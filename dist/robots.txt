@@ -1,0 +1,21 @@
+# Autoriser tous les moteurs de recherche classiques
+User-agent: *
+Allow: /
+
+# Autoriser explicitement les bots IA (ChatGPT, Perplexity, Google Gemini, Claude)
+User-agent: GPTBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+User-agent: Claude-Web
+Allow: /
+
+Sitemap: https://grichard.eu/sitemap.xml

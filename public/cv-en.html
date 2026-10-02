@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume_Guillaume_Richard_EN</title>
+    <meta name="description" content="Resume of Guillaume Richard, System, Network and Development Administrator.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { emerald: { 600: '#059669', 700: '#047857' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f3f4f6; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .page {
+            width: 21cm;
+            min-height: 29.7cm;
+            margin: 2rem auto;
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        @media print {
+            @page { size: A4; margin: 0; }
+            html, body { margin: 0; padding: 0; background: white; }
+            .page {
+                margin: 0;
+                box-shadow: none;
+                width: 210mm;
+                height: 296mm;
+                min-height: 0;
+                overflow: hidden;
+                padding: 8mm 15mm;
+            }
+            .no-print { display: none !important; }
+            .avoid-break { page-break-inside: avoid; break-inside: avoid; }
+            .text-slate-500, .text-slate-600 { color: #334155 !important; }
+        }
+    </style>
+</head>
+<body class="text-slate-900 antialiased selection:bg-emerald-200">
+
+    <div class="fixed top-6 right-6 no-print">
+        <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-5 rounded-lg shadow-md flex items-center gap-2 transition-colors">
+            <i data-lucide="download" class="w-5 h-5"></i>
+            Generate PDF (English)
+        </button>
+    </div>
+
+    <main class="page flex flex-col">
+
+        <header class="border-b-2 border-slate-200 pb-3 mb-3 avoid-break flex items-center gap-6">
+
+            <div class="order-1">
+                <h1 class="text-3xl font-bold text-slate-900 tracking-tight uppercase">Guillaume <span class="text-emerald-600">Richard</span></h1>
+                <h2 class="text-lg font-semibold text-slate-700 mt-0.5">System, Network &amp; Dev. Administrator</h2>
+            </div>
+
+            <address class="order-2 ml-auto flex flex-col gap-1 text-xs text-slate-700 not-italic font-medium pl-6 border-l border-slate-200">
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-emerald-600" aria-hidden="true"></i>
+                    <span>Laval, France (53000)</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="phone" class="w-3.5 h-3.5 text-emerald-600" aria-hidden="true"></i>
+                    <a href="tel:+33615440398">+33 6 15 44 03 98</a>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="mail" class="w-3.5 h-3.5 text-emerald-600" aria-hidden="true"></i>
+                    <a href="mailto:guillaume.rwins@gmail.com">guillaume.rwins@gmail.com</a>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/>
+                    </svg>
+                    <a href="https://linkedin.com/in/guillaume-richard-in" target="_blank">linkedin.com/in/guillaume-richard-in</a>
+                </div>
+            </address>
+
+        </header>
+
+        <section class="mb-3 avoid-break">
+            <h3 class="sr-only">Professional Profile</h3>
+            <p class="text-[13px] leading-tight text-slate-800 text-justify font-medium">
+                Passionate about IT from an early age and naturally curious, I love exploring and testing new technologies. Building on solid experience, I possess a strong expertise in system and network administration, Cloud management (M365/Workspace), DNS troubleshooting, and end-to-end IT support. On a daily basis, I deploy and manage complex IT infrastructures while developing custom automation tools.
+            </p>
+        </section>
+
+        <div class="grid grid-cols-12 gap-5 flex-1">
+
+            <!-- RIGHT COLUMN (Experiences) -->
+            <div class="order-2 col-span-8 space-y-3">
+
+                <section>
+                    <h3 class="text-base font-bold text-slate-900 border-b-2 border-emerald-600 pb-0.5 mb-2 uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="briefcase" class="w-4 h-4 text-emerald-600" aria-hidden="true"></i> Professional Experience
+                    </h3>
+
+                    <article class="mb-2.5 avoid-break">
+                        <div class="flex justify-between items-baseline">
+                            <h4 class="font-bold text-slate-900 text-[14px]">System &amp; Network Administrator</h4>
+                            <span class="text-[11px] font-bold text-slate-600">Since Aug 2023</span>
+                        </div>
+                        <p class="text-[12px] font-semibold text-emerald-700 mb-1">TIXIA Services numériques - Laval, France</p>
+                        <ul class="list-disc list-outside ml-4 text-[12px] text-slate-800 space-y-0.5 leading-snug">
+                            <li>Advanced administration of <strong>Microsoft 365</strong> and <strong>Google Workspace</strong> (identities, security, MCO).</li>
+                            <li><strong>Complex migrations:</strong> IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail, and Outlook to the Cloud.</li>
+                            <li>Managed DNS zones, analyzed SMTP headers, and resolved deliverability incidents (<strong>SPF, DKIM, DMARC</strong>).</li>
+                            <li>Administered <strong>Windows Server (MDT, WDS, AD, DHCP, DNS, RDP)</strong>.</li>
+                            <li>Handled <strong>L1 to L3 IT Support</strong> (L4 escalation to software publishers).</li>
+                            <li>Performed hardware assembly and system imaging.</li>
+                        </ul>
+                    </article>
+
+                    <article class="mb-2.5 avoid-break">
+                        <div class="flex justify-between items-baseline">
+                            <h4 class="font-bold text-slate-900 text-[14px]">Independent IT Technician</h4>
+                            <span class="text-[11px] font-bold text-slate-600">Since 2021</span>
+                        </div>
+                        <p class="text-[12px] font-semibold text-emerald-700 mb-1">Private Clients / AlloVoisin - Laval &amp; Le Mans</p>
+                        <ul class="list-disc list-outside ml-4 text-[12px] text-slate-800 space-y-0.5 leading-snug">
+                            <li>Provided on-site IT assistance and hardware/software diagnostics.</li>
+                            <li>Performed PC repairs, technological consulting, and personal system optimization.</li>
+                        </ul>
+                    </article>
+
+                    <article class="mb-2.5 avoid-break">
+                        <div class="flex justify-between items-baseline">
+                            <h4 class="font-bold text-slate-900 text-[14px]">Webmaster</h4>
+                            <span class="text-[11px] font-bold text-slate-600">Apr 2022 - Jun 2022</span>
+                        </div>
+                        <p class="text-[12px] font-semibold text-emerald-700 mb-1">Les papiers de Lucas - Changé, France</p>
+                        <ul class="list-disc list-outside ml-4 text-[12px] text-slate-800 space-y-0.5 leading-snug">
+                            <li>Managed technical maintenance and administration of a <strong>PrestaShop</strong> e-commerce website.</li>
+                            <li>Conducted detailed <strong>SEO</strong> audits, DNS management, and UX/UI bug fixes.</li>
+                        </ul>
+                    </article>
+
+                    <article class="mb-1 avoid-break">
+                        <div class="flex justify-between items-baseline">
+                            <h4 class="font-bold text-slate-900 text-[14px]">IT Maintenance Technician</h4>
+                            <span class="text-[11px] font-bold text-slate-600">January 2019</span>
+                        </div>
+                        <p class="text-[12px] font-semibold text-emerald-700 mb-1">Tibco (Lactalis Group) - Laval, France</p>
+                        <ul class="list-disc list-outside ml-4 text-[12px] text-slate-800 space-y-0.5 leading-snug">
+                            <li>Prepared and deployed industrial computer workstations.</li>
+                            <li>Conducted hardware diagnostics on factory floors and remote technical assistance.</li>
+                        </ul>
+                    </article>
+                </section>
+
+                <section>
+                    <h3 class="text-base font-bold text-slate-900 border-b-2 border-emerald-600 pb-0.5 mb-2 uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="folder-git-2" class="w-4 h-4 text-emerald-600" aria-hidden="true"></i> Technical Projects &amp; GitHub
+                    </h3>
+
+                    <div class="space-y-2">
+                        <article class="avoid-break">
+                            <h4 class="font-bold text-slate-900 text-[13px]">Email Conversion Tool (C#)</h4>
+                            <p class="text-[12px] text-slate-800 mt-0.5 leading-snug">Business tool built to extract and convert complete email archives (MSG/EML) to PDF with automated attachment handling.</p>
+                        </article>
+
+                        <article class="avoid-break">
+                            <h4 class="font-bold text-slate-900 text-[13px]">Automation &amp; Web (Python, JS, React)</h4>
+                            <p class="text-[12px] text-slate-800 mt-0.5 leading-snug">Creation of Python, PowerShell, and Apps Script scripts to optimize workflows. Deployed websites (WordPress, Wix, React).</p>
+                        </article>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- LEFT COLUMN (Skills, Education) -->
+            <aside class="order-1 col-span-4 space-y-3 border-r border-slate-200 pr-4">
+
+                <section>
+                    <h3 class="text-base font-bold text-slate-900 border-b-2 border-emerald-600 pb-0.5 mb-1.5 uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="code-2" class="w-4 h-4 text-emerald-600" aria-hidden="true"></i> Skills
+                    </h3>
+
+                    <article class="mb-2 avoid-break">
+                        <h4 class="font-bold text-slate-900 text-xs">Systems &amp; Networks</h4>
+                        <p class="text-[11px] text-slate-700 mt-0.5 leading-snug"><strong>Windows Server</strong> (AD, MDT, WDS, DNS, DHCP, RDP), Linux. <strong>Network:</strong> LAN/WLAN, Stormshield, VPN, FTP/SFTP.</p>
+                    </article>
+
+                    <article class="mb-2 avoid-break">
+                        <h4 class="font-bold text-slate-900 text-xs">Messaging &amp; Cloud</h4>
+                        <p class="text-[11px] text-slate-700 mt-0.5 leading-snug"><strong>M365, Google Workspace</strong>. SMTP Analysis, Deliverability, DNS Zones (<strong>MX, SPF, DKIM, DMARC</strong>).</p>
+                    </article>
+
+                    <article class="mb-2 avoid-break">
+                        <h4 class="font-bold text-slate-900 text-xs">Web &amp; Development</h4>
+                        <p class="text-[11px] text-slate-700 mt-0.5 leading-snug">Wix, Shopify, WordPress. <strong>Languages:</strong> C#, Java, Python, PowerShell, Bash, SQL, PHP.</p>
+                    </article>
+
+                    <article class="mb-2 avoid-break">
+                        <h4 class="font-bold text-slate-900 text-xs">IT Support &amp; Projects</h4>
+                        <p class="text-[11px] text-slate-700 mt-0.5 leading-snug">L1-L3 Support, L4 publisher escalation, business software deployment.</p>
+                    </article>
+                </section>
+
+                <section>
+                    <h3 class="text-base font-bold text-slate-900 border-b-2 border-emerald-600 pb-0.5 mb-1.5 uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="graduation-cap" class="w-4 h-4 text-emerald-600" aria-hidden="true"></i> Education
+                    </h3>
+                    <article class="mb-2 avoid-break">
+                        <h4 class="font-bold text-slate-900 text-[12px] leading-snug">BSc in Computer Science</h4>
+                        <p class="text-[11px] text-slate-700">Development &amp; Programming</p>
+                        <p class="text-[11px] text-emerald-700 font-semibold mt-0.5">Le Mans University | 2023</p>
+                    </article>
+                    <article class="mb-2 avoid-break">
+                        <h4 class="font-bold text-slate-900 text-[12px] leading-snug">High School Diploma</h4>
+                        <p class="text-[11px] text-slate-700">Engineering Sciences</p>
+                        <p class="text-[11px] text-emerald-700 font-semibold mt-0.5">Immac. Conception High School | 2020</p>
+                    </article>
+                </section>
+
+                <section>
+                    <h3 class="text-base font-bold text-slate-900 border-b-2 border-emerald-600 pb-0.5 mb-1.5 uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="languages" class="w-4 h-4 text-emerald-600" aria-hidden="true"></i> Languages
+                    </h3>
+                    <ul class="text-[11px] text-slate-700 space-y-1 list-none">
+                        <li><strong class="text-slate-900">French:</strong> Native</li>
+                        <li><strong class="text-slate-900">English:</strong> Bilingual (Technical)</li>
+                    </ul>
+                </section>
+
+            </aside>
+
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
