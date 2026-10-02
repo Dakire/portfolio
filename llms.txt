@@ -1,0 +1,8 @@
+# Portfolio de Guillaume Richard
+
+Bonjour, je suis Guillaume Richard, Administrateur Système, Réseau et Développeur basé à Laval, France.
+Ce site présente mon parcours, mes compétences informatiques et mes expériences professionnelles.
+
+## Liens et ressources
+- [Mon CV en français](https://www.grichard.eu/CV_Guillaume_Richard_FR.pdf)
+- [My resume in English](https://www.grichard.eu/Resume_Guillaume_Richard_EN.pdf)
