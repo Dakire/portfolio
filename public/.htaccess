@@ -85,6 +85,20 @@ AddType application/manifest+json .webmanifest
     Require all denied
 </FilesMatch>
 
+# Sauvegardes, journaux et fichiers d'éditeur oubliés sur le serveur (contact.config.php.bak, ancien.php~, …)
+<FilesMatch "(\.(bak|old|orig|save|swp|sql|log|ini|lock|dist)|~)$">
+    Require all denied
+</FilesMatch>
+
+# Fichiers et dossiers cachés (.git, .env, …) : 404, sauf /.well-known/ (security.txt)
+<IfModule mod_alias.c>
+    RedirectMatch 404 "/\.(?!well-known/)"
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header always unset X-Powered-By
+</IfModule>
+
 # ----------------------------------------------------------------------
 # 6. URL canonique et page 404
 #    Une URL inconnue doit renvoyer un vrai 404 (pas l'accueil en 200 : « soft 404 »).

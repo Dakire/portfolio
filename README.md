@@ -65,3 +65,14 @@ Les mentions légales (section 5) décrivent ce fonctionnement : à tenir à jou
 
 Lien d'évitement, focus visible (3 px), menu mobile avec `aria-expanded`, hiérarchie h1 → h2 → h3, messages de formulaire dans une région live,
 `prefers-reduced-motion` respecté, contrastes ≥ WCAG AA (texte courant ≥ 7:1, boutons blancs sur `emerald-700` ≈ 5,5:1).
+
+## Sécurité
+
+- **Secrets** : seule la clé *de site* Turnstile (publique) est dans le build. La clé secrète vit dans `contact.config.php`, ignoré par Git,
+  placé au-dessus de la racine web ; `.htaccess` bloque aussi ce fichier, les sauvegardes (`.bak`, `~`…) et les fichiers cachés (`.git`, `.env`).
+- **Formulaire** (`public/contact.php`) : Turnstile vérifié côté serveur (nom de domaine du jeton contrôlé), honeypot, contrôle de l'origine,
+  plafond de 15 messages par heure, nom et e-mail nettoyés contre l'injection d'en-têtes, aucune erreur PHP renvoyée.
+- **En-têtes** : CSP sans `unsafe-inline` pour les scripts, HSTS, anti-clickjacking, `nosniff`, Referrer-Policy, Permissions-Policy.
+- **Contenu** : les articles Markdown sont de confiance (rendus tels quels) ; n'y collez jamais de HTML d'origine inconnue.
+- **Contact sécurité** : `/.well-known/security.txt` (champ `Expires` à renouveler avant le 30 septembre 2027).
+- Contrôle régulier : `npm audit`.

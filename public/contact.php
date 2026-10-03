@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 // Endpoint du formulaire de contact : même origine uniquement (pas d'en-têtes CORS ouverts).
+// Jamais d'erreurs PHP dans la réponse (elles pourraient révéler des chemins du serveur).
+ini_set('display_errors', '0');
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
@@ -9,6 +11,7 @@ header('X-Content-Type-Options: nosniff');
 const MAIL_TO = 'contact@grichard.eu';
 const MAIL_FROM = 'noreply@grichard.eu'; // doit appartenir au domaine (anti-spam OVH)
 const ALLOWED_HOSTS = ['grichard.eu', 'www.grichard.eu'];
+const MAX_MESSAGES_PER_HOUR = 15; // plafond global : protège la boîte de réception en cas d'abus
 
 function respond(int $code, bool $success, string $message): never
 {
@@ -54,7 +57,35 @@ function verifyTurnstile(string $token, string $secret, string $ip): bool
         return false;
     }
     $result = json_decode($raw, true);
-    return is_array($result) && ($result['success'] ?? false) === true;
+    if (!is_array($result) || ($result['success'] ?? false) !== true) {
+        return false;
+    }
+    // Le jeton doit avoir été émis pour notre site (et non pour un autre domaine utilisant la même clé).
+    $hostname = $result['hostname'] ?? '';
+    return $hostname === '' || in_array($hostname, ALLOWED_HOSTS, true);
+}
+
+/**
+ * Plafond global de messages par heure (compteur dans un fichier temporaire, sans aucune donnée personnelle).
+ * Avec Turnstile, chaque message exige déjà un captcha résolu ; ceci évite d'inonder la boîte de réception.
+ */
+function rateLimited(): bool
+{
+    $file = sys_get_temp_dir() . '/portfolio_contact_' . hash('sha256', __DIR__) . '.json';
+    $now = time();
+    $hits = [];
+    if (is_file($file)) {
+        $stored = json_decode((string) @file_get_contents($file), true);
+        if (is_array($stored)) {
+            $hits = array_values(array_filter($stored, static fn ($t) => is_int($t) && $t > $now - 3600));
+        }
+    }
+    if (count($hits) >= MAX_MESSAGES_PER_HOUR) {
+        return true;
+    }
+    $hits[] = $now;
+    @file_put_contents($file, json_encode($hits), LOCK_EX);
+    return false;
 }
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
@@ -69,7 +100,7 @@ if ($origin !== '' && !in_array(parse_url($origin, PHP_URL_HOST), ALLOWED_HOSTS,
 }
 
 $raw = file_get_contents('php://input', false, null, 0, 20000);
-$input = json_decode($raw ?: '', true);
+$input = json_decode($raw ?: '', true, 4);
 if (!is_array($input)) {
     respond(400, false, 'Requête invalide.');
 }
@@ -90,7 +121,8 @@ if (!verifyTurnstile((string) ($input['turnstileToken'] ?? ''), $secret, $_SERVE
 }
 
 // Validation (le texte reste brut : c'est un e-mail texte, l'échappement HTML n'a pas lieu d'être ici).
-$name = trim(preg_replace('/[\r\n\t]+/', ' ', strip_tags((string) ($input['name'] ?? ''))));
+// Nom : sans balises ni caractères de contrôle (CR, LF, NUL, séparateurs de ligne Unicode…) pour interdire toute injection d'en-tête.
+$name = trim((string) preg_replace('/[\p{Cc}\x{2028}\x{2029}]+/u', ' ', strip_tags((string) ($input['name'] ?? ''))));
 $email = trim((string) ($input['email'] ?? ''));
 $message = trim((string) ($input['message'] ?? ''));
 
@@ -98,8 +130,13 @@ if (
     $name === '' || mb_strlen($name) > 100
     || $message === '' || mb_strlen($message) > 5000
     || strlen($email) > 254 || !filter_var($email, FILTER_VALIDATE_EMAIL)
+    || preg_match('/[\s"<>,;()\[\]\\\\]/', $email) === 1 // pas de forme exotique (guillemets, commentaires, listes) dans Reply-To
 ) {
     respond(400, false, 'Données invalides ou manquantes.');
+}
+
+if (rateLimited()) {
+    respond(429, false, 'Trop de messages pour le moment, veuillez réessayer plus tard.');
 }
 
 $subject = mb_encode_mimeheader('Nouveau contact Portfolio : ' . $name, 'UTF-8');
@@ -109,7 +146,6 @@ $headers = implode("\r\n", [
     'Reply-To: ' . $email, // validé par FILTER_VALIDATE_EMAIL : pas de CR/LF possible
     'MIME-Version: 1.0',
     'Content-Type: text/plain; charset=UTF-8',
-    'X-Mailer: PHP/' . PHP_VERSION,
 ]);
 
 if (mail(MAIL_TO, $subject, $body, $headers)) {
