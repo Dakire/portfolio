@@ -101,7 +101,6 @@ export const PORTFOLIO_DATA = {
     ],
     languagesInfo: 'Français (langue maternelle), Anglais (courant, technique).',
     contactTitle: 'Me contacter',
-    contactDesc: "Une question, une remarque sur le site ou sur un article ? Écrivez-moi, je réponds dès que possible.",
     form: {
       name: 'Votre nom complet',
       email: 'Votre adresse email',
@@ -210,7 +209,6 @@ export const PORTFOLIO_DATA = {
     ],
     languagesInfo: 'French (Native), English (Fluent Technical).',
     contactTitle: 'Get in touch',
-    contactDesc: 'A question, or a comment about the site or an article? Drop me a message, I reply as soon as I can.',
     form: {
       name: 'Full Name',
       email: 'Email Address',

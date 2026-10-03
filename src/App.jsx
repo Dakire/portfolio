@@ -203,7 +203,6 @@ export default function App({ lang = 'fr', posts = [] }) {
               <Mail className="w-6 h-6 shrink-0 text-emerald-400" aria-hidden="true" /> {t.contactTitle}
             </h2>
             <div className="bg-slate-900 border border-slate-800 p-5 sm:p-6 md:p-8 rounded-2xl shadow-xl">
-              <p className="text-slate-300 mb-6 text-sm">{t.contactDesc}</p>
               <ContactForm t={t} lang={lang} />
             </div>
           </section>
