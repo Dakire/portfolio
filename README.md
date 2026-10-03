@@ -17,7 +17,7 @@ src/
 content/blog/*.md      Articles en français (front matter : title, description, date, updated optionnel, script optionnel ; slug = nom du fichier)
 content/blog/en/*.md   Traductions anglaises (mêmes champs + translationOf : slug de l'article français correspondant)
 scripts/prerender.js   Génère : accueil FR et EN, mentions légales, blog, 404.html, sitemap.xml (avec hreflang) et llms.txt
-public/                 Copié tel quel dans dist/ : contact.php, .htaccess, robots.txt, llms.txt, og-image.png, PDF, favicon
+public/                 Copié tel quel dans dist/ : contact.php, .htaccess, robots.txt, llms.txt, og-image.png, PDF, icônes (favicon.svg/.ico, apple-touch-icon, site.webmanifest)
 public/js/             Scripts autonomes : consent.js (bandeau + Google Analytics), table-filter.js, 404.js
 ```
 
