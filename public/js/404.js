@@ -1,6 +1,7 @@
 // Page 404 : le bouton « Retourner à l'accueil » esquive la souris.
-// Garde-fous : le clavier et les lecteurs d'écran ne sont jamais esquivés, « réduire les animations » désactive le jeu,
-// et le bouton abandonne tout seul après MAX_DODGES esquives. Sans JavaScript, c'est un simple lien.
+// Garde-fous : le clavier et les lecteurs d'écran ne sont jamais esquivés, et le bouton abandonne tout seul
+// après MAX_DODGES esquives. Avec « réduire les animations », le bouton se déplace instantanément (sans transition).
+// Sans JavaScript, c'est un simple lien.
 (() => {
   const MAX_DODGES = 8;
   const FLEE_DISTANCE = 110; // le bouton fuit quand le curseur s'approche à moins de ce nombre de pixels
@@ -12,11 +13,6 @@
   const score = document.getElementById('score');
   const scoreN = document.getElementById('score-n');
   if (!zone || !btn || !taunt || !score || !scoreN) return;
-
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    taunt.textContent = 'Votre navigateur demande moins d’animations : le bouton reste calme. Cliquez.';
-    return;
-  }
 
   const taunts = [
     'Raté !',

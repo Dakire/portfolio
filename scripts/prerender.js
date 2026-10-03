@@ -5,6 +5,8 @@
 //  - 404.html (ErrorDocument Apache) ;
 //  - sitemap.xml et llms.txt, générés (aucune liste d'URL à maintenir à la main).
 import { readFile, writeFile, readdir, mkdir } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { marked } from 'marked';
 import { createServer } from 'vite';
@@ -16,6 +18,15 @@ const TODAY = new Date().toISOString().slice(0, 10);
 
 const root = (p) => new URL(`../${p}`, import.meta.url);
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// Ajoute ?v=<empreinte> aux scripts de public/js : un script modifié n'est jamais servi depuis un ancien cache navigateur.
+const versioned = (src) => {
+  try {
+    const hash = createHash('sha1').update(readFileSync(root(`public${src}`))).digest('hex').slice(0, 8);
+    return `${src}?v=${hash}`;
+  } catch {
+    return src;
+  }
+};
 const json = (data) => JSON.stringify(data).replace(/</g, '\\u003c');
 
 /** Date du dernier commit touchant ces chemins (aujourd'hui s'ils ont des modifications non commitées). */
@@ -112,7 +123,7 @@ function page({ lang = 'fr', assets, scripts = [], title, description, path, typ
     ${ld ? `<script type="application/ld+json">${json(ld)}</script>` : ''}
   </head>
   <body>${body}
-    ${[...scripts, '/js/consent.js'].map((s) => `<script defer src="${esc(s)}"></script>`).join('\n    ')}
+    ${[...scripts, '/js/consent.js'].map((s) => `<script defer src="${esc(versioned(s))}"></script>`).join('\n    ')}
   </body>
 </html>
 `;
