@@ -20,9 +20,15 @@ const getInitialLang = () => {
 };
 
 export default function App() {
-  const [lang, setLang] = useState(getInitialLang);
+  // 'fr' au premier rendu (identique au HTML pré-rendu), puis langue préférée du visiteur.
+  const [lang, setLang] = useState('fr');
   const [showLegal, setShowLegal] = useState(false);
   const t = PORTFOLIO_DATA[lang];
+
+  useEffect(() => {
+    // oxlint-disable-next-line react/set-state-in-effect -- lecture post-hydratation des préférences du visiteur
+    setLang(getInitialLang());
+  }, []);
 
   // Langue, titre et description synchronisés avec la langue active.
   useEffect(() => {

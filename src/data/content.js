@@ -13,9 +13,9 @@ export const SECTION_IDS = ['about', 'skills', 'experience', 'projects', 'contac
 export const PORTFOLIO_DATA = {
   fr: {
     meta: {
-      title: 'Guillaume Richard | Administrateur Système & Réseau',
+      title: 'Guillaume Richard | Technicien Informatique & Systèmes Numériques',
       description:
-        'Portfolio de Guillaume Richard, Administrateur Système et Réseau à Laval. Expertise en infrastructure (M365, Google Workspace, DNS, Windows Server), Cloud et développement.',
+        'Portfolio de Guillaume Richard, Technicien Informatique et Systèmes Numériques à Laval. Expertise en infrastructure (M365, Google Workspace, DNS, Windows Server), Cloud et développement.',
     },
     ui: {
       skip: 'Aller au contenu principal',
@@ -34,7 +34,7 @@ export const PORTFOLIO_DATA = {
     nav: { about: 'À propos', skills: 'Compétences', experience: 'Expériences', projects: 'Projets', contact: 'Contact' },
     hero: {
       greeting: 'Bonjour, je suis',
-      role: 'Administrateur Système, Réseau & Développement',
+      role: 'Technicien Informatique & Systèmes Numériques',
       cvBtn: 'Télécharger mon CV',
       contactBtn: 'Me contacter',
       cvLink: '/CV_Guillaume_Richard_FR.pdf',
@@ -96,9 +96,9 @@ export const PORTFOLIO_DATA = {
   },
   en: {
     meta: {
-      title: 'Guillaume Richard | System & Network Administrator',
+      title: 'Guillaume Richard | IT & Digital Systems Technician',
       description:
-        'Portfolio of Guillaume Richard, System and Network Administrator based in Laval, France. Expertise in infrastructure (M365, Google Workspace, DNS, Windows Server), Cloud and development.',
+        'Portfolio of Guillaume Richard, IT and Digital Systems Technician based in Laval, France. Expertise in infrastructure (M365, Google Workspace, DNS, Windows Server), Cloud and development.',
     },
     ui: {
       skip: 'Skip to main content',
@@ -117,7 +117,7 @@ export const PORTFOLIO_DATA = {
     nav: { about: 'About', skills: 'Skills', experience: 'Experience', projects: 'Projects', contact: 'Contact' },
     hero: {
       greeting: 'Hello, I am',
-      role: 'IT, System, Network & Development Admin',
+      role: 'IT & Digital Systems Technician',
       cvBtn: 'Download Resume',
       contactBtn: 'Contact Me',
       cvLink: '/Resume_Guillaume_Richard_EN.pdf',

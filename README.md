@@ -22,7 +22,7 @@ npm install
 cp .env.example .env.local   # renseigner VITE_TURNSTILE_SITE_KEY
 npm run dev                  # http://localhost:5173
 npm run lint
-npm run build                # génère dist/
+npm run build                # génère dist/ (+ pré-rendu FR dans dist/index.html via scripts/prerender.js)
 ```
 
 ## Déploiement (OVH)

@@ -1,6 +1,6 @@
 # Portfolio de Guillaume Richard
 
-Bonjour, je suis Guillaume Richard, Administrateur Système, Réseau et Développeur basé à Laval, France.
+Bonjour, je suis Guillaume Richard, Technicien Informatique et Systèmes Numériques basé à Laval, France.
 Ce site présente mon parcours, mes compétences informatiques et mes expériences professionnelles.
 
 ## Liens et ressources
