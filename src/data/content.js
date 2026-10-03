@@ -1,0 +1,180 @@
+// Contenu du site (calqué sur le CV). Toute modification de texte se fait ici.
+
+export const PROFILE = {
+  name: 'Guillaume Richard',
+  email: 'guillaume.rwins@gmail.com',
+  location: 'Laval, France',
+  linkedin: 'https://www.linkedin.com/in/guillaume-richard-in',
+  github: 'https://github.com/Dakire',
+};
+
+export const SECTION_IDS = ['about', 'skills', 'experience', 'projects', 'contact'];
+
+export const PORTFOLIO_DATA = {
+  fr: {
+    meta: {
+      title: 'Guillaume Richard | Administrateur Système & Réseau',
+      description:
+        'Portfolio de Guillaume Richard, Administrateur Système et Réseau à Laval. Expertise en infrastructure (M365, Google Workspace, DNS, Windows Server), Cloud et développement.',
+    },
+    ui: {
+      skip: 'Aller au contenu principal',
+      home: "Retour à l'accueil",
+      menu: 'Menu principal',
+      openMenu: 'Ouvrir le menu',
+      closeMenu: 'Fermer le menu',
+      switchLang: 'Switch to English',
+      linkedin: 'Profil LinkedIn (nouvelle fenêtre)',
+      github: 'Profil GitHub (nouvelle fenêtre)',
+      projectOpen: 'voir sur GitHub (nouvelle fenêtre)',
+      cvOpen: 'PDF, nouvelle fenêtre',
+      languages: 'Langues',
+      back: 'Retour au portfolio',
+    },
+    nav: { about: 'À propos', skills: 'Compétences', experience: 'Expériences', projects: 'Projets', contact: 'Contact' },
+    hero: {
+      greeting: 'Bonjour, je suis',
+      role: 'Administrateur Système, Réseau & Développement',
+      cvBtn: 'Télécharger mon CV',
+      contactBtn: 'Me contacter',
+      cvLink: '/CV_Guillaume_Richard_FR.pdf',
+    },
+    aboutTitle: 'À propos de moi',
+    about:
+      "Passionné par l'informatique depuis toujours et d'un naturel curieux, j'aime explorer et tester les nouvelles technologies. Fort de mon expérience, je possède aujourd'hui une solide expertise en administration système et réseau, gestion Cloud (M365/Workspace), troubleshooting DNS et support IT de bout en bout. Au quotidien, je déploie et administre des infrastructures complexes tout en développant des outils d'automatisation sur-mesure.",
+    skillsTitle: "Domaines d'Expertise",
+    skills: [
+      { category: 'Systèmes & Réseaux', items: 'Windows Server (AD, MDT, WDS, DNS, DHCP, RDP), Linux. Gestion de Réseaux : LAN/WLAN, Stormshield, VPN, FTP/SFTP.' },
+      { category: 'Messagerie & Cloud', items: 'Expertise M365 & Google Workspace. Analyse SMTP, Délivrabilité, gestion des Zones DNS (MX, SPF, DKIM, DMARC), Maintien en Conditions Opérationnelles (MCO).' },
+      { category: 'Web & Développement', items: 'Création et gestion de sites (WordPress, Wix, Shopify, React). Langages : C#, Java, Python, PowerShell, Bash, SQL, PHP.' },
+      { category: 'Support & Projets IT', items: 'Support utilisateur de bout en bout (N1 à N3), escalade éditeurs (N4), déploiement de logiciels métiers et accompagnement technique.' },
+    ],
+    experienceTitle: 'Expériences Professionnelles',
+    experiences: [
+      { role: 'Technicien informatique et systèmes numériques', company: 'TIXIA Services numériques', location: 'Laval, France', date: 'Depuis Août 2023', desc: 'Administration avancée de Microsoft 365 et Google Workspace (identités, sécurité, MCO). Migrations complexes : IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail, Outlook vers le Cloud. Gestion zones DNS, analyse headers SMTP et délivrabilité (SPF, DKIM, DMARC). Administration Windows Server (MDT, WDS, AD, DHCP, DNS, RDP). Support IT N1 à N3 (escalade N4 éditeurs) et masterisation de PC.' },
+      { role: 'Intervenant Dépannage Informatique', company: 'AlloVoisin / Particuliers', location: 'Laval & Le Mans', date: 'Depuis 2021', desc: "Assistance informatique de proximité et diagnostic (matériel/logiciel). Réparation de PC, conseil technologique et optimisation de systèmes." },
+      { role: 'Webmaster', company: 'Les papiers de Lucas', location: 'Changé, France', date: 'Avril 2022 - Juin 2022', desc: "Maintenance technique et administration d'un site e-commerce PrestaShop. Audits SEO détaillés, gestion DNS et correction UX/UI." },
+      { role: 'Technicien de Maintenance IT', company: 'Tibco (Groupe Lactalis)', location: 'Laval, France', date: 'Janvier 2019', desc: 'Préparation et masterisation de postes informatiques industriels. Diagnostic de pannes matérielles et télé-assistance.' },
+    ],
+    projectsTitle: 'Projets Techniques & GitHub',
+    projects: [
+      { title: 'Outil de Conversion Email (C#)', desc: "Outil métier développé en C# permettant l'extraction et la conversion d'archives mails complètes (MSG/EML) vers PDF avec gestion automatique des pièces jointes.", tags: ['C#', 'Outil Métier', 'Email'] },
+      { title: 'Automatisation (Python, Scripts)', desc: "Création de scripts Python, PowerShell et Google Apps Script pour l'automatisation de tâches récurrentes et l'optimisation des flux de travail.", tags: ['Python', 'PowerShell', 'Automation'] },
+      { title: 'Création Web (JS, React, CMS)', desc: "Développement d'extensions navigateur sur-mesure et déploiement de sites web modernes (WordPress, Wix, React).", tags: ['JavaScript', 'React', 'Web'] },
+    ],
+    educationTitle: 'Formation & Profil',
+    education: [
+      'Licence Informatique (Développement et Programmation) - Le Mans Université (2023)',
+      "Baccalauréat Scientifique (Sciences de l'Ingénieur) - Lycée Immaculée Conception, Laval (2020)",
+    ],
+    languagesInfo: 'Français (Maternelle), Anglais (Bilingue technique).',
+    contactTitle: 'Échangeons sur vos projets',
+    contactDesc: "Une question, un projet ou une opportunité professionnelle ? N'hésitez pas à me contacter via ce formulaire, je vous répondrai dans les plus brefs délais.",
+    form: {
+      name: 'Votre nom complet',
+      email: 'Votre adresse email',
+      message: 'Votre message',
+      gdpr: "J'accepte que mes données soient utilisées pour me recontacter.",
+      submit: 'Envoyer le message',
+      sending: 'Envoi en cours...',
+      success: 'Message envoyé avec succès !',
+      error: 'Erreur technique. Veuillez réessayer.',
+      captcha: 'Veuillez valider la vérification anti-robot avant l\'envoi.',
+      captchaLabel: 'Vérification anti-robot',
+    },
+    footer: { legal: 'Mentions Légales', rights: 'Tous droits réservés.' },
+    legal: {
+      title: 'Mentions Légales',
+      sections: [
+        { h: '1. Éditeur du site', p: 'Ce site est édité par Guillaume Richard, un particulier. Résidant à : Laval, 53000, France. Contact : guillaume.rwins@gmail.com' },
+        { h: '2. Hébergement', p: 'Ce site est hébergé par OVH SAS. Adresse : 2 rue Kellermann - 59100 Roubaix - France. Site web : www.ovh.com' },
+        { h: '3. Propriété intellectuelle', p: "L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés." },
+        { h: '4. Données personnelles (RGPD)', p: 'Les informations recueillies via le formulaire de contact (Nom, Email, Message) sont uniquement destinées à vous répondre. Elles ne sont stockées dans aucune base de données et ne sont jamais cédées à des tiers. Le formulaire est protégé par Cloudflare Turnstile, qui vérifie que le visiteur est humain sans cookie publicitaire. Conformément à la loi « Informatique et Libertés » et au RGPD, vous disposez d\'un droit d\'accès, de rectification et d\'effacement de vos données en me contactant par email.' },
+        { h: '5. Cookies et mesure d\'audience', p: 'Ce site ne dépose aucun cookie publicitaire. Une mesure d\'audience anonyme (Google Analytics) est utilisée pour connaître la fréquentation du site.' },
+      ],
+    },
+  },
+  en: {
+    meta: {
+      title: 'Guillaume Richard | System & Network Administrator',
+      description:
+        'Portfolio of Guillaume Richard, System and Network Administrator based in Laval, France. Expertise in infrastructure (M365, Google Workspace, DNS, Windows Server), Cloud and development.',
+    },
+    ui: {
+      skip: 'Skip to main content',
+      home: 'Back to top',
+      menu: 'Main menu',
+      openMenu: 'Open menu',
+      closeMenu: 'Close menu',
+      switchLang: 'Passer en français',
+      linkedin: 'LinkedIn profile (opens in a new window)',
+      github: 'GitHub profile (opens in a new window)',
+      projectOpen: 'view on GitHub (opens in a new window)',
+      cvOpen: 'PDF, opens in a new window',
+      languages: 'Languages',
+      back: 'Back to portfolio',
+    },
+    nav: { about: 'About', skills: 'Skills', experience: 'Experience', projects: 'Projects', contact: 'Contact' },
+    hero: {
+      greeting: 'Hello, I am',
+      role: 'IT, System, Network & Development Admin',
+      cvBtn: 'Download Resume',
+      contactBtn: 'Contact Me',
+      cvLink: '/Resume_Guillaume_Richard_EN.pdf',
+    },
+    aboutTitle: 'About Me',
+    about:
+      'Passionate about IT from an early age and naturally curious, I love exploring and testing new technologies. Building on solid experience, I possess a strong expertise in system and network administration, Cloud management (M365/Workspace), DNS troubleshooting, and end-to-end IT support. On a daily basis, I deploy and manage complex IT infrastructures while developing custom automation tools.',
+    skillsTitle: 'Core Expertise',
+    skills: [
+      { category: 'Systems & Networks', items: 'Windows Server (AD, MDT, WDS, DNS, DHCP, RDP), Linux. Network Management: LAN/WLAN, Stormshield, VPN, FTP/SFTP.' },
+      { category: 'Messaging & Cloud', items: 'M365 & Google Workspace expertise. SMTP header analysis, deliverability troubleshooting, DNS zone management (MX, SPF, DKIM, DMARC).' },
+      { category: 'Web & Development', items: 'Website creation and management (WordPress, Wix, Shopify, React). Languages: C#, Java, Python, PowerShell, Bash, SQL, PHP.' },
+      { category: 'IT Support & Projects', items: 'End-to-end user support (L1 to L3), software publisher escalation (L4), business application deployment, and technical consulting.' },
+    ],
+    experienceTitle: 'Professional Experience',
+    experiences: [
+      { role: 'IT and Digital Systems Technician', company: 'TIXIA Services numériques', location: 'Laval, France', date: 'Since August 2023', desc: 'Advanced administration of Microsoft 365 and Google Workspace (identities, security). Complex migrations: IMAP (OVH, Gandi, IONOS, Orange), Gmail, Outlook to the Cloud. DNS zone management, SMTP headers analysis, and deliverability (SPF, DKIM, DMARC). Windows Server administration (MDT, WDS, AD, DHCP, DNS, RDP). L1-L3 IT Support (L4 escalation) and PC imaging.' },
+      { role: 'IT Support Technician', company: 'Private Individuals', location: 'Laval & Le Mans', date: 'Since 2021', desc: 'Local IT assistance and diagnostics (hardware/software). PC repair, technological consulting, and system optimization.' },
+      { role: 'Webmaster', company: 'Les papiers de Lucas', location: 'Changé, France', date: 'April 2022 - June 2022', desc: 'Technical maintenance and administration of a PrestaShop e-commerce website. Detailed SEO audits, DNS management, and UX/UI fixes.' },
+      { role: 'IT Maintenance Technician', company: 'Tibco (Lactalis Group)', location: 'Laval, France', date: 'January 2019', desc: 'Preparation and system imaging of industrial computers. On-site hardware diagnostics and remote technical assistance.' },
+    ],
+    projectsTitle: 'Technical Projects & GitHub',
+    projects: [
+      { title: 'MSG/EML to PDF Converter', desc: 'Business tool developed in C# allowing the extraction and conversion of complete email archives (MSG/EML) into PDFs with automated attachment handling.', tags: ['C#', 'Business Tool', 'Email'] },
+      { title: 'Automation (Python, Scripts)', desc: 'Creation of Python, PowerShell, and Google Apps Script scripts to automate recurring tasks and optimize workflows.', tags: ['Python', 'PowerShell', 'Automation'] },
+      { title: 'Web Creation (JS, React, CMS)', desc: 'Development of custom browser extensions and deployment of modern websites (WordPress, Wix, React).', tags: ['JavaScript', 'React', 'Web'] },
+    ],
+    educationTitle: 'Education & Profile',
+    education: [
+      'Bachelor of Science in Computer Science (Development & Programming) - Le Mans University (2023)',
+      'A-Levels (Engineering Sciences, Physics, Maths) - Lycée Immaculée Conception, Laval (2020)',
+    ],
+    languagesInfo: 'French (Native), English (Fluent Technical).',
+    contactTitle: "Let's connect",
+    contactDesc: 'A question, a project, or a professional opportunity? Feel free to contact me via this form, and I will get back to you as soon as possible.',
+    form: {
+      name: 'Full Name',
+      email: 'Email Address',
+      message: 'Your message',
+      gdpr: 'I agree that my data may be used to contact me.',
+      submit: 'Send Message',
+      sending: 'Sending...',
+      success: 'Message sent successfully!',
+      error: 'Technical error. Please try again.',
+      captcha: 'Please complete the anti-bot check before sending.',
+      captchaLabel: 'Anti-bot check',
+    },
+    footer: { legal: 'Legal Notice', rights: 'All rights reserved.' },
+    legal: {
+      title: 'Legal Notice',
+      sections: [
+        { h: '1. Publisher', p: 'This website is published by Guillaume Richard, a private individual, residing in Laval, 53000, France. Contact: guillaume.rwins@gmail.com' },
+        { h: '2. Hosting', p: 'This website is hosted by OVH SAS, 2 rue Kellermann - 59100 Roubaix - France. Website: www.ovh.com' },
+        { h: '3. Intellectual property', p: 'This website is protected by French and international copyright and intellectual property laws. All reproduction rights are reserved.' },
+        { h: '4. Personal data (GDPR)', p: 'Information collected through the contact form (name, email, message) is used solely to reply to you. It is not stored in any database and is never shared with third parties. The form is protected by Cloudflare Turnstile, which checks that the visitor is human without advertising cookies. Under French data protection law and the GDPR, you have the right to access, rectify and erase your data by contacting me by email.' },
+        { h: '5. Cookies and analytics', p: 'This website sets no advertising cookies. Anonymous audience measurement (Google Analytics) is used to understand site traffic.' },
+      ],
+    },
+  },
+};

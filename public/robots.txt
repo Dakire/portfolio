@@ -1,8 +1,10 @@
-# Autoriser tous les moteurs de recherche classiques
 User-agent: *
 Allow: /
+Disallow: /contact.php
+Disallow: /cv-fr.html
+Disallow: /cv-en.html
 
-# Autoriser explicitement les bots IA (ChatGPT, Perplexity, Google Gemini, Claude)
+# Bots IA : autorisés explicitement
 User-agent: GPTBot
 Allow: /
 User-agent: ChatGPT-User
@@ -14,6 +16,8 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 User-agent: anthropic-ai
+Allow: /
+User-agent: ClaudeBot
 Allow: /
 User-agent: Claude-Web
 Allow: /
