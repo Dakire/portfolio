@@ -67,19 +67,6 @@ function Toc({ items, lang }) {
   );
 }
 
-function Cta({ lang }) {
-  const b = PORTFOLIO_DATA[lang].blog;
-  return (
-    <aside aria-labelledby="cta-title" className="mt-14 bg-slate-900 border border-emerald-500/40 rounded-2xl p-6 sm:p-8">
-      <h2 id="cta-title" className="text-xl font-bold text-white mb-2">{b.ctaTitle}</h2>
-      <p className="text-slate-300 mb-5">{b.ctaBody}</p>
-      <a href={`${LANGS[lang].home}#contact`} className="inline-block bg-emerald-700 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-        {b.ctaBtn}
-      </a>
-    </aside>
-  );
-}
-
 export function BlogPost({ post, related, lang }) {
   const b = PORTFOLIO_DATA[lang].blog;
   return (
@@ -107,7 +94,6 @@ export function BlogPost({ post, related, lang }) {
         {post.toc.length >= 4 && <Toc items={post.toc} lang={lang} />}
         <div className="article" dangerouslySetInnerHTML={{ __html: post.html }} />
       </article>
-      <Cta lang={lang} />
       {related.length > 0 && (
         <aside aria-labelledby="related-title" className="mt-16 pt-8 border-t border-slate-800">
           <h2 id="related-title" className="text-xl font-bold text-white mb-4">{b.related}</h2>
