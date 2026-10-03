@@ -14,14 +14,15 @@ src/
   App.jsx               Accueil ; la langue vient de l'URL ('/' = FR, '/en/' = EN), pas d'un état
   main.jsx              Hydratation (langue et articles lus dans le HTML pré-rendu)
   index.css             Tailwind, focus visible, skip-link, styles des articles et du bandeau de cookies
-content/blog/*.md      Articles (front matter : title, description, date, updated optionnel, script optionnel ; slug = nom du fichier)
+content/blog/*.md      Articles en français (front matter : title, description, date, updated optionnel, script optionnel ; slug = nom du fichier)
+content/blog/en/*.md   Traductions anglaises (mêmes champs + translationOf : slug de l'article français correspondant)
 scripts/prerender.js   Génère : accueil FR et EN, mentions légales, blog, 404.html, sitemap.xml (avec hreflang) et llms.txt
 public/                 Copié tel quel dans dist/ : contact.php, .htaccess, robots.txt, llms.txt, og-image.png, PDF, favicon
 public/js/             Scripts autonomes : consent.js (bandeau + Google Analytics), table-filter.js, 404.js
 ```
 
-Pages produites : `/`, `/en/`, `/mentions-legales/`, `/en/legal-notice/`, `/blog/`, `/blog/<slug>/`, `404.html`.
-Le sitemap n'est pas à maintenir à la main : il est entièrement généré au build.
+Pages produites : `/`, `/en/`, `/mentions-legales/`, `/en/legal-notice/`, `/blog/`, `/blog/<slug>/`, `/en/blog/`, `/en/blog/<slug>/`, `404.html`.
+Le sitemap (avec `hreflang`) et `llms.txt` sont entièrement générés au build : aucune URL à maintenir à la main.
 
 ## Développement
 
@@ -33,7 +34,9 @@ npm run lint
 npm run build                # génère dist/ (build Vite + pré-rendu)
 ```
 
-Pour ajouter un article : créer `content/blog/<slug>.md` avec son front matter, puis `npm run build`.
+Pour ajouter un article : créer `content/blog/<slug>.md` avec son front matter. Pour sa version anglaise, créer `content/blog/en/<slug-en>.md`
+avec `translationOf: <slug français>` (le build échoue si ce slug n'existe pas), puis `npm run build`. Les deux versions sont reliées
+(`hreflang`, lien « Read this article in English ») ; un article sans traduction fonctionne aussi.
 
 ## Déploiement (OVH)
 
