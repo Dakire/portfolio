@@ -1,4 +1,8 @@
 <!doctype html>
+<!--
+  Gabarit de développement uniquement. En production, scripts/prerender.js génère toutes les pages
+  (balises SEO, Open Graph, hreflang, JSON-LD, contenu pré-rendu) à partir de src/data/content.js.
+-->
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
@@ -6,125 +10,10 @@
     <meta name="theme-color" content="#020617" />
     <meta name="color-scheme" content="dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href="https://grichard.eu/" />
-
-    <!-- SEO -->
-    <title>Guillaume Richard | Technicien Informatique & Systèmes Numériques</title>
-    <meta name="description" content="Portfolio de Guillaume Richard, Technicien Informatique et Systèmes Numériques à Laval. Expertise en infrastructure (M365, Google Workspace, DNS, Windows Server), Cloud et développement." />
-    <meta name="author" content="Guillaume Richard" />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="profile" />
-    <meta property="og:site_name" content="Guillaume Richard" />
-    <meta property="og:title" content="Guillaume Richard | Technicien Informatique & Systèmes Numériques" />
-    <meta property="og:description" content="Administration système et réseau, Cloud (M365, Google Workspace), DNS et développement. Basé à Laval, France." />
-    <meta property="og:url" content="https://grichard.eu/" />
-    <meta property="og:locale" content="fr_FR" />
-    <meta property="og:locale:alternate" content="en_US" />
-    <meta property="profile:first_name" content="Guillaume" />
-    <meta property="profile:last_name" content="Richard" />
-
-    <!-- Twitter Cards -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Guillaume Richard | Technicien Informatique & Systèmes Numériques" />
-    <meta name="twitter:description" content="Administration système et réseau, Cloud (M365, Google Workspace), DNS et développement. Basé à Laval, France." />
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BT1XNR3K5F"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-BT1XNR3K5F', { anonymize_ip: true });
-    </script>
-
-    <!-- Données structurées : ProfilePage + Person -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "ProfilePage",
-          "@id": "https://grichard.eu/#profilepage",
-          "url": "https://grichard.eu/",
-          "name": "Guillaume Richard | Technicien Informatique & Systèmes Numériques",
-          "inLanguage": ["fr-FR", "en"],
-          "dateModified": "2026-10-03",
-          "mainEntity": { "@id": "https://grichard.eu/#person" }
-        },
-        {
-          "@type": "Person",
-          "@id": "https://grichard.eu/#person",
-          "name": "Guillaume Richard",
-          "givenName": "Guillaume",
-          "familyName": "Richard",
-          "jobTitle": "Technicien Informatique et Systèmes Numériques",
-          "description": "Technicien Informatique et Systèmes Numériques basé à Laval. Expert en infrastructure IT, migrations Cloud (Google Workspace, M365) et automatisation.",
-          "url": "https://grichard.eu/",
-          "homeLocation": {
-            "@type": "Place",
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": "Laval",
-              "postalCode": "53000",
-              "addressRegion": "Pays de la Loire",
-              "addressCountry": "FR"
-            }
-          },
-          "workLocation": {
-            "@type": "Place",
-            "address": { "@type": "PostalAddress", "addressLocality": "Laval", "addressCountry": "FR" }
-          },
-          "knowsLanguage": ["fr", "en"],
-          "sameAs": [
-            "https://www.linkedin.com/in/guillaume-richard-in",
-            "https://github.com/Dakire"
-          ],
-          "worksFor": {
-            "@type": "Organization",
-            "name": "TIXIA Services numériques",
-            "address": { "@type": "PostalAddress", "addressLocality": "Laval", "addressCountry": "FR" }
-          },
-          "alumniOf": {
-            "@type": "CollegeOrUniversity",
-            "name": "Le Mans Université",
-            "address": { "@type": "PostalAddress", "addressLocality": "Le Mans", "addressCountry": "FR" }
-          },
-          "knowsAbout": [
-            "Administration Système",
-            "Réseaux informatiques",
-            "Google Workspace",
-            "Microsoft 365",
-            "Active Directory",
-            "Windows Server",
-            "DNS, SPF, DKIM, DMARC",
-            "Développement C#",
-            "Python",
-            "Java",
-            "PowerShell",
-            "Stormshield"
-          ]
-        }
-      ]
-    }
-    </script>
+    <title>Guillaume Richard | Technicien Informatique &amp; Systèmes Numériques</title>
   </head>
   <body>
     <div id="root"></div>
-    <noscript>
-      <main style="font-family:system-ui,sans-serif;max-width:40rem;margin:3rem auto;padding:0 1rem;color:#e2e8f0">
-        <h1>Guillaume Richard</h1>
-        <p>Technicien Informatique &amp; Systèmes Numériques — Laval, France.</p>
-        <p>Ce site nécessite JavaScript. / This site requires JavaScript.</p>
-        <ul>
-          <li><a href="/CV_Guillaume_Richard_FR.pdf" style="color:#6ee7b7">CV (PDF)</a></li>
-          <li><a href="/Resume_Guillaume_Richard_EN.pdf" style="color:#6ee7b7">Resume (PDF)</a></li>
-          <li><a href="https://www.linkedin.com/in/guillaume-richard-in" style="color:#6ee7b7">LinkedIn</a></li>
-          <li><a href="https://github.com/Dakire" style="color:#6ee7b7">GitHub</a></li>
-        </ul>
-      </main>
-    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

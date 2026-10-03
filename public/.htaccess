@@ -1,5 +1,15 @@
 # ----------------------------------------------------------------------
-# 1. Mise en cache des ressources statiques 
+# 1. Base
+#    Le site est entièrement pré-rendu (aucun routeur côté client).
+# ----------------------------------------------------------------------
+Options -Indexes
+DirectoryIndex index.html
+AddDefaultCharset UTF-8
+
+# ----------------------------------------------------------------------
+# 2. Cache
+#    /assets/ : noms hachés par Vite, donc cache longue durée sans risque.
+#    HTML : toujours revalidé, pour qu'un nouveau déploiement soit visible tout de suite.
 # ----------------------------------------------------------------------
 <IfModule mod_expires.c>
     ExpiresActive On
@@ -7,59 +17,91 @@
     ExpiresByType image/jpeg "access plus 1 year"
     ExpiresByType image/gif "access plus 1 year"
     ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/avif "access plus 1 year"
     ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
     ExpiresByType text/css "access plus 1 month"
     ExpiresByType application/pdf "access plus 1 month"
     ExpiresByType text/x-javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
     ExpiresByType application/javascript "access plus 1 month"
 </IfModule>
 
+<IfModule mod_headers.c>
+    <If "%{REQUEST_URI} =~ m#^/assets/#">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </If>
+    <FilesMatch "\.html$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+</IfModule>
+
 # ----------------------------------------------------------------------
-# 2. En-têtes de sécurité (Pour satisfaire PageSpeed Insights)
+# 3. En-têtes de sécurité
+#    CSP sans 'unsafe-inline' pour les scripts : les pages ne contiennent aucun script en ligne
+#    (Google Analytics est chargé par /js/consent.js, uniquement après consentement).
 # ----------------------------------------------------------------------
 <IfModule mod_headers.c>
-    # Forcer le HTTPS (HSTS)
+    # HTTPS forcé (tous les sous-domaines doivent être servis en HTTPS)
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
 
-    # Anti-Clickjacking (Empêche l'intégration de votre site dans une iframe externe)
+    # Anti-clickjacking
     Header always set X-Frame-Options "SAMEORIGIN"
 
-    # Empêcher le navigateur de deviner les types MIME
+    # Pas de détection de type MIME
     Header always set X-Content-Type-Options "nosniff"
 
-    # Isolation COOP (Cross-Origin-Opener-Policy)
+    # Isolation COOP
     Header always set Cross-Origin-Opener-Policy "same-origin"
 
-    # CSP (Content Security Policy) : Autorise Google Analytics et Cloudflare Turnstile
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://stats.g.doubleclick.net https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+    # Content Security Policy : Google Analytics (après consentement) et Cloudflare Turnstile
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://challenges.cloudflare.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
 
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
 </IfModule>
 
-# Compression
+# ----------------------------------------------------------------------
+# 4. Compression
+# ----------------------------------------------------------------------
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml text/plain application/xml
+    AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript text/javascript application/json application/ld+json application/xml image/svg+xml
 </IfModule>
 
-# Le fichier de configuration du secret Turnstile ne doit jamais être servi
+# ----------------------------------------------------------------------
+# 5. Fichiers non publics
+#    - contact.config.php : secret Turnstile (à placer de préférence au-dessus de la racine web)
+#    - cv-fr.html / cv-en.html : sources HTML des CV, utilisées pour générer les PDF
+# ----------------------------------------------------------------------
 <Files "contact.config.php">
     Require all denied
 </Files>
+<FilesMatch "^cv-(fr|en)\.html$">
+    Require all denied
+</FilesMatch>
 
 # ----------------------------------------------------------------------
-# 3. Redirection des requêtes pour React/Vite (si vous utilisez React Router)
+# 6. URL canonique et page 404
+#    Une URL inconnue doit renvoyer un vrai 404 (pas l'accueil en 200 : « soft 404 »).
 # ----------------------------------------------------------------------
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
-    RewriteRule ^index\.html$ - [L]
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /index.html [L]
+
+    # HTTP -> HTTPS (l'en-tête X-Forwarded-Proto évite toute boucle derrière un proxy)
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://grichard.eu%{REQUEST_URI} [L,R=301]
+
+    # www -> domaine nu
+    RewriteCond %{HTTP_HOST} ^www\. [NC]
+    RewriteRule ^ https://grichard.eu%{REQUEST_URI} [L,R=301]
+
+    # /dossier/index.html -> /dossier/ (évite les doublons d'URL)
+    RewriteCond %{THE_REQUEST} \s/+(?:.*/)?index\.html[\s?]
+    RewriteRule ^(.*/)?index\.html$ /$1 [L,R=301]
 </IfModule>
 
-# Sources HTML des CV (utilisées pour générer les PDF) : non publiques
-<FilesMatch "^cv-(fr|en)\.html$">
-    Require all denied
-</FilesMatch>
+ErrorDocument 404 /404.html
+ErrorDocument 403 /404.html

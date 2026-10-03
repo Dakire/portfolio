@@ -17,17 +17,21 @@ function respond(int $code, bool $success, string $message): never
     exit;
 }
 
-/** Secret Turnstile : variable d'environnement, ou contact.config.php (hors dépôt Git). */
+/**
+ * Secret Turnstile : variable d'environnement, sinon contact.config.php.
+ * Ce fichier est cherché d'abord AU-DESSUS de la racine web (jamais servi par Apache), puis à côté de ce script.
+ */
 function turnstileSecret(): string
 {
     $env = getenv('TURNSTILE_SECRET');
     if ($env) {
         return $env;
     }
-    $file = __DIR__ . '/contact.config.php';
-    if (is_file($file)) {
-        $config = require $file;
-        return (string) ($config['turnstile_secret'] ?? '');
+    foreach ([dirname(__DIR__) . '/contact.config.php', __DIR__ . '/contact.config.php'] as $file) {
+        if (is_file($file)) {
+            $config = require $file;
+            return (string) ($config['turnstile_secret'] ?? '');
+        }
     }
     return '';
 }

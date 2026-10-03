@@ -26,4 +26,4 @@ dist-ssr
 # Secrets
 .env
 .env.local
-public/contact.config.php
+contact.config.php

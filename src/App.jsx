@@ -1,62 +1,23 @@
-import { useState, useEffect } from 'react';
-import { Server, Code, Mail, MapPin, Download, User, Briefcase, BookOpen, FolderGit2, Shield } from 'lucide-react';
-import { PORTFOLIO_DATA, PROFILE } from './data/content';
+import { Server, Code, Mail, MapPin, Download, User, Briefcase, BookOpen, FolderGit2, Shield, Newspaper, Clock } from 'lucide-react';
+import { PORTFOLIO_DATA, PROFILE, LANGS } from './data/content';
 import { GithubIcon, LinkedinIcon } from './components/Icons';
 import Header from './components/Header';
 import SectionHeading from './components/SectionHeading';
 import ContactForm from './components/ContactForm';
-import LegalPage from './components/LegalPage';
 
 const YEAR = new Date().getFullYear();
 
-const getInitialLang = () => {
-  try {
-    const stored = localStorage.getItem('lang');
-    if (stored in PORTFOLIO_DATA) return stored;
-  } catch {
-    // stockage indisponible : on retombe sur la langue du navigateur
-  }
-  return navigator.language?.toLowerCase().startsWith('fr') ? 'fr' : 'en';
-};
+const formatDate = (iso, locale) =>
+  new Date(iso).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
-export default function App() {
-  // 'fr' au premier rendu (identique au HTML pré-rendu), puis langue préférée du visiteur.
-  const [lang, setLang] = useState('fr');
-  const [showLegal, setShowLegal] = useState(false);
+// La langue est portée par l'URL ('/' = fr, '/en/' = en) : le HTML pré-rendu et l'hydratation partent du même état.
+export default function App({ lang = 'fr', posts = [] }) {
   const t = PORTFOLIO_DATA[lang];
-
-  useEffect(() => {
-    // oxlint-disable-next-line react/set-state-in-effect -- lecture post-hydratation des préférences du visiteur
-    setLang(getInitialLang());
-  }, []);
-
-  // Langue, titre et description synchronisés avec la langue active.
-  useEffect(() => {
-    document.documentElement.lang = lang;
-    document.title = t.meta.title;
-    document.querySelector('meta[name="description"]')?.setAttribute('content', t.meta.description);
-    try {
-      localStorage.setItem('lang', lang);
-    } catch {
-      // non bloquant
-    }
-  }, [lang, t]);
-
-  const toggleLang = () => setLang((l) => (l === 'fr' ? 'en' : 'fr'));
-
-  if (showLegal) {
-    return (
-      <>
-        <a href="#main" className="skip-link">{t.ui.skip}</a>
-        <LegalPage t={t} onBack={() => setShowLegal(false)} />
-      </>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-300 font-sans selection:bg-emerald-500/30">
       <a href="#main" className="skip-link">{t.ui.skip}</a>
-      <Header t={t} lang={lang} onToggleLang={toggleLang} />
+      <Header t={t} lang={lang} />
 
       <main id="main" className="max-w-6xl mx-auto px-4 sm:px-6 pt-28 md:pt-32 pb-20 space-y-24 md:space-y-32">
         {/* HERO */}
@@ -146,16 +107,17 @@ export default function App() {
         <section id="projects" aria-labelledby="projects-title" className="scroll-mt-32">
           <SectionHeading id="projects-title" icon={FolderGit2}>{t.projectsTitle}</SectionHeading>
           <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {t.projects.map((project) => (
-              <li key={project.title} className="h-full">
-                <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="bg-slate-900 border border-slate-800 hover:border-emerald-500 p-6 rounded-2xl transition-colors shadow-lg group flex flex-col h-full">
+            {t.projects.map((project) => {
+              const card = 'bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg flex flex-col h-full';
+              const body = (
+                <>
                   <div className="flex justify-between items-start mb-4">
                     <FolderGit2 className="w-8 h-8 text-emerald-400" aria-hidden="true" />
-                    <GithubIcon className="w-5 h-5 text-slate-300 group-hover:text-white transition-colors" />
+                    {project.href && <GithubIcon className="w-5 h-5 text-slate-300 group-hover:text-white transition-colors" />}
                   </div>
                   <h3 className="text-white font-bold text-lg mb-2 group-hover:text-emerald-300 transition-colors">
                     {project.title}
-                    <span className="sr-only"> — {t.ui.projectOpen}</span>
+                    {project.href && <span className="sr-only"> — {t.ui.projectOpen}</span>}
                   </h3>
                   <p className="text-slate-300 text-sm leading-relaxed mb-6 flex-1">{project.desc}</p>
                   <ul className="flex flex-wrap gap-2 mt-auto" aria-label="Tags">
@@ -163,11 +125,52 @@ export default function App() {
                       <li key={tag} className="text-xs font-mono text-emerald-300 bg-emerald-500/10 px-2 py-1 rounded-md border border-emerald-500/30">{tag}</li>
                     ))}
                   </ul>
-                </a>
-              </li>
-            ))}
+                </>
+              );
+              return (
+                <li key={project.title} className="h-full">
+                  {project.href ? (
+                    <a href={project.href} target="_blank" rel="noopener noreferrer" className={`${card} hover:border-emerald-500 transition-colors group`}>{body}</a>
+                  ) : (
+                    <div className={card}>{body}</div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
+          <p className="mt-6">
+            <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-emerald-300 hover:text-emerald-200 underline underline-offset-2 rounded">
+              <GithubIcon className="w-5 h-5" /> {t.ui.repos}
+            </a>
+          </p>
         </section>
+
+        {/* BLOG */}
+        {posts.length > 0 && (
+          <section id="blog" aria-labelledby="blog-title" className="scroll-mt-32">
+            <SectionHeading id="blog-title" icon={Newspaper}>{t.blog.title}</SectionHeading>
+            <p className="text-slate-300 mb-6 max-w-3xl">{t.blog.intro}</p>
+            <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {posts.slice(0, 3).map((p) => (
+                <li key={p.slug} className="h-full">
+                  <article className="bg-slate-900 border border-slate-800 hover:border-emerald-500/60 transition-colors p-6 rounded-2xl shadow-lg h-full flex flex-col">
+                    <h3 className="text-white font-bold text-lg mb-2">
+                      <a href={`${LANGS[lang].blog}${p.slug}/`} className="hover:text-emerald-300 transition-colors">{p.title}</a>
+                    </h3>
+                    <p className="text-slate-300 text-sm leading-relaxed mb-4 flex-1">{p.description}</p>
+                    <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono text-emerald-300">
+                      <time dateTime={p.date}>{formatDate(p.date, t.blog.dateLocale)}</time>
+                      <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" aria-hidden="true" /> {p.readingTime} {t.blog.min}</span>
+                    </p>
+                  </article>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6">
+              <a href={LANGS[lang].blog} className="text-emerald-300 hover:text-emerald-200 underline underline-offset-2 rounded">{t.blog.all}</a>
+            </p>
+          </section>
+        )}
 
         {/* EDUCATION & CONTACT */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -212,9 +215,10 @@ export default function App() {
               </a>
             </li>
             <li>
-              <button type="button" onClick={() => setShowLegal(true)} className="hover:text-emerald-300 underline underline-offset-2 transition-colors rounded">
-                {t.footer.legal}
-              </button>
+              <a href={LANGS[lang].legal} className="hover:text-emerald-300 underline underline-offset-2 transition-colors rounded">{t.footer.legal}</a>
+            </li>
+            <li>
+              <button type="button" data-consent-open className="hover:text-emerald-300 underline underline-offset-2 transition-colors rounded">{t.ui.cookies}</button>
             </li>
           </ul>
         </div>
