@@ -95,8 +95,8 @@ export const PORTFOLIO_DATA = {
       "Baccalauréat Scientifique (Sciences de l'Ingénieur) - Lycée Immaculée Conception, Laval (2020)",
     ],
     languagesInfo: 'Français (langue maternelle), Anglais (courant, technique).',
-    contactTitle: 'Échangeons sur vos projets',
-    contactDesc: "Une question, un projet ou une opportunité professionnelle ? N'hésitez pas à me contacter via ce formulaire, je vous répondrai dans les plus brefs délais.",
+    contactTitle: 'Me contacter',
+    contactDesc: "Une question, une remarque sur le site ou sur un article du blog ? Écrivez-moi via ce formulaire, je vous répondrai dès que possible.",
     form: {
       name: 'Votre nom complet',
       email: 'Votre adresse email',
@@ -199,8 +199,8 @@ export const PORTFOLIO_DATA = {
       'French Scientific Baccalauréat (Engineering Sciences) - Lycée Immaculée Conception, Laval (2020)',
     ],
     languagesInfo: 'French (Native), English (Fluent Technical).',
-    contactTitle: "Let's connect",
-    contactDesc: 'A question, a project, or a professional opportunity? Feel free to contact me via this form, and I will get back to you as soon as possible.',
+    contactTitle: 'Get in touch',
+    contactDesc: 'A question, or a comment about the site or a blog article? Write to me with this form and I will get back to you as soon as possible.',
     form: {
       name: 'Full Name',
       email: 'Email Address',
