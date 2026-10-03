@@ -2,7 +2,7 @@
 
 export const PROFILE = {
   name: 'Guillaume Richard',
-  email: 'guillaume.rwins@gmail.com',
+  email: 'contact@grichard.eu',
   location: 'Laval, France',
   linkedin: 'https://www.linkedin.com/in/guillaume-richard-in',
   github: 'https://github.com/Dakire',
@@ -86,7 +86,7 @@ export const PORTFOLIO_DATA = {
     legal: {
       title: 'Mentions Légales',
       sections: [
-        { h: '1. Éditeur du site', p: 'Ce site est édité par Guillaume Richard, un particulier. Résidant à : Laval, 53000, France. Contact : guillaume.rwins@gmail.com' },
+        { h: '1. Éditeur du site', p: 'Ce site est édité par Guillaume Richard, un particulier. Résidant à : Laval, 53000, France. Contact : contact@grichard.eu' },
         { h: '2. Hébergement', p: 'Ce site est hébergé par OVH SAS. Adresse : 2 rue Kellermann - 59100 Roubaix - France. Site web : www.ovh.com' },
         { h: '3. Propriété intellectuelle', p: "L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés." },
         { h: '4. Données personnelles (RGPD)', p: 'Les informations recueillies via le formulaire de contact (Nom, Email, Message) sont uniquement destinées à vous répondre. Elles ne sont stockées dans aucune base de données et ne sont jamais cédées à des tiers. Le formulaire est protégé par Cloudflare Turnstile, qui vérifie que le visiteur est humain sans cookie publicitaire. Conformément à la loi « Informatique et Libertés » et au RGPD, vous disposez d\'un droit d\'accès, de rectification et d\'effacement de vos données en me contactant par email.' },
@@ -169,7 +169,7 @@ export const PORTFOLIO_DATA = {
     legal: {
       title: 'Legal Notice',
       sections: [
-        { h: '1. Publisher', p: 'This website is published by Guillaume Richard, a private individual, residing in Laval, 53000, France. Contact: guillaume.rwins@gmail.com' },
+        { h: '1. Publisher', p: 'This website is published by Guillaume Richard, a private individual, residing in Laval, 53000, France. Contact: contact@grichard.eu' },
         { h: '2. Hosting', p: 'This website is hosted by OVH SAS, 2 rue Kellermann - 59100 Roubaix - France. Website: www.ovh.com' },
         { h: '3. Intellectual property', p: 'This website is protected by French and international copyright and intellectual property laws. All reproduction rights are reserved.' },
         { h: '4. Personal data (GDPR)', p: 'Information collected through the contact form (name, email, message) is used solely to reply to you. It is not stored in any database and is never shared with third parties. The form is protected by Cloudflare Turnstile, which checks that the visitor is human without advertising cookies. Under French data protection law and the GDPR, you have the right to access, rectify and erase your data by contacting me by email.' },
