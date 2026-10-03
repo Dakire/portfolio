@@ -99,7 +99,7 @@ export const PORTFOLIO_DATA = {
       'Licence Informatique (Développement et Programmation) - Le Mans Université (2023)',
       "Baccalauréat Scientifique (Sciences de l'Ingénieur) - Lycée Immaculée Conception, Laval (2020)",
     ],
-    languagesInfo: 'Français (langue maternelle), Anglais (courant, technique).',
+    languagesInfo: 'Français (langue maternelle), Anglais (langue maternelle).',
     contactTitle: 'Me contacter',
     form: {
       name: 'Votre nom complet',
@@ -207,7 +207,7 @@ export const PORTFOLIO_DATA = {
       'Bachelor of Science in Computer Science (Development & Programming) - Le Mans University (2023)',
       'French Scientific Baccalauréat (Engineering Sciences) - Lycée Immaculée Conception, Laval (2020)',
     ],
-    languagesInfo: 'French (Native), English (Fluent Technical).',
+    languagesInfo: 'French (Native), English (Native).',
     contactTitle: 'Get in touch',
     form: {
       name: 'Full Name',
