@@ -37,7 +37,7 @@ export const PORTFOLIO_DATA = {
       languages: 'Langues',
       back: 'Retour au portfolio',
       cookies: 'Gérer les cookies',
-      repos: 'Voir tous mes dépôts GitHub (nouvelle fenêtre)',
+      repos: 'Voir tous mes dépôts GitHub',
       langName: 'English',
     },
     blog: {
@@ -65,6 +65,11 @@ export const PORTFOLIO_DATA = {
       cvBtn: 'Télécharger mon CV',
       contactBtn: 'Me contacter',
       cvLink: '/CV_Guillaume_Richard_FR.pdf',
+      terminal: [
+        { cmd: 'whoami', out: 'guillaume · technicien informatique & systèmes numériques' },
+        { cmd: 'cat stack.txt', out: 'Microsoft 365 · Google Workspace · DNS · Windows Server' },
+        { cmd: 'ls ~/blog', out: 'spf-dkim-dmarc  delivrabilite  dns  migration  windows-11' },
+      ],
     },
     aboutTitle: 'À propos de moi',
     about:
@@ -96,7 +101,7 @@ export const PORTFOLIO_DATA = {
     ],
     languagesInfo: 'Français (langue maternelle), Anglais (courant, technique).',
     contactTitle: 'Me contacter',
-    contactDesc: "Une question, une remarque sur le site ou sur un article du blog ? Écrivez-moi via ce formulaire, je vous répondrai dès que possible.",
+    contactDesc: "Une question, une remarque sur le site ou sur un article ? Écrivez-moi, je réponds dès que possible.",
     form: {
       name: 'Votre nom complet',
       email: 'Votre adresse email',
@@ -141,7 +146,7 @@ export const PORTFOLIO_DATA = {
       languages: 'Languages',
       back: 'Back to portfolio',
       cookies: 'Cookie settings',
-      repos: 'See all my GitHub repositories (opens in a new window)',
+      repos: 'See all my GitHub repositories',
       langName: 'Français',
     },
     blog: {
@@ -169,6 +174,11 @@ export const PORTFOLIO_DATA = {
       cvBtn: 'Download Resume',
       contactBtn: 'Contact Me',
       cvLink: '/Resume_Guillaume_Richard_EN.pdf',
+      terminal: [
+        { cmd: 'whoami', out: 'guillaume · it & digital systems technician' },
+        { cmd: 'cat stack.txt', out: 'Microsoft 365 · Google Workspace · DNS · Windows Server' },
+        { cmd: 'ls ~/blog', out: 'spf-dkim-dmarc  deliverability  dns  migration  windows-11' },
+      ],
     },
     aboutTitle: 'About Me',
     about:
@@ -200,7 +210,7 @@ export const PORTFOLIO_DATA = {
     ],
     languagesInfo: 'French (Native), English (Fluent Technical).',
     contactTitle: 'Get in touch',
-    contactDesc: 'A question, or a comment about the site or a blog article? Write to me with this form and I will get back to you as soon as possible.',
+    contactDesc: 'A question, or a comment about the site or an article? Drop me a message, I reply as soon as I can.',
     form: {
       name: 'Full Name',
       email: 'Email Address',

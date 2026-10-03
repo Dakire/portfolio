@@ -17,7 +17,7 @@ export function BlogIndex({ posts, lang }) {
       <ul className="space-y-6">
         {posts.map((p) => (
           <li key={p.slug}>
-            <article className="bg-slate-900/60 border border-slate-800 hover:border-emerald-500/60 transition-colors p-6 rounded-2xl">
+            <article className="card-lift bg-slate-900/60 border border-slate-800 p-6 rounded-2xl">
               <h2 className="text-xl font-bold text-white mb-2">
                 <a href={`${LANGS[lang].blog}${p.slug}/`} className="hover:text-emerald-300 transition-colors">{p.title}</a>
               </h2>

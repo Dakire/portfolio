@@ -4,6 +4,8 @@ import { GithubIcon, LinkedinIcon } from './components/Icons';
 import Header from './components/Header';
 import SectionHeading from './components/SectionHeading';
 import ContactForm from './components/ContactForm';
+import Decor from './components/Decor';
+import Terminal from './components/Terminal';
 
 const YEAR = new Date().getFullYear();
 
@@ -15,18 +17,20 @@ export default function App({ lang = 'fr', posts = [] }) {
   const t = PORTFOLIO_DATA[lang];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-300 font-sans selection:bg-emerald-500/30">
+    <div className="relative isolate min-h-screen text-slate-300 font-sans selection:bg-emerald-500/30">
+      <Decor />
       <a href="#main" className="skip-link">{t.ui.skip}</a>
       <Header t={t} lang={lang} />
 
       <main id="main" className="max-w-6xl mx-auto px-4 sm:px-6 pt-28 md:pt-32 pb-20 space-y-24 md:space-y-32">
         {/* HERO */}
-        <section id="home" aria-labelledby="hero-title" className="scroll-mt-32 flex flex-col items-start justify-center min-h-[50vh] md:min-h-[60vh]">
+        <section id="home" aria-labelledby="hero-title" className="scroll-mt-32 grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] min-h-[50vh] md:min-h-[60vh]">
+          <div className="flex flex-col items-start">
           <p className="text-emerald-400 font-mono mb-4 text-lg">{t.hero.greeting}</p>
           <h1 id="hero-title" className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-4">
-            Guillaume <span className="bg-clip-text text-transparent bg-linear-to-r from-emerald-400 to-cyan-400">Richard.</span>
+            Guillaume <span className="gradient-shift bg-clip-text text-transparent bg-linear-to-r from-emerald-400 to-cyan-400">Richard.</span>
           </h1>
-          <p className="text-xl sm:text-2xl md:text-4xl font-bold text-slate-300 mb-8 max-w-3xl leading-tight">{t.hero.role}</p>
+          <p className="caret-after text-xl sm:text-2xl md:text-4xl font-bold text-slate-300 mb-8 max-w-3xl leading-tight">{t.hero.role}</p>
 
           <div className="flex flex-wrap gap-4 mt-4">
             <a href="#contact" className="bg-emerald-700 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-lg shadow-emerald-900/30">
@@ -38,10 +42,12 @@ export default function App({ lang = 'fr', posts = [] }) {
               <span className="sr-only"> ({t.ui.cvOpen})</span>
             </a>
           </div>
+          </div>
+          <Terminal lines={t.hero.terminal} />
         </section>
 
         {/* ABOUT */}
-        <section id="about" aria-labelledby="about-title" className="scroll-mt-32">
+        <section id="about" aria-labelledby="about-title" className="reveal scroll-mt-32">
           <SectionHeading id="about-title" icon={User}>{t.aboutTitle}</SectionHeading>
           <div className="bg-slate-900/60 border border-slate-800 p-6 sm:p-8 rounded-2xl text-base sm:text-lg leading-relaxed text-slate-300 max-w-4xl shadow-xl">
             <p>{t.about}</p>
@@ -61,11 +67,11 @@ export default function App({ lang = 'fr', posts = [] }) {
         </section>
 
         {/* SKILLS */}
-        <section id="skills" aria-labelledby="skills-title" className="scroll-mt-32">
+        <section id="skills" aria-labelledby="skills-title" className="reveal scroll-mt-32">
           <SectionHeading id="skills-title" icon={Code}>{t.skillsTitle}</SectionHeading>
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.skills.map((skill) => (
-              <li key={skill.category} className="bg-slate-900 border border-slate-800 p-6 rounded-2xl hover:border-emerald-500/60 transition-colors shadow-lg">
+              <li key={skill.category} className="card-lift bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg">
                 <div className="flex items-center gap-3 mb-4">
                   <Server className="w-5 h-5 shrink-0 text-emerald-400" aria-hidden="true" />
                   <h3 className="text-white font-bold text-lg">{skill.category}</h3>
@@ -77,13 +83,13 @@ export default function App({ lang = 'fr', posts = [] }) {
         </section>
 
         {/* EXPERIENCE */}
-        <section id="experience" aria-labelledby="experience-title" className="scroll-mt-32">
+        <section id="experience" aria-labelledby="experience-title" className="reveal scroll-mt-32">
           <SectionHeading id="experience-title" icon={Briefcase}>{t.experienceTitle}</SectionHeading>
           <ol className="space-y-8 max-w-4xl">
             {t.experiences.map((exp) => (
               <li key={`${exp.company}-${exp.date}`} className="relative pl-8 md:pl-0">
                 <div className="absolute left-[11px] md:left-[140px] top-2 -bottom-8 w-px bg-slate-700" aria-hidden="true" />
-                <div className="absolute left-[7px] md:left-[136px] top-3 w-2.5 h-2.5 rounded-full bg-emerald-400 border-[3px] border-slate-950 box-content" aria-hidden="true" />
+                <div className="absolute left-[7px] md:left-[136px] top-3 w-2.5 h-2.5 rounded-full bg-emerald-400 border-[3px] border-slate-950 box-content shadow-[0_0_14px_rgb(52_211_153/0.9)]" aria-hidden="true" />
 
                 <div className="flex flex-col md:flex-row gap-4 md:gap-16">
                   <p className="md:w-[120px] shrink-0 md:pt-6 md:text-right text-emerald-400 font-mono text-sm">{exp.date}</p>
@@ -104,11 +110,11 @@ export default function App({ lang = 'fr', posts = [] }) {
         </section>
 
         {/* PROJECTS */}
-        <section id="projects" aria-labelledby="projects-title" className="scroll-mt-32">
+        <section id="projects" aria-labelledby="projects-title" className="reveal scroll-mt-32">
           <SectionHeading id="projects-title" icon={FolderGit2}>{t.projectsTitle}</SectionHeading>
           <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {t.projects.map((project) => {
-              const card = 'bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg flex flex-col h-full';
+              const card = 'card-lift bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg flex flex-col h-full';
               const body = (
                 <>
                   <div className="flex justify-between items-start mb-4">
@@ -130,7 +136,7 @@ export default function App({ lang = 'fr', posts = [] }) {
               return (
                 <li key={project.title} className="h-full">
                   {project.href ? (
-                    <a href={project.href} target="_blank" rel="noopener noreferrer" className={`${card} hover:border-emerald-500 transition-colors group`}>{body}</a>
+                    <a href={project.href} target="_blank" rel="noopener noreferrer" className={`${card} group`}>{body}</a>
                   ) : (
                     <div className={card}>{body}</div>
                   )}
@@ -147,13 +153,13 @@ export default function App({ lang = 'fr', posts = [] }) {
 
         {/* BLOG */}
         {posts.length > 0 && (
-          <section id="blog" aria-labelledby="blog-title" className="scroll-mt-32">
+          <section id="blog" aria-labelledby="blog-title" className="reveal scroll-mt-32">
             <SectionHeading id="blog-title" icon={Newspaper}>{t.blog.title}</SectionHeading>
             <p className="text-slate-300 mb-6 max-w-3xl">{t.blog.intro}</p>
             <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {posts.slice(0, 3).map((p) => (
                 <li key={p.slug} className="h-full">
-                  <article className="bg-slate-900 border border-slate-800 hover:border-emerald-500/60 transition-colors p-6 rounded-2xl shadow-lg h-full flex flex-col">
+                  <article className="card-lift bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg h-full flex flex-col">
                     <h3 className="text-white font-bold text-lg mb-2">
                       <a href={`${LANGS[lang].blog}${p.slug}/`} className="hover:text-emerald-300 transition-colors">{p.title}</a>
                     </h3>
@@ -174,7 +180,7 @@ export default function App({ lang = 'fr', posts = [] }) {
 
         {/* EDUCATION & CONTACT */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <section id="education" aria-labelledby="education-title" className="scroll-mt-32">
+          <section id="education" aria-labelledby="education-title" className="reveal scroll-mt-32">
             <h2 id="education-title" className="text-2xl font-bold text-white flex items-center gap-3 mb-8">
               <BookOpen className="w-6 h-6 shrink-0 text-emerald-400" aria-hidden="true" /> {t.educationTitle}
             </h2>
@@ -192,7 +198,7 @@ export default function App({ lang = 'fr', posts = [] }) {
             </div>
           </section>
 
-          <section id="contact" aria-labelledby="contact-title" className="scroll-mt-32">
+          <section id="contact" aria-labelledby="contact-title" className="reveal scroll-mt-32">
             <h2 id="contact-title" className="text-2xl font-bold text-white flex items-center gap-3 mb-8">
               <Mail className="w-6 h-6 shrink-0 text-emerald-400" aria-hidden="true" /> {t.contactTitle}
             </h2>

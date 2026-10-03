@@ -1,5 +1,6 @@
 // Gabarit des pages statiques (blog, mentions légales, 404) : rendu uniquement au build, sans JavaScript côté client.
 import { Terminal } from 'lucide-react';
+import Decor from './Decor';
 import { LANGS, PORTFOLIO_DATA, PROFILE } from '../data/content';
 
 const YEAR = new Date().getFullYear();
@@ -10,7 +11,8 @@ export default function Shell({ lang = 'fr', children }) {
   const { home, legal } = LANGS[lang];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-300 font-sans selection:bg-emerald-500/30">
+    <div className="relative isolate min-h-screen text-slate-300 font-sans selection:bg-emerald-500/30">
+      <Decor />
       <a href="#main" className="skip-link">{t.ui.skip}</a>
       <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/95 backdrop-blur-md">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex justify-between items-center gap-4">

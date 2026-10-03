@@ -5,7 +5,7 @@ export default function SectionHeading({ id, icon: Icon, children }) {
         <Icon className="w-7 h-7 sm:w-8 sm:h-8 shrink-0 text-emerald-400" aria-hidden="true" />
         {children}
       </h2>
-      <div className="h-px bg-slate-700 flex-1" aria-hidden="true" />
+      <div className="h-px bg-linear-to-r from-emerald-500/50 via-slate-700 to-transparent flex-1" aria-hidden="true" />
     </div>
   );
 }
