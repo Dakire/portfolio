@@ -9,6 +9,7 @@ import Experience from './components/home/Experience';
 import Projects from './components/home/Projects';
 import LatestPosts from './components/home/LatestPosts';
 import EducationAndContact from './components/home/EducationAndContact';
+import { terminalData } from './lib/terminal/data';
 
 // Accueil. En production il est rendu au build (HTML statique) et seul le formulaire de contact est hydraté
 // (src/main.jsx). La langue est portée par l'URL ('/' = fr, '/en/' = en), pas par un état.
@@ -22,7 +23,7 @@ export default function App({ lang = 'fr', posts = [] }) {
       <SiteHeader t={t} lang={lang} onHome switchHref={LANGS[LANGS[lang].other].home} />
 
       <main id="main" className="mx-auto max-w-6xl space-y-section px-4 pb-8 pt-[calc(var(--header-h)+2.5rem)] sm:px-6 2xl:max-w-7xl">
-        <Hero t={t} />
+        <Hero t={t} lang={lang} terminal={terminalData(lang, t, posts)} />
         <About t={t} />
         <Skills t={t} />
         <Experience t={t} />

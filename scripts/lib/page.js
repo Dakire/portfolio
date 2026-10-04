@@ -23,7 +23,7 @@ export const json = (data) => JSON.stringify(data).replace(/</g, '\\u003c');
 
 /**
  * - assets : balises <link>/<script> issues du build Vite (CSS, bundle JS de l'accueil)
- * - scripts : scripts autonomes de public/js/ en plus de ceux de toutes les pages (nav.js, fx.js, consent.js ; theme.js est chargé dans le <head>, sans defer, pour éviter tout flash de thème)
+ * - scripts : scripts autonomes de public/js/ en plus de ceux de toutes les pages (nav.js, fx.js, palette.js, consent.js ; theme.js est chargé dans le <head>, sans defer, pour éviter tout flash de thème)
  * - alternates : [{ lang, path }] pour les balises hreflang
  * - feeds : [{ title, path }] flux RSS à déclarer dans le <head> (découverte automatique par les lecteurs)
  * - image : image de partage { url, width, height, alt } ; par défaut l'image générique du site
@@ -74,7 +74,7 @@ export function page({ lang = 'fr', assets, scripts = [], title, description, pa
     ${ld ? `<script type="application/ld+json">${json(ld)}</script>` : ''}
   </head>
   <body>${body}
-    ${[...scripts, '/js/nav.js', '/js/fx.js', '/js/consent.js'].map((s) => `<script defer src="${esc(versioned(s))}"></script>`).join('\n    ')}
+    ${[...scripts, '/js/nav.js', '/js/fx.js', '/js/palette.js', '/js/consent.js'].map((s) => `<script defer src="${esc(versioned(s))}"></script>`).join('\n    ')}
   </body>
 </html>
 `;

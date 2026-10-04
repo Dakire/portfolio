@@ -1,8 +1,9 @@
 import { Download } from 'lucide-react';
 import Button from '../ui/Button';
-import Terminal from '../Terminal';
+import InteractiveTerminal from '../terminal/InteractiveTerminal';
+import { TERMINAL_ROOT_ID } from '../../lib/islands';
 
-export default function Hero({ t }) {
+export default function Hero({ t, lang, terminal }) {
   return (
     <section id="home" aria-labelledby="hero-title" className="grid min-h-[min(60dvh,38rem)] grid-cols-1 items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
       <div className="flex flex-col items-start">
@@ -21,7 +22,9 @@ export default function Hero({ t }) {
           </Button>
         </div>
       </div>
-      <Terminal lines={t.hero.terminal} />
+      <div id={TERMINAL_ROOT_ID} className="min-w-0 lg:justify-self-end">
+        <InteractiveTerminal lang={lang} data={terminal} />
+      </div>
     </section>
   );
 }

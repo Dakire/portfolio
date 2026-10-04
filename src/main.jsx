@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import { CONTACT_ROOT_ID, DNS_ROOT_ID, ISLANDS_DATA_ID } from './lib/islands.js'
+import { CONTACT_ROOT_ID, DNS_ROOT_ID, ISLANDS_DATA_ID, TERMINAL_ROOT_ID } from './lib/islands.js'
 
 // Production : les pages sont du HTML pré-rendu ; seules les zones interactives (« îlots ») sont hydratées.
 // Chaque îlot est un chargement dynamique : une page ne télécharge que le code des îlots qu'elle contient.
@@ -9,6 +9,7 @@ import { CONTACT_ROOT_ID, DNS_ROOT_ID, ISLANDS_DATA_ID } from './lib/islands.js'
 const ISLANDS = {
   [CONTACT_ROOT_ID]: () => import('./islands/contact.jsx'),
   [DNS_ROOT_ID]: () => import('./islands/dns.jsx'),
+  [TERMINAL_ROOT_ID]: () => import('./islands/terminal.jsx'),
 }
 
 const present = Object.entries(ISLANDS).filter(([id]) => document.getElementById(id))

@@ -14,6 +14,7 @@ import { gitDate } from './lib/git.js';
 import { generateOgImages, OG_SIZE } from './lib/og.js';
 import { generateCvPdfs } from './lib/pdf.js';
 import { buildRss } from './lib/rss.js';
+import { buildSearchIndex } from './lib/search-index.js';
 import { parsePost } from './lib/markdown.js';
 import { page, json, SITE } from './lib/page.js';
 import { root } from './lib/paths.js';
@@ -24,7 +25,8 @@ const vite = await createServer({ server: { middlewareMode: true }, appType: 'cu
 try {
   const { render, renderLegal, renderBlogIndex, renderBlogPost, renderNotFound, renderDnsTool } = await vite.ssrLoadModule('/src/entry-server.jsx');
   const { DNS_TOOL } = await vite.ssrLoadModule('/src/data/dns-tool.js');
-  const { PORTFOLIO_DATA, LANGS, PROFILE } = await vite.ssrLoadModule('/src/data/content.js');
+  const { PALETTE } = await vite.ssrLoadModule('/src/data/palette.js');
+  const { PORTFOLIO_DATA, LANGS, PROFILE, SECTION_IDS } = await vite.ssrLoadModule('/src/data/content.js');
   const { islandsData, ISLANDS_DATA_ID } = await vite.ssrLoadModule('/src/lib/islands.js');
 
   const write = async (path, html) => {
@@ -36,7 +38,7 @@ try {
   const manifest = await readManifest();
   const assets = assetTags(manifest);
   // Pages avec îlots : le script d'entrée et le code des îlots dont elles ont besoin (préchargés)
-  const homeAssets = assetTags(manifest, { islands: ['src/islands/contact.jsx'] });
+  const homeAssets = assetTags(manifest, { islands: ['src/islands/contact.jsx', 'src/islands/terminal.jsx'] });
   const dnsAssets = assetTags(manifest, { islands: ['src/islands/dns.jsx'] });
 
   // 1. Blog : lecture des articles (content/blog = français, content/blog/en = anglais)
@@ -106,7 +108,7 @@ try {
         alternates: alternatesOf('home'),
         feeds: feedsFor(lang),
         extraMeta: '<meta property="profile:first_name" content="Guillaume" />\n    <meta property="profile:last_name" content="Richard" />',
-        body: `<div id="root">${render(lang, lite(postsByLang[lang]))}</div>\n    <script type="application/json" id="${ISLANDS_DATA_ID}">${json(islandsData(lang, t))}</script>`,
+        body: `<div id="root">${render(lang, lite(postsByLang[lang]))}</div>\n    <script type="application/json" id="${ISLANDS_DATA_ID}">${json(islandsData(lang, t, lite(postsByLang[lang])))}</script>`,
         ld: homeLd({ lang, path, t, profile: PROFILE, dateModified: homeLastmodIso }),
       }),
     );
@@ -223,6 +225,12 @@ try {
     ]),
   );
   await writeFile(root('dist/llms.txt'), buildLlmsTxt(await readFile(root('public/llms.txt'), 'utf-8'), postsByLang, blogPath));
+
+  // 5a. Index de la palette de commandes (chargé à la première ouverture)
+  await writeFile(
+    root('dist/search-index.json'),
+    JSON.stringify(buildSearchIndex({ data: PORTFOLIO_DATA, langs: LANGS, profile: PROFILE, palette: PALETTE, sections: SECTION_IDS, posts: postsByLang, postPath: blogPath })),
+  );
 
   // 5b. Flux RSS (un par langue)
   for (const lang of ['fr', 'en']) {

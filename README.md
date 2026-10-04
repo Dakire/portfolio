@@ -23,13 +23,16 @@ src/
     home/               Sections de l'accueil : Hero, About, Skills, Experience, Projects, LatestPosts, EducationAndContact
     SiteHeader, SiteFooter   En-tête flottant et pied de page communs à TOUTES les pages (accueil, blog, légal, 404)
     ContactForm, ContactIsland, ErrorBoundary   Le formulaire de contact (îlot) et son filet de sécurité
+    terminal/           InteractiveTerminal : le terminal interactif de l'accueil (îlot)
     tools/              Outil DNS : DnsToolPage (pré-rendue), DnsChecker (îlot), DnsReport, severity
     Blog, LegalPage, NotFound, Shell            Pages statiques (rendues au build, jamais hydratées)
     PostMeta, SectionHeading, Decor, Terminal, Icons
   hooks/useTurnstile.js Cycle de vie du widget Cloudflare Turnstile (chargement, nouvelle tentative, jeton)
   lib/                  format.js (dates), cx.js (classes), islands.js (identifiants et données des îlots)
   lib/dns/              Analyse DNS pure (sans React ni DOM) : résolveur DoH, spf, dkim, dmarc, mx, txt, records, extras, providers, analyze, report
+  lib/terminal/         Interpréteur du terminal (commands.js : fonctions pures) et données qu'il consulte (data.js)
   data/dns-tool.js      Textes de l'outil DNS (FR/EN) : interface et un message par code de constat
+  data/terminal.js, data/palette.js   Textes du terminal ; textes et mots-clés de la palette
 content/blog/*.md       Articles en français (front matter : title, description, date, updated optionnel, script optionnel ; slug = nom du fichier)
 content/blog/en/*.md    Traductions anglaises (mêmes champs + translationOf : slug de l'article français correspondant)
 scripts/
@@ -39,7 +42,7 @@ scripts/
                         rss.js (flux RSS), og.js (images de partage), pdf.js (PDF des CV)
 public/                 Copié tel quel dans dist/ : contact.php, .htaccess, robots.txt, llms.txt, og-image.png, PDF, icônes,
                         cv-fr.html / cv-en.html (sources des CV pour générer les PDF ; non servies : `.htaccess` les bloque)
-public/js/              Scripts autonomes (voir « Scripts autonomes ») : theme.js, nav.js, fx.js, consent.js, table-filter.js, 404.js
+public/js/              Scripts autonomes (voir « Scripts autonomes ») : theme.js, nav.js, fx.js, palette.js, consent.js, table-filter.js, 404.js
 tests/unit/             Vitest : pré-rendu (front matter, dates, sitemap, gabarit, RSS), cohérence du contenu, analyse DNS (tests/unit/helpers/fake-dns.js)
 tests/e2e/              Playwright + axe : accessibilité (2 thèmes), responsive, thème, formulaire, navigation, contenu de dist/
 ```
@@ -94,6 +97,18 @@ n'héberge aucun relais et ne stocke rien. La CSP autorise `cloudflare-dns.com` 
   la politique MTA-STS (`https://mta-sts.<domaine>/.well-known/mta-sts.txt`) n'est pas lisible depuis un navigateur (CORS) ; un sélecteur DKIM au nom
   inhabituel ne peut pas être deviné (l'outil le dit et invite à le saisir).
 
+## Terminal interactif et palette de commandes
+
+- **Terminal** (accueil, îlot React) : de vraies commandes — `help`, `whoami`, `about`, `skills`, `experience`, `projects`, `education`, `blog`, `contact`, `links`, `cv`, `ls`, `cat`,
+  `goto <section>`, `theme [dark|light]`, `lang [fr|en]`, `clear` (et quelques œufs de Pâques). Historique (↑/↓), complétion par Tab, Ctrl+L. Les trois commandes d'ouverture
+  se tapent en CSS (décoratives, masquées aux lecteurs d'écran) ; ensuite le champ est un vrai `<input>` étiqueté, les résultats sont annoncés (`role="log"`), des suggestions
+  cliquables remplacent le clavier sur mobile, et Tab ne piège jamais le focus. Aucune saisie n'est interprétée comme du HTML. L'interpréteur (`src/lib/terminal/commands.js`)
+  est pur : il retourne des lignes et une action, le composant exécute l'action (défilement, thème, langue). Textes : `src/data/terminal.js`.
+- **Palette** (toutes les pages, JS autonome) : Ctrl/Cmd + K, « / » (hors champ de saisie) ou le bouton de loupe ouvre une recherche de pages, d'articles, de sections et d'actions
+  (thème, langue de la page courante, copier l'e-mail, CV, GitHub, LinkedIn, RSS, haut de page). Recherche sans accent ni casse, titres > mots-clés > descriptions. Index
+  `/search-index.json` généré au build (`scripts/lib/search-index.js`) et chargé à la première ouverture seulement. `<dialog>` natif (focus piégé, Échap, retour du focus).
+  Pour qu'une nouvelle page y figure, l'ajouter à `buildSearchIndex` (les articles y entrent d'eux-mêmes).
+
 ## Design system et thèmes
 
 Tout est dans `src/index.css`, sans configuration Tailwind séparée (Tailwind 4 : `@theme`).
@@ -130,6 +145,7 @@ Ils sont versionnés par empreinte (`?v=<hash>`) et servis depuis `'self'` : la 
 | `theme.js` | Thème clair/sombre, `meta theme-color`, classe `js` sur `<html>` | `<head>`, sans `defer` |
 | `nav.js` | Menu mobile (clic, Échap, clic extérieur, focus), surlignage de la section visible (`aria-current="location"`) | `defer`, toutes les pages |
 | `fx.js` | Halo des cartes qui suit le pointeur (souris uniquement, rien si mouvement réduit) | `defer`, toutes les pages |
+| `palette.js` | Palette de commandes (Ctrl/Cmd + K, « / », bouton de l'en-tête) : `<dialog>` + combobox ARIA, index chargé à la première ouverture | `defer`, toutes les pages |
 | `consent.js` | Bandeau de cookies et Google Analytics après consentement | `defer`, toutes les pages |
 | `table-filter.js`, `404.js` | Filtre de tableau d'un article ; bouton esquiveur de la 404 | à la demande (`script:` d'un article, page 404) |
 

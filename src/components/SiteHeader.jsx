@@ -1,4 +1,4 @@
-import { Globe, Menu, Terminal, X } from 'lucide-react';
+import { Globe, Menu, Search, Terminal, X } from 'lucide-react';
 import { LANGS, SECTION_IDS } from '../data/content';
 import ThemeToggle from './ui/ThemeToggle';
 
@@ -41,12 +41,16 @@ export default function SiteHeader({ t, lang, onHome = false, current, switchHre
             href={switchHref ?? LANGS[other].home}
             hrefLang={other}
             lang={other}
+            data-lang-switch
             aria-label={ui.switchLang}
             className="btn btn-secondary gap-1.5 px-3"
           >
             <Globe className="h-4 w-4 text-brand" aria-hidden="true" />
             <span aria-hidden="true">{other.toUpperCase()}</span>
           </a>
+          <button type="button" data-palette-open aria-haspopup="dialog" aria-expanded="false" aria-label={ui.search} title={ui.search} className="btn btn-ghost btn-icon palette-trigger">
+            <Search className="h-5 w-5" aria-hidden="true" />
+          </button>
           <ThemeToggle label={ui.theme} />
           <button
             type="button"
