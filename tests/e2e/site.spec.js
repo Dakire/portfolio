@@ -5,6 +5,8 @@ import { expect, test } from '@playwright/test';
 const PAGES = [
   { name: 'accueil FR', path: '/', lang: 'fr' },
   { name: 'accueil EN', path: '/en/', lang: 'en' },
+  { name: 'outil DNS FR', path: '/outils/dns/', lang: 'fr' },
+  { name: 'outil DNS EN', path: '/en/tools/dns/', lang: 'en' },
   { name: 'blog FR', path: '/blog/', lang: 'fr' },
   { name: 'blog EN', path: '/en/blog/', lang: 'en' },
   { name: 'article FR', path: '/blog/spf-dkim-dmarc-expliques/', lang: 'fr' },
@@ -406,9 +408,13 @@ test.describe('contenu produit (dist/)', () => {
     expect(existsSync('dist/.vite')).toBe(false);
   });
 
-  test('un seul bundle JS, sans le code des sections statiques', () => {
-    const scripts = readdirSync('dist/assets').filter((f) => f.endsWith('.js'));
-    expect(scripts).toHaveLength(1);
+  test("le code de l'outil DNS est dans son propre fichier, absent du bundle d'entrée", () => {
+    const files = readdirSync('dist/assets').filter((f) => f.endsWith('.js'));
+    const dns = files.find((f) => /^dns-.*.js$/.test(f));
+    expect(dns, 'chunk dns-*.js').toBeTruthy();
+    const entry = files.find((f) => /^index-.*.js$/.test(f));
+    expect(readFileSync('dist/assets/' + entry, 'utf-8')).not.toContain('cloudflare-dns.com');
+    expect(readFileSync('dist/assets/' + dns, 'utf-8')).toContain('cloudflare-dns.com');
   });
 
   test('theme.js est chargé dans le <head> sans defer ; nav.js et fx.js en fin de page', async ({ request }) => {

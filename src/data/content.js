@@ -12,8 +12,8 @@ export const SECTION_IDS = ['about', 'skills', 'experience', 'projects', 'contac
 
 // Une URL par langue (pré-rendues au build) : le contenu anglais est indexable et lié par hreflang.
 export const LANGS = {
-  fr: { home: '/', legal: '/mentions-legales/', blog: '/blog/', rss: '/rss.xml', other: 'en' },
-  en: { home: '/en/', legal: '/en/legal-notice/', blog: '/en/blog/', rss: '/en/rss.xml', other: 'fr' },
+  fr: { home: '/', legal: '/mentions-legales/', blog: '/blog/', rss: '/rss.xml', dns: '/outils/dns/', other: 'en' },
+  en: { home: '/en/', legal: '/en/legal-notice/', blog: '/en/blog/', rss: '/en/rss.xml', dns: '/en/tools/dns/', other: 'fr' },
 };
 
 export const PORTFOLIO_DATA = {
@@ -64,7 +64,7 @@ export const PORTFOLIO_DATA = {
       emptyTitle: 'Les premiers articles arrivent',
       emptyText: "Les notes techniques seront publiées ici dès qu'elles sont prêtes.",
     },
-    nav: { about: 'À propos', skills: 'Compétences', experience: 'Expériences', projects: 'Projets', contact: 'Contact', blog: 'Blog' },
+    nav: { about: 'À propos', skills: 'Compétences', experience: 'Expériences', projects: 'Projets', contact: 'Contact', blog: 'Blog', tools: 'Outil DNS' },
     hero: {
       greeting: 'Bonjour, je suis',
       role: 'Technicien Informatique & Systèmes Numériques',
@@ -190,7 +190,7 @@ export const PORTFOLIO_DATA = {
       emptyTitle: 'The first articles are on their way',
       emptyText: 'Technical notes will be published here as soon as they are ready.',
     },
-    nav: { about: 'About', skills: 'Skills', experience: 'Experience', projects: 'Projects', contact: 'Contact', blog: 'Blog' },
+    nav: { about: 'About', skills: 'Skills', experience: 'Experience', projects: 'Projects', contact: 'Contact', blog: 'Blog', tools: 'DNS tool' },
     hero: {
       greeting: 'Hello, I am',
       role: 'IT & Digital Systems Technician',

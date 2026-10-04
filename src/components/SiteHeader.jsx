@@ -17,6 +17,7 @@ export default function SiteHeader({ t, lang, onHome = false, current, switchHre
   const links = [
     ...SECTION_IDS.map((id) => ({ id, label: nav[id], href: `${base}#${id}`, spy: onHome })),
     { id: 'blog', label: nav.blog, href: LANGS[lang].blog, current: current === 'blog' },
+    { id: 'tools', label: nav.tools, href: LANGS[lang].dns, current: current === 'tools' },
   ];
 
   return (

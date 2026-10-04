@@ -5,15 +5,16 @@ Production : <https://grichard.eu>
 
 ## Architecture
 
-Le site est **entièrement pré-rendu** au build (HTML statique, lisible sans JavaScript). React n'hydrate qu'une seule zone
-interactive, le formulaire de contact. Le menu, la bascule de thème, le surlignage de section, l'effet de halo des cartes et le
+Le site est **entièrement pré-rendu** au build (HTML statique, lisible sans JavaScript). React n'hydrate que des zones
+interactives (« îlots ») : le formulaire de contact sur l'accueil, l'outil DNS sur sa page. Le menu, la bascule de thème, le surlignage de section, l'effet de halo des cartes et le
 bandeau de cookies sont de petits scripts autonomes (`public/js/`), qui fonctionnent sur toutes les pages sans React.
 
 ```
 index.html              Gabarit de développement uniquement (le HTML de production est généré par le pré-rendu)
 src/
   data/content.js       TOUT le contenu (FR/EN), liens, mentions légales, chemins par langue (LANGS)
-  main.jsx              Point d'entrée navigateur : hydrate le formulaire (en dev, rend toute la page côté client)
+  main.jsx              Point d'entrée navigateur : charge et hydrate uniquement les îlots présents dans la page (en dev, rend toute la page)
+  islands/              Un module par îlot (contact.jsx, dns.jsx), chargé dynamiquement : chaque page ne télécharge que son code
   App.jsx               Accueil (assemble les sections) ; la langue vient de l'URL ('/' = FR, '/en/' = EN), pas d'un état
   entry-server.jsx      Fonctions de rendu utilisées par le pré-rendu
   index.css             Design system : jetons de thème, échelles, composants (.btn, .card, .field…), effets (voir plus bas)
@@ -21,11 +22,14 @@ src/
     ui/                 Primitives : Button, Card, Field, ThemeToggle, EmptyState
     home/               Sections de l'accueil : Hero, About, Skills, Experience, Projects, LatestPosts, EducationAndContact
     SiteHeader, SiteFooter   En-tête flottant et pied de page communs à TOUTES les pages (accueil, blog, légal, 404)
-    ContactForm, ContactIsland, ErrorBoundary   Le formulaire (seul composant hydraté) et son filet de sécurité
+    ContactForm, ContactIsland, ErrorBoundary   Le formulaire de contact (îlot) et son filet de sécurité
+    tools/              Outil DNS : DnsToolPage (pré-rendue), DnsChecker (îlot), DnsReport, severity
     Blog, LegalPage, NotFound, Shell            Pages statiques (rendues au build, jamais hydratées)
     PostMeta, SectionHeading, Decor, Terminal, Icons
   hooks/useTurnstile.js Cycle de vie du widget Cloudflare Turnstile (chargement, nouvelle tentative, jeton)
-  lib/                  format.js (dates), cx.js (classes), islands.js (identifiants et données du formulaire)
+  lib/                  format.js (dates), cx.js (classes), islands.js (identifiants et données des îlots)
+  lib/dns/              Analyse DNS pure (sans React ni DOM) : résolveur DoH, spf, dkim, dmarc, mx, txt, records, extras, providers, analyze, report
+  data/dns-tool.js      Textes de l'outil DNS (FR/EN) : interface et un message par code de constat
 content/blog/*.md       Articles en français (front matter : title, description, date, updated optionnel, script optionnel ; slug = nom du fichier)
 content/blog/en/*.md    Traductions anglaises (mêmes champs + translationOf : slug de l'article français correspondant)
 scripts/
@@ -36,7 +40,7 @@ scripts/
 public/                 Copié tel quel dans dist/ : contact.php, .htaccess, robots.txt, llms.txt, og-image.png, PDF, icônes,
                         cv-fr.html / cv-en.html (sources des CV pour générer les PDF ; non servies : `.htaccess` les bloque)
 public/js/              Scripts autonomes (voir « Scripts autonomes ») : theme.js, nav.js, fx.js, consent.js, table-filter.js, 404.js
-tests/unit/             Vitest : pré-rendu (front matter, dates, sitemap, gabarit) et cohérence du contenu
+tests/unit/             Vitest : pré-rendu (front matter, dates, sitemap, gabarit, RSS), cohérence du contenu, analyse DNS (tests/unit/helpers/fake-dns.js)
 tests/e2e/              Playwright + axe : accessibilité (2 thèmes), responsive, thème, formulaire, navigation, contenu de dist/
 ```
 
@@ -65,6 +69,30 @@ Le sélecteur de langue mène à la page équivalente (la traduction d'un articl
 - **Images de partage** : une image 1200 × 630 par article dans `dist/og/<slug>.png` (titre en grand, charte du site), utilisée par `og:image`, `twitter:image` et le JSON-LD de l'article. Rendu par Chromium (Playwright), mis en cache dans `.cache/og/` (ignoré par Git) : seuls les articles nouveaux ou modifiés sont rendus.
 - **PDF des CV** : `dist/CV_Guillaume_Richard_FR.pdf` et `dist/Resume_Guillaume_Richard_EN.pdf` sont **régénérés** depuis `public/cv-fr.html` et `public/cv-en.html` (impression A4 par Chromium, cache dans `.cache/cv/`). Les sources chargent Tailwind, Inter et Lucide depuis des CDN : le rendu n'est accepté que si elles ont chargé ; sinon le PDF de `public/` est conservé et un avertissement s'affiche. **Pour modifier un CV, éditez le HTML** (les PDF de `public/` ne sont plus que le secours).
 - Chromium est requis : `npx playwright install chromium` (déjà fait par la CI). `BUILD_FAST=1 npm run build` saute images et PDF pour un build rapide ; sans Chromium, le build continue avec l'image générique et les PDF de `public/`.
+
+## Outil DNS et e-mail (`/outils/dns/`, `/en/tools/dns/`)
+
+Vérificateur de domaine : **A, AAAA, MX, SPF, DKIM, DMARC, TXT, NS, SOA, CAA, DNSSEC, MTA-STS, TLS-RPT, BIMI**, avec une section « Doublons ».
+Les requêtes partent du **navigateur du visiteur** vers Cloudflare puis Google (DNS-over-HTTPS, format JSON, `do=1` pour DNSSEC) : le site
+n'héberge aucun relais et ne stocke rien. La CSP autorise `cloudflare-dns.com` et `dns.google` dans `connect-src`.
+
+- **SPF** : syntaxe de chaque terme, `+all`/`?all`/`~all`/`-all`, `ptr`, plages trop larges ou redondantes, doublons, boucles, include introuvables,
+  et **décompte des requêtes DNS** en suivant récursivement `include` et `redirect` (limite de 10, requêtes « vides » limitées à 2).
+  Dans un `include`, la qualification du `all` final est ignorée (elle est sans effet) ; seul `+all` est signalé.
+- **DKIM** : taille de clé lue dans le DER (RSA < 1024 erreur, 1024 avertissement, ≥ 2048 conforme ; Ed25519), clé tronquée ou révoquée, `t=y`, SHA-1 seul,
+  CNAME délégué (Microsoft 365), plusieurs enregistrements au même sélecteur, même clé sous plusieurs sélecteurs. **Sans sélecteur saisi, il est deviné** :
+  le fournisseur est reconnu d'après les MX et les `include` SPF (`src/lib/dns/providers.js`), puis ses sélecteurs documentés sont essayés
+  (Google `google`, Microsoft 365 `selector1`/`selector2`, OVH `ovhmo-selector-1`/`-2`, Zoho, Proton, Fastmail, SendGrid, Mailchimp, Brevo…),
+  puis des noms courants (`default`, `dkim`, `mail`…). Pour ajouter un fournisseur, ajoutez une entrée à `PROVIDERS`.
+- **DMARC** : chaque balise, politique (`none` = surveillance seulement), `pct`, alignements, adresses `rua`/`ruf`, héritage du domaine d'organisation
+  pour un sous-domaine, et **autorisation des rapports envoyés à un autre domaine** (`<domaine>._report._dmarc.<destinataire>`).
+- **MX** : hôtes qui résolvent, pas de CNAME, pas d'IP, adresses non routables, MX nul (RFC 7505), doublons, redondance.
+- Les statuts : *erreur* (invalide ou inefficace), *avertissement* (risque ou mauvaise pratique), *information*, *conforme*. Un message traduit (titre, détail,
+  correction) existe pour chaque code de constat (`src/data/dns-tool.js`) ; `tests/unit/dns-tool.test.js` échoue si un code manque dans une langue.
+- Une analyse est partageable par lien (`?d=exemple.fr&s=selecteur`) ; le rapport se copie en Markdown.
+- Limites : le domaine d'organisation est déduit d'une courte liste de suffixes à deux niveaux (pas de liste des suffixes publics complète) ;
+  la politique MTA-STS (`https://mta-sts.<domaine>/.well-known/mta-sts.txt`) n'est pas lisible depuis un navigateur (CORS) ; un sélecteur DKIM au nom
+  inhabituel ne peut pas être deviné (l'outil le dit et invite à le saisir).
 
 ## Design system et thèmes
 
@@ -131,7 +159,7 @@ ont exactement les mêmes clés.
 
 - **Unitaires** (`npm test`, Vitest) : front matter (cas d'erreur compris), ancres et sommaire, dates ISO avec fuseau (heure d'été/hiver),
   gabarit HTML, sitemap, manifeste Vite, parité FR/EN du contenu, validité de tous les articles et de leurs traductions.
-- **Bout en bout** (`npm run test:e2e`, Playwright) sur le site construit :
+- **Bout en bout** (`npm run test:e2e`, Playwright) sur le site construit (`tests/e2e/dns-tool.spec.js` couvre l'outil DNS avec de faux résolveurs DoH) :
   - axe (WCAG 2.x A/AA) sur 9 pages **dans chacun des deux thèmes**, et sur le bandeau de cookies ;
   - structure et SEO (langue, un seul `h1`, canonical, hreflang, sélecteur de langue vers la traduction) ;
   - responsive : aucun scroll horizontal de 320 à 2560 px, cibles tactiles ≥ 44 px sur mobile ;

@@ -52,6 +52,36 @@ export const blogLd = ({ blogRoot, name, inLanguage, author, posts, postUrl }) =
   blogPost: posts.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: `${SITE}${postUrl(p)}`, datePublished: toIso(p.date) })),
 });
 
+export const toolLd = ({ lang, path, ui, homePath, author }) => ({
+  '@context': CONTEXT,
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: ui.h1,
+      url: `${SITE}${path}`,
+      description: ui.meta.appDescription,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      browserRequirements: 'Requires JavaScript',
+      inLanguage: lang === 'fr' ? 'fr-FR' : 'en',
+      isAccessibleForFree: true,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+      author,
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: ui.breadcrumb.home, item: `${SITE}${homePath}` },
+        { '@type': 'ListItem', position: 2, name: ui.h1, item: `${SITE}${path}` },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: ui.seo.faq.map(([question, answer]) => ({ '@type': 'Question', name: question, acceptedAnswer: { '@type': 'Answer', text: answer } })),
+    },
+  ],
+});
+
 export const postLd = ({ post, path, blogRoot, homePath, inLanguage, author, labels, image = OG_IMAGE.url }) => {
   const modified = post.updated ?? post.date;
   return {

@@ -4,8 +4,8 @@ import SiteFooter from './SiteFooter';
 import SiteHeader from './SiteHeader';
 import { PORTFOLIO_DATA } from '../data/content';
 
-// switchHref : page équivalente dans l'autre langue (par défaut, l'accueil de l'autre langue). current : 'blog' pour marquer le lien Blog.
-export default function Shell({ lang = 'fr', switchHref, current, children }) {
+// wide : mise en page large (outils). switchHref : page équivalente dans l'autre langue (par défaut, l'accueil de l'autre langue). current : 'blog' pour marquer le lien Blog.
+export default function Shell({ lang = 'fr', switchHref, current, wide = false, children }) {
   const t = PORTFOLIO_DATA[lang];
 
   return (
@@ -13,7 +13,7 @@ export default function Shell({ lang = 'fr', switchHref, current, children }) {
       <Decor />
       <a href="#main" className="skip-link">{t.ui.skip}</a>
       <SiteHeader t={t} lang={lang} current={current} switchHref={switchHref} />
-      <main id="main" className="mx-auto max-w-3xl px-4 pb-8 pt-[calc(var(--header-h)+2.5rem)] sm:px-6">{children}</main>
+      <main id="main" className={`mx-auto px-4 pb-8 pt-[calc(var(--header-h)+2.5rem)] sm:px-6 ${wide ? 'max-w-5xl' : 'max-w-3xl'}`}>{children}</main>
       <SiteFooter t={t} lang={lang} />
     </div>
   );

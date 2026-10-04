@@ -17,12 +17,13 @@ import { buildRss } from './lib/rss.js';
 import { parsePost } from './lib/markdown.js';
 import { page, json, SITE } from './lib/page.js';
 import { root } from './lib/paths.js';
-import { blogLd, homeLd, person, postLd } from './lib/schema.js';
+import { blogLd, homeLd, person, postLd, toolLd } from './lib/schema.js';
 import { buildLlmsTxt, buildSitemap } from './lib/sitemap.js';
 
 const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error' });
 try {
-  const { render, renderLegal, renderBlogIndex, renderBlogPost, renderNotFound } = await vite.ssrLoadModule('/src/entry-server.jsx');
+  const { render, renderLegal, renderBlogIndex, renderBlogPost, renderNotFound, renderDnsTool } = await vite.ssrLoadModule('/src/entry-server.jsx');
+  const { DNS_TOOL } = await vite.ssrLoadModule('/src/data/dns-tool.js');
   const { PORTFOLIO_DATA, LANGS, PROFILE } = await vite.ssrLoadModule('/src/data/content.js');
   const { islandsData, ISLANDS_DATA_ID } = await vite.ssrLoadModule('/src/lib/islands.js');
 
@@ -34,6 +35,9 @@ try {
   // 0. Ressources produites par Vite (CSS + bundle de l'accueil), à réutiliser dans toutes les pages
   const manifest = await readManifest();
   const assets = assetTags(manifest);
+  // Pages avec îlots : le script d'entrée et le code des îlots dont elles ont besoin (préchargés)
+  const homeAssets = assetTags(manifest, { islands: ['src/islands/contact.jsx'] });
+  const dnsAssets = assetTags(manifest, { islands: ['src/islands/dns.jsx'] });
 
   // 1. Blog : lecture des articles (content/blog = français, content/blog/en = anglais)
   const loadPosts = async (lang, dir) => {
@@ -94,7 +98,7 @@ try {
       path,
       page({
         lang,
-        assets: assets.full,
+        assets: homeAssets.full,
         title: t.meta.title,
         description: t.meta.description,
         path,
@@ -167,6 +171,27 @@ try {
     }
   }
 
+  // 3b. Outil DNS (FR et EN) : page pré-rendue, outil hydraté
+  for (const lang of ['fr', 'en']) {
+    const ui = DNS_TOOL[lang].ui;
+    const path = LANGS[lang].dns;
+    await write(
+      path,
+      page({
+        lang,
+        assets: dnsAssets.full,
+        title: ui.meta.title,
+        description: ui.meta.description,
+        path,
+        alternates: alternatesOf('dns'),
+        feeds: feedsFor(lang),
+        body: `${renderDnsTool(lang, lite(postsByLang[lang]))}
+    <script type="application/json" id="${ISLANDS_DATA_ID}">${json({ lang })}</script>`,
+        ld: toolLd({ lang, path, ui, homePath: LANGS[lang].home, author }),
+      }),
+    );
+  }
+
   // 4. Page 404 (servie par Apache via ErrorDocument) : évite les « soft 404 »
   await writeFile(
     root('dist/404.html'),
@@ -191,6 +216,8 @@ try {
       { path: LANGS.fr.blog, lastmod: newest(postsByLang.fr) },
       { path: LANGS.en.blog, lastmod: newest(postsByLang.en) },
       ...allPosts.map((p) => ({ path: blogPath(p), lastmod: p.updated ?? p.date })),
+      { path: LANGS.fr.dns, lastmod: siteDate.slice(0, 10) },
+      { path: LANGS.en.dns, lastmod: siteDate.slice(0, 10) },
       { path: LANGS.fr.legal, lastmod: siteDate.slice(0, 10) },
       { path: LANGS.en.legal, lastmod: siteDate.slice(0, 10) },
     ]),

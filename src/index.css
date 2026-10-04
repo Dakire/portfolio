@@ -32,6 +32,8 @@
   --on-brand: #ffffff;
   --accent: #22d3ee; /* second ton du dégradé de marque */
   --danger: #fca5a5;
+  --warn: #fbbf24; /* avertissement (outil DNS) */
+  --info: #7dd3fc;
 
   --code-bg: #0f172a;
   --code-fg: #e2e8f0;
@@ -61,6 +63,8 @@
   --on-brand: #ffffff;
   --accent: #0891b2;
   --danger: #b91c1c;
+  --warn: #92400e;
+  --info: #0369a1;
   --code-bg: #f1f5f9;
   --code-fg: #0f172a;
   --code-inline: #047857;
@@ -86,6 +90,8 @@
     --link-hover: #065f46;
     --accent: #0891b2;
     --danger: #b91c1c;
+    --warn: #92400e;
+    --info: #0369a1;
     --code-bg: #f1f5f9;
     --code-fg: #0f172a;
     --code-inline: #047857;
@@ -115,6 +121,8 @@
   --color-on-brand: var(--on-brand);
   --color-accent: var(--accent);
   --color-danger: var(--danger);
+  --color-warn: var(--warn);
+  --color-info: var(--info);
 
   --shadow-card: var(--shadow-card);
   --shadow-float: var(--shadow-float);
@@ -336,6 +344,7 @@ body {
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
+    min-width: 2.75rem; /* un lien d'un seul mot court (« Home ») garde une cible de 44 px */
   }
 
   /* Cartes */
@@ -697,3 +706,16 @@ body {
 .nav-toggle[aria-expanded='false'] .icon-close {
   display: none;
 }
+
+/* ---------- Outil DNS ---------- */
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+.record-table { width: 100%; min-width: 30rem; border-collapse: collapse; font-size: 0.875rem; } /* en dessous, la zone défile horizontalement plutôt que d'écraser les colonnes */
+.record-table.compact { min-width: 0; }
+.record-table th { text-align: left; font-weight: 600; color: var(--muted); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line-strong); white-space: nowrap; }
+.record-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.record-table tr:last-child td { border-bottom: 0; }
+.sev-badge { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 2rem; padding: 0.25rem 0.75rem; border-radius: 9999px; border: 1px solid currentColor; font-size: 0.8125rem; font-weight: 600; background: color-mix(in srgb, currentColor 10%, transparent); }
+details.check > summary { list-style: none; cursor: pointer; }
+details.check > summary::-webkit-details-marker { display: none; }
+details.check[open] > summary .chevron { transform: rotate(90deg); }
+.chevron { transition: transform 0.2s var(--ease-soft); }

@@ -1,16 +1,21 @@
 import { StrictMode } from 'react'
-import { createRoot, hydrateRoot } from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import './index.css'
-import ContactIsland from './components/ContactIsland.jsx'
-import { CONTACT_ROOT_ID, ISLANDS_DATA_ID } from './lib/islands.js'
+import { CONTACT_ROOT_ID, DNS_ROOT_ID, ISLANDS_DATA_ID } from './lib/islands.js'
 
-// Production : la page est du HTML pré-rendu ; seul le formulaire de contact est hydraté.
-// Ses données (langue, textes) viennent du HTML : l'hydratation part du même état que le serveur.
-const contact = document.getElementById(CONTACT_ROOT_ID)
+// Production : les pages sont du HTML pré-rendu ; seules les zones interactives (« îlots ») sont hydratées.
+// Chaque îlot est un chargement dynamique : une page ne télécharge que le code des îlots qu'elle contient.
+// Les données (langue, textes) viennent du HTML : l'hydratation part du même état que le serveur.
+const ISLANDS = {
+  [CONTACT_ROOT_ID]: () => import('./islands/contact.jsx'),
+  [DNS_ROOT_ID]: () => import('./islands/dns.jsx'),
+}
 
-if (contact) {
-  const { lang, form } = JSON.parse(document.getElementById(ISLANDS_DATA_ID).textContent)
-  hydrateRoot(contact, <StrictMode><ContactIsland lang={lang} form={form} /></StrictMode>)
+const present = Object.entries(ISLANDS).filter(([id]) => document.getElementById(id))
+
+if (present.length) {
+  const data = JSON.parse(document.getElementById(ISLANDS_DATA_ID).textContent)
+  for (const [id, load] of present) load().then((island) => island.default(document.getElementById(id), data))
 } else if (import.meta.env.DEV) {
   // Développement (gabarit index.html, pas de pré-rendu) : toute la page est rendue côté client.
   import('./App.jsx').then(({ default: App }) => {
