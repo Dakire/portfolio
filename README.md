@@ -142,6 +142,7 @@ npm run dev                  # http://localhost:5173 (gabarit de dev : pas de bl
 npm run lint                 # oxlint : hooks (dont exhaustive-deps), accessibilité JSX (jsx-a11y), bonnes pratiques
 npm test                     # tests unitaires (Vitest)
 npm run test:e2e             # construit le site puis lance Playwright + axe (1re fois : npx playwright install chromium)
+npm run test:live            # tests contre les VRAIS résolveurs DNS (réseau requis ; hors CI) : vérifie les formats de réponse réels
 npm run check                # lint + tests unitaires + e2e, comme la CI
 npm run build                # génère dist/ (build Vite + pré-rendu)
 ```
@@ -169,6 +170,7 @@ ont exactement les mêmes clés.
     Turnstile injoignable, squelette, état occupé ; absence d'erreur d'hydratation ;
   - contenu de `dist/`.
   Turnstile est remplacé par un double : aucun test ne dépend du réseau.
+- **Tests « live »** (`npm run test:live`, `tests/live/`) : l'outil DNS contre Cloudflare et Google pour de vrai (TXT, MX nul, NXDOMAIN, DNSSEC, CAA, analyse de gmail.com et microsoft.com). À lancer de temps en temps : ils détectent un changement de format des résolveurs. Les domaines tiers peuvent évoluer.
 - **CI** (`.github/workflows/ci.yml`) : à chaque push et pull request, `npm ci`, lint, `npm audit` (dépendances de production),
   tests unitaires puis e2e ; le rapport Playwright est conservé en cas d'échec. La CI utilise la clé de test Turnstile.
 

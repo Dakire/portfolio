@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "check": "npm run lint && npm test && npm run test:e2e"
+    "check": "npm run lint && npm test && npm run test:e2e",
+    "test:live": "vitest run --config vitest.live.config.js"
   },
   "dependencies": {
     "lucide-react": "^1.50.0",

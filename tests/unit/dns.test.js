@@ -211,6 +211,14 @@ describe('SPF : analyse récursive', () => {
     expect(has(r.findings, 'spf.hardfailAll', 'ok')).toBe(true);
   });
 
+  it('rétrograde en information les défauts de style d\'un include tiers, pas ceux de la racine', async () => {
+    const r = await run({ 'example.com': {}, 'fournisseur.test': { TXT: ['v=spf1 ptr ip4:10.0.0.0/8 -all'] } }, ['v=spf1 include:fournisseur.test ptr -all']);
+    const ptr = r.findings.filter((f) => f.code === 'spf.ptr');
+    expect(ptr.find((f) => f.params.domain === 'fournisseur.test').severity).toBe('info');
+    expect(ptr.find((f) => f.params.domain === 'example.com').severity).toBe('warn');
+    expect(r.findings.find((f) => f.code === 'spf.wideRange').severity).toBe('info');
+  });
+
   it('reconnaît le fournisseur d\'après les include', async () => {
     const r = await run({ 'example.com': {}, '_spf.google.com': { TXT: ['v=spf1 ip4:192.0.2.1 -all'] } }, ['v=spf1 include:_spf.google.com ~all']);
     expect(r.findings.find((f) => f.code === 'spf.provider').params.names).toContain('Google Workspace');

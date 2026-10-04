@@ -168,7 +168,13 @@ export async function analyzeSpf({ domain, texts, resolver, maxQueries = 40 }) {
     node.terms = parsed.terms;
     // Dans un include, la qualification du « all » final est sans effet (il ne correspond jamais) : seul +all, qui autoriserait tout le monde, compte
     const ignoredInInclude = new Set(['spf.softfailAll', 'spf.hardfailAll', 'spf.neutralAll', 'spf.noAll']);
-    node.findings.push(...parsed.findings.filter((f) => root || !ignoredInInclude.has(f.code)).map((f) => ({ ...f, params: { ...f.params, domain: name } })));
+    // Défauts de style d'un include tiers (ptr, plage large…) : le propriétaire du domaine ne peut pas les corriger et ils n'invalident pas son SPF
+    const softInInclude = new Set(['spf.ptr', 'spf.wideRange', 'spf.hostBits', 'spf.duplicateTerm', 'spf.afterAll', 'spf.tooLong', 'spf.redirectIgnored']);
+    node.findings.push(
+      ...parsed.findings
+        .filter((f) => root || !ignoredInInclude.has(f.code))
+        .map((f) => ({ ...f, severity: !root && f.severity === 'warn' && softInInclude.has(f.code) ? 'info' : f.severity, params: { ...f.params, domain: name } })),
+    );
 
     const pending = [];
     const follow = (term, target, kind) => {

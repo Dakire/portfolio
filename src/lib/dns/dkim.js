@@ -138,7 +138,6 @@ export async function analyzeDkim({ domain, selectors, explicit, resolver }) {
 
     if (found) {
       if (dkimTexts.length > 1) entry.findings.push(finding('dkim.multipleAtSelector', 'error', { selector, count: dkimTexts.length }));
-      if (entry.cname) entry.findings.push(finding('dkim.cname', 'info', { selector, target: entry.cname }));
       const analysis = analyzeDkimRecord((dkimTexts[0] ?? texts[0]).text);
       entry.key = analysis.key;
       entry.tags = analysis.tags;
@@ -161,6 +160,10 @@ export async function analyzeDkim({ domain, selectors, explicit, resolver }) {
     if (p) byKey.set(p, [...(byKey.get(p) ?? []), r.selector]);
   }
   for (const list of byKey.values()) if (list.length > 1) findings.push(finding('dkim.sameKey', 'info', { selectors: list.join(', ') }));
+
+  // Un seul constat pour tous les sélecteurs délégués par CNAME (sinon la liste se répète pour chacun)
+  const delegated = found.filter((r) => r.cname);
+  if (delegated.length) findings.push(finding('dkim.cname', 'info', { selectors: delegated.map((r) => r.selector).join(', ') }));
 
   const guessed = !explicit && found.some((r) => r.provider);
   if (guessed) findings.push(finding('dkim.guess', 'info', { selectors: found.filter((r) => r.provider).map((r) => `${r.selector} (${r.provider})`).join(', ') }));
