@@ -371,22 +371,21 @@ try {
     }),
   );
 
-  // 5. Sitemap (avec hreflang) et llms.txt
-  const url = (path, lastmod, alternates = []) =>
-    `  <url>\n    <loc>${SITE}${path}</loc>\n    <lastmod>${lastmod}</lastmod>${alternates
-      .map((a) => `\n    <xhtml:link rel="alternate" hreflang="${a.lang}" href="${SITE}${a.path}"/>`)
-      .join('')}\n  </url>`;
+  // 5. Sitemap et llms.txt
+  // Sitemap volontairement « pur » (sitemap.xsd uniquement) : les hreflang sont déjà déclarés dans le <head> de chaque page,
+  // et les balises xhtml:link du sitemap font échouer certains validateurs XSD (attribut xml:lang non déclaré).
+  const url = (path, lastmod) => `  <url>\n    <loc>${SITE}${path}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`;
   const newest = (list) => (list[0] ? (list[0].updated ?? list[0].date) : homeLastmod);
   await writeFile(
     root('dist/sitemap.xml'),
-    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${[
-      url(LANGS.fr.home, homeLastmod, homeAlternates),
-      url(LANGS.en.home, homeLastmod, homeAlternates),
-      url(LANGS.fr.blog, newest(postsByLang.fr), blogAlternates),
-      url(LANGS.en.blog, newest(postsByLang.en), blogAlternates),
-      ...allPosts.map((p) => url(blogPath(p), p.updated ?? p.date, translationAlternates(p))),
-      url(LANGS.fr.legal, siteDate.slice(0, 10), legalAlternates),
-      url(LANGS.en.legal, siteDate.slice(0, 10), legalAlternates),
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[
+      url(LANGS.fr.home, homeLastmod),
+      url(LANGS.en.home, homeLastmod),
+      url(LANGS.fr.blog, newest(postsByLang.fr)),
+      url(LANGS.en.blog, newest(postsByLang.en)),
+      ...allPosts.map((p) => url(blogPath(p), p.updated ?? p.date)),
+      url(LANGS.fr.legal, siteDate.slice(0, 10)),
+      url(LANGS.en.legal, siteDate.slice(0, 10)),
     ].join('\n')}\n</urlset>\n`,
   );
 
