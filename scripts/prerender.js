@@ -14,7 +14,19 @@ import { createServer } from 'vite';
 const SITE = 'https://grichard.eu';
 const OG_IMAGE = { url: `${SITE}/og-image.png`, width: 1200, height: 630, alt: 'Guillaume Richard, Technicien Informatique & Systèmes Numériques' };
 const LOCALES = { fr: 'fr_FR', en: 'en_US' };
-const TODAY = new Date().toISOString().slice(0, 10);
+const NOW = new Date().toISOString();
+
+/**
+ * Date ISO 8601 complète avec fuseau, comme Google le recommande pour datePublished/dateModified.
+ * 'YYYY-MM-DD' devient minuit à Paris, avec le bon décalage (heure d'été ou d'hiver) pour ce jour-là.
+ */
+const toIso = (d) => {
+  if (d.includes('T')) return d;
+  const zone = new Intl.DateTimeFormat('en', { timeZone: 'Europe/Paris', timeZoneName: 'longOffset' })
+    .formatToParts(new Date(`${d}T12:00:00Z`))
+    .find((part) => part.type === 'timeZoneName')?.value;
+  return `${d}T00:00:00${zone?.replace('GMT', '') || 'Z'}`;
+};
 
 const root = (p) => new URL(`../${p}`, import.meta.url);
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -29,14 +41,14 @@ const versioned = (src) => {
 };
 const json = (data) => JSON.stringify(data).replace(/</g, '\\u003c');
 
-/** Date du dernier commit touchant ces chemins (aujourd'hui s'ils ont des modifications non commitées). */
+/** Date et heure (ISO 8601 complète) du dernier commit touchant ces chemins ; maintenant s'ils ont des modifications non commitées. */
 function gitDate(...paths) {
   try {
     const git = (...args) => execFileSync('git', args, { cwd: root('.'), stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
-    if (git('status', '--porcelain', '--', ...paths)) return TODAY;
-    return git('log', '-1', '--format=%cs', '--', ...paths) || TODAY;
+    if (git('status', '--porcelain', '--', ...paths)) return NOW;
+    return git('log', '-1', '--format=%cI', '--', ...paths) || NOW;
   } catch {
-    return TODAY;
+    return NOW;
   }
 }
 
@@ -187,7 +199,8 @@ try {
 
   const person = { '@type': 'Person', '@id': `${SITE}/#person`, name: PROFILE.name, url: `${SITE}/` };
   const siteDate = gitDate('src', 'public/js');
-  const homeLastmod = [siteDate, ...allPosts.map((p) => p.updated ?? p.date)].sort().at(-1);
+  const homeLastmodIso = [siteDate, ...allPosts.map((p) => toIso(p.updated ?? p.date))].sort((a, b) => Date.parse(a) - Date.parse(b)).at(-1);
+  const homeLastmod = homeLastmodIso.slice(0, 10); // le sitemap n'a besoin que de la date
 
   // 2. Accueil (FR / EN) et mentions légales
   const homeAlternates = [
@@ -230,7 +243,7 @@ try {
               url: `${SITE}${path}`,
               name: t.meta.title,
               inLanguage: lang === 'fr' ? 'fr-FR' : 'en',
-              dateModified: homeLastmod,
+              dateModified: homeLastmodIso,
               mainEntity: { '@id': `${SITE}/#person` },
             },
             {
@@ -290,7 +303,7 @@ try {
           name: b.siteName,
           inLanguage,
           author: person,
-          blogPost: list.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: `${SITE}${blogPath(p)}`, datePublished: p.date })),
+          blogPost: list.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: `${SITE}${blogPath(p)}`, datePublished: toIso(p.date) })),
         },
       }),
     );
@@ -309,7 +322,7 @@ try {
           path,
           type: 'article',
           alternates: translationAlternates(post),
-          extraMeta: `<meta property="article:published_time" content="${post.date}" />\n    <meta property="article:modified_time" content="${modified}" />\n    <meta property="article:author" content="${SITE}${LANGS[lang].home}" />`,
+          extraMeta: `<meta property="article:published_time" content="${toIso(post.date)}" />\n    <meta property="article:modified_time" content="${toIso(modified)}" />\n    <meta property="article:author" content="${SITE}${LANGS[lang].home}" />`,
           body: renderBlogPost(post, related, lang),
           scripts: post.script ? [post.script] : [],
           ld: {
@@ -322,8 +335,8 @@ try {
                 url: `${SITE}${path}`,
                 mainEntityOfPage: `${SITE}${path}`,
                 image: OG_IMAGE.url,
-                datePublished: post.date,
-                dateModified: modified,
+                datePublished: toIso(post.date),
+                dateModified: toIso(modified),
                 inLanguage,
                 author: person,
                 publisher: person,
@@ -372,8 +385,8 @@ try {
       url(LANGS.fr.blog, newest(postsByLang.fr), blogAlternates),
       url(LANGS.en.blog, newest(postsByLang.en), blogAlternates),
       ...allPosts.map((p) => url(blogPath(p), p.updated ?? p.date, translationAlternates(p))),
-      url(LANGS.fr.legal, siteDate, legalAlternates),
-      url(LANGS.en.legal, siteDate, legalAlternates),
+      url(LANGS.fr.legal, siteDate.slice(0, 10), legalAlternates),
+      url(LANGS.en.legal, siteDate.slice(0, 10), legalAlternates),
     ].join('\n')}\n</urlset>\n`,
   );
 
