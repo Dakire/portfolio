@@ -139,6 +139,31 @@ n'héberge aucun relais et ne stocke rien. La CSP autorise `cloudflare-dns.com` 
   la politique MTA-STS (`https://mta-sts.<domaine>/.well-known/mta-sts.txt`) n'est pas lisible depuis un navigateur (CORS) ; un sélecteur DKIM au nom
   inhabituel ne peut pas être deviné (l'outil le dit et invite à le saisir).
 
+## Articles hebdomadaires (brouillon par IA, publication après relecture)
+
+Chaque lundi à 6 h UTC, `.github/workflows/weekly-article.yml` fait rédiger un **brouillon** (français + anglais) par l'API Claude et ouvre une **pull request**.
+Rien n'est publié tant que vous ne l'avez pas fusionnée : l'IA propose, vous décidez.
+
+**Mise en place (une fois)** : secret de dépôt `ANTHROPIC_API_KEY` (Settings > Secrets and variables > Actions) et, dans Settings > Actions > General,
+« Allow GitHub Actions to create and approve pull requests ». Sans clé, le workflow s'arrête avec un avertissement, sans échec. Le coût dépend du modèle choisi et de la
+longueur produite (le préfixe, ligne éditoriale et articles d'exemple, est mis en cache) : surveillez la consommation de la clé après les premières exécutions. Lancement manuel : onglet Actions > « Brouillon d'article hebdomadaire » > Run workflow.
+
+**Fonctionnement** (`scripts/generate-article.js`, modules dans `scripts/lib/article/`) :
+
+1. **Sujet** : le premier « todo » de `content/topics.json` (liste tenue à la main : `id`, `topic`, `angle`, `tools` du site à relier). Liste épuisée : le modèle propose un sujet qui ne recoupe pas les articles existants.
+   Un sujet peut aussi être imposé (`--id`, `--topic "texte"`, ou les champs du lancement manuel).
+2. **Style** (`style.js`) : une ligne éditoriale (vouvoiement, concret, sources, pas de tiret cadratin, rien d'inventé, aucune anecdote client) et trois **articles publiés en exemples**. Le préfixe est identique d'une semaine à l'autre, donc mis en cache.
+3. **Appel** (`claude.js`) : `claude-opus-5-5` (variable `ARTICLE_MODEL` pour en changer), réflexion adaptative, effort `high`, streaming, **sortie structurée** (JSON : slug, titre, description et corps FR/EN + liste `claims_to_verify`).
+   `fallbacks: "default"` (bêta `server-side-fallback-2026-07-01`) : si les classificateurs de sécurité refusent la demande, l'API la rejoue côté serveur sur le modèle de repli recommandé.
+4. **Contrôles automatiques** (`validate.js`) avant toute écriture : slug libre, titre et description à la bonne longueur, 700 à 1 600 mots, plan en 3 à 12 sections finissant par « Sources » (2 à 8 liens https), **liens internes limités aux pages réelles du site**
+   (articles et outils), pas de HTML, de tiret cadratin ni de formule d'assistant, blocs de code fermés, plan FR/EN cohérent. En cas de rejet, **une seconde tentative** reçoit la liste des problèmes ; au deuxième rejet le workflow échoue sans rien écrire.
+5. **Fichiers** : `content/blog/<slug>.md` et `content/blog/en/<slug>.md` (avec `translationOf`), relus par le parseur du build ; un article existant n'est jamais écrasé. Le sujet est marqué « done ».
+6. **Vérifications avant la PR** : lint, tests unitaires, build, tests de bout en bout. Les PR créées par `GITHUB_TOKEN` ne déclenchent pas la CI : c'est pourquoi le workflow les exécute lui-même.
+7. **PR** : branche `article/<slug>`, description = **rapport de relecture** (faits précis à vérifier selon le modèle, état de chaque lien externe, liste de contrôle). Tant qu'une PR d'article est ouverte, le lundi suivant ne génère rien de plus.
+
+**Limites à connaître** : le modèle n'a pas accès au web, il peut se tromper sur un détail ou citer une adresse inexacte (le rapport signale les liens qui ne répondent pas, mais pas ceux qui répondent à côté du sujet) ;
+**la relecture humaine est le vrai contrôle**. Essai sans clé ni écriture : `npm run article -- --fixture <réponse.json> --dry-run` ; consigne complète envoyée : `npm run article -- --print-prompt`.
+
 ## Terminal interactif et palette de commandes
 
 - **Terminal** (accueil, îlot React) : de vraies commandes — `help`, `whoami`, `about`, `skills`, `experience`, `projects`, `education`, `blog`, `contact`, `links`, `cv`, `ls`, `cat`,

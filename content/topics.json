@@ -1,0 +1,93 @@
+[
+  {
+    "id": "lire-en-tetes-email",
+    "topic": "Lire les en-têtes d'un e-mail pour savoir d'où vient un message",
+    "angle": "Démarche pas à pas : chemin Received, Authentication-Results, alignement SPF/DKIM/DMARC, signaux d'usurpation. Montrer comment l'outil du site automatise la lecture.",
+    "tools": [
+      "email-headers",
+      "dns"
+    ],
+    "status": "todo"
+  },
+  {
+    "id": "mta-sts-tls-rpt",
+    "topic": "MTA-STS et TLS-RPT : imposer le chiffrement du courrier entrant",
+    "angle": "Pourquoi STARTTLS seul ne suffit pas, enregistrements DNS et fichier de politique, mode testing puis enforce, lecture des rapports.",
+    "tools": [
+      "dns"
+    ],
+    "status": "todo"
+  },
+  {
+    "id": "sauvegarde-3-2-1",
+    "topic": "La règle de sauvegarde 3-2-1 appliquée à une PME",
+    "angle": "Trois copies, deux supports, une hors site ; sauvegardes immuables contre les rançongiciels ; test de restauration ; ce qui n'est pas une sauvegarde (synchronisation, corbeille).",
+    "tools": [],
+    "status": "todo"
+  },
+  {
+    "id": "plan-adressage-vlsm",
+    "topic": "Plan d'adressage IP et VLSM pour un petit réseau",
+    "angle": "Choisir une plage privée, découper en sous-réseaux de tailles différentes, garder de la marge, documenter. S'appuyer sur la calculatrice réseau du site.",
+    "tools": [
+      "subnet"
+    ],
+    "status": "todo"
+  },
+  {
+    "id": "mfa-sans-friction",
+    "topic": "Déployer l'authentification multifacteur sans bloquer les utilisateurs",
+    "angle": "Méthodes (application, clé FIDO2, SMS en dernier recours), comptes de secours, déploiement progressif, exceptions à éviter, protocoles hérités.",
+    "tools": [
+      "password"
+    ],
+    "status": "todo"
+  },
+  {
+    "id": "selecteur-dkim-ovh-google-microsoft",
+    "topic": "Trouver et publier son sélecteur DKIM chez OVHcloud, Google Workspace et Microsoft 365",
+    "angle": "Où activer DKIM chez chaque fournisseur, nom du sélecteur, enregistrement TXT ou CNAME, vérification avec l'outil DNS du site.",
+    "tools": [
+      "dns",
+      "email-headers"
+    ],
+    "status": "todo"
+  },
+  {
+    "id": "agendas-ics-sans-doublons",
+    "topic": "Migrer ou fusionner des agendas (fichiers ICS) sans créer de doublons",
+    "angle": "Pourquoi les doublons apparaissent (UID régénérés, séries récurrentes), exporter, comparer, importer seulement la différence. Utiliser les outils ICS du site.",
+    "tools": [
+      "ics-compare",
+      "ics-split"
+    ],
+    "status": "todo"
+  },
+  {
+    "id": "changer-hebergeur-dns-ttl",
+    "topic": "Changer d'hébergeur sans coupure : DNS, TTL et ordre des opérations",
+    "angle": "Baisser le TTL à l'avance, préparer le nouveau serveur, basculer, vérifier la propagation, remonter le TTL ; pièges de la messagerie.",
+    "tools": [
+      "dns"
+    ],
+    "status": "todo"
+  },
+  {
+    "id": "wifi-pme-wpa3-invite",
+    "topic": "Sécuriser le Wi-Fi d'une PME : WPA2/WPA3 Entreprise et réseau invité",
+    "angle": "Clé partagée contre authentification 802.1X, séparation du réseau invité, portail captif, erreurs courantes.",
+    "tools": [
+      "subnet"
+    ],
+    "status": "todo"
+  },
+  {
+    "id": "verifier-telechargement-sha256",
+    "topic": "Vérifier l'intégrité d'un fichier téléchargé : empreintes SHA-256 et signatures",
+    "angle": "Ce que prouve (et ne prouve pas) une empreinte, la calculer sous Windows, macOS et Linux, la comparer, vérifier une signature quand l'éditeur en publie une.",
+    "tools": [
+      "encoder"
+    ],
+    "status": "todo"
+  }
+]

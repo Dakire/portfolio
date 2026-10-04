@@ -1,0 +1,108 @@
+name: Brouillon d'article hebdomadaire
+
+# Chaque lundi, le modèle rédige un brouillon d'article (français + anglais) et ouvre une pull request.
+# Rien n'est publié sans relecture : c'est la fusion de la PR qui publie. Voir README, « Articles hebdomadaires ».
+#
+# Prérequis (une fois) :
+#   - secret du dépôt ANTHROPIC_API_KEY ;
+#   - Settings > Actions > General > « Allow GitHub Actions to create and approve pull requests ».
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      topic_id:
+        description: "Identifiant d'un sujet de content/topics.json (sinon le premier « todo »)"
+        required: false
+      topic:
+        description: "Sujet libre (prioritaire sur l'identifiant)"
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: weekly-article
+  cancel-in-progress: false
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GH_TOKEN: ${{ github.token }}
+      # Clé de test Cloudflare (publique) : le build exige une clé de site Turnstile.
+      VITE_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
+    steps:
+      - name: Clé API absente
+        if: ${{ env.ANTHROPIC_API_KEY == '' }}
+        run: |
+          echo "::warning::Secret ANTHROPIC_API_KEY absent : aucun article généré. Ajoutez-le dans Settings > Secrets and variables > Actions."
+
+      - name: Une PR d'article attend déjà une relecture
+        id: pending
+        if: ${{ env.ANTHROPIC_API_KEY != '' && github.event_name == 'schedule' }}
+        run: |
+          count=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --search "head:article/" --json number --jq 'length')
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+          if [ "$count" -gt 0 ]; then echo "::notice::$count PR d'article encore ouverte : pas de nouveau brouillon cette semaine."; fi
+
+      - name: Décider
+        id: go
+        run: |
+          if [ -n "$ANTHROPIC_API_KEY" ] && [ "${{ steps.pending.outputs.count || 0 }}" = "0" ]; then echo "run=true" >> "$GITHUB_OUTPUT"; else echo "run=false" >> "$GITHUB_OUTPUT"; fi
+
+      - uses: actions/checkout@v4
+        if: steps.go.outputs.run == 'true'
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        if: steps.go.outputs.run == 'true'
+        with:
+          node-version: 22
+          cache: npm
+      - if: steps.go.outputs.run == 'true'
+        run: npm ci
+
+      - name: Rédiger le brouillon
+        id: generate
+        if: steps.go.outputs.run == 'true'
+        env:
+          INPUT_TOPIC: ${{ inputs.topic }}
+          INPUT_TOPIC_ID: ${{ inputs.topic_id }}
+        run: |
+          args=(--report "$RUNNER_TEMP/report.md")
+          if [ -n "$INPUT_TOPIC" ]; then args+=(--topic "$INPUT_TOPIC"); elif [ -n "$INPUT_TOPIC_ID" ]; then args+=(--id "$INPUT_TOPIC_ID"); fi
+          node scripts/generate-article.js "${args[@]}"
+
+      # L'article doit passer les mêmes contrôles que n'importe quel changement avant qu'une PR soit ouverte.
+      - name: Contrôles (lint, tests unitaires, build)
+        if: steps.go.outputs.run == 'true'
+        run: |
+          npm run lint
+          npm test
+          BUILD_FAST=1 npm run build
+      - name: Tests de bout en bout
+        if: steps.go.outputs.run == 'true'
+        run: |
+          npx playwright install --with-deps chromium
+          npm run test:e2e
+
+      - name: Ouvrir la pull request
+        if: steps.go.outputs.run == 'true'
+        env:
+          SLUG: ${{ steps.generate.outputs.slug }}
+          TITLE: ${{ steps.generate.outputs.title }}
+        run: |
+          branch="article/$SLUG"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add content/blog content/topics.json
+          git commit -m "Brouillon d'article : $TITLE"
+          git push origin "$branch"
+          gh pr create --title "Brouillon d'article : $TITLE" --body-file "$RUNNER_TEMP/report.md" --base main --head "$branch" --label article 2>/dev/null \
+            || gh pr create --title "Brouillon d'article : $TITLE" --body-file "$RUNNER_TEMP/report.md" --base main --head "$branch"

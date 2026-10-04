@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build && node scripts/prerender.js",
     "lint": "oxlint",
+    "article": "node scripts/generate-article.js",
     "preview": "vite preview",
     "test": "vitest run",
     "test:e2e": "playwright test",
@@ -19,6 +20,7 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/vite": "^4.3.3",
