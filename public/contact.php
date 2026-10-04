@@ -12,6 +12,7 @@ const MAIL_TO = 'contact@grichard.eu';
 const MAIL_FROM = 'noreply@grichard.eu'; // doit appartenir au domaine (anti-spam OVH)
 const ALLOWED_HOSTS = ['grichard.eu', 'www.grichard.eu'];
 const MAX_MESSAGES_PER_HOUR = 15; // plafond global : protège la boîte de réception en cas d'abus
+const MAX_MESSAGES_PER_IP_PER_HOUR = 3; // plafond par visiteur : un seul client ne peut pas bloquer les autres
 
 function respond(int $code, bool $success, string $message): never
 {
@@ -33,7 +34,7 @@ function turnstileSecret(): string
     foreach ([dirname(__DIR__) . '/contact.config.php', __DIR__ . '/contact.config.php'] as $file) {
         if (is_file($file)) {
             $config = require $file;
-            return (string) ($config['turnstile_secret'] ?? '');
+            return is_array($config) ? (string) ($config['turnstile_secret'] ?? '') : '';
         }
     }
     return '';
@@ -66,26 +67,41 @@ function verifyTurnstile(string $token, string $secret, string $ip): bool
 }
 
 /**
- * Plafond global de messages par heure (compteur dans un fichier temporaire, sans aucune donnée personnelle).
- * Avec Turnstile, chaque message exige déjà un captcha résolu ; ceci évite d'inonder la boîte de réception.
+ * Limitation du nombre de messages, globale (protège la boîte de réception) et par adresse IP (un seul visiteur ne peut
+ * pas épuiser le plafond global à lui seul). Compteur dans un fichier temporaire : lecture, contrôle et écriture se font
+ * sous un seul verrou, donc deux requêtes simultanées ne peuvent pas dépasser la limite.
+ * Seule une empreinte salée de l'IP est conservée, au plus une heure (voir mentions légales, section 4).
  */
-function rateLimited(): bool
+function rateLimited(string $ip): bool
 {
     $file = sys_get_temp_dir() . '/portfolio_contact_' . hash('sha256', __DIR__) . '.json';
+    $handle = @fopen($file, 'c+');
+    if ($handle === false || !flock($handle, LOCK_EX)) {
+        return false; // panne de stockage : on ne bloque pas un visiteur légitime (Turnstile reste exigé)
+    }
+
     $now = time();
+    $stored = json_decode((string) stream_get_contents($handle), true);
     $hits = [];
-    if (is_file($file)) {
-        $stored = json_decode((string) @file_get_contents($file), true);
-        if (is_array($stored)) {
-            $hits = array_values(array_filter($stored, static fn ($t) => is_int($t) && $t > $now - 3600));
+    foreach (is_array($stored) ? $stored : [] as $hit) {
+        if (is_array($hit) && is_int($hit['t'] ?? null) && is_string($hit['ip'] ?? null) && $hit['t'] > $now - 3600) {
+            $hits[] = $hit;
         }
     }
-    if (count($hits) >= MAX_MESSAGES_PER_HOUR) {
-        return true;
+
+    $ipKey = hash('sha256', __DIR__ . '|' . $ip);
+    $fromThisIp = count(array_filter($hits, static fn (array $h): bool => $h['ip'] === $ipKey));
+    $limited = count($hits) >= MAX_MESSAGES_PER_HOUR || $fromThisIp >= MAX_MESSAGES_PER_IP_PER_HOUR;
+
+    if (!$limited) {
+        $hits[] = ['t' => $now, 'ip' => $ipKey];
     }
-    $hits[] = $now;
-    @file_put_contents($file, json_encode($hits), LOCK_EX);
-    return false;
+    ftruncate($handle, 0);
+    rewind($handle);
+    fwrite($handle, json_encode($hits));
+    flock($handle, LOCK_UN);
+    fclose($handle);
+    return $limited;
 }
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
@@ -135,7 +151,7 @@ if (
     respond(400, false, 'Données invalides ou manquantes.');
 }
 
-if (rateLimited()) {
+if (rateLimited($_SERVER['REMOTE_ADDR'] ?? '')) {
     respond(429, false, 'Trop de messages pour le moment, veuillez réessayer plus tard.');
 }
 

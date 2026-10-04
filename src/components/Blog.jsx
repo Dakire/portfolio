@@ -1,10 +1,9 @@
 // Pages du blog (FR et EN) : rendues uniquement au build (scripts/prerender.js), sans JavaScript côté client.
 import { Clock } from 'lucide-react';
 import { LANGS, PORTFOLIO_DATA, PROFILE } from '../data/content';
+import { formatDate } from '../lib/format';
+import PostMeta from './PostMeta';
 import Shell from './Shell';
-
-const formatDate = (iso, locale) =>
-  new Date(iso).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
 const crumbLink = 'text-emerald-300 hover:text-emerald-200 underline underline-offset-2 rounded';
 
@@ -22,10 +21,7 @@ export function BlogIndex({ posts, lang }) {
                 <a href={`${LANGS[lang].blog}${p.slug}/`} className="hover:text-emerald-300 transition-colors">{p.title}</a>
               </h2>
               <p className="text-sm text-slate-300 leading-relaxed mb-4">{p.description}</p>
-              <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono text-emerald-300">
-                <time dateTime={p.date}>{formatDate(p.date, b.dateLocale)}</time>
-                <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" aria-hidden="true" /> {p.readingTime} {b.min}</span>
-              </p>
+              <PostMeta post={p} blog={b} />
             </article>
           </li>
         ))}
