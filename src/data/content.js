@@ -12,8 +12,8 @@ export const SECTION_IDS = ['about', 'skills', 'experience', 'projects', 'contac
 
 // Une URL par langue (pré-rendues au build) : le contenu anglais est indexable et lié par hreflang.
 export const LANGS = {
-  fr: { home: '/', legal: '/mentions-legales/', blog: '/blog/', other: 'en' },
-  en: { home: '/en/', legal: '/en/legal-notice/', blog: '/en/blog/', other: 'fr' },
+  fr: { home: '/', legal: '/mentions-legales/', blog: '/blog/', rss: '/rss.xml', other: 'en' },
+  en: { home: '/en/', legal: '/en/legal-notice/', blog: '/en/blog/', rss: '/en/rss.xml', other: 'fr' },
 };
 
 export const PORTFOLIO_DATA = {

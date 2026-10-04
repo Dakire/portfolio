@@ -25,8 +25,10 @@ export const json = (data) => JSON.stringify(data).replace(/</g, '\\u003c');
  * - assets : balises <link>/<script> issues du build Vite (CSS, bundle JS de l'accueil)
  * - scripts : scripts autonomes de public/js/ en plus de ceux de toutes les pages (nav.js, fx.js, consent.js ; theme.js est chargé dans le <head>, sans defer, pour éviter tout flash de thème)
  * - alternates : [{ lang, path }] pour les balises hreflang
+ * - feeds : [{ title, path }] flux RSS à déclarer dans le <head> (découverte automatique par les lecteurs)
+ * - image : image de partage { url, width, height, alt } ; par défaut l'image générique du site
  */
-export function page({ lang = 'fr', assets, scripts = [], title, description, path, type = 'website', body, extraMeta = '', ld, noindex = false, alternates = [] }) {
+export function page({ lang = 'fr', assets, scripts = [], title, description, path, type = 'website', body, extraMeta = '', ld, noindex = false, alternates = [], feeds = [], image = OG_IMAGE }) {
   const url = `${SITE}${path}`;
   const alt = alternates
     .map((a) => `<link rel="alternate" hreflang="${a.lang}" href="${SITE}${a.path}" />`)
@@ -46,6 +48,7 @@ export function page({ lang = 'fr', assets, scripts = [], title, description, pa
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="canonical" href="${url}" />
     ${alt}
+    ${feeds.map((f) => `<link rel="alternate" type="application/rss+xml" title="${esc(f.title)}" href="${SITE}${f.path}" />`).join('\n    ')}
     <title>${esc(title)}</title>
     <meta name="description" content="${esc(description)}" />
     <meta name="author" content="Guillaume Richard" />
@@ -57,15 +60,16 @@ export function page({ lang = 'fr', assets, scripts = [], title, description, pa
     <meta property="og:url" content="${url}" />
     <meta property="og:locale" content="${LOCALES[lang]}" />
     ${others.join('\n    ')}
-    <meta property="og:image" content="${OG_IMAGE.url}" />
-    <meta property="og:image:width" content="${OG_IMAGE.width}" />
-    <meta property="og:image:height" content="${OG_IMAGE.height}" />
-    <meta property="og:image:alt" content="${esc(OG_IMAGE.alt)}" />
+    <meta property="og:image" content="${image.url}" />
+    <meta property="og:image:width" content="${image.width}" />
+    <meta property="og:image:height" content="${image.height}" />
+    <meta property="og:image:alt" content="${esc(image.alt)}" />
     ${extraMeta}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${esc(title)}" />
     <meta name="twitter:description" content="${esc(description)}" />
-    <meta name="twitter:image" content="${OG_IMAGE.url}" />
+    <meta name="twitter:image" content="${image.url}" />
+    <meta name="twitter:image:alt" content="${esc(image.alt)}" />
     ${assets}
     ${ld ? `<script type="application/ld+json">${json(ld)}</script>` : ''}
   </head>

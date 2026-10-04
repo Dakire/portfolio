@@ -3,13 +3,17 @@
 //  - mentions légales (/mentions-legales/, /en/legal-notice/) ;
 //  - blog (content/blog/*.md) ;
 //  - 404.html (ErrorDocument Apache) ;
-//  - sitemap.xml et llms.txt, générés (aucune liste d'URL à maintenir à la main).
+//  - sitemap.xml, llms.txt et flux RSS (FR et EN), générés (aucune liste d'URL à maintenir à la main) ;
+//  - images de partage des articles (og/) et PDF des CV, produits par Chromium (BUILD_FAST=1 les saute pour un build rapide).
 // La logique réutilisable (front matter, dates, gabarit, sitemap…) est dans scripts/lib/, couverte par tests/unit.
 import { readFile, writeFile, readdir, mkdir, rm } from 'node:fs/promises';
 import { createServer } from 'vite';
 import { assetTags, readManifest } from './lib/assets.js';
 import { toIso } from './lib/dates.js';
 import { gitDate } from './lib/git.js';
+import { generateOgImages, OG_SIZE } from './lib/og.js';
+import { generateCvPdfs } from './lib/pdf.js';
+import { buildRss } from './lib/rss.js';
 import { parsePost } from './lib/markdown.js';
 import { page, json, SITE } from './lib/page.js';
 import { root } from './lib/paths.js';
@@ -66,6 +70,17 @@ try {
     { lang: 'x-default', path: LANGS.fr[key] },
   ];
 
+  // Images de partage : une par article (titre en grand). Sans Chromium, les pages gardent l'image générique.
+  const fast = process.env.BUILD_FAST === '1';
+  const ogDone = fast
+    ? new Set()
+    : await generateOgImages(
+        allPosts.map((p) => ({ key: p.slug, title: p.title, kicker: `Blog · ${p.readingTime} ${PORTFOLIO_DATA[p.lang].blog.min}`, byline: `${PROFILE.name} · grichard.eu` })),
+        'dist/og',
+      );
+  const ogImage = (post) => (ogDone.has(post.slug) ? { url: `${SITE}/og/${post.slug}.png`, ...OG_SIZE, alt: post.title } : undefined);
+  const feedsFor = (lang) => [{ title: `${PORTFOLIO_DATA[lang].blog.siteName} (RSS)`, path: LANGS[lang].rss }];
+
   const author = person(PROFILE);
   const siteDate = gitDate('src', 'public/js');
   const homeLastmodIso = [siteDate, ...allPosts.map((p) => toIso(p.updated ?? p.date))].sort((a, b) => Date.parse(a) - Date.parse(b)).at(-1);
@@ -85,6 +100,7 @@ try {
         path,
         type: 'profile',
         alternates: alternatesOf('home'),
+        feeds: feedsFor(lang),
         extraMeta: '<meta property="profile:first_name" content="Guillaume" />\n    <meta property="profile:last_name" content="Richard" />',
         body: `<div id="root">${render(lang, lite(postsByLang[lang]))}</div>\n    <script type="application/json" id="${ISLANDS_DATA_ID}">${json(islandsData(lang, t))}</script>`,
         ld: homeLd({ lang, path, t, profile: PROFILE, dateModified: homeLastmodIso }),
@@ -121,6 +137,7 @@ try {
         description: b.pageDescription,
         path: blogRoot,
         alternates: alternatesOf('blog'),
+        feeds: feedsFor(lang),
         body: renderBlogIndex(list, lang),
         ld: blogLd({ blogRoot, name: b.siteName, inLanguage, author, posts: list, postUrl: blogPath }),
       }),
@@ -139,10 +156,12 @@ try {
           path,
           type: 'article',
           alternates: translationAlternates(post),
+          feeds: feedsFor(lang),
+          image: ogImage(post),
           extraMeta: `<meta property="article:published_time" content="${toIso(post.date)}" />\n    <meta property="article:modified_time" content="${toIso(post.updated ?? post.date)}" />\n    <meta property="article:author" content="${SITE}${LANGS[lang].home}" />`,
           body: renderBlogPost(post, related, lang),
           scripts: post.script ? [post.script] : [],
-          ld: postLd({ post, path, blogRoot, homePath: LANGS[lang].home, inLanguage, author, labels: b }),
+          ld: postLd({ post, path, blogRoot, homePath: LANGS[lang].home, inLanguage, author, labels: b, image: ogImage(post)?.url }),
         }),
       );
     }
@@ -178,10 +197,27 @@ try {
   );
   await writeFile(root('dist/llms.txt'), buildLlmsTxt(await readFile(root('public/llms.txt'), 'utf-8'), postsByLang, blogPath));
 
+  // 5b. Flux RSS (un par langue)
+  for (const lang of ['fr', 'en']) {
+    const b = PORTFOLIO_DATA[lang].blog;
+    await writeFile(
+      root(`dist${LANGS[lang].rss}`),
+      buildRss({ lang, title: b.siteName, description: b.pageDescription, blogPath: LANGS[lang].blog, feedPath: LANGS[lang].rss, author: PROFILE.name, postPath: blogPath, posts: postsByLang[lang] }),
+    );
+  }
+
+  // 5c. PDF des CV, régénérés depuis leurs sources HTML (les PDF de public/ restent en secours si Chromium ou le réseau manquent)
+  const pdfs = fast
+    ? []
+    : await generateCvPdfs([
+        { source: 'public/cv-fr.html', out: 'dist/CV_Guillaume_Richard_FR.pdf' },
+        { source: 'public/cv-en.html', out: 'dist/Resume_Guillaume_Richard_EN.pdf' },
+      ]);
+
   // 6. Le manifeste Vite n'a plus d'utilité une fois les pages générées : il ne doit pas être déployé
   await rm(root('dist/.vite'), { recursive: true, force: true });
 
-  console.log(`Pré-rendu : accueil FR/EN, mentions légales, blog (${postsByLang.fr.length} articles FR + ${postsByLang.en.length} EN), 404, sitemap, llms.txt`);
+  console.log(`Pré-rendu : accueil FR/EN, mentions légales, blog (${postsByLang.fr.length} articles FR + ${postsByLang.en.length} EN), 404, sitemap, llms.txt, RSS, ${ogDone.size} images de partage, PDF des CV (${pdfs.map((r) => r.status).join(', ') || 'ignorés'})`);
 } finally {
   await vite.close();
 }

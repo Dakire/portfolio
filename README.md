@@ -31,7 +31,8 @@ content/blog/en/*.md    Traductions anglaises (mêmes champs + translationOf : s
 scripts/
   prerender.js          Orchestre la génération : accueil FR/EN, mentions légales, blog, 404.html, sitemap.xml, llms.txt
   lib/                  Briques testées : markdown.js (front matter, sommaire), dates.js, page.js (gabarit <head>),
-                        schema.js (JSON-LD), sitemap.js, assets.js (lecture du manifeste Vite), git.js
+                        schema.js (JSON-LD), sitemap.js, assets.js (lecture du manifeste Vite), git.js,
+                        rss.js (flux RSS), og.js (images de partage), pdf.js (PDF des CV)
 public/                 Copié tel quel dans dist/ : contact.php, .htaccess, robots.txt, llms.txt, og-image.png, PDF, icônes,
                         cv-fr.html / cv-en.html (sources des CV pour générer les PDF ; non servies : `.htaccess` les bloque)
 public/js/              Scripts autonomes (voir « Scripts autonomes ») : theme.js, nav.js, fx.js, consent.js, table-filter.js, 404.js
@@ -57,6 +58,13 @@ Le sélecteur de langue mène à la page équivalente (la traduction d'un articl
   suit le système ; les sections apparaissent sans animation.
 - **Front matter minimal** (`scripts/lib/markdown.js`) plutôt que YAML : les titres contiennent des « : » qu'un parseur YAML strict
   refuserait sans guillemets. En contrepartie, toute erreur (ligne sans « : », clé inconnue ou en double, date mal formée) fait échouer le build.
+
+## Artefacts produits au build
+
+- **Flux RSS** : `/rss.xml` (FR) et `/en/rss.xml` (EN), contenu complet des articles, liens absolus. Déclarés dans le `<head>` de l'accueil, du blog et des articles (découverte automatique).
+- **Images de partage** : une image 1200 × 630 par article dans `dist/og/<slug>.png` (titre en grand, charte du site), utilisée par `og:image`, `twitter:image` et le JSON-LD de l'article. Rendu par Chromium (Playwright), mis en cache dans `.cache/og/` (ignoré par Git) : seuls les articles nouveaux ou modifiés sont rendus.
+- **PDF des CV** : `dist/CV_Guillaume_Richard_FR.pdf` et `dist/Resume_Guillaume_Richard_EN.pdf` sont **régénérés** depuis `public/cv-fr.html` et `public/cv-en.html` (impression A4 par Chromium, cache dans `.cache/cv/`). Les sources chargent Tailwind, Inter et Lucide depuis des CDN : le rendu n'est accepté que si elles ont chargé ; sinon le PDF de `public/` est conservé et un avertissement s'affiche. **Pour modifier un CV, éditez le HTML** (les PDF de `public/` ne sont plus que le secours).
+- Chromium est requis : `npx playwright install chromium` (déjà fait par la CI). `BUILD_FAST=1 npm run build` saute images et PDF pour un build rapide ; sans Chromium, le build continue avec l'image générique et les PDF de `public/`.
 
 ## Design system et thèmes
 

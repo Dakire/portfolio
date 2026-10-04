@@ -52,7 +52,7 @@ export const blogLd = ({ blogRoot, name, inLanguage, author, posts, postUrl }) =
   blogPost: posts.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: `${SITE}${postUrl(p)}`, datePublished: toIso(p.date) })),
 });
 
-export const postLd = ({ post, path, blogRoot, homePath, inLanguage, author, labels }) => {
+export const postLd = ({ post, path, blogRoot, homePath, inLanguage, author, labels, image = OG_IMAGE.url }) => {
   const modified = post.updated ?? post.date;
   return {
     '@context': CONTEXT,
@@ -63,7 +63,7 @@ export const postLd = ({ post, path, blogRoot, homePath, inLanguage, author, lab
         description: post.description,
         url: `${SITE}${path}`,
         mainEntityOfPage: `${SITE}${path}`,
-        image: OG_IMAGE.url,
+        image,
         datePublished: toIso(post.date),
         dateModified: toIso(modified),
         inLanguage,

@@ -10,6 +10,7 @@ Le portfolio est disponible en français et en anglais. Le blog est lui aussi di
 - [Blog (français)](https://grichard.eu/blog/) : notes techniques sur la messagerie, le DNS, les migrations et le poste de travail
 - [Blog (English)](https://grichard.eu/en/blog/) : technical notes on email, DNS, migrations and the workstation
 - [Mentions légales](https://grichard.eu/mentions-legales/) : éditeur, hébergement, données personnelles et cookies
+- [Flux RSS (français)](https://grichard.eu/rss.xml) et [RSS feed (English)](https://grichard.eu/en/rss.xml) : tous les articles du blog
 
 ## Documents
 - [CV en français (PDF)](https://grichard.eu/CV_Guillaume_Richard_FR.pdf)

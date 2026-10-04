@@ -31,3 +31,6 @@ contact.config.php
 # Tests
 playwright-report
 test-results
+
+# Caches de build (images de partage, PDF des CV)
+.cache

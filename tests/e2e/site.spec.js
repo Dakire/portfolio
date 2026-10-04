@@ -1,4 +1,4 @@
-import { existsSync, readdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
@@ -417,6 +417,36 @@ test.describe('contenu produit (dist/)', () => {
     expect(head).toMatch(/<script src="\/js\/theme\.js\?v=[0-9a-f]+"><\/script>/);
     expect(html).toMatch(/<script defer src="\/js\/nav\.js\?v=/);
     expect(html).toMatch(/<script defer src="\/js\/fx\.js\?v=/);
+  });
+
+  test('le flux RSS est un XML valide avec un item par article, dans les deux langues', async ({ page, request }) => {
+    for (const [path, count] of [['/rss.xml', 7], ['/en/rss.xml', 7]]) {
+      const xml = await (await request.get(path)).text();
+      const result = await page.evaluate((text) => {
+        const doc = new DOMParser().parseFromString(text, 'application/xml');
+        return { error: doc.querySelector('parsererror')?.textContent ?? null, items: doc.querySelectorAll('item').length, rss: doc.documentElement.tagName };
+      }, xml);
+      expect(result, path).toEqual({ error: null, items: count, rss: 'rss' });
+    }
+  });
+
+  test('les pages du blog déclarent leur flux RSS et leur image de partage propre', async ({ page, request }) => {
+    await page.goto('/blog/spf-dkim-dmarc-expliques/');
+    await expect(page.locator('link[rel="alternate"][type="application/rss+xml"]')).toHaveAttribute('href', 'https://grichard.eu/rss.xml');
+    const image = await page.locator('meta[property="og:image"]').getAttribute('content');
+    expect(image).toBe('https://grichard.eu/og/spf-dkim-dmarc-expliques.png');
+    const png = await request.get('/og/spf-dkim-dmarc-expliques.png');
+    expect(png.headers()['content-type']).toBe('image/png');
+    expect((await png.body()).length).toBeGreaterThan(10_000);
+    await page.goto('/en/');
+    await expect(page.locator('link[rel="alternate"][type="application/rss+xml"]')).toHaveAttribute('href', 'https://grichard.eu/en/rss.xml');
+  });
+
+  test('les PDF des CV sont présents dans dist/', () => {
+    for (const file of ['CV_Guillaume_Richard_FR.pdf', 'Resume_Guillaume_Richard_EN.pdf']) {
+      expect(existsSync('dist/' + file), file).toBe(true);
+      expect(readFileSync('dist/' + file).subarray(0, 5).toString()).toBe('%PDF-');
+    }
   });
 
   test('le sitemap liste les pages et les articles', async ({ request }) => {
