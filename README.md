@@ -98,6 +98,23 @@ Les outils de fichiers et de texte tournent **entièrement dans le navigateur** 
   Options : casse du titre, heure de fin, description, dédoublonnage, inclusion des modifiés. Le fichier produit est un `.ics` valide prêt à importer.
 - Limites : 50 Mo par fichier ; les heures flottantes (sans fuseau) ne sont comparables qu'entre elles ; un fuseau inconnu n'est comparé que sur son texte.
 
+### Outils d'administration et de développement
+
+Quatre outils, **sans aucun appel réseau**, dont la logique est dans des fonctions pures testées (`src/lib/`) et l'interface dans `src/components/tools/` :
+
+- **Analyseur d'en-têtes d'e-mail** (`/outils/en-tetes-email/`, `src/lib/mail/headers.js`) : chemin `Received` du plus ancien au plus récent (délai par saut, TLS, horloges décalées),
+  `Authentication-Results` / `Received-SPF` / `DKIM-Signature` / ARC, **alignement DMARC** (relaxé), nom affiché usurpé, `Reply-To` et `Return-Path` divergents, signaux de spam
+  (SpamAssassin, SCL Exchange, `X-Forefront-Antispam-Report`), `List-Unsubscribe`. Chaque signature DKIM renvoie vers l'outil DNS (`?d=<domaine>&s=<sélecteur>`).
+  Les constats suivent le même modèle que l'outil DNS (`finding(code, gravité, paramètres)` + catalogue FR/EN, complétude vérifiée par test).
+- **Calculatrice réseau** (`/outils/calculateur-reseau/`, `src/lib/net/cidr.js`) : IPv4 et IPv6 (BigInt), masque, joker, broadcast, plage, classe, type (privée, CGNAT, lien-local, documentation…),
+  binaire avec bits de réseau en évidence, DNS inverse, **découpage** en sous-réseaux (limité à 256 lignes affichées) et **plan VLSM** (blocs triés du plus grand au plus petit, alignés),
+  test d'appartenance et de chevauchement.
+- **Encodeur / décodeur** (`/outils/encodeur-decodeur/`, `src/lib/encode/`) : Base64 (classique et URL-safe, UTF-8 sûr), URL (avec décomposition), hexadécimal, entités HTML, **lecteur de JWT**
+  (décode seulement : la signature n'est **jamais** vérifiée, et l'interface le dit), empreintes MD5 (implémentation locale) / SHA-1 / SHA-256 / SHA-384 / SHA-512 de textes ou de fichiers
+  (`SubtleCrypto`) avec comparaison, timestamps (secondes, ms, µs, ns détectés) et UUID v4 / v7. Les onglets suivent le motif ARIA « tabs » (`src/components/ui/Tabs.jsx`).
+- **Générateur de mots de passe** (`/outils/generateur-mot-de-passe/`, `src/lib/password.js`) : `crypto.getRandomValues` avec **rejet** pour éviter le biais du modulo ; modes aléatoire,
+  prononçable et PIN ; entropie réelle affichée (pas une jauge décorative). Les valeurs ne sont générées qu'**après l'hydratation** : le HTML pré-rendu ne contient jamais de mot de passe.
+
 ## Outil DNS et e-mail (`/outils/dns/`, `/en/tools/dns/`)
 
 Vérificateur de domaine : **A, AAAA, MX, SPF, DKIM, DMARC, TXT, NS, SOA, CAA, DNSSEC, MTA-STS, TLS-RPT, BIMI**, avec une section « Doublons ».

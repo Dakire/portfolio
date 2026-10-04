@@ -6,29 +6,8 @@ import Button from '../ui/Button';
 import Card from '../ui/Card';
 import CopyButton from '../ui/CopyButton';
 import ScrollRegion from '../ui/ScrollRegion';
+import Finding from './Finding';
 import { SEVERITY } from './severity';
-
-function Finding({ finding, lang, ui }) {
-  const d = describeFinding(lang, finding);
-  const { icon: Icon, color } = SEVERITY[finding.severity];
-  return (
-    <li className="flex gap-3">
-      <Icon className={cx('mt-0.5 h-5 w-5 shrink-0', color)} aria-hidden="true" />
-      <div className="min-w-0">
-        <p className="font-semibold text-ink">
-          <span className="sr-only">{ui.results.status[finding.severity]} : </span>
-          {d.title}
-        </p>
-        {d.detail && <p className="text-copy text-body">{d.detail}</p>}
-        {d.fix && (
-          <p className="mt-1 text-copy text-body">
-            <strong className="text-ink">{ui.results.fix} :</strong> {d.fix}
-          </p>
-        )}
-      </div>
-    </li>
-  );
-}
 
 function RecordTable({ records, ui, caption }) {
   const c = ui.results.recordCols;
@@ -167,6 +146,7 @@ function Extra({ check, ui }) {
 
 /** Une vérification : en-tête cliquable (gravité, titre, première conclusion), puis constats, détails et enregistrements. */
 function CheckSection({ check, lang, ui, open, onToggle }) {
+  const describe = (f) => describeFinding(lang, f);
   const { icon: Icon, color } = SEVERITY[check.status];
   const headline = [...check.findings].sort((a, b) => ['error', 'warn', 'info', 'ok'].indexOf(a.severity) - ['error', 'warn', 'info', 'ok'].indexOf(b.severity))[0];
   const records = check.records ?? [];
@@ -189,7 +169,7 @@ function CheckSection({ check, lang, ui, open, onToggle }) {
           {ui.checks[check.id].intro && <p className="text-copy text-muted">{ui.checks[check.id].intro}</p>}
           <ul className="space-y-3">
             {check.findings.map((f, i) => (
-              <Finding key={`${f.code}-${i}`} finding={f} lang={lang} ui={ui} />
+              <Finding key={`${f.code}-${i}`} finding={f} describe={describe} statusLabels={ui.results.status} fixLabel={ui.results.fix} />
             ))}
           </ul>
           <Extra check={check} ui={ui} />
@@ -207,6 +187,7 @@ function CheckSection({ check, lang, ui, open, onToggle }) {
 
 export default function DnsReport({ report, lang, onCopyReport, onCopyLink, headingRef }) {
   const ui = DNS_TOOL[lang].ui;
+  const describe = (f) => describeFinding(lang, f);
   const r = ui.results;
   const [openMap, setOpenMap] = useState(() => Object.fromEntries(report.checks.map((c) => [c.id, c.status === 'error' || c.status === 'warn'])));
   const setAll = (value) => setOpenMap(Object.fromEntries(report.checks.map((c) => [c.id, value])));
@@ -215,7 +196,7 @@ export default function DnsReport({ report, lang, onCopyReport, onCopyLink, head
     return (
       <Card solid className="space-y-3 p-5 sm:p-6">
         <h2 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-ink outline-none">{r.title} {report.domain}</h2>
-        <ul>{report.findings.map((f, i) => <Finding key={i} finding={f} lang={lang} ui={ui} />)}</ul>
+        <ul>{report.findings.map((f, i) => <Finding key={i} finding={f} describe={describe} statusLabels={ui.results.status} fixLabel={ui.results.fix} />)}</ul>
       </Card>
     );
   }
@@ -258,7 +239,7 @@ export default function DnsReport({ report, lang, onCopyReport, onCopyLink, head
           ) : (
             <ul className="space-y-3">
               {report.duplicates.map((f, i) => (
-                <Finding key={`${f.code}-${i}`} finding={f} lang={lang} ui={ui} />
+                <Finding key={`${f.code}-${i}`} finding={f} describe={describe} statusLabels={ui.results.status} fixLabel={ui.results.fix} />
               ))}
             </ul>
           )}

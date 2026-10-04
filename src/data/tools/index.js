@@ -3,8 +3,12 @@
 // Pour ajouter un outil : ses textes (src/data/tools/<id>.js), son composant (src/components/tools/registry.jsx),
 // son îlot (src/islands/tools/<id>.jsx) et une entrée ci-dessous.
 import { DNS_TOOL } from '../dns-tool.js';
+import { EMAIL_HEADERS } from './email-headers.js';
+import { ENCODER } from './encoder.js';
 import { ICS_COMPARE } from './ics-compare.js';
 import { ICS_SPLIT } from './ics-split.js';
+import { PASSWORD } from './password.js';
+import { SUBNET } from './subnet.js';
 
 export const TOOLS_BASE = { fr: '/outils/', en: '/en/tools/' };
 
@@ -12,6 +16,10 @@ export const TOOLS = [
   { id: 'dns', slug: { fr: 'dns', en: 'dns' }, icon: 'network', text: DNS_TOOL },
   { id: 'ics-split', slug: { fr: 'ics-decouper', en: 'ics-splitter' }, icon: 'scissors', text: ICS_SPLIT },
   { id: 'ics-compare', slug: { fr: 'ics-comparer', en: 'ics-compare' }, icon: 'diff', text: ICS_COMPARE },
+  { id: 'email-headers', slug: { fr: 'en-tetes-email', en: 'email-headers' }, icon: 'mail', text: EMAIL_HEADERS },
+  { id: 'subnet', slug: { fr: 'calculateur-reseau', en: 'subnet-calculator' }, icon: 'calculator', text: SUBNET },
+  { id: 'encoder', slug: { fr: 'encodeur-decodeur', en: 'encoder-decoder' }, icon: 'binary', text: ENCODER },
+  { id: 'password', slug: { fr: 'generateur-mot-de-passe', en: 'password-generator' }, icon: 'key', text: PASSWORD },
 ];
 
 export const toolPath = (tool, lang) => `${TOOLS_BASE[lang]}${tool.slug[lang]}/`;
