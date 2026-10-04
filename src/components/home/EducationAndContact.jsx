@@ -1,38 +1,38 @@
 import { BookOpen, Mail, Shield } from 'lucide-react';
 import { CONTACT_ROOT_ID } from '../../lib/islands';
-import { ContactIsland } from '../../islands';
+import ContactIsland from '../ContactIsland';
+import Card from '../ui/Card';
+import SectionHeading from '../SectionHeading';
 
-// Formation et contact côte à côte. Le formulaire est un îlot hydraté (voir src/islands.jsx).
+// Formation et contact côte à côte. Le formulaire est la seule zone hydratée (voir src/main.jsx).
 export default function EducationAndContact({ t, lang }) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-      <section id="education" aria-labelledby="education-title" className="reveal scroll-mt-32">
-        <h2 id="education-title" className="text-2xl font-bold text-white flex items-center gap-3 mb-8">
-          <BookOpen className="w-6 h-6 shrink-0 text-emerald-400" aria-hidden="true" /> {t.educationTitle}
-        </h2>
-        <ul className="space-y-4 mb-6">
+    <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
+      <section id="education" aria-labelledby="education-title" className="reveal">
+        <SectionHeading id="education-title" icon={BookOpen}>{t.educationTitle}</SectionHeading>
+        <ul className="mb-5 space-y-4">
           {t.education.map((edu) => (
-            <li key={edu} className="flex gap-4 bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
-              <Shield className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" aria-hidden="true" />
-              <span className="text-slate-300 text-sm leading-relaxed">{edu}</span>
+            <li key={edu}>
+              <Card className="flex gap-4 p-5">
+                <Shield className="mt-0.5 h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
+                <span className="text-copy text-body">{edu}</span>
+              </Card>
             </li>
           ))}
         </ul>
-        <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl">
-          <h3 className="text-white font-bold mb-1">{t.ui.languages}</h3>
-          <p className="text-sm text-slate-300">{t.languagesInfo}</p>
-        </div>
+        <Card className="p-6">
+          <h3 className="mb-1 font-bold text-ink">{t.ui.languages}</h3>
+          <p className="text-copy text-body">{t.languagesInfo}</p>
+        </Card>
       </section>
 
-      <section id="contact" aria-labelledby="contact-title" className="reveal scroll-mt-32">
-        <h2 id="contact-title" className="text-2xl font-bold text-white flex items-center gap-3 mb-8">
-          <Mail className="w-6 h-6 shrink-0 text-emerald-400" aria-hidden="true" /> {t.contactTitle}
-        </h2>
-        <div className="bg-slate-900 border border-slate-800 p-5 sm:p-6 md:p-8 rounded-2xl shadow-xl">
+      <section id="contact" aria-labelledby="contact-title" className="reveal">
+        <SectionHeading id="contact-title" icon={Mail}>{t.contactTitle}</SectionHeading>
+        <Card solid className="p-5 shadow-float sm:p-6 md:p-8">
           <div id={CONTACT_ROOT_ID}>
             <ContactIsland lang={lang} form={t.form} />
           </div>
-        </div>
+        </Card>
       </section>
     </div>
   );

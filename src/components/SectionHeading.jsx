@@ -1,11 +1,13 @@
 export default function SectionHeading({ id, icon: Icon, children }) {
   return (
-    <div className="flex items-center gap-4 mb-8 md:mb-10">
-      <h2 id={id} className="text-2xl sm:text-3xl font-bold text-white flex items-center gap-3">
-        <Icon className="w-7 h-7 sm:w-8 sm:h-8 shrink-0 text-emerald-400" aria-hidden="true" />
+    <div className="mb-8 flex items-center gap-4 md:mb-10">
+      <h2 id={id} className="flex items-center gap-3 text-title font-bold tracking-tight text-ink">
+        <span className="icon-tile h-11 w-11 shrink-0" aria-hidden="true">
+          <Icon className="h-6 w-6" />
+        </span>
         {children}
       </h2>
-      <div className="h-px bg-linear-to-r from-emerald-500/50 via-slate-700 to-transparent flex-1" aria-hidden="true" />
+      <div className="h-px flex-1 bg-linear-to-r from-brand/60 via-line-strong/50 to-transparent" aria-hidden="true" />
     </div>
   );
 }

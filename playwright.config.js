@@ -13,6 +13,7 @@ export default defineConfig({
     baseURL: `http://localhost:${PORT}`,
     trace: 'on-first-retry',
     reducedMotion: 'reduce', // désactive les animations au défilement : contrastes et captures stables
+    colorScheme: 'dark', // réglage système simulé ; chaque test peut le changer (le thème suit le système par défaut)
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {

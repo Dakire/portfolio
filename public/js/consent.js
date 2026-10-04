@@ -98,7 +98,7 @@
       const choice = e.target.closest('button')?.dataset.choice;
       if (choice) choose(choice === 'accept');
     });
-    document.body.appendChild(banner);
+    document.body.prepend(banner); // en tête de page : atteint dès le premier Tab, sans parcourir toute la page
     if (focus) banner.querySelector('button').focus();
   };
 

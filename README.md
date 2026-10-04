@@ -5,26 +5,27 @@ Production : <https://grichard.eu>
 
 ## Architecture
 
-Le site est **entièrement pré-rendu** au build (HTML statique, lisible sans JavaScript). React n'hydrate que deux zones
-interactives, les « îlots » : le menu (`Header`) et le formulaire de contact. Tout le reste de l'accueil est du HTML statique.
-Le JavaScript chargé par le navigateur est donc réduit au strict nécessaire (React + ces deux composants).
+Le site est **entièrement pré-rendu** au build (HTML statique, lisible sans JavaScript). React n'hydrate qu'une seule zone
+interactive, le formulaire de contact. Le menu, la bascule de thème, le surlignage de section, l'effet de halo des cartes et le
+bandeau de cookies sont de petits scripts autonomes (`public/js/`), qui fonctionnent sur toutes les pages sans React.
 
 ```
 index.html              Gabarit de développement uniquement (le HTML de production est généré par le pré-rendu)
 src/
   data/content.js       TOUT le contenu (FR/EN), liens, mentions légales, chemins par langue (LANGS)
-  main.jsx              Point d'entrée navigateur : hydrate les îlots (en dev, rend toute la page côté client)
-  islands.jsx           Les deux îlots : HeaderIsland, ContactIsland (formulaire dans un ErrorBoundary)
+  main.jsx              Point d'entrée navigateur : hydrate le formulaire (en dev, rend toute la page côté client)
   App.jsx               Accueil (assemble les sections) ; la langue vient de l'URL ('/' = FR, '/en/' = EN), pas d'un état
   entry-server.jsx      Fonctions de rendu utilisées par le pré-rendu
+  index.css             Design system : jetons de thème, échelles, composants (.btn, .card, .field…), effets (voir plus bas)
   components/
-    home/               Sections de l'accueil : Hero, About, Skills, Experience, Projects, LatestPosts, EducationAndContact, Footer
-    Header, ContactForm, ErrorBoundary    Composants interactifs (îlots)
-    Blog, LegalPage, NotFound, Shell      Pages statiques (rendues au build, jamais hydratées)
+    ui/                 Primitives : Button, Card, Field, ThemeToggle, EmptyState
+    home/               Sections de l'accueil : Hero, About, Skills, Experience, Projects, LatestPosts, EducationAndContact
+    SiteHeader, SiteFooter   En-tête flottant et pied de page communs à TOUTES les pages (accueil, blog, légal, 404)
+    ContactForm, ContactIsland, ErrorBoundary   Le formulaire (seul composant hydraté) et son filet de sécurité
+    Blog, LegalPage, NotFound, Shell            Pages statiques (rendues au build, jamais hydratées)
     PostMeta, SectionHeading, Decor, Terminal, Icons
-  hooks/useTurnstile.js Cycle de vie du widget Cloudflare Turnstile
-  lib/                  format.js (dates), islands.js (identifiants et données des îlots)
-  index.css             Tailwind, focus visible, skip-link, styles des articles et du bandeau de cookies
+  hooks/useTurnstile.js Cycle de vie du widget Cloudflare Turnstile (chargement, nouvelle tentative, jeton)
+  lib/                  format.js (dates), cx.js (classes), islands.js (identifiants et données du formulaire)
 content/blog/*.md       Articles en français (front matter : title, description, date, updated optionnel, script optionnel ; slug = nom du fichier)
 content/blog/en/*.md    Traductions anglaises (mêmes champs + translationOf : slug de l'article français correspondant)
 scripts/
@@ -33,25 +34,68 @@ scripts/
                         schema.js (JSON-LD), sitemap.js, assets.js (lecture du manifeste Vite), git.js
 public/                 Copié tel quel dans dist/ : contact.php, .htaccess, robots.txt, llms.txt, og-image.png, PDF, icônes,
                         cv-fr.html / cv-en.html (sources des CV pour générer les PDF ; non servies : `.htaccess` les bloque)
-public/js/              Scripts autonomes : consent.js (bandeau + Google Analytics), table-filter.js, 404.js
+public/js/              Scripts autonomes (voir « Scripts autonomes ») : theme.js, nav.js, fx.js, consent.js, table-filter.js, 404.js
 tests/unit/             Vitest : pré-rendu (front matter, dates, sitemap, gabarit) et cohérence du contenu
-tests/e2e/              Playwright + axe : accessibilité, SEO, hydratation, menu, formulaire, contenu de dist/
+tests/e2e/              Playwright + axe : accessibilité (2 thèmes), responsive, thème, formulaire, navigation, contenu de dist/
 ```
 
 Pages produites : `/`, `/en/`, `/mentions-legales/`, `/en/legal-notice/`, `/blog/`, `/blog/<slug>/`, `/en/blog/`, `/en/blog/<slug>/`, `404.html`.
 Le sitemap et `llms.txt` sont entièrement générés au build : aucune URL à maintenir à la main. Les `hreflang` sont déclarés dans le
 `<head>` de chaque page (le sitemap reste volontairement « pur », sans `xhtml:link`, pour passer les validateurs XSD stricts).
+Le sélecteur de langue mène à la page équivalente (la traduction d'un article, l'index du blog, les mentions légales…).
 
 ### Choix de conception
 
-- **État** : uniquement local (`useState` dans `Header` et `ContactForm`). Pas de Redux, Context ni bibliothèque de data fetching :
+- **État** : uniquement local (`useState` dans `ContactForm`). Pas de Redux, Context ni bibliothèque de data fetching :
   le site n'a qu'un appel réseau (`POST /contact.php`).
-- **Îlots** : le HTML de l'accueil contient `#header-root`, `#contact-root` et un `<script type="application/json" id="islands-data">`
-  (langue et textes dont les îlots ont besoin). `main.jsx` les relit et hydrate chaque îlot ; le reste n'est jamais hydraté,
-  donc l'année du pied de page ou une section statique ne peuvent pas provoquer de désaccord d'hydratation.
+- **Une seule zone hydratée** : le HTML de l'accueil contient `#contact-root` et un `<script type="application/json" id="islands-data">`
+  (langue et textes du formulaire). `main.jsx` les relit et hydrate le formulaire ; le reste n'est jamais hydraté, donc
+  l'année du pied de page ou une section statique ne peuvent pas provoquer de désaccord d'hydratation. Le JavaScript de React
+  (≈ 73 Ko gzip) ne sert qu'au formulaire ; les pages de blog n'en chargent pas du tout.
 - **Pas de code splitting** (`React.lazy`) : une seule page et un seul point d'entrée, il n'y aurait rien à découper.
+- **Amélioration progressive** : sans JavaScript, le menu mobile est affiché en clair, la bascule de thème est masquée et le thème
+  suit le système ; les sections apparaissent sans animation.
 - **Front matter minimal** (`scripts/lib/markdown.js`) plutôt que YAML : les titres contiennent des « : » qu'un parseur YAML strict
   refuserait sans guillemets. En contrepartie, toute erreur (ligne sans « : », clé inconnue ou en double, date mal formée) fait échouer le build.
+
+## Design system et thèmes
+
+Tout est dans `src/index.css`, sans configuration Tailwind séparée (Tailwind 4 : `@theme`).
+
+- **Jetons sémantiques** : `canvas`, `surface`, `raised`, `line`, `line-strong`, `ink` (titres), `body` (texte), `muted`, `brand` (accent
+  décoratif), `link` (texte accentué), `brand-strong` (fond des boutons), `accent`, `danger`. Ils existent en variables CSS, une valeur
+  par thème, et sont exposés en classes Tailwind (`bg-surface`, `text-body`, `border-line`…). **N'écrivez plus de couleur en dur
+  dans un composant** : ajoutez ou réutilisez un jeton.
+- **Thèmes clair et sombre** : sombre par défaut, clair ensuite. `public/js/theme.js` (chargé dans le `<head>`, sans `defer`, donc sans
+  flash) pose `data-theme` sur `<html>` d'après le choix mémorisé (`localStorage`, clé `theme`) ou, à défaut, le réglage du système ;
+  il suit le système tant qu'aucun choix manuel n'existe. La bascule (`ThemeToggle`, `data-theme-toggle`) fonctionne sur toutes les
+  pages ; avec « réduire les animations » elle est instantanée, sinon le nouveau thème se déploie en cercle (View Transitions).
+  Le terminal de l'accueil et les blocs de code restent volontairement sombres/neutres selon leurs propres jetons.
+- **Échelles** : texte fluide (`text-display`, `text-title`, `text-lead`, `text-copy`, `text-meta`, via `clamp()`), espacement de section
+  (`space-y-section`), rayons (`rounded-card`, `rounded-control`), ombres (`shadow-card`, `shadow-glow`), courbe `ease-soft`.
+- **Composants partagés** : boutons (`.btn` + `btn-primary|secondary|ghost`, 44 px de haut minimum, états hover / active / disabled /
+  loading), cartes (`.card`, `.card-glow`), champs (`.field`), étiquettes (`.tag`), liens (`.link`, `.tap` pour une zone de 44 px),
+  squelette (`.skeleton`), état vide (`EmptyState`). Les composants React de `components/ui/` n'assemblent que ces classes.
+- **Contrastes** : texte courant ≥ 7:1 dans les deux thèmes, `link` ≥ 5:1 sur toutes les surfaces. Vérifié par axe dans `tests/e2e`.
+- **Mouvement** : transitions ciblées (`transition-colors`, `transform`…, jamais `transition-all` en dehors de la page 404),
+  `prefers-reduced-motion` coupe toute animation. Aucune animation décorative ne tourne en continu : le dégradé du nom (5 s), le
+  curseur (4 clignotements) et l'écriture du terminal se jouent une fois (WCAG 2.2.2) ; seul le squelette de chargement boucle.
+- **Effets** : en-tête flottant en verre dépoli avec barre de progression de lecture (CSS pur, `animation-timeline: scroll()`), halo de
+  bordure qui suit le pointeur sur les cartes (`fx.js`, souris uniquement), reflet sur le bouton principal, fond à halos et grille,
+  transitions de page fondues entre les pages statiques (View Transitions inter-documents, navigateurs compatibles).
+- **Impression** : fond neutre, sans en-tête ni bandeau.
+
+## Scripts autonomes (`public/js/`)
+
+Ils sont versionnés par empreinte (`?v=<hash>`) et servis depuis `'self'` : la CSP n'autorise aucun script en ligne.
+
+| Script | Rôle | Chargement |
+|---|---|---|
+| `theme.js` | Thème clair/sombre, `meta theme-color`, classe `js` sur `<html>` | `<head>`, sans `defer` |
+| `nav.js` | Menu mobile (clic, Échap, clic extérieur, focus), surlignage de la section visible (`aria-current="location"`) | `defer`, toutes les pages |
+| `fx.js` | Halo des cartes qui suit le pointeur (souris uniquement, rien si mouvement réduit) | `defer`, toutes les pages |
+| `consent.js` | Bandeau de cookies et Google Analytics après consentement | `defer`, toutes les pages |
+| `table-filter.js`, `404.js` | Filtre de tableau d'un article ; bouton esquiveur de la 404 | à la demande (`script:` d'un article, page 404) |
 
 ## Développement
 
@@ -71,18 +115,24 @@ refuserait tous les messages. Pour un build local sans vraie clé, utiliser la c
 
 Pour ajouter un article : créer `content/blog/<slug>.md` avec son front matter. Pour sa version anglaise, créer `content/blog/en/<slug-en>.md`
 avec `translationOf: <slug français>` (le build échoue si ce slug n'existe pas), puis `npm run build`. Les deux versions sont reliées
-(`hreflang`, lien « Read this article in English ») ; un article sans traduction fonctionne aussi.
-Pour ajouter une langue ou un texte : tout se passe dans `src/data/content.js` ; `tests/unit/content.test.js` vérifie que FR et EN
+(`hreflang`, lien « Read this article in English », sélecteur de langue) ; un article sans traduction fonctionne aussi.
+Pour ajouter un texte : tout se passe dans `src/data/content.js` ; `tests/unit/content.test.js` vérifie que FR et EN
 ont exactement les mêmes clés.
 
 ## Tests et intégration continue
 
 - **Unitaires** (`npm test`, Vitest) : front matter (cas d'erreur compris), ancres et sommaire, dates ISO avec fuseau (heure d'été/hiver),
   gabarit HTML, sitemap, manifeste Vite, parité FR/EN du contenu, validité de tous les articles et de leurs traductions.
-- **Bout en bout** (`npm run test:e2e`, Playwright) sur le site construit : axe (WCAG 2.x A/AA) sur 9 pages, structure et SEO
-  (langue, un seul `h1`, canonical, hreflang), absence d'erreur d'hydratation, menu mobile (Échap, retour du focus),
-  formulaire (succès, 429, coupure réseau, Turnstile injoignable), contenu de `dist/`. Turnstile est remplacé par un double :
-  aucun test ne dépend du réseau.
+- **Bout en bout** (`npm run test:e2e`, Playwright) sur le site construit :
+  - axe (WCAG 2.x A/AA) sur 9 pages **dans chacun des deux thèmes**, et sur le bandeau de cookies ;
+  - structure et SEO (langue, un seul `h1`, canonical, hreflang, sélecteur de langue vers la traduction) ;
+  - responsive : aucun scroll horizontal de 320 à 2560 px, cibles tactiles ≥ 44 px sur mobile ;
+  - thème : suit le système, bascule, mémorisation, `aria-pressed` ; site utilisable sans JavaScript ;
+  - navigation : menu mobile (Échap, clic extérieur, retour du focus), surlignage de section, bandeau de cookies atteint en premier au clavier ;
+  - formulaire : validation par champ, compteur, succès (focus sur la confirmation, second envoi), 429, coupure réseau,
+    Turnstile injoignable, squelette, état occupé ; absence d'erreur d'hydratation ;
+  - contenu de `dist/`.
+  Turnstile est remplacé par un double : aucun test ne dépend du réseau.
 - **CI** (`.github/workflows/ci.yml`) : à chaque push et pull request, `npm ci`, lint, `npm audit` (dépendances de production),
   tests unitaires puis e2e ; le rapport Playwright est conservé en cas d'échec. La CI utilise la clé de test Turnstile.
 
@@ -99,25 +149,31 @@ ont exactement les mêmes clés.
 
 Google Analytics n'est chargé qu'après un clic sur « Accepter » (`public/js/consent.js`) ; le choix est mémorisé 6 mois
 dans `localStorage` et modifiable via « Gérer les cookies » (pied de page). Aucun script Google n'est chargé avant.
-Les mentions légales (section 5) décrivent ce fonctionnement : à tenir à jour si l'outil change.
+Le bandeau est inséré en tête de `<body>` (atteint dès le premier Tab), ses boutons font 44 px de haut et « Refuser » a le même
+poids visuel qu'« Accepter ». Les mentions légales (section 5) décrivent ce fonctionnement : à tenir à jour si l'outil change.
 
 ## Captcha — Cloudflare Turnstile
 
 - Créer un widget sur <https://dash.cloudflare.com/?to=/:account/turnstile> (domaine `grichard.eu`).
 - Clé de **site** (publique) → `VITE_TURNSTILE_SITE_KEY` au moment du build (le build échoue sans elle).
 - Clé **secrète** → `contact.config.php` (ou variable d'environnement `TURNSTILE_SECRET`).
-- Le widget ne se charge que lorsque le formulaire approche de l'écran (`useTurnstile`). Un champ honeypot complète la protection.
+- Le widget ne se charge que lorsque le formulaire approche de l'écran (`useTurnstile`) ; un squelette tient sa place en attendant,
+  et un bouton « Recharger la vérification » apparaît si le script est injoignable. Un champ honeypot complète la protection.
 - `contact.php` échoue en mode fermé : sans secret, aucun e-mail n'est envoyé.
 - Côté interface, chaque cas a son message : captcha non validé ou refusé (403), trop de messages (429), script Turnstile
   injoignable, réseau coupé ou délai de 15 s dépassé, erreur serveur.
 
 ## Accessibilité
 
-Lien d'évitement, focus visible (3 px), menu mobile avec `aria-expanded` (Échap le ferme et rend le focus à son bouton),
-hiérarchie h1 → h2 → h3, `prefers-reduced-motion` respecté, contrastes ≥ WCAG AA (texte courant ≥ 7:1, boutons blancs sur
-`emerald-700` ≈ 5,5:1). Dans le formulaire, les messages passent par une région live au rôle stable (`role="status"`),
-et les champs sont en lecture seule (pas `disabled`) pendant l'envoi pour ne pas faire perdre le focus au clavier.
-Le contrôle est automatisé : axe dans `tests/e2e`, règles `jsx-a11y` dans `npm run lint`.
+Lien d'évitement, focus visible (3 px, couleur de marque dans les deux thèmes), hiérarchie h1 → h2 → h3, une seule `<header>`,
+un seul `<main>` et un seul `<footer>` par page, `prefers-reduced-motion` respecté, contrastes AA dans les deux thèmes.
+Menu mobile : `aria-expanded`, libellé qui change (ouvrir/fermer), Échap et retour du focus, clic extérieur. Section courante :
+`aria-current="location"` ; page courante (Blog) : `aria-current="page"`. Bascule de thème : `aria-pressed`.
+Formulaire : champs obligatoires signalés (astérisque + `required`), erreurs par champ reliées par `aria-describedby` et
+`aria-invalid`, focus sur le premier champ en erreur, région live au rôle stable (`role="status"`), champs en lecture seule
+(pas `disabled`) pendant l'envoi pour ne pas faire perdre le focus, focus déplacé sur la confirmation après envoi.
+Cibles tactiles ≥ 44 px (boutons et liens autonomes ; seuls les liens au fil d'une phrase en sont dispensés).
+Le contrôle est automatisé : axe dans `tests/e2e` (deux thèmes), règles `jsx-a11y` dans `npm run lint`.
 
 ## Sécurité
 
@@ -129,7 +185,8 @@ Le contrôle est automatisé : axe dans `tests/e2e`, règles `jsx-a11y` dans `np
   le plafond global). Le compteur est un fichier temporaire manipulé sous un seul verrou (`flock`) : deux requêtes simultanées
   ne peuvent pas dépasser la limite. Il ne contient qu'une empreinte salée de l'IP, conservée au plus une heure ;
   les mentions légales (section 4) le précisent : à tenir à jour si ce mécanisme change.
-- **En-têtes** : CSP sans `unsafe-inline` pour les scripts, HSTS, anti-clickjacking, `nosniff`, Referrer-Policy, Permissions-Policy.
+- **En-têtes** : CSP sans `unsafe-inline` pour les scripts (tous les scripts sont des fichiers de `'self'`, d'où `theme.js` externe et
+  sans `defer` plutôt qu'en ligne), HSTS, anti-clickjacking, `nosniff`, Referrer-Policy, Permissions-Policy.
   `style-src` garde `'unsafe-inline'` par prudence (comportement du widget Turnstile, non vérifiable hors production) :
   à retirer seulement après un essai sur le vrai site.
 - **Contenu** : les articles Markdown sont de confiance (rendus tels quels, `marked` n'assainit pas le HTML) ; n'y collez jamais de HTML

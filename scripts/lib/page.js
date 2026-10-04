@@ -23,7 +23,7 @@ export const json = (data) => JSON.stringify(data).replace(/</g, '\\u003c');
 
 /**
  * - assets : balises <link>/<script> issues du build Vite (CSS, bundle JS de l'accueil)
- * - scripts : scripts autonomes de public/js/ (consent.js est toujours ajouté)
+ * - scripts : scripts autonomes de public/js/ en plus de ceux de toutes les pages (nav.js, fx.js, consent.js ; theme.js est chargé dans le <head>, sans defer, pour éviter tout flash de thème)
  * - alternates : [{ lang, path }] pour les balises hreflang
  */
 export function page({ lang = 'fr', assets, scripts = [], title, description, path, type = 'website', body, extraMeta = '', ld, noindex = false, alternates = [] }) {
@@ -38,7 +38,8 @@ export function page({ lang = 'fr', assets, scripts = [], title, description, pa
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#020617" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="dark light" />
+    <script src="${esc(versioned('/js/theme.js'))}"></script>
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -69,7 +70,7 @@ export function page({ lang = 'fr', assets, scripts = [], title, description, pa
     ${ld ? `<script type="application/ld+json">${json(ld)}</script>` : ''}
   </head>
   <body>${body}
-    ${[...scripts, '/js/consent.js'].map((s) => `<script defer src="${esc(versioned(s))}"></script>`).join('\n    ')}
+    ${[...scripts, '/js/nav.js', '/js/fx.js', '/js/consent.js'].map((s) => `<script defer src="${esc(versioned(s))}"></script>`).join('\n    ')}
   </body>
 </html>
 `;
