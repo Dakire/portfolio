@@ -53,7 +53,7 @@ describe('commandes', () => {
   });
 
   it('links, cv, ls, cat', () => {
-    expect(run('links', ctx()).lines.flat().filter((s) => s.href).map((s) => s.href)).toContain('/outils/dns/');
+    expect(run('links', ctx()).lines.flat().filter((s) => s.href).map((s) => s.href)).toContain('/outils/');
     expect(run('cv', ctx()).action).toEqual({ type: 'open', href: '/CV_Guillaume_Richard_FR.pdf' });
     expect(run('cv', ctx('en')).action.href).toBe('/Resume_Guillaume_Richard_EN.pdf');
     expect(text(run('ls', ctx()))).toContain('stack.txt');

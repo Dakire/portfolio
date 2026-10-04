@@ -1,38 +1,12 @@
 import { useState } from 'react';
-import { ChevronRight, CircleAlert, CircleCheck, Copy } from 'lucide-react';
+import { ChevronRight, CircleAlert, Copy } from 'lucide-react';
 import { describeFinding, DNS_TOOL } from '../../data/dns-tool';
 import { cx } from '../../lib/cx';
 import Button from '../ui/Button';
 import Card from '../ui/Card';
+import CopyButton from '../ui/CopyButton';
+import ScrollRegion from '../ui/ScrollRegion';
 import { SEVERITY } from './severity';
-
-// Zone à défilement horizontal : focalisable au clavier pour pouvoir la faire défiler (exigence d'accessibilité)
-function ScrollRegion({ label, children }) {
-  return (
-    // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-    <div role="region" aria-label={label} tabIndex={0} className="overflow-x-auto rounded-xl border border-line">
-      {children}
-    </div>
-  );
-}
-
-function CopyButton({ text, label, copiedLabel, className }) {
-  const [copied, setCopied] = useState(false);
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch {
-      // presse-papiers indisponible (page non sécurisée, autorisation refusée) : aucun retour, le texte reste sélectionnable
-    }
-  };
-  return (
-    <Button variant="ghost" icon onClick={copy} aria-label={copied ? copiedLabel : label} className={className}>
-      {copied ? <CircleCheck className="h-4 w-4 text-link" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}
-    </Button>
-  );
-}
 
 function Finding({ finding, lang, ui }) {
   const d = describeFinding(lang, finding);

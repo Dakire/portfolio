@@ -18,13 +18,14 @@ import { buildSearchIndex } from './lib/search-index.js';
 import { parsePost } from './lib/markdown.js';
 import { page, json, SITE } from './lib/page.js';
 import { root } from './lib/paths.js';
-import { blogLd, homeLd, person, postLd, toolLd } from './lib/schema.js';
+import { blogLd, homeLd, hubLd, person, postLd, toolLd } from './lib/schema.js';
 import { buildLlmsTxt, buildSitemap } from './lib/sitemap.js';
 
 const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error' });
 try {
-  const { render, renderLegal, renderBlogIndex, renderBlogPost, renderNotFound, renderDnsTool } = await vite.ssrLoadModule('/src/entry-server.jsx');
-  const { DNS_TOOL } = await vite.ssrLoadModule('/src/data/dns-tool.js');
+  const { render, renderLegal, renderBlogIndex, renderBlogPost, renderNotFound, renderToolPage, renderToolsHub } = await vite.ssrLoadModule('/src/entry-server.jsx');
+  const { TOOLS, toolPath, toolUi } = await vite.ssrLoadModule('/src/data/tools/index.js');
+  const { HUB } = await vite.ssrLoadModule('/src/data/tools/hub.js');
   const { PALETTE } = await vite.ssrLoadModule('/src/data/palette.js');
   const { PORTFOLIO_DATA, LANGS, PROFILE, SECTION_IDS } = await vite.ssrLoadModule('/src/data/content.js');
   const { islandsData, ISLANDS_DATA_ID } = await vite.ssrLoadModule('/src/lib/islands.js');
@@ -39,7 +40,6 @@ try {
   const assets = assetTags(manifest);
   // Pages avec îlots : le script d'entrée et le code des îlots dont elles ont besoin (préchargés)
   const homeAssets = assetTags(manifest, { islands: ['src/islands/contact.jsx', 'src/islands/terminal.jsx'] });
-  const dnsAssets = assetTags(manifest, { islands: ['src/islands/dns.jsx'] });
 
   // 1. Blog : lecture des articles (content/blog = français, content/blog/en = anglais)
   const loadPosts = async (lang, dir) => {
@@ -86,6 +86,13 @@ try {
       );
   const ogImage = (post) => (ogDone.has(post.slug) ? { url: `${SITE}/og/${post.slug}.png`, ...OG_SIZE, alt: post.title } : undefined);
   const feedsFor = (lang) => [{ title: `${PORTFOLIO_DATA[lang].blog.siteName} (RSS)`, path: LANGS[lang].rss }];
+
+  // hreflang d'une page d'outil (tool = null : la page « Outils » elle-même)
+  const toolsAlternates = (tool) => [
+    { lang: 'fr', path: tool ? toolPath(tool, 'fr') : LANGS.fr.tools },
+    { lang: 'en', path: tool ? toolPath(tool, 'en') : LANGS.en.tools },
+    { lang: 'x-default', path: tool ? toolPath(tool, 'fr') : LANGS.fr.tools },
+  ];
 
   const author = person(PROFILE);
   const siteDate = gitDate('src', 'public/js');
@@ -173,25 +180,43 @@ try {
     }
   }
 
-  // 3b. Outil DNS (FR et EN) : page pré-rendue, outil hydraté
+  // 3b. Outils : page « Outils » et une page par outil (FR et EN), chacune avec son îlot hydraté
   for (const lang of ['fr', 'en']) {
-    const ui = DNS_TOOL[lang].ui;
-    const path = LANGS[lang].dns;
+    const hub = HUB[lang];
     await write(
-      path,
+      LANGS[lang].tools,
       page({
         lang,
-        assets: dnsAssets.full,
-        title: ui.meta.title,
-        description: ui.meta.description,
-        path,
-        alternates: alternatesOf('dns'),
+        assets: assets.css,
+        title: hub.meta.title,
+        description: hub.meta.description,
+        path: LANGS[lang].tools,
+        alternates: toolsAlternates(null),
         feeds: feedsFor(lang),
-        body: `${renderDnsTool(lang, lite(postsByLang[lang]))}
-    <script type="application/json" id="${ISLANDS_DATA_ID}">${json({ lang })}</script>`,
-        ld: toolLd({ lang, path, ui, homePath: LANGS[lang].home, author }),
+        body: renderToolsHub(lang),
+        ld: hubLd({ lang, path: LANGS[lang].tools, hub, tools: TOOLS.map((t) => ({ name: toolUi(t, lang).name, url: toolPath(t, lang), description: toolUi(t, lang).card })) }),
       }),
     );
+
+    for (const tool of TOOLS) {
+      const ui = toolUi(tool, lang);
+      const path = toolPath(tool, lang);
+      const tags = assetTags(manifest, { islands: [`src/islands/tools/${tool.id}.jsx`] });
+      await write(
+        path,
+        page({
+          lang,
+          assets: tags.full,
+          title: ui.meta.title,
+          description: ui.meta.description,
+          path,
+          alternates: toolsAlternates(tool),
+          feeds: feedsFor(lang),
+          body: `${renderToolPage(tool.id, lang, lite(postsByLang[lang]))}\n    <script type="application/json" id="${ISLANDS_DATA_ID}">${json({ lang, tool: tool.id })}</script>`,
+          ld: toolLd({ lang, path, ui, hub, homePath: LANGS[lang].home, hubPath: LANGS[lang].tools, author }),
+        }),
+      );
+    }
   }
 
   // 4. Page 404 (servie par Apache via ErrorDocument) : évite les « soft 404 »
@@ -218,18 +243,27 @@ try {
       { path: LANGS.fr.blog, lastmod: newest(postsByLang.fr) },
       { path: LANGS.en.blog, lastmod: newest(postsByLang.en) },
       ...allPosts.map((p) => ({ path: blogPath(p), lastmod: p.updated ?? p.date })),
-      { path: LANGS.fr.dns, lastmod: siteDate.slice(0, 10) },
-      { path: LANGS.en.dns, lastmod: siteDate.slice(0, 10) },
+      { path: LANGS.fr.tools, lastmod: siteDate.slice(0, 10) },
+      { path: LANGS.en.tools, lastmod: siteDate.slice(0, 10) },
+      ...TOOLS.flatMap((tool) => ['fr', 'en'].map((lang) => ({ path: toolPath(tool, lang), lastmod: siteDate.slice(0, 10) }))),
       { path: LANGS.fr.legal, lastmod: siteDate.slice(0, 10) },
       { path: LANGS.en.legal, lastmod: siteDate.slice(0, 10) },
     ]),
   );
-  await writeFile(root('dist/llms.txt'), buildLlmsTxt(await readFile(root('public/llms.txt'), 'utf-8'), postsByLang, blogPath));
+  await writeFile(root('dist/llms.txt'), buildLlmsTxt(
+      await readFile(root('public/llms.txt'), 'utf-8'),
+      postsByLang,
+      blogPath,
+      TOOLS.map((tool) => ({
+        fr: { name: toolUi(tool, 'fr').name, url: toolPath(tool, 'fr'), description: toolUi(tool, 'fr').card },
+        en: { name: toolUi(tool, 'en').name, url: toolPath(tool, 'en'), description: toolUi(tool, 'en').card },
+      })),
+    ));
 
   // 5a. Index de la palette de commandes (chargé à la première ouverture)
   await writeFile(
     root('dist/search-index.json'),
-    JSON.stringify(buildSearchIndex({ data: PORTFOLIO_DATA, langs: LANGS, profile: PROFILE, palette: PALETTE, sections: SECTION_IDS, posts: postsByLang, postPath: blogPath })),
+    JSON.stringify(buildSearchIndex({ data: PORTFOLIO_DATA, langs: LANGS, profile: PROFILE, palette: PALETTE, sections: SECTION_IDS, posts: postsByLang, postPath: blogPath, tools: TOOLS, toolPath, toolUi })),
   );
 
   // 5b. Flux RSS (un par langue)

@@ -11,7 +11,7 @@ export const PALETTE = {
     hints: { navigate: 'naviguer', open: 'ouvrir', close: 'fermer' },
     close: 'Fermer la palette',
     copied: 'Adresse e-mail copiée',
-    groups: { actions: 'Actions', pages: 'Pages', sections: 'Accueil', articles: 'Articles' },
+    groups: { actions: 'Actions', pages: 'Pages', tools: 'Outils', sections: 'Accueil', articles: 'Articles' },
     actions: {
       theme: 'Changer de thème (clair / sombre)',
       lang: 'Changer de langue',
@@ -22,7 +22,7 @@ export const PALETTE = {
       rss: 'Flux RSS du blog',
       top: 'Haut de page',
     },
-    pages: { home: 'Accueil', blog: 'Blog', dns: 'Outil DNS et e-mail', legal: 'Mentions légales' },
+    pages: { home: 'Accueil', blog: 'Blog', tools: 'Outils', legal: 'Mentions légales' },
     sectionHint: "Section de l'accueil",
     keywords: {
       theme: 'theme clair sombre dark light mode couleur apparence',
@@ -35,7 +35,7 @@ export const PALETTE = {
       top: 'haut debut remonter',
       home: 'accueil portfolio',
       blog: 'articles notes billets',
-      dns: 'dns spf dkim dmarc mx outil verification email delivrabilite domaine',
+      tools: 'outils utilitaires dns ics calendrier reseau mail',
       legal: 'legal rgpd cookies confidentialite donnees mentions',
       about: 'a propos presentation profil bio',
       skills: 'competences expertise stack technologies',
@@ -54,7 +54,7 @@ export const PALETTE = {
     hints: { navigate: 'navigate', open: 'open', close: 'close' },
     close: 'Close the palette',
     copied: 'Email address copied',
-    groups: { actions: 'Actions', pages: 'Pages', sections: 'Home', articles: 'Articles' },
+    groups: { actions: 'Actions', pages: 'Pages', tools: 'Tools', sections: 'Home', articles: 'Articles' },
     actions: {
       theme: 'Change theme (light / dark)',
       lang: 'Change language',
@@ -65,7 +65,7 @@ export const PALETTE = {
       rss: 'Blog RSS feed',
       top: 'Back to top',
     },
-    pages: { home: 'Home', blog: 'Blog', dns: 'DNS and email tool', legal: 'Legal notice' },
+    pages: { home: 'Home', blog: 'Blog', tools: 'Tools', legal: 'Legal notice' },
     sectionHint: 'Home section',
     keywords: {
       theme: 'theme light dark mode colour appearance',
@@ -78,7 +78,7 @@ export const PALETTE = {
       top: 'top start scroll up',
       home: 'home portfolio',
       blog: 'articles notes posts',
-      dns: 'dns spf dkim dmarc mx tool checker email deliverability domain',
+      tools: 'tools utilities dns ics calendar network mail',
       legal: 'legal gdpr cookies privacy data notice',
       about: 'about introduction profile bio',
       skills: 'skills expertise stack technologies',

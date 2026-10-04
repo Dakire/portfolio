@@ -99,7 +99,7 @@ test.describe('terminal interactif', () => {
     await expect(log(page).getByRole('link').first()).toHaveAttribute('href', /^\/blog\/.+\/$/);
     await type(page, 'links');
     await expect(log(page).getByRole('link', { name: 'https://github.com/Dakire' })).toHaveAttribute('target', '_blank');
-    await expect(log(page).getByRole('link', { name: 'outil DNS et e-mail' })).toHaveAttribute('href', '/outils/dns/');
+    await expect(log(page).getByRole('link', { name: /outils/ })).toHaveAttribute('href', '/outils/');
 
     // cv ouvre le PDF dans un nouvel onglet (window.open observé : le lecteur PDF de Chromium n'a pas à être testé)
     await page.evaluate(() => {

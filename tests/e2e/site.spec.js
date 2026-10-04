@@ -5,6 +5,12 @@ import { expect, test } from '@playwright/test';
 const PAGES = [
   { name: 'accueil FR', path: '/', lang: 'fr' },
   { name: 'accueil EN', path: '/en/', lang: 'en' },
+  { name: 'outils FR', path: '/outils/', lang: 'fr' },
+  { name: 'outils EN', path: '/en/tools/', lang: 'en' },
+  { name: 'découpeur ICS FR', path: '/outils/ics-decouper/', lang: 'fr' },
+  { name: 'ICS splitter EN', path: '/en/tools/ics-splitter/', lang: 'en' },
+  { name: 'comparateur ICS FR', path: '/outils/ics-comparer/', lang: 'fr' },
+  { name: 'ICS comparer EN', path: '/en/tools/ics-compare/', lang: 'en' },
   { name: 'outil DNS FR', path: '/outils/dns/', lang: 'fr' },
   { name: 'outil DNS EN', path: '/en/tools/dns/', lang: 'en' },
   { name: 'blog FR', path: '/blog/', lang: 'fr' },

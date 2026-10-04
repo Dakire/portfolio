@@ -103,7 +103,7 @@ export function run(raw, { s, d, theme = 'dark' }) {
           line(t('▸ GitHub    ', 'accent'), link(d.links.github, d.links.github, true)),
           line(t('▸ LinkedIn  ', 'accent'), link(d.links.linkedin, d.links.linkedin, true)),
           line(t('▸ CV        ', 'accent'), link(d.paths.cv, d.paths.cv, true)),
-          line(t('▸ DNS       ', 'accent'), link(s.dnsTool, d.paths.dns)),
+          line(t('▸ Tools     ', 'accent'), link(s.tools, d.paths.tools)),
         ],
       };
     case 'cv':

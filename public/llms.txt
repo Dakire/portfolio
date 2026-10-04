@@ -10,7 +10,6 @@ Le portfolio est disponible en français et en anglais. Le blog est lui aussi di
 - [Blog (français)](https://grichard.eu/blog/) : notes techniques sur la messagerie, le DNS, les migrations et le poste de travail
 - [Blog (English)](https://grichard.eu/en/blog/) : technical notes on email, DNS, migrations and the workstation
 - [Mentions légales](https://grichard.eu/mentions-legales/) : éditeur, hébergement, données personnelles et cookies
-- [Outil DNS et e-mail](https://grichard.eu/outils/dns/) / [DNS and email checker](https://grichard.eu/en/tools/dns/) : vérifie A, MX, SPF, DKIM, DMARC, doublons, DNSSEC, CAA ; devine les sélecteurs DKIM
 - [Flux RSS (français)](https://grichard.eu/rss.xml) et [RSS feed (English)](https://grichard.eu/en/rss.xml) : tous les articles du blog
 
 ## Documents

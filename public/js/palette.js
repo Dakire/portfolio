@@ -4,7 +4,7 @@
 (() => {
   const lang = document.documentElement.lang === 'en' ? 'en' : 'fr';
   const MAX_RESULTS = 12;
-  const GROUP_ORDER = ['actions', 'pages', 'sections', 'articles'];
+  const GROUP_ORDER = ['actions', 'pages', 'tools', 'sections', 'articles'];
 
   let dialog;
   let input;
@@ -52,7 +52,7 @@
     if (!terms.length) {
       // Sans saisie : actions et pages d'abord, puis les sections et quelques articles, dans l'ordre naturel
       const pick = (g, n) => items.filter((i) => i.group === g).slice(0, n);
-      return [...pick('actions', 8), ...pick('pages', 4), ...pick('sections', 6), ...pick('articles', 3)];
+      return [...pick('actions', 8), ...pick('pages', 4), ...pick('tools', 4), ...pick('sections', 6), ...pick('articles', 3)];
     }
     return items
       .map((item) => ({ item, s: score(item, terms) }))

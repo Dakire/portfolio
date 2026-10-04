@@ -10,8 +10,9 @@
  * @param {string[]} o.sections             SECTION_IDS
  * @param {Record<string, object[]>} o.posts  articles par langue (title, description, slug)
  * @param {(post: object) => string} o.postPath
+ * @param {object[]} [o.tools]  registre des outils (src/data/tools), avec toolPath(tool, lang) et toolUi(tool, lang)
  */
-export function buildSearchIndex({ data, langs, profile, palette, sections, posts, postPath }) {
+export function buildSearchIndex({ data, langs, profile, palette, sections, posts, postPath, tools = [], toolPath, toolUi }) {
   const index = {};
   for (const lang of Object.keys(langs)) {
     const p = palette[lang];
@@ -33,9 +34,14 @@ export function buildSearchIndex({ data, langs, profile, palette, sections, post
     const pages = [
       { id: 'home', url: l.home },
       { id: 'blog', url: l.blog },
-      { id: 'dns', url: l.dns },
+      { id: 'tools', url: l.tools },
       { id: 'legal', url: l.legal },
     ].map(({ id, url }) => ({ group: 'pages', title: p.pages[id], keywords: k[id], url }));
+
+    const toolItems = tools.map((tool) => {
+      const ui = toolUi(tool, lang);
+      return { group: 'tools', title: ui.name, hint: ui.card, keywords: ui.keywords, url: toolPath(tool, lang) };
+    });
 
     const sectionItems = sections.map((id) => ({ group: 'sections', title: t.nav[id], hint: p.sectionHint, keywords: k[id], url: `${l.home}#${id}` }));
 
@@ -43,7 +49,7 @@ export function buildSearchIndex({ data, langs, profile, palette, sections, post
 
     index[lang] = {
       ui: { label: p.label, placeholder: p.placeholder, loading: p.loading, error: p.error, empty: p.empty, count: p.count, hints: p.hints, close: p.close, copied: p.copied, groups: p.groups },
-      items: [...actions, ...pages, ...sectionItems, ...articles],
+      items: [...actions, ...pages, ...toolItems, ...sectionItems, ...articles],
     };
   }
   return index;

@@ -14,7 +14,7 @@ export function terminalData(lang, t, posts = []) {
     education: t.education,
     languagesInfo: t.languagesInfo,
     posts: posts.slice(0, 5).map((p) => ({ title: p.title, slug: p.slug })),
-    paths: { blog: LANGS[lang].blog, dns: LANGS[lang].dns, otherHome: LANGS[LANGS[lang].other].home, cv: t.hero.cvLink },
+    paths: { blog: LANGS[lang].blog, tools: LANGS[lang].tools, otherHome: LANGS[LANGS[lang].other].home, cv: t.hero.cvLink },
     links: { github: PROFILE.github, linkedin: PROFILE.linkedin, email: PROFILE.email },
     location: PROFILE.location,
     name: PROFILE.name,

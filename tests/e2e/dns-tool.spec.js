@@ -37,7 +37,7 @@ test.describe('page de l\'outil DNS', () => {
 
   test('est référencée dans le menu et le plan du site', async ({ page, request }) => {
     await page.goto('/');
-    await expect(page.getByRole('banner').getByRole('link', { name: 'Outil DNS' })).toHaveAttribute('href', '/outils/dns/');
+    await expect(page.getByRole('banner').getByRole('link', { name: 'Outils' })).toHaveAttribute('href', '/outils/');
     const xml = await (await request.get('/sitemap.xml')).text();
     expect(xml).toContain('<loc>https://grichard.eu/outils/dns/</loc>');
     expect(xml).toContain('<loc>https://grichard.eu/en/tools/dns/</loc>');
@@ -271,7 +271,7 @@ test.describe('accessibilité de l\'outil', () => {
     await page.getByRole('heading', { name: 'Résultats pour example.fr' }).waitFor();
     await page.getByRole('button', { name: 'Tout déplier' }).click();
     const small = await page.evaluate(() =>
-      [...document.querySelectorAll('#dns-root button, #dns-root summary')]
+      [...document.querySelectorAll('#tool-root button, #tool-root summary')]
         .filter((el) => getComputedStyle(el).display !== 'inline' && el.getBoundingClientRect().height > 0 && el.getBoundingClientRect().height < 43.5)
         .map((el) => `${el.tagName} "${(el.getAttribute('aria-label') || el.textContent).trim().slice(0, 30)}" ${Math.round(el.getBoundingClientRect().height)}`),
     );

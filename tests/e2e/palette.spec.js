@@ -59,7 +59,7 @@ test.describe('palette de commandes', () => {
   test('sans saisie : actions, pages et sections regroupées', async ({ page }) => {
     await page.goto('/');
     await open(page);
-    for (const group of ['Actions', 'Pages', 'Accueil', 'Articles']) await expect(palette(page).locator('.palette-group', { hasText: group })).toBeVisible();
+    for (const group of ['Actions', 'Pages', 'Outils', 'Accueil', 'Articles']) await expect(palette(page).locator('.palette-group', { hasText: group })).toBeVisible();
   });
 
   test('les flèches déplacent la sélection (avec retour à la ligne) et Entrée ouvre', async ({ page }) => {

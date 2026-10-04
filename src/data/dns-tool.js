@@ -24,6 +24,9 @@ const fr = {
     h1: 'Vérificateur DNS et e-mail',
     intro: "Entrez un domaine : l'outil interroge son DNS et vérifie la messagerie en détail. Au-delà d'un simple dig, il valide la syntaxe de SPF, DKIM et DMARC, compte les requêtes DNS du SPF, repère les doublons et devine les sélecteurs DKIM d'après votre fournisseur (Google, Microsoft 365, OVH…).",
     breadcrumb: { home: 'Accueil', tools: 'Outils' },
+    name: 'Outil DNS et e-mail',
+    card: 'Vérifie A, MX, SPF, DKIM, DMARC, doublons, DNSSEC et plus ; devine les sélecteurs DKIM selon votre fournisseur.',
+    keywords: 'dns spf dkim dmarc mx dig delivrabilite domaine verification email',
     form: {
       domain: 'Domaine à analyser',
       domainHint: 'Un nom de domaine, une URL ou une adresse e-mail (ex. exemple.fr).',
@@ -126,6 +129,7 @@ const fr = {
       howTitle: 'Comment lire le rapport',
       how: "Chaque vérification affiche un statut (conforme, information, avertissement ou erreur), les enregistrements réellement publiés et, pour chaque constat, l'explication et la correction à apporter. Les erreurs rendent un enregistrement invalide ou inefficace ; les avertissements sont des risques ou des mauvaises pratiques ; les informations sont des constats neutres.",
       privacyTitle: 'Confidentialité',
+      privacy: "Les requêtes partent de votre navigateur vers les résolveurs publics Cloudflare et Google (DNS-over-HTTPS). Rien n'est enregistré sur ce site.",
       faq: [
         ["Pourquoi mon SPF est-il « trop long » alors qu'il tient en une ligne ?", "La limite ne porte pas sur la longueur mais sur le nombre de requêtes DNS déclenchées par les mécanismes include, a, mx, ptr, exists et redirect, include imbriqués compris : 10 au maximum (RFC 7208). Au-delà, le SPF est invalide (PermError)."],
         ["Comment trouver mon sélecteur DKIM ?", "Ouvrez un message reçu de votre domaine, affichez ses en-têtes et cherchez DKIM-Signature : le champ s= contient le sélecteur. Sinon laissez le champ vide : l'outil essaie les sélecteurs de votre fournisseur puis les noms courants."],
@@ -301,6 +305,9 @@ const en = {
     h1: 'DNS and email checker',
     intro: 'Enter a domain: the tool queries its DNS and checks email setup in depth. Beyond a plain dig, it validates SPF, DKIM and DMARC syntax, counts SPF DNS lookups, spots duplicates and guesses DKIM selectors from your provider (Google, Microsoft 365, OVH…).',
     breadcrumb: { home: 'Home', tools: 'Tools' },
+    name: 'DNS and email tool',
+    card: 'Check A, MX, SPF, DKIM, DMARC, duplicates, DNSSEC and more; guesses DKIM selectors from your provider.',
+    keywords: 'dns spf dkim dmarc mx dig deliverability domain email checker lookup',
     form: {
       domain: 'Domain to analyse',
       domainHint: 'A domain name, a URL or an email address (e.g. example.com).',
@@ -403,6 +410,7 @@ const en = {
       howTitle: 'How to read the report',
       how: 'Each check shows a status (compliant, information, warning or error), the records actually published and, for each finding, the explanation and the fix. Errors make a record invalid or ineffective; warnings are risks or bad practice; information is neutral.',
       privacyTitle: 'Privacy',
+      privacy: 'Queries go from your browser to the public Cloudflare and Google resolvers (DNS-over-HTTPS). Nothing is stored on this site.',
       faq: [
         ['Why is my SPF "too long" when it fits on one line?', 'The limit is not about length but about the number of DNS lookups triggered by include, a, mx, ptr, exists and redirect, nested includes included: 10 at most (RFC 7208). Beyond that the SPF is invalid (PermError).'],
         ['How do I find my DKIM selector?', 'Open a message received from your domain, view its headers and look for DKIM-Signature: the s= field holds the selector. Otherwise leave the field empty: the tool tries your provider\'s selectors, then common names.'],

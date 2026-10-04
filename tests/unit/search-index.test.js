@@ -21,7 +21,7 @@ describe('index de la palette', () => {
       for (const item of index[lang].items) {
         expect(item.title, JSON.stringify(item)).toBeTruthy();
         expect(Boolean(item.url) !== Boolean(item.action), JSON.stringify(item)).toBe(true);
-        expect(['actions', 'pages', 'sections', 'articles']).toContain(item.group);
+        expect(['actions', 'pages', 'tools', 'sections', 'articles']).toContain(item.group);
       }
     }
   });

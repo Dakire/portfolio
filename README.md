@@ -14,7 +14,7 @@ index.html              Gabarit de développement uniquement (le HTML de product
 src/
   data/content.js       TOUT le contenu (FR/EN), liens, mentions légales, chemins par langue (LANGS)
   main.jsx              Point d'entrée navigateur : charge et hydrate uniquement les îlots présents dans la page (en dev, rend toute la page)
-  islands/              Un module par îlot (contact.jsx, dns.jsx), chargé dynamiquement : chaque page ne télécharge que son code
+  islands/              Un module par îlot (contact.jsx, terminal.jsx, tools/<id>.jsx), chargé dynamiquement : chaque page ne télécharge que son code
   App.jsx               Accueil (assemble les sections) ; la langue vient de l'URL ('/' = FR, '/en/' = EN), pas d'un état
   entry-server.jsx      Fonctions de rendu utilisées par le pré-rendu
   index.css             Design system : jetons de thème, échelles, composants (.btn, .card, .field…), effets (voir plus bas)
@@ -24,11 +24,13 @@ src/
     SiteHeader, SiteFooter   En-tête flottant et pied de page communs à TOUTES les pages (accueil, blog, légal, 404)
     ContactForm, ContactIsland, ErrorBoundary   Le formulaire de contact (îlot) et son filet de sécurité
     terminal/           InteractiveTerminal : le terminal interactif de l'accueil (îlot)
-    tools/              Outil DNS : DnsToolPage (pré-rendue), DnsChecker (îlot), DnsReport, severity
+    tools/              Outils : ToolPage (page générique pré-rendue), ToolsHub, registry.jsx, un composant par outil (DnsChecker, IcsSplit, IcsCompare…)
     Blog, LegalPage, NotFound, Shell            Pages statiques (rendues au build, jamais hydratées)
     PostMeta, SectionHeading, Decor, Terminal, Icons
   hooks/useTurnstile.js Cycle de vie du widget Cloudflare Turnstile (chargement, nouvelle tentative, jeton)
   lib/                  format.js (dates), cx.js (classes), islands.js (identifiants et données des îlots)
+  lib/ics/, lib/zip.js  Bibliothèque iCalendar pure (parse, dates et fuseaux, build, split, compare) et écriture de ZIP
+  data/tools/           Registre des outils (index.js), page « Outils » (hub.js) et textes de chaque outil
   lib/dns/              Analyse DNS pure (sans React ni DOM) : résolveur DoH, spf, dkim, dmarc, mx, txt, records, extras, providers, analyze, report
   lib/terminal/         Interpréteur du terminal (commands.js : fonctions pures) et données qu'il consulte (data.js)
   data/dns-tool.js      Textes de l'outil DNS (FR/EN) : interface et un message par code de constat
@@ -72,6 +74,29 @@ Le sélecteur de langue mène à la page équivalente (la traduction d'un articl
 - **Images de partage** : une image 1200 × 630 par article dans `dist/og/<slug>.png` (titre en grand, charte du site), utilisée par `og:image`, `twitter:image` et le JSON-LD de l'article. Rendu par Chromium (Playwright), mis en cache dans `.cache/og/` (ignoré par Git) : seuls les articles nouveaux ou modifiés sont rendus.
 - **PDF des CV** : `dist/CV_Guillaume_Richard_FR.pdf` et `dist/Resume_Guillaume_Richard_EN.pdf` sont **régénérés** depuis `public/cv-fr.html` et `public/cv-en.html` (impression A4 par Chromium, cache dans `.cache/cv/`). Les sources chargent Tailwind, Inter et Lucide depuis des CDN : le rendu n'est accepté que si elles ont chargé ; sinon le PDF de `public/` est conservé et un avertissement s'affiche. **Pour modifier un CV, éditez le HTML** (les PDF de `public/` ne sont plus que le secours).
 - Chromium est requis : `npx playwright install chromium` (déjà fait par la CI). `BUILD_FAST=1 npm run build` saute images et PDF pour un build rapide ; sans Chromium, le build continue avec l'image générique et les PDF de `public/`.
+
+## Outils (`/outils/`, `/en/tools/`)
+
+Une page « Outils » liste les outils ; chacun a sa page (FR et EN) pré-rendue (explications, FAQ, données structurées `WebApplication` + `FAQPage`, fil d'Ariane) et son
+îlot hydraté, chargé à la demande. **Un seul registre** (`src/data/tools/index.js`) alimente la page « Outils », le menu, la palette de commandes, le plan du site, `llms.txt`
+et le JSON-LD. Pour **ajouter un outil** : ses textes FR/EN (`src/data/tools/<id>.js`, mêmes clés dans les deux langues : `tests/unit/tools.test.js` le vérifie), son composant
+(`src/components/tools/`, déclaré dans `registry.jsx`), son îlot (`src/islands/tools/<id>.jsx`) et une entrée dans le registre.
+Les outils de fichiers et de texte tournent **entièrement dans le navigateur** : rien n'est envoyé. Seul l'outil DNS interroge des résolveurs publics.
+
+### Découpeur ICS (`/outils/ics-decouper/`) et comparateur ICS (`/outils/ics-comparer/`)
+
+- **Analyse tolérante** (`src/lib/ics/parse.js`) : exports Google, Outlook, Apple, Thunderbird ; lignes dépliées ; BOM ; `\r`, `\n` ou `\r\n` ; composants non fermés ; plusieurs
+  `VCALENDAR` concaténés. Les événements gardent leurs lignes d'origine : ils sont **recopiés à l'identique**, jamais re-sérialisés (participants, rappels, champs `X-` conservés).
+- **Dates et fuseaux** (`dates.js`) : date, UTC, flottante, avec `TZID` ; fuseaux IANA via `Intl`, noms **Windows** d'Outlook (« Romance Standard Time »…), préfixes Mozilla et
+  `X-LIC-LOCATION` ; changement d'heure géré ; durées. Deux heures équivalentes dans des fuseaux différents sont reconnues comme identiques.
+- **Découpage** (`split.js`) : par nombre d'événements, par taille, par année, par mois, un événement par fichier, par calendrier. Une **série et ses exceptions** (même `UID`) restent toujours
+  dans le même fichier ; chaque fichier n'embarque que les `VTIMEZONE` utilisés ; lignes repliées à 75 octets sans couper un caractère. Téléchargement fichier par fichier ou en **ZIP**
+  (`src/lib/zip.js`, archive « stockée » écrite à la main, vérifiée avec l'extraction de Windows).
+- **Comparaison « source moins destination »** (`compare.js`) : identité par `UID`, par **contenu** (titre + début + fin + récurrence, utile quand un import a régénéré les UID, ex. Google → Outlook)
+  ou les deux. Sort les événements **à importer**, les **déjà présents**, les **modifiés** (même UID, contenu différent : titre, début, fin, lieu, récurrence, statut…), ceux **seulement en destination**
+  et les **doublons** de chaque fichier ; chaque événement de la destination n'est consommé qu'une fois ; signale les **exceptions orphelines** (exception de série dont le maître est absent des deux fichiers).
+  Options : casse du titre, heure de fin, description, dédoublonnage, inclusion des modifiés. Le fichier produit est un `.ics` valide prêt à importer.
+- Limites : 50 Mo par fichier ; les heures flottantes (sans fuseau) ne sont comparables qu'entre elles ; un fuseau inconnu n'est comparé que sur son texte.
 
 ## Outil DNS et e-mail (`/outils/dns/`, `/en/tools/dns/`)
 

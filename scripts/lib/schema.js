@@ -52,12 +52,12 @@ export const blogLd = ({ blogRoot, name, inLanguage, author, posts, postUrl }) =
   blogPost: posts.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: `${SITE}${postUrl(p)}`, datePublished: toIso(p.date) })),
 });
 
-export const toolLd = ({ lang, path, ui, homePath, author }) => ({
+export const toolLd = ({ lang, path, ui, hub, homePath, hubPath, author }) => ({
   '@context': CONTEXT,
   '@graph': [
     {
       '@type': 'WebApplication',
-      name: ui.h1,
+      name: ui.name,
       url: `${SITE}${path}`,
       description: ui.meta.appDescription,
       applicationCategory: 'DeveloperApplication',
@@ -71,8 +71,9 @@ export const toolLd = ({ lang, path, ui, homePath, author }) => ({
     {
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: ui.breadcrumb.home, item: `${SITE}${homePath}` },
-        { '@type': 'ListItem', position: 2, name: ui.h1, item: `${SITE}${path}` },
+        { '@type': 'ListItem', position: 1, name: hub.breadcrumb.home, item: `${SITE}${homePath}` },
+        { '@type': 'ListItem', position: 2, name: hub.breadcrumb.tools, item: `${SITE}${hubPath}` },
+        { '@type': 'ListItem', position: 3, name: ui.name, item: `${SITE}${path}` },
       ],
     },
     {
@@ -80,6 +81,18 @@ export const toolLd = ({ lang, path, ui, homePath, author }) => ({
       mainEntity: ui.seo.faq.map(([question, answer]) => ({ '@type': 'Question', name: question, acceptedAnswer: { '@type': 'Answer', text: answer } })),
     },
   ],
+});
+
+export const hubLd = ({ lang, path, hub, tools }) => ({
+  '@context': CONTEXT,
+  '@type': 'CollectionPage',
+  name: hub.schemaName,
+  url: `${SITE}${path}`,
+  inLanguage: lang === 'fr' ? 'fr-FR' : 'en',
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: tools.map((t, n) => ({ '@type': 'ListItem', position: n + 1, name: t.name, url: `${SITE}${t.url}`, description: t.description })),
+  },
 });
 
 export const postLd = ({ post, path, blogRoot, homePath, inLanguage, author, labels, image = OG_IMAGE.url }) => {
