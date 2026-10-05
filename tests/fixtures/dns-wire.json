@@ -1,0 +1,133 @@
+[
+ {
+  "name": "example.com",
+  "type": 1,
+  "hex": "000081800001000200000000076578616d706c6503636f6d0000010001c00c000100010000012c0004ac4293f3c00c000100010000012c00046814179a",
+  "answers": [
+   {
+    "name": "example.com.",
+    "type": 1,
+    "data": "172.66.147.243"
+   },
+   {
+    "name": "example.com.",
+    "type": 1,
+    "data": "104.20.23.154"
+   }
+  ]
+ },
+ {
+  "name": "example.com",
+  "type": 28,
+  "hex": "000081800001000200000000076578616d706c6503636f6d00001c0001c00c001c00010000012c0010260647000010000000000000ac4293f3c00c001c00010000012c00102606470000100000000000006814179a",
+  "answers": [
+   {
+    "name": "example.com.",
+    "type": 28,
+    "data": "2606:4700:10::6814:179a"
+   },
+   {
+    "name": "example.com.",
+    "type": 28,
+    "data": "2606:4700:10::ac42:93f3"
+   }
+  ]
+ },
+ {
+  "name": "example.com",
+  "type": 2,
+  "hex": "000081800001000200000000076578616d706c6503636f6d0000020001c00c0002000100005460001807656c6c696f7474026e730a636c6f7564666c617265c014c00c000200010000546000070468657261c031",
+  "answers": [
+   {
+    "name": "example.com.",
+    "type": 2,
+    "data": "hera.ns.cloudflare.com."
+   },
+   {
+    "name": "example.com.",
+    "type": 2,
+    "data": "elliott.ns.cloudflare.com."
+   }
+  ]
+ },
+ {
+  "name": "example.com",
+  "type": 6,
+  "hex": "000081800001000100000000076578616d706c6503636f6d0000060001c00c0006000100000708003207656c6c696f7474026e730a636c6f7564666c617265c01403646e73c0349006f398000027100000096000093a8000000708",
+  "answers": [
+   {
+    "name": "example.com.",
+    "type": 6,
+    "data": "elliott.ns.cloudflare.com. dns.cloudflare.com. 2416374680 10000 2400 604800 1800"
+   }
+  ]
+ },
+ {
+  "name": "gmail.com",
+  "type": 15,
+  "hex": "00008180000100050000000005676d61696c03636f6d00000f0001c00c000f00010000054a001b00050d676d61696c2d736d74702d696e016c06676f6f676c65c012c00c000f00010000054a0009000a04616c7431c029c00c000f00010000054a0009002804616c7434c029c00c000f00010000054a0009001e04616c7433c029c00c000f00010000054a0009001404616c7432c029",
+  "answers": [
+   {
+    "name": "gmail.com.",
+    "type": 15,
+    "data": "10 alt1.gmail-smtp-in.l.google.com."
+   },
+   {
+    "name": "gmail.com.",
+    "type": 15,
+    "data": "5 gmail-smtp-in.l.google.com."
+   },
+   {
+    "name": "gmail.com.",
+    "type": 15,
+    "data": "20 alt2.gmail-smtp-in.l.google.com."
+   },
+   {
+    "name": "gmail.com.",
+    "type": 15,
+    "data": "30 alt3.gmail-smtp-in.l.google.com."
+   },
+   {
+    "name": "gmail.com.",
+    "type": 15,
+    "data": "40 alt4.gmail-smtp-in.l.google.com."
+   }
+  ]
+ },
+ {
+  "name": "_dmarc.gmail.com",
+  "type": 16,
+  "hex": "000081800001000100000000065f646d61726305676d61696c03636f6d0000100001c00c0010000100000258004847763d444d415243313b20703d6e6f6e653b2073703d71756172616e74696e653b207275613d6d61696c746f3a6d61696c617574682d7265706f72747340676f6f676c652e636f6d",
+  "answers": [
+   {
+    "name": "_dmarc.gmail.com.",
+    "type": 16,
+    "data": "v=DMARC1; p=none; sp=quarantine; rua=mailto:mailauth-reports@google.com"
+   }
+  ]
+ },
+ {
+  "name": "google.com",
+  "type": 257,
+  "hex": "00008180000100010000000006676f6f676c6503636f6d0001010001c00c0101000100003847000f00056973737565706b692e676f6f67",
+  "answers": [
+   {
+    "name": "google.com.",
+    "type": 257,
+    "data": "0 issue \"pki.goog\""
+   }
+  ]
+ },
+ {
+  "name": "www.github.com",
+  "type": 5,
+  "hex": "000081800001000100000000037777770667697468756203636f6d0000050001c00c00050001000001e50002c010",
+  "answers": [
+   {
+    "name": "www.github.com.",
+    "type": 5,
+    "data": "github.com."
+   }
+  ]
+ }
+]
