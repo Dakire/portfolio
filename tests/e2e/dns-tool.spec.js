@@ -68,7 +68,7 @@ test.describe('analyse', () => {
     await expect(heading).toBeFocused();
     await expect(page.getByRole('status').filter({ hasText: 'Analyse terminée' })).toHaveCount(1);
     await expect(page.getByText('Google Workspace').first()).toBeVisible();
-    await expect(page.getByText('Aucun doublon détecté')).toBeVisible();
+    await expect(page.getByText('Doublons', { exact: true })).toHaveCount(0); // rien à signaler : pas de bloc vide
     for (const id of ['mx', 'spf', 'dkim', 'dmarc', 'addresses', 'dnssec']) await expect(page.locator(`#check-${id}`)).toBeVisible();
     expect(page.url()).toContain('?d=example.fr');
   });
@@ -261,7 +261,7 @@ test.describe('analyse', () => {
     await page.goto('/en/tools/dns/');
     await analyse(page, 'example.fr');
     await expect(page.getByRole('heading', { name: 'Results for example.fr' })).toBeVisible();
-    await expect(page.getByText('No duplicates found')).toBeVisible();
+    await expect(page.getByText('Duplicates', { exact: true })).toHaveCount(0);
   });
 });
 

@@ -170,10 +170,9 @@ function CheckSection({ check, lang, ui, open, onToggle }) {
           </span>
         </summary>
         <div className="space-y-5 border-t border-line px-4 py-4 sm:px-5">
-          {ui.checks[check.id].intro && <p className="text-copy text-muted">{ui.checks[check.id].intro}</p>}
           <ul className="space-y-3">
             {findings.map((f, i) => (
-              <Finding key={`${f.code}-${i}`} finding={f} describe={describe} statusLabels={ui.results.status} fixLabel={ui.results.fix} />
+              <Finding key={`${f.code}-${i}`} finding={f} describe={describe} statusLabels={ui.results.status} fixLabel={ui.results.fix} terse />
             ))}
           </ul>
           <Extra check={check} ui={ui} />
@@ -209,7 +208,7 @@ export default function DnsReport({ report, lang, onCopyReport, onCopyLink, head
     return (
       <Card solid className="space-y-3 p-5 sm:p-6">
         <h2 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-ink outline-none">{r.title} {report.domain}</h2>
-        <ul>{report.findings.map((f, i) => <Finding key={i} finding={f} describe={describe} statusLabels={ui.results.status} fixLabel={ui.results.fix} />)}</ul>
+        <ul>{report.findings.map((f, i) => <Finding key={i} finding={f} describe={describe} statusLabels={ui.results.status} fixLabel={ui.results.fix} terse />)}</ul>
       </Card>
     );
   }
@@ -266,8 +265,7 @@ export default function DnsReport({ report, lang, onCopyReport, onCopyLink, head
         </div>
 
         <nav aria-label={r.overview}>
-          <h3 className="mb-1 font-semibold text-ink">{r.overview}</h3>
-          <p className="mb-2 text-meta text-muted">{r.overviewHint}</p>
+          <h3 className="mb-2 font-semibold text-ink">{r.overview}</h3>
           <ul className="flex flex-wrap gap-2">
             {report.checks.map((check) => {
               const { icon: Icon, color } = SEVERITY[check.status];
@@ -292,20 +290,18 @@ export default function DnsReport({ report, lang, onCopyReport, onCopyLink, head
           <strong className="text-ink">{r.providers} :</strong> {report.providers.length ? report.providers.join(', ') : r.noProvider}
         </p>
 
-        <div>
-          <p className="mb-2 flex items-center gap-2 font-semibold text-ink">
-            <CircleAlert className="h-5 w-5 text-warn" aria-hidden="true" /> {r.duplicates}
-          </p>
-          {report.duplicates.length === 0 ? (
-            <p className="text-copy text-body">{r.duplicatesNone}</p>
-          ) : (
+        {report.duplicates.length > 0 && (
+          <div>
+            <p className="mb-2 flex items-center gap-2 font-semibold text-ink">
+              <CircleAlert className="h-5 w-5 text-warn" aria-hidden="true" /> {r.duplicates}
+            </p>
             <ul className="space-y-3">
               {report.duplicates.map((f, i) => (
-                <Finding key={`${f.code}-${i}`} finding={f} describe={describe} statusLabels={ui.results.status} fixLabel={ui.results.fix} />
+                <Finding key={`${f.code}-${i}`} finding={f} describe={describe} statusLabels={ui.results.status} fixLabel={ui.results.fix} terse />
               ))}
             </ul>
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="flex flex-wrap gap-2 border-t border-line pt-4">
           <Button variant="secondary" onClick={onCopyReport}><Copy className="h-4 w-4" aria-hidden="true" /> {r.copyReport}</Button>
