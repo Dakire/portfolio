@@ -3,10 +3,143 @@
 Site personnel bilingue (FR/EN) : React 19 + Vite + Tailwind CSS 4, hébergé sur OVH (mutualisé, Apache + PHP).
 Production : <https://grichard.eu>
 
+> Ce dépôt est public. Il ne contient **aucun secret** : la clé secrète Turnstile, la clé de l'API Anthropic et l'accès à l'hébergement
+> n'y figurent jamais (voir « Secrets et configuration »). Les valeurs publiques (clé de site Turnstile, identifiant de mesure d'audience) sont par nature visibles dans le site.
+
+## Sommaire
+
+[Infrastructure](#infrastructure) · [Bibliothèques](#bibliothèques-et-dépendances) · [Architecture du code](#architecture) · [Outils](#outils-outils-entools) ·
+[Outil DNS](#outil-dns-et-e-mail-outilsdns-entoolsdns) · [Articles hebdomadaires](#articles-hebdomadaires-brouillon-par-ia-publication-après-relecture) ·
+[Terminal et palette](#terminal-interactif-et-palette-de-commandes) · [Design system](#design-system-et-thèmes) · [Développement](#développement) ·
+[Tests et CI](#tests-et-intégration-continue) · [Déploiement](#déploiement-ovh) · [Sécurité](#sécurité)
+
+## Infrastructure
+
+Un site **statique** servi par un hébergement mutualisé, plus un seul script serveur (le formulaire de contact). Pas de base de données, pas de serveur d'application,
+pas de conteneur : tout ce qui demande du calcul se passe au **build** (sur la machine du développeur ou sur GitHub Actions) ou dans le **navigateur** du visiteur.
+
+```mermaid
+flowchart LR
+  subgraph Dev["Développement et CI (GitHub)"]
+    SRC["Sources<br/>React + Markdown + données"] --> BUILD["npm run build<br/>Vite + pré-rendu + Chromium"]
+    BUILD --> DIST["dist/<br/>HTML statique, JS, CSS, PDF, images OG"]
+    CI["GitHub Actions<br/>lint, audit, tests, e2e"] -. vérifie .-> SRC
+    WEEKLY["Workflow hebdomadaire<br/>brouillon d'article"] -->|pull request| SRC
+    WEEKLY -->|appel API| CLAUDE["API Claude (Anthropic)"]
+  end
+  DIST -->|envoi manuel| HOST["OVH mutualisé<br/>Apache + PHP"]
+  subgraph Prod["Production : grichard.eu"]
+    HOST --> PAGES["Pages HTML statiques<br/>+ .htaccess (en-têtes, cache, redirections)"]
+    HOST --> PHP["contact.php<br/>(seul code serveur)"]
+  end
+  VISITOR(["Navigateur du visiteur"]) -->|HTTPS| PAGES
+  VISITOR -->|POST JSON| PHP
+  VISITOR -->|widget| TS["Cloudflare Turnstile"]
+  PHP -->|vérification du jeton| TS
+  PHP -->|mail| MAIL["Messagerie du domaine"]
+  VISITOR -->|DNS-over-HTTPS, outil DNS| DOH["Cloudflare DNS + Google DNS"]
+  VISITOR -. après consentement .-> GA["Google Analytics"]
+```
+
+| Brique | Rôle | Où et comment |
+|---|---|---|
+| **Hébergement** | Sert les fichiers de `dist/` et exécute `contact.php` | OVH, offre mutualisée (Apache + PHP). Déploiement **manuel** : envoi du contenu de `dist/` (voir « Déploiement ») |
+| **Apache (`public/.htaccess`)** | Cache, compression, en-têtes de sécurité (CSP, HSTS…), redirections canoniques (HTTP → HTTPS, `www` → domaine nu, `index.html` → `/`), vrai 404, fichiers sensibles refusés | Copié tel quel dans `dist/` |
+| **PHP (`public/contact.php`)** | Reçoit le formulaire, vérifie Turnstile, limite le débit, envoie l'e-mail avec `mail()` | Seul code exécuté côté serveur ; aucune dépendance (pas de Composer) |
+| **Cloudflare Turnstile** | Captcha du formulaire | Widget chargé dans le navigateur ; jeton vérifié par `contact.php` auprès de Cloudflare |
+| **Résolveurs DoH** (Cloudflare, Google) | Requêtes DNS de l'outil DNS | Interrogés **directement par le navigateur** du visiteur ; le site ne relaie ni ne stocke rien |
+| **Google Analytics** | Mesure d'audience | Chargé **uniquement après consentement** (`public/js/consent.js`) |
+| **GitHub** | Code, historique, pull requests | Dépôt public ; l'historique Git sert aussi de source aux dates de « dernière modification » des pages |
+| **GitHub Actions** | CI et génération des brouillons d'articles | `.github/workflows/ci.yml` et `weekly-article.yml` (voir « Tests et CI » et « Articles hebdomadaires ») |
+| **API Claude (Anthropic)** | Rédaction des brouillons d'articles | Appelée **uniquement depuis le workflow hebdomadaire**, jamais depuis le site ni le navigateur |
+| **Chromium (Playwright)** | Au build : images de partage (OG) des articles et PDF des CV ; en test : tests de bout en bout | Installé par `npx playwright install chromium` ; optionnel pour un build rapide (`BUILD_FAST=1`) |
+
+**Ce que le site ne fait pas** : pas de base de données, pas de compte utilisateur, pas de cookie avant consentement, pas de police ni de script tiers avant consentement,
+pas de rendu côté serveur à la requête (tout est généré au build), pas d'envoi de données saisies dans les outils (ils tournent dans le navigateur ; seul l'outil DNS fait des requêtes, vers les résolveurs publics).
+
+### Du source au site en ligne
+
+1. **Source** : le contenu vit dans `src/data/` (textes FR/EN, outils) et `content/blog/` (articles Markdown) ; l'interface dans `src/` (React).
+2. **Build** (`npm run build`) : Vite produit le CSS et les bundles JS hachés (`dist/assets/`), puis `scripts/prerender.js` démarre Vite en mode serveur pour exécuter `src/entry-server.jsx` et écrire
+   **chaque page en HTML statique**, avec `sitemap.xml`, `llms.txt`, flux RSS, index de recherche, JSON-LD, `hreflang`, images OG et PDF des CV.
+3. **Vérification** : `npm run check` (lint, tests unitaires, tests de bout en bout sur le site construit), exécuté aussi par la CI à chaque push et pull request.
+4. **Mise en ligne** : envoi manuel de `dist/` sur l'hébergement. Aucun déploiement automatique : une fusion sur `main` ne publie rien à elle seule.
+
+### Secrets et configuration
+
+| Valeur | Nature | Où elle vit |
+|---|---|---|
+| `VITE_TURNSTILE_SITE_KEY` | Clé de **site** Turnstile, **publique** (visible dans le HTML) | `.env.local` en local (ignoré par Git), clé de test Cloudflare dans la CI |
+| Clé **secrète** Turnstile (`TURNSTILE_SECRET`) | **Secret** | `contact.config.php` sur le serveur, ignoré par Git, hors de la racine web ; ou variable d'environnement |
+| `ANTHROPIC_API_KEY` | **Secret** | Secret de dépôt GitHub Actions, lu par le seul workflow hebdomadaire |
+| `ARTICLE_MODEL` | Réglage (modèle utilisé pour les brouillons) | Variable d'environnement du workflow, facultative |
+| `BUILD_FAST` | Réglage (saute images OG et PDF) | Variable d'environnement, facultative |
+
+Le modèle `contact.config.example.php` ne contient qu'un texte à remplacer. `.gitignore` exclut `.env`, `.env.local`, `contact.config.php` et les caches de build.
+
+## Bibliothèques et dépendances
+
+Le choix assumé est un **minimum de dépendances à l'exécution** : trois paquets sont livrés aux visiteurs. Tout le reste est un outil de build, de test ou de CI.
+Beaucoup de briques sont **écrites à la main** plutôt qu'importées (voir la dernière table), chacune avec ses tests.
+
+### Livrées dans le navigateur (`dependencies`)
+
+| Paquet | Version | Rôle |
+|---|---|---|
+| [`react`](https://react.dev) | 19 | Interface des îlots (contact, terminal, outils) et rendu des pages au build |
+| [`react-dom`](https://react.dev) | 19 | Hydratation des îlots (`hydrateRoot`), rendu statique au build (`renderToString`), rendu complet côté client en développement seulement (`createRoot`) |
+| [`lucide-react`](https://lucide.dev) | 1.x | Icônes SVG (importées une à une, donc élaguées au build) |
+
+### Build et outillage (`devDependencies`, jamais livrées)
+
+| Paquet | Version | Rôle |
+|---|---|---|
+| [`vite`](https://vite.dev) | 8 | Serveur de développement, bundler, manifeste des fichiers produits ; sert aussi de moteur de chargement des modules au pré-rendu |
+| [`@vitejs/plugin-react`](https://github.com/vitejs/vite-plugin-react) | 6 | Support JSX et Fast Refresh |
+| [`tailwindcss`](https://tailwindcss.com) + `@tailwindcss/vite` | 4 | CSS utilitaire, jetons de thème déclarés en `@theme` dans `src/index.css` (pas de fichier de configuration séparé) |
+| [`marked`](https://marked.js.org) | 18 | Markdown → HTML des articles, au build seulement (le HTML des articles est de confiance, voir « Sécurité ») |
+| [`oxlint`](https://oxc.rs) | 1.x | Lint rapide : règles React, hooks (`exhaustive-deps`), accessibilité JSX (`jsx-a11y`) |
+
+### Tests
+
+| Paquet | Version | Rôle |
+|---|---|---|
+| [`vitest`](https://vitest.dev) | 4 | Tests unitaires (`tests/unit/`) et tests « live » contre les vrais résolveurs DNS (`tests/live/`) |
+| [`@playwright/test`](https://playwright.dev) | 1.x | Tests de bout en bout sur le site construit (`tests/e2e/`) ; son Chromium rend aussi les images OG et les PDF au build |
+| [`@axe-core/playwright`](https://github.com/dequelabs/axe-core-npm) | 4 | Contrôle d'accessibilité WCAG automatisé dans les deux thèmes |
+
+### Génération d'articles
+
+| Paquet | Version | Rôle |
+|---|---|---|
+| [`@anthropic-ai/sdk`](https://github.com/anthropics/anthropic-sdk-typescript) | 0.x | Client de l'API Claude, utilisé par `scripts/generate-article.js` dans le workflow hebdomadaire uniquement |
+
+### Plateforme
+
+- **Node.js ≥ 22** (champ `engines`, et version utilisée par la CI). Modules ES partout (`"type": "module"`).
+- **Actions GitHub** : `actions/checkout@v4`, `actions/setup-node@v4` (cache npm), `actions/upload-artifact@v4` (rapport Playwright en cas d'échec) et la CLI `gh` (ouverture des pull requests d'articles).
+- **Ressources chargées depuis des CDN, au build seulement** : les sources HTML des CV (`public/cv-fr.html`, `public/cv-en.html`) utilisent Tailwind, Inter et Lucide par CDN pour produire les PDF. Le site lui-même n'en charge aucun
+  (polices système, aucune ressource tierce avant consentement).
+
+### Ce qui est écrit à la main (et pourquoi)
+
+| Brique | Fichiers | Pourquoi pas une bibliothèque |
+|---|---|---|
+| Analyseur JSON | `src/lib/json.js` | Position exacte en ligne/colonne, nombres et chaînes recopiés tels quels, messages identiques d'un navigateur à l'autre |
+| Bibliothèque iCalendar (analyse, fuseaux, découpage, comparaison) | `src/lib/ics/` | Les événements sont recopiés à l'identique, jamais re-sérialisés ; fuseaux Windows d'Outlook gérés |
+| Écriture de ZIP | `src/lib/zip.js` | Archive « stockée » sans compression : quelques dizaines de lignes au lieu d'une dépendance |
+| Analyse DNS, SPF, DKIM, DMARC, MX | `src/lib/dns/` | Logique pure et testée, sans DOM ; décompte récursif des requêtes SPF |
+| En-têtes d'e-mail, calcul d'adresses (CIDR, VLSM), encodage, JWT, empreintes, mots de passe, unités | `src/lib/mail/`, `net/`, `encode/`, `password.js`, `units.js` | Fonctions pures, hors réseau ; MD5 local, SHA via `SubtleCrypto`, aléa via `crypto.getRandomValues` |
+| Front matter, sitemap, RSS, JSON-LD, index de recherche, images OG | `scripts/lib/` | Front matter volontairement strict (les titres contiennent des « : ») ; chaque artefact est vérifié par un test |
+| Interpréteur du terminal, palette de commandes | `src/lib/terminal/`, `public/js/palette.js` | Interpréteur pur ; palette en `<dialog>` natif sans framework |
+| Thème, menu, bandeau de cookies, halo des cartes | `public/js/` | Petits scripts autonomes, sans React, compatibles avec une CSP sans script en ligne |
+
+Pour mettre les dépendances à jour : `npm outdated`, puis `npm update`, puis `npm run check`. La CI échoue sur une vulnérabilité **haute** des dépendances de production (`npm audit --omit=dev`).
+
 ## Architecture
 
 Le site est **entièrement pré-rendu** au build (HTML statique, lisible sans JavaScript). React n'hydrate que des zones
-interactives (« îlots ») : le formulaire de contact sur l'accueil, l'outil DNS sur sa page. Le menu, la bascule de thème, le surlignage de section, l'effet de halo des cartes et le
+interactives (« îlots ») : le formulaire de contact et le terminal sur l'accueil, l'outil de sa page sur chaque page d'outil. Le menu, la bascule de thème, le surlignage de section, l'effet de halo des cartes et le
 bandeau de cookies sont de petits scripts autonomes (`public/js/`), qui fonctionnent sur toutes les pages sans React.
 
 ```
@@ -20,17 +153,18 @@ src/
   index.css             Design system : jetons de thème, échelles, composants (.btn, .card, .field…), effets (voir plus bas)
   components/
     ui/                 Primitives : Button, Card, Field, ThemeToggle, EmptyState
-    home/               Sections de l'accueil : Hero, About, Skills, Experience, Projects, LatestPosts, EducationAndContact
+    home/               Sections de l'accueil : Hero, About, Skills, Experience, Projects, ToolsShowcase, LatestPosts, EducationAndContact
     SiteHeader, SiteFooter   En-tête flottant et pied de page communs à TOUTES les pages (accueil, blog, légal, 404)
     ContactForm, ContactIsland, ErrorBoundary   Le formulaire de contact (îlot) et son filet de sécurité
     terminal/           InteractiveTerminal : le terminal interactif de l'accueil (îlot)
-    tools/              Outils : ToolPage (page générique pré-rendue), ToolsHub, registry.jsx, un composant par outil (DnsChecker, IcsSplit, IcsCompare…)
+    tools/              Outils : ToolPage (page générique pré-rendue), ToolsHub, registry.jsx, icons.js (icône de chaque outil), un composant par outil (DnsChecker, IcsSplit, JsonFormatter, UnitConverter…)
     Blog, LegalPage, NotFound, Shell            Pages statiques (rendues au build, jamais hydratées)
     PostMeta, SectionHeading, Decor, Terminal, Icons
   hooks/useTurnstile.js Cycle de vie du widget Cloudflare Turnstile (chargement, nouvelle tentative, jeton)
   lib/                  format.js (dates), cx.js (classes), islands.js (identifiants et données des îlots)
   lib/ics/, lib/zip.js  Bibliothèque iCalendar pure (parse, dates et fuseaux, build, split, compare) et écriture de ZIP
   data/tools/           Registre des outils (index.js), page « Outils » (hub.js) et textes de chaque outil
+  lib/json.js, lib/units.js   Analyse et mise en forme de JSON ; conversions de tailles, débits et bases numériques (fonctions pures)
   lib/dns/              Analyse DNS pure (sans React ni DOM) : résolveur DoH, spf, dkim, dmarc, mx, txt, records, extras, providers, analyze, report
   lib/terminal/         Interpréteur du terminal (commands.js : fonctions pures) et données qu'il consulte (data.js)
   data/dns-tool.js      Textes de l'outil DNS (FR/EN) : interface et un message par code de constat
@@ -45,7 +179,7 @@ scripts/
 public/                 Copié tel quel dans dist/ : contact.php, .htaccess, robots.txt, llms.txt, og-image.png, PDF, icônes,
                         cv-fr.html / cv-en.html (sources des CV pour générer les PDF ; non servies : `.htaccess` les bloque)
 public/js/              Scripts autonomes (voir « Scripts autonomes ») : theme.js, nav.js, fx.js, palette.js, consent.js, table-filter.js, 404.js
-tests/unit/             Vitest : pré-rendu (front matter, dates, sitemap, gabarit, RSS), cohérence du contenu, analyse DNS (tests/unit/helpers/fake-dns.js)
+tests/unit/             Vitest : pré-rendu (front matter, dates, sitemap, gabarit, RSS), cohérence du contenu, analyse DNS (tests/unit/helpers/fake-dns.js), outils (JSON, unités, réseau, encodage…)
 tests/e2e/              Playwright + axe : accessibilité (2 thèmes), responsive, thème, formulaire, navigation, contenu de dist/
 ```
 
@@ -58,11 +192,12 @@ Le sélecteur de langue mène à la page équivalente (la traduction d'un articl
 
 - **État** : uniquement local (`useState` dans `ContactForm`). Pas de Redux, Context ni bibliothèque de data fetching :
   le site n'a qu'un appel réseau (`POST /contact.php`).
-- **Une seule zone hydratée** : le HTML de l'accueil contient `#contact-root` et un `<script type="application/json" id="islands-data">`
-  (langue et textes du formulaire). `main.jsx` les relit et hydrate le formulaire ; le reste n'est jamais hydraté, donc
-  l'année du pied de page ou une section statique ne peuvent pas provoquer de désaccord d'hydratation. Le JavaScript de React
-  (≈ 73 Ko gzip) ne sert qu'au formulaire ; les pages de blog n'en chargent pas du tout.
-- **Pas de code splitting** (`React.lazy`) : une seule page et un seul point d'entrée, il n'y aurait rien à découper.
+- **Des îlots, pas de page hydratée** : le HTML contient des racines (`#contact-root`, `#terminal-root`, `#tool-root`) et un `<script type="application/json" id="islands-data">`
+  (langue et données). `main.jsx` les relit et n'hydrate que ces zones ; le reste n'est jamais hydraté, donc l'année du pied de page ou une
+  section statique ne peuvent pas provoquer de désaccord d'hydratation. React (≈ 70 Ko gzip, le plancher de ce choix) est commun à tous les îlots ;
+  les pages de blog n'en chargent pas du tout.
+- **Chargement à la demande** : chaque îlot est un module chargé dynamiquement (`import.meta.glob`). Une page ne télécharge que son code : le terminal sur l'accueil,
+  l'outil de la page sur une page d'outil. Ajouter un outil n'alourdit donc ni l'accueil ni les autres outils.
 - **Amélioration progressive** : sans JavaScript, le menu mobile est affiché en clair, la bascule de thème est masquée et le thème
   suit le système ; les sections apparaissent sans animation.
 - **Front matter minimal** (`scripts/lib/markdown.js`) plutôt que YAML : les titres contiennent des « : » qu'un parseur YAML strict
@@ -80,7 +215,8 @@ Le sélecteur de langue mène à la page équivalente (la traduction d'un articl
 Une page « Outils » liste les outils ; chacun a sa page (FR et EN) pré-rendue (explications, FAQ, données structurées `WebApplication` + `FAQPage`, fil d'Ariane) et son
 îlot hydraté, chargé à la demande. **Un seul registre** (`src/data/tools/index.js`) alimente la page « Outils », le menu, la palette de commandes, le plan du site, `llms.txt`
 et le JSON-LD. Pour **ajouter un outil** : ses textes FR/EN (`src/data/tools/<id>.js`, mêmes clés dans les deux langues : `tests/unit/tools.test.js` le vérifie), son composant
-(`src/components/tools/`, déclaré dans `registry.jsx`), son îlot (`src/islands/tools/<id>.jsx`) et une entrée dans le registre.
+(`src/components/tools/`, déclaré dans `registry.jsx`), son îlot (`src/islands/tools/<id>.jsx`), son icône (`src/components/tools/icons.js`) et une entrée dans le registre. L'accueil (section « Outils »,
+`ToolsShowcase`) et la page « Outils » se mettent à jour d'eux-mêmes ; ajoutez l'adresse de l'outil à `PAGES` dans `tests/e2e/site.spec.js` (axe, responsive).
 Les outils de fichiers et de texte tournent **entièrement dans le navigateur** : rien n'est envoyé. Seul l'outil DNS interroge des résolveurs publics.
 
 ### Découpeur ICS (`/outils/ics-decouper/`) et comparateur ICS (`/outils/ics-comparer/`)
@@ -100,7 +236,7 @@ Les outils de fichiers et de texte tournent **entièrement dans le navigateur** 
 
 ### Outils d'administration et de développement
 
-Quatre outils, **sans aucun appel réseau**, dont la logique est dans des fonctions pures testées (`src/lib/`) et l'interface dans `src/components/tools/` :
+Six outils, **sans aucun appel réseau**, dont la logique est dans des fonctions pures testées (`src/lib/`) et l'interface dans `src/components/tools/` :
 
 - **Analyseur d'en-têtes d'e-mail** (`/outils/en-tetes-email/`, `src/lib/mail/headers.js`) : chemin `Received` du plus ancien au plus récent (délai par saut, TLS, horloges décalées),
   `Authentication-Results` / `Received-SPF` / `DKIM-Signature` / ARC, **alignement DMARC** (relaxé), nom affiché usurpé, `Reply-To` et `Return-Path` divergents, signaux de spam
@@ -112,6 +248,13 @@ Quatre outils, **sans aucun appel réseau**, dont la logique est dans des foncti
 - **Encodeur / décodeur** (`/outils/encodeur-decodeur/`, `src/lib/encode/`) : Base64 (classique et URL-safe, UTF-8 sûr), URL (avec décomposition), hexadécimal, entités HTML, **lecteur de JWT**
   (décode seulement : la signature n'est **jamais** vérifiée, et l'interface le dit), empreintes MD5 (implémentation locale) / SHA-1 / SHA-256 / SHA-384 / SHA-512 de textes ou de fichiers
   (`SubtleCrypto`) avec comparaison, timestamps (secondes, ms, µs, ns détectés) et UUID v4 / v7. Les onglets suivent le motif ARIA « tabs » (`src/components/ui/Tabs.jsx`).
+- **Formateur et validateur JSON** (`/outils/formateur-json/`, `src/lib/json.js`) : analyseur RFC 8259 écrit pour l'occasion plutôt que `JSON.parse` (messages d'erreur identiques
+  d'un navigateur à l'autre, position exacte en **ligne et colonne**, indice pour les fautes courantes : apostrophes, virgule finale, commentaires, clés sans guillemets, `NaN`). Les nombres et
+  les chaînes sont recopiés **tels qu'écrits** : `12345678901234567890` n'est pas arrondi. Indentation 2/4/tabulation, minification, tri des clés, clés en double signalées, « Aller à l'erreur »
+  (place le curseur). Limites : 5 millions de caractères, 512 niveaux ; syntaxe seulement (pas de JSON Schema), ni JSONC ni JSON5.
+- **Convertisseur d'unités** (`/outils/convertisseur-unites/`, `src/lib/units.js`) : trois onglets. *Tailles* : bit à pébioctet, SI (×1000) et CEI (×1024) côte à côte. *Débit et durée* : taille, débit
+  (bit/s à Tbit/s, o/s à Gio/s) et rendement utile → durée en j/h/min/s et débit dans toutes les unités (estimation théorique : ni latence ni charge). *Bases* : décimal, hexadécimal, binaire, octal en **BigInt**
+  (512 chiffres, préfixes 0x/0b/0o, signe). Les tailles sont des nombres à virgule flottante (15 chiffres significatifs, jusqu'à 10²¹).
 - **Générateur de mots de passe** (`/outils/generateur-mot-de-passe/`, `src/lib/password.js`) : `crypto.getRandomValues` avec **rejet** pour éviter le biais du modulo ; modes aléatoire,
   prononçable et PIN ; entropie réelle affichée (pas une jauge décorative). Les valeurs ne sont générées qu'**après l'hydratation** : le HTML pré-rendu ne contient jamais de mot de passe.
 
@@ -167,7 +310,7 @@ longueur produite (le préfixe, ligne éditoriale et articles d'exemple, est mis
 ## Terminal interactif et palette de commandes
 
 - **Terminal** (accueil, îlot React) : de vraies commandes — `help`, `whoami`, `about`, `skills`, `experience`, `projects`, `education`, `blog`, `contact`, `links`, `cv`, `ls`, `cat`,
-  `goto <section>`, `theme [dark|light]`, `lang [fr|en]`, `clear` (et quelques œufs de Pâques). Historique (↑/↓), complétion par Tab, Ctrl+L. Les trois commandes d'ouverture
+  `goto <section>` (accueil, à propos, compétences, expériences, projets, outils, blog, formation, contact), `theme [dark|light]`, `lang [fr|en]`, `clear` (et quelques œufs de Pâques). Historique (↑/↓), complétion par Tab, Ctrl+L. Les trois commandes d'ouverture
   se tapent en CSS (décoratives, masquées aux lecteurs d'écran) ; ensuite le champ est un vrai `<input>` étiqueté, les résultats sont annoncés (`role="log"`), des suggestions
   cliquables remplacent le clavier sur mobile, et Tab ne piège jamais le focus. Aucune saisie n'est interprétée comme du HTML. L'interpréteur (`src/lib/terminal/commands.js`)
   est pur : il retourne des lignes et une action, le composant exécute l'action (défilement, thème, langue). Textes : `src/data/terminal.js`.
@@ -189,15 +332,20 @@ Tout est dans `src/index.css`, sans configuration Tailwind séparée (Tailwind 4
   il suit le système tant qu'aucun choix manuel n'existe. La bascule (`ThemeToggle`, `data-theme-toggle`) fonctionne sur toutes les
   pages ; avec « réduire les animations » elle est instantanée, sinon le nouveau thème se déploie en cercle (View Transitions).
   Le terminal de l'accueil et les blocs de code restent volontairement sombres/neutres selon leurs propres jetons.
+  **Focus du terminal** : la règle globale `:where(a, button, input…):focus-visible` est *hors couche CSS* et bat donc les utilitaires Tailwind (`focus-visible:outline-none` ne suffit pas) ; le champ a
+  la classe `term-input` (`outline: none`) et c'est la ligne de saisie (`.term-prompt:focus-within`) qui porte l'unique indicateur. Même piège pour tout futur champ au focus personnalisé.
 - **Échelles** : texte fluide (`text-display`, `text-title`, `text-lead`, `text-copy`, `text-meta`, via `clamp()`), espacement de section
   (`space-y-section`), rayons (`rounded-card`, `rounded-control`), ombres (`shadow-card`, `shadow-glow`), courbe `ease-soft`.
 - **Composants partagés** : boutons (`.btn` + `btn-primary|secondary|ghost`, 44 px de haut minimum, états hover / active / disabled /
   loading), cartes (`.card`, `.card-glow`), champs (`.field`), étiquettes (`.tag`), liens (`.link`, `.tap` pour une zone de 44 px),
   squelette (`.skeleton`), état vide (`EmptyState`). Les composants React de `components/ui/` n'assemblent que ces classes.
-- **Contrastes** : texte courant ≥ 7:1 dans les deux thèmes, `link` ≥ 5:1 sur toutes les surfaces. Vérifié par axe dans `tests/e2e`.
+- **Contrastes** : texte courant ≥ 7:1 dans les deux thèmes, `link` ≥ 5:1 sur toutes les surfaces. Vérifié par axe dans `tests/e2e`. **Jamais d'animation d'opacité sur du texte** (ni de fond translucide
+  derrière lui, comme l'ancien bandeau de cookies) : PageSpeed mesure le contraste en cours d'animation et un texte à demi transparent échoue (c'était la cause du 96/100 en accessibilité). Le reste de la
+  suite e2e tourne en « mouvement réduit », où ces fondus n'existent pas : `terminal.spec.js` rejoue donc axe pendant les animations d'ouverture.
 - **Mouvement** : transitions ciblées (`transition-colors`, `transform`…, jamais `transition-all` en dehors de la page 404),
-  `prefers-reduced-motion` coupe toute animation. Aucune animation décorative ne tourne en continu : le dégradé du nom (5 s), le
-  curseur (4 clignotements) et l'écriture du terminal se jouent une fois (WCAG 2.2.2) ; seul le squelette de chargement boucle.
+  `prefers-reduced-motion` coupe toute animation. Aucune animation décorative ne tourne en continu : le
+  curseur (4 clignotements) et l'écriture du terminal se jouent une fois (WCAG 2.2.2) ; seul le squelette de chargement boucle. Les animations n'utilisent que `transform` (composité) : le reflet du squelette
+  est un calque qui glisse, et le nom en dégradé est statique (animer `background-position` n'est pas composable).
 - **Effets** : en-tête flottant en verre dépoli avec barre de progression de lecture (CSS pur, `animation-timeline: scroll()`), halo de
   bordure qui suit le pointeur sur les cartes (`fx.js`, souris uniquement), reflet sur le bouton principal, fond à halos et grille,
   transitions de page fondues entre les pages statiques (View Transitions inter-documents, navigateurs compatibles).
@@ -209,7 +357,7 @@ Ils sont versionnés par empreinte (`?v=<hash>`) et servis depuis `'self'` : la 
 
 | Script | Rôle | Chargement |
 |---|---|---|
-| `theme.js` | Thème clair/sombre, `meta theme-color`, classe `js` sur `<html>` | `<head>`, sans `defer` |
+| `theme.js` | Thème clair/sombre, `meta theme-color`, classe `js` sur `<html>` | `<head>`, sans `defer` (bloque le rendu **volontairement** : sans lui, flash du mauvais thème ; en ligne, il faudrait `'unsafe-inline'` ou un hachage dans la CSP. Il part en parallèle de la feuille de style, qui bloque de toute façon) |
 | `nav.js` | Menu mobile (clic, Échap, clic extérieur, focus), surlignage de la section visible (`aria-current="location"`) | `defer`, toutes les pages |
 | `fx.js` | Halo des cartes qui suit le pointeur (souris uniquement, rien si mouvement réduit) | `defer`, toutes les pages |
 | `palette.js` | Palette de commandes (Ctrl/Cmd + K, « / », bouton de l'en-tête) : `<dialog>` + combobox ARIA, index chargé à la première ouverture | `defer`, toutes les pages |
@@ -239,16 +387,24 @@ avec `translationOf: <slug français>` (le build échoue si ce slug n'existe pas
 Pour ajouter un texte : tout se passe dans `src/data/content.js` ; `tests/unit/content.test.js` vérifie que FR et EN
 ont exactement les mêmes clés.
 
+## Performances
+
+Mesure locale, proche de PageSpeed (mobile, Lighthouse 13) : `npm run build`, `npx vite preview --port 4173`, puis `npx lighthouse http://localhost:4173/ --only-categories=performance,accessibility,best-practices,seo --chrome-flags="--headless=new"`.
+`vite preview` ne reproduit ni les en-têtes ni la compression d'Apache : les poids réseau sont à lire sur PageSpeed (https://pagespeed.web.dev/), les scores et métriques de rendu sont comparables.
+Décisions : React est chargé une fois (≈ 70 Ko gzip) ; terminal et outils sont des modules à la demande ; aucune police ni script tiers avant consentement ; `theme.js` et la feuille de style bloquent le rendu volontairement (voir « Scripts autonomes »).
+Le JavaScript « inutilisé » signalé par Lighthouse est du code de React DOM qu'une page donnée n'exécute pas : le retirer demanderait de remplacer React, pas de retoucher le site.
+
 ## Tests et intégration continue
 
 - **Unitaires** (`npm test`, Vitest) : front matter (cas d'erreur compris), ancres et sommaire, dates ISO avec fuseau (heure d'été/hiver),
-  gabarit HTML, sitemap, manifeste Vite, parité FR/EN du contenu, validité de tous les articles et de leurs traductions.
+  gabarit HTML, sitemap, manifeste Vite, parité FR/EN du contenu, validité de tous les articles et de leurs traductions, registre des outils, analyseur JSON (erreurs, nombres intacts, tri) et conversions d'unités (SI/CEI, débits, BigInt).
 - **Bout en bout** (`npm run test:e2e`, Playwright) sur le site construit (`tests/e2e/dns-tool.spec.js` couvre l'outil DNS avec de faux résolveurs DoH) :
   - axe (WCAG 2.x A/AA) sur 9 pages **dans chacun des deux thèmes**, et sur le bandeau de cookies ;
   - structure et SEO (langue, un seul `h1`, canonical, hreflang, sélecteur de langue vers la traduction) ;
   - responsive : aucun scroll horizontal de 320 à 2560 px, cibles tactiles ≥ 44 px sur mobile ;
   - thème : suit le système, bascule, mémorisation, `aria-pressed` ; site utilisable sans JavaScript ;
   - navigation : menu mobile (Échap, clic extérieur, retour du focus), surlignage de section, bandeau de cookies atteint en premier au clavier ;
+  - terminal : un seul contour de focus et aucun décalage, contraste mesuré pendant les animations (`terminal.spec.js`) ; formateur JSON, convertisseur d'unités, section « Outils » de l'accueil (`json-units.spec.js`, `home-tools.spec.js`) ;
   - formulaire : validation par champ, compteur, succès (focus sur la confirmation, second envoi), 429, coupure réseau,
     Turnstile injoignable, squelette, état occupé ; absence d'erreur d'hydratation ;
   - contenu de `dist/`.
@@ -310,6 +466,13 @@ Le contrôle est automatisé : axe dans `tests/e2e` (deux thèmes), règles `jsx
   sans `defer` plutôt qu'en ligne), HSTS, anti-clickjacking, `nosniff`, Referrer-Policy, Permissions-Policy.
   `style-src` garde `'unsafe-inline'` par prudence (comportement du widget Turnstile, non vérifiable hors production) :
   à retirer seulement après un essai sur le vrai site.
+- **Injection DOM** : aucun `innerHTML` dans le code exécuté par le navigateur (le bandeau de cookies est construit en `createElement`/`textContent`) ; les deux `dangerouslySetInnerHTML` de `Blog.jsx` ne
+  servent qu'au pré-rendu (ces pages ne sont jamais hydratées). Tous les `target="_blank"` portent `rel="noopener"`.
+- **Points d'audit connus, non appliqués (décisions à prendre)** :
+  - *CSP `script-src` par liste d'hôtes* (signalé par Lighthouse) : un nonce ou un hachage est impossible sur un hébergement statique sans script en ligne. La seule réduction réaliste est de limiter les hôtes à des
+    chemins (`https://www.googletagmanager.com/gtag/` et `https://challenges.cloudflare.com/turnstile/`) ; non fait faute de pouvoir tester Google Analytics et Turnstile hors production (une erreur casserait la mesure ou le formulaire).
+  - *HSTS `preload`* : l'en-tête actuel (`max-age=31536000; includeSubDomains`) est correct ; `preload` n'a de sens qu'après inscription sur hstspreload.org, qui engage **tous** les sous-domaines en HTTPS, durablement. Décision explicite requise.
+  - *Trusted Types* (`require-trusted-types-for 'script'`) : le point d'injection du site est supprimé, mais le chargement de Google Analytics (`script.src`) et de Turnstile exigerait des politiques dédiées et un essai en `Content-Security-Policy-Report-Only` sur le vrai site.
 - **Contenu** : les articles Markdown sont de confiance (rendus tels quels, `marked` n'assainit pas le HTML) ; n'y collez jamais de HTML
   d'origine inconnue. La CSP (aucun script en ligne) limite l'impact d'une erreur.
 - **Contact sécurité** : `/.well-known/security.txt` (champ `Expires` à renouveler avant le 30 septembre 2027).

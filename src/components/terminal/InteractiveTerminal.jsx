@@ -149,7 +149,7 @@ export default function InteractiveTerminal({ lang, data }) {
             autoCorrect="off"
             spellCheck={false}
             enterKeyHint="send"
-            className="min-w-0 flex-1 bg-transparent py-2 text-slate-100 placeholder:text-slate-500 focus-visible:outline-none"
+            className="term-input min-w-0 flex-1 bg-transparent py-2 text-slate-100 placeholder:text-slate-400"
           />
         </form>
       </div>

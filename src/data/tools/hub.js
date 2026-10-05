@@ -3,7 +3,7 @@ export const HUB = {
   fr: {
     meta: {
       title: 'Outils en ligne pour techniciens IT : DNS, e-mail, calendriers, réseau | Guillaume Richard',
-      description: "Outils gratuits pour techniciens et administrateurs : vérificateur DNS et e-mail (SPF, DKIM, DMARC), découpeur et comparateur de fichiers ICS, calculatrice réseau, analyseur d'en-têtes d'e-mail, encodeurs. Dans votre navigateur.",
+      description: "Outils gratuits pour techniciens et administrateurs : vérificateur DNS et e-mail (SPF, DKIM, DMARC), découpeur et comparateur de fichiers ICS, calculatrice réseau, analyseur d'en-têtes d'e-mail, encodeurs, formateur JSON, convertisseurs d'unités. Dans votre navigateur.",
     },
     h1: 'Outils pour techniciens IT',
     intro: "Des outils pratiques, gratuits et sans inscription, nés de problèmes rencontrés en support et en administration. Les outils de fichiers et de texte tournent entièrement dans votre navigateur : rien n'est envoyé.",
@@ -16,7 +16,7 @@ export const HUB = {
   en: {
     meta: {
       title: 'Online tools for IT technicians: DNS, email, calendars, networking | Guillaume Richard',
-      description: 'Free tools for technicians and administrators: DNS and email checker (SPF, DKIM, DMARC), ICS file splitter and comparer, subnet calculator, email header analyzer, encoders. In your browser.',
+      description: 'Free tools for technicians and administrators: DNS and email checker (SPF, DKIM, DMARC), ICS file splitter and comparer, subnet calculator, email header analyzer, encoders, JSON formatter, unit converters. In your browser.',
     },
     h1: 'Tools for IT technicians',
     intro: 'Practical tools, free and without sign-up, born from problems met in support and administration. The file and text tools run entirely in your browser: nothing is uploaded.',

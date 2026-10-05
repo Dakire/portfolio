@@ -65,6 +65,11 @@ export const PORTFOLIO_DATA = {
       emptyTitle: 'Les premiers articles arrivent',
       emptyText: "Les notes techniques seront publiées ici dès qu'elles sont prêtes.",
     },
+    tools: {
+      title: 'Outils',
+      intro: "Des outils gratuits pour techniciens et administrateurs, nés de problèmes rencontrés en support : diagnostic DNS et e-mail, calendriers ICS, réseau, encodage, JSON, mots de passe, conversions. Ceux qui traitent des fichiers ou du texte s'exécutent dans votre navigateur ; seul l'outil DNS interroge des résolveurs publics.",
+      all: 'Tous les outils',
+    },
     nav: { about: 'À propos', skills: 'Compétences', experience: 'Expériences', projects: 'Projets', contact: 'Contact', blog: 'Blog', tools: 'Outils' },
     hero: {
       greeting: 'Bonjour, je suis',
@@ -191,6 +196,11 @@ export const PORTFOLIO_DATA = {
       otherLang: 'Lire cet article en français',
       emptyTitle: 'The first articles are on their way',
       emptyText: 'Technical notes will be published here as soon as they are ready.',
+    },
+    tools: {
+      title: 'Tools',
+      intro: 'Free tools for technicians and administrators, born from problems met in support: DNS and email diagnosis, ICS calendars, networking, encoding, JSON, passwords, conversions. Those that process files or text run in your browser; only the DNS tool queries public resolvers.',
+      all: 'All tools',
     },
     nav: { about: 'About', skills: 'Skills', experience: 'Experience', projects: 'Projects', contact: 'Contact', blog: 'Blog', tools: 'Tools' },
     hero: {

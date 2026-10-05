@@ -12,7 +12,7 @@
     ? {
         label: 'Cookie settings',
         body: 'This site uses Google Analytics to measure its audience. Analytics cookies are only set with your consent.',
-        more: 'Learn more',
+        more: 'More about cookies',
         legal: '/en/legal-notice/#s5',
         accept: 'Accept',
         refuse: 'Refuse',
@@ -20,7 +20,7 @@
     : {
         label: 'Gestion des cookies',
         body: "Ce site utilise Google Analytics pour mesurer son audience. Les cookies de mesure ne sont déposés qu'avec votre accord.",
-        more: 'En savoir plus',
+        more: 'En savoir plus sur les cookies',
         legal: '/mentions-legales/#s5',
         accept: 'Accepter',
         refuse: 'Refuser',
@@ -92,8 +92,18 @@
     banner.className = 'consent';
     banner.setAttribute('role', 'region');
     banner.setAttribute('aria-label', text.label);
-    banner.innerHTML = `<p>${text.body} <a href="${text.legal}">${text.more}</a></p>
-<div class="consent-actions"><button type="button" data-choice="refuse">${text.refuse}</button><button type="button" data-choice="accept">${text.accept}</button></div>`;
+    // Construit avec l'API DOM (textContent) plutôt qu'avec innerHTML : aucun point d'injection HTML dans le site
+    const more = Object.assign(document.createElement('a'), { href: text.legal, textContent: text.more });
+    const message = document.createElement('p');
+    message.append(`${text.body} `, more);
+    const actions = document.createElement('div');
+    actions.className = 'consent-actions';
+    for (const [choice, label] of [['refuse', text.refuse], ['accept', text.accept]]) {
+      const button = Object.assign(document.createElement('button'), { type: 'button', textContent: label });
+      button.dataset.choice = choice;
+      actions.append(button);
+    }
+    banner.append(message, actions);
     banner.addEventListener('click', (e) => {
       const choice = e.target.closest('button')?.dataset.choice;
       if (choice) choose(choice === 'accept');

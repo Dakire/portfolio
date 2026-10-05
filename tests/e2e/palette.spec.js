@@ -87,6 +87,7 @@ test.describe('palette de commandes', () => {
     await search(page).fill('outil dns');
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/\/outils\/dns\/$/);
+    await page.waitForLoadState('load'); // l'URL change avant que palette.js soit chargé sur la nouvelle page : Ctrl+K serait perdu
 
     await open(page);
     await search(page).fill('stack');

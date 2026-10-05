@@ -149,6 +149,39 @@ test.describe('terminal interactif', () => {
     for (const h of heights) expect(h).toBeGreaterThanOrEqual(43.5);
   });
 
+  test("le champ n'a qu'un seul contour de focus, sans décalage de la mise en page", async ({ page }) => {
+    await page.goto('/');
+    await expect(prompt(page)).toBeEnabled();
+    const line = page.locator('.term-prompt');
+    const geometry = () => page.evaluate(() => {
+      const r = (el) => { const b = el.getBoundingClientRect(); return [b.x + scrollX, b.y + scrollY, b.width, b.height].map(Math.round); };
+      return [r(document.querySelector('.term-prompt')), r(document.querySelector('#term-input'))];
+    });
+    const before = await geometry();
+    await prompt(page).focus();
+    // L'indicateur est celui de la ligne ; le champ lui-même n'en dessine aucun (sinon : deux cadres imbriqués)
+    await expect(line).toHaveCSS('outline-style', 'solid');
+    await expect(line).toHaveCSS('outline-width', '2px');
+    await expect(prompt(page)).toHaveCSS('outline-style', 'none');
+    await expect(prompt(page)).toHaveCSS('box-shadow', 'none');
+    expect(await geometry()).toEqual(before);
+    await page.locator('body').click({ position: { x: 1, y: 1 } });
+    await expect(line).toHaveCSS('outline-style', 'none');
+  });
+
+  test("contraste conforme pendant les animations d'ouverture (mesure PageSpeed)", async ({ page }) => {
+    // La suite tourne en « mouvement réduit » : les fondus n'y existent pas. PageSpeed, lui, mesure en cours d'animation.
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/');
+    const violations = new Set();
+    for (let i = 0; i < 10; i++) {
+      const results = await new AxeBuilder({ page }).withRules(['color-contrast']).analyze();
+      for (const v of results.violations) for (const n of v.nodes) violations.add(n.target.join(' '));
+      await page.waitForTimeout(500);
+    }
+    expect([...violations]).toEqual([]);
+  });
+
   for (const theme of ['dark', 'light']) {
     test(`respecte WCAG AA avec des sorties affichées (axe, thème ${theme})`, async ({ page }) => {
       await page.addInitScript((t) => localStorage.setItem('theme', t), theme);

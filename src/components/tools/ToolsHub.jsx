@@ -1,12 +1,11 @@
 // Page « Outils » : la liste des outils, en cartes. Pré-rendue, sans JavaScript côté client.
-import { ArrowRight, Binary, Calculator, Diff, KeyRound, Mail, Network, Scissors } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { LANGS } from '../../data/content';
 import { HUB } from '../../data/tools/hub';
 import { TOOLS, toolPath, toolUi } from '../../data/tools/index';
 import Shell from '../Shell';
 import Card from '../ui/Card';
-
-const ICONS = { network: Network, scissors: Scissors, diff: Diff, mail: Mail, calculator: Calculator, binary: Binary, key: KeyRound };
+import { DEFAULT_TOOL_ICON, TOOL_ICONS } from './icons';
 
 export default function ToolsHub({ lang }) {
   const hub = HUB[lang];
@@ -26,7 +25,7 @@ export default function ToolsHub({ lang }) {
       <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {TOOLS.map((tool) => {
           const ui = toolUi(tool, lang);
-          const Icon = ICONS[tool.icon] ?? Network;
+          const Icon = TOOL_ICONS[tool.icon] ?? DEFAULT_TOOL_ICON;
           return (
             <li key={tool.id}>
               <Card as="a" href={toolPath(tool, lang)} glow solid className="group flex h-full flex-col p-6">

@@ -8,6 +8,7 @@ import Skills from './components/home/Skills';
 import Experience from './components/home/Experience';
 import Projects from './components/home/Projects';
 import LatestPosts from './components/home/LatestPosts';
+import ToolsShowcase from './components/home/ToolsShowcase';
 import EducationAndContact from './components/home/EducationAndContact';
 import { terminalData } from './lib/terminal/data';
 
@@ -28,6 +29,7 @@ export default function App({ lang = 'fr', posts = [] }) {
         <Skills t={t} />
         <Experience t={t} />
         <Projects t={t} />
+        <ToolsShowcase t={t} lang={lang} />
         <LatestPosts t={t} lang={lang} posts={posts} />
         <EducationAndContact t={t} lang={lang} />
       </main>

@@ -5,8 +5,10 @@ import EmailHeaders from './EmailHeaders';
 import EncoderDecoder from './EncoderDecoder';
 import IcsCompare from './IcsCompare';
 import IcsSplit from './IcsSplit';
+import JsonFormatter from './JsonFormatter';
 import PasswordGenerator from './PasswordGenerator';
 import SubnetCalculator from './SubnetCalculator';
+import UnitConverter from './UnitConverter';
 
 export const TOOL_COMPONENTS = {
   dns: DnsChecker,
@@ -16,4 +18,6 @@ export const TOOL_COMPONENTS = {
   subnet: SubnetCalculator,
   encoder: EncoderDecoder,
   password: PasswordGenerator,
+  json: JsonFormatter,
+  units: UnitConverter,
 };

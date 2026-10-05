@@ -7,8 +7,10 @@ import { EMAIL_HEADERS } from './email-headers.js';
 import { ENCODER } from './encoder.js';
 import { ICS_COMPARE } from './ics-compare.js';
 import { ICS_SPLIT } from './ics-split.js';
+import { JSON_TOOL } from './json.js';
 import { PASSWORD } from './password.js';
 import { SUBNET } from './subnet.js';
+import { UNITS_TOOL } from './units.js';
 
 export const TOOLS_BASE = { fr: '/outils/', en: '/en/tools/' };
 
@@ -20,6 +22,8 @@ export const TOOLS = [
   { id: 'subnet', slug: { fr: 'calculateur-reseau', en: 'subnet-calculator' }, icon: 'calculator', text: SUBNET },
   { id: 'encoder', slug: { fr: 'encodeur-decodeur', en: 'encoder-decoder' }, icon: 'binary', text: ENCODER },
   { id: 'password', slug: { fr: 'generateur-mot-de-passe', en: 'password-generator' }, icon: 'key', text: PASSWORD },
+  { id: 'json', slug: { fr: 'formateur-json', en: 'json-formatter' }, icon: 'braces', text: JSON_TOOL },
+  { id: 'units', slug: { fr: 'convertisseur-unites', en: 'unit-converter' }, icon: 'ruler', text: UNITS_TOOL },
 ];
 
 export const toolPath = (tool, lang) => `${TOOLS_BASE[lang]}${tool.slug[lang]}/`;

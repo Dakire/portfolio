@@ -7,7 +7,7 @@
 
 export const COMMANDS = ['help', 'whoami', 'about', 'skills', 'experience', 'projects', 'education', 'blog', 'contact', 'links', 'cv', 'ls', 'cat', 'goto', 'theme', 'lang', 'clear'];
 export const FILES = ['about.txt', 'stack.txt', 'contact.txt'];
-export const SECTIONS = ['home', 'about', 'skills', 'experience', 'projects', 'blog', 'education', 'contact'];
+export const SECTIONS = ['home', 'about', 'skills', 'experience', 'projects', 'tools', 'blog', 'education', 'contact'];
 
 const fill = (text, params = {}) => text.replace(/\{(\w+)\}/g, (_, k) => String(params[k] ?? ''));
 const t = (text, kind) => ({ t: text, kind });
