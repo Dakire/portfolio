@@ -8,10 +8,17 @@ Production : <https://grichard.eu>
 
 ## Sommaire
 
-[Infrastructure](#infrastructure) · [Bibliothèques](#bibliothèques-et-dépendances) · [Architecture du code](#architecture) · [Outils](#outils-outils-entools) ·
-[Outil DNS](#outil-dns-et-e-mail-outilsdns-entoolsdns) · [Articles hebdomadaires](#articles-hebdomadaires-brouillon-par-ia-publication-après-relecture) ·
-[Terminal et palette](#terminal-interactif-et-palette-de-commandes) · [Design system](#design-system-et-thèmes) · [Développement](#développement) ·
-[Tests et CI](#tests-et-intégration-continue) · [Déploiement](#déploiement-ovh) · [Sécurité](#sécurité)
+[Infrastructure](#infrastructure)
+[Bibliothèques](#bibliothèques-et-dépendances)
+[Architecture du code](#architecture)
+[Outils](#outils-outils-entools)
+[Outil DNS](#outil-dns-et-e-mail-outilsdns-entoolsdns)
+[Articles hebdomadaires](#articles-hebdomadaires-brouillon-par-ia-publication-après-relecture)
+[Terminal et palette](#terminal-interactif-et-palette-de-commandes) · [Design system](#design-system-et-thèmes)
+[Développement](#développement)
+[Tests et CI](#tests-et-intégration-continue)
+[Déploiement](#déploiement-ovh)
+[Sécurité](#sécurité)
 
 ## Infrastructure
 
