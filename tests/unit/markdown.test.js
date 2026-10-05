@@ -68,6 +68,11 @@ describe('enhance', () => {
     expect(html).toContain('role="region" aria-label="Tableau &quot;large&quot;" tabindex="0"><table>');
     expect(html.endsWith('</table></div>')).toBe(true);
   });
+
+  it('rend les blocs de code défilables au clavier', () => {
+    const { html } = enhance('<pre><code class="language-sh">ls</code></pre>', 'Tableau');
+    expect(html).toBe('<pre tabindex="0"><code class="language-sh">ls</code></pre>');
+  });
 });
 
 describe('parsePost', () => {

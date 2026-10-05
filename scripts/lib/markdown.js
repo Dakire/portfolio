@@ -33,7 +33,7 @@ export function parseFrontMatter(raw, name) {
   return { meta, body: m[2] };
 }
 
-// Ajoute des ancres aux h2 (sommaire, liens profonds) et rend les tableaux défilables au clavier.
+// Ajoute des ancres aux h2 (sommaire, liens profonds) et rend les tableaux et blocs de code défilables au clavier.
 export function enhance(html, tableLabel) {
   const toc = [];
   const used = new Set();
@@ -48,7 +48,9 @@ export function enhance(html, tableLabel) {
   });
   const withTables = withIds
     .replace(/<table>/g, `<div class="table-scroll" role="region" aria-label="${esc(tableLabel)}" tabindex="0"><table>`)
-    .replace(/<\/table>/g, '</table></div>');
+    .replace(/<\/table>/g, '</table></div>')
+    // Un bloc de code plus large que la page défile : sans focus, axe (scrollable-region-focusable) le refuse. Selon la police, ce n'est pas le cas partout (Windows ≠ Linux).
+    .replace(/<pre>/g, '<pre tabindex="0">');
   return { html: withTables, toc };
 }
 
