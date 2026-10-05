@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   checkPropagation,
@@ -8,6 +9,7 @@ import {
   queryResolver,
   summarize,
 } from '../../src/lib/dns/propagation.js';
+import { ENDPOINTS } from '../../src/lib/dns/resolver.js';
 import { buildResponse } from '../helpers/dns-wire.js';
 
 const JSON_RESOLVER = PROPAGATION_RESOLVERS.find((r) => r.format === 'json');
@@ -168,5 +170,13 @@ describe('checkPropagation', () => {
   it('chaque résolveur a un identifiant et une adresse https uniques', () => {
     expect(new Set(PROPAGATION_RESOLVERS.map((r) => r.id)).size).toBe(PROPAGATION_RESOLVERS.length);
     for (const r of PROPAGATION_RESOLVERS) expect(r.url.startsWith('https://')).toBe(true);
+  });
+});
+
+describe('politique de sécurité du contenu', () => {
+  it("autorise dans connect-src chaque résolveur interrogé par le navigateur (sinon l'outil échoue en production, pas en test)", () => {
+    const csp = readFileSync('public/.htaccess', 'utf-8').match(/Content-Security-Policy "([^"]+)"/)[1];
+    const connectSrc = csp.split(';').map((d) => d.trim()).find((d) => d.startsWith('connect-src'));
+    for (const { url } of [...PROPAGATION_RESOLVERS, ...ENDPOINTS]) expect(connectSrc, url).toContain(new URL(url).origin);
   });
 });

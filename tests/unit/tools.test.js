@@ -47,6 +47,12 @@ describe('registre des outils', () => {
     }
   });
 
+  it("l'outil de propagation renvoie vers l'adresse réelle du DNS Lookup, dans chaque langue", () => {
+    const dns = TOOLS.find((t) => t.id === 'dns');
+    const propagation = TOOLS.find((t) => t.id === 'propagation');
+    for (const lang of ['fr', 'en']) expect(toolUi(propagation, lang).results.lookupPath).toBe(toolPath(dns, lang));
+  });
+
   it('la page « Outils » a ses textes dans les deux langues', () => {
     expect(keys(HUB.en).sort()).toEqual(keys(HUB.fr).sort());
   });

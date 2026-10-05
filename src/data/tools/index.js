@@ -9,6 +9,7 @@ import { ICS_COMPARE } from './ics-compare.js';
 import { ICS_SPLIT } from './ics-split.js';
 import { JSON_TOOL } from './json.js';
 import { PASSWORD } from './password.js';
+import { PROPAGATION } from './propagation.js';
 import { SUBNET } from './subnet.js';
 import { UNITS_TOOL } from './units.js';
 
@@ -16,6 +17,7 @@ export const TOOLS_BASE = { fr: '/outils/', en: '/en/tools/' };
 
 export const TOOLS = [
   { id: 'dns', slug: { fr: 'dns', en: 'dns' }, icon: 'network', text: DNS_TOOL },
+  { id: 'propagation', slug: { fr: 'propagation-dns', en: 'dns-propagation' }, icon: 'globe', text: PROPAGATION },
   { id: 'ics-split', slug: { fr: 'ics-decouper', en: 'ics-splitter' }, icon: 'scissors', text: ICS_SPLIT },
   { id: 'ics-compare', slug: { fr: 'ics-comparer', en: 'ics-compare' }, icon: 'diff', text: ICS_COMPARE },
   { id: 'email-headers', slug: { fr: 'en-tetes-email', en: 'email-headers' }, icon: 'mail', text: EMAIL_HEADERS },

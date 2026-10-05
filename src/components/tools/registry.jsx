@@ -7,11 +7,13 @@ import IcsCompare from './IcsCompare';
 import IcsSplit from './IcsSplit';
 import JsonFormatter from './JsonFormatter';
 import PasswordGenerator from './PasswordGenerator';
+import PropagationChecker from './PropagationChecker';
 import SubnetCalculator from './SubnetCalculator';
 import UnitConverter from './UnitConverter';
 
 export const TOOL_COMPONENTS = {
   dns: DnsChecker,
+  propagation: PropagationChecker,
   'ics-split': IcsSplit,
   'ics-compare': IcsCompare,
   'email-headers': EmailHeaders,

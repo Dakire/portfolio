@@ -13,6 +13,7 @@ Production : <https://grichard.eu>
 - [Architecture du code](#architecture)
 - [Outils](#outils-outils-entools)
 - [DNS Lookup](#dns-lookup-outilsdns-entoolsdns)
+- [Propagation DNS](#propagation-dns-outilspropagation-dns-entoolsdns-propagation)
 - [Articles hebdomadaires](#articles-hebdomadaires-brouillon-par-ia-publication-après-relecture)
 - [Terminal et palette](#terminal-interactif-et-palette-de-commandes)
 - [Design system](#design-system-et-thèmes)
@@ -55,7 +56,7 @@ flowchart LR
 | **Apache (`public/.htaccess`)** | Cache, compression, en-têtes de sécurité (CSP, HSTS…), redirections canoniques (HTTP → HTTPS, `www` → domaine nu, `index.html` → `/`), vrai 404, fichiers sensibles refusés | Copié tel quel dans `dist/` |
 | **PHP (`public/contact.php`)** | Reçoit le formulaire, vérifie Turnstile, limite le débit, envoie l'e-mail avec `mail()` | Seul code exécuté côté serveur ; aucune dépendance (pas de Composer) |
 | **Cloudflare Turnstile** | Captcha du formulaire | Widget chargé dans le navigateur ; jeton vérifié par `contact.php` auprès de Cloudflare |
-| **Résolveurs DoH** (Cloudflare, Google) | Requêtes DNS de l'outil DNS | Interrogés **directement par le navigateur** du visiteur ; le site ne relaie ni ne stocke rien |
+| **Résolveurs DoH** (Cloudflare et Google pour DNS Lookup ; neuf résolveurs publics pour Propagation DNS) | Requêtes DNS des outils DNS | Interrogés **directement par le navigateur** du visiteur ; le site ne relaie ni ne stocke rien |
 | **Google Analytics** | Mesure d'audience | Chargé **uniquement après consentement** (`public/js/consent.js`) |
 | **GitHub** | Code, historique, pull requests | Dépôt public ; l'historique Git sert aussi de source aux dates de « dernière modification » des pages |
 | **GitHub Actions** | CI et génération des brouillons d'articles | `.github/workflows/ci.yml` et `weekly-article.yml` (voir « Tests et CI » et « Articles hebdomadaires ») |
@@ -137,6 +138,7 @@ Beaucoup de briques sont **écrites à la main** plutôt qu'importées (voir la 
 | Bibliothèque iCalendar (analyse, fuseaux, découpage, comparaison) | `src/lib/ics/` | Les événements sont recopiés à l'identique, jamais re-sérialisés ; fuseaux Windows d'Outlook gérés |
 | Écriture de ZIP | `src/lib/zip.js` | Archive « stockée » sans compression : quelques dizaines de lignes au lieu d'une dépendance |
 | Analyse DNS, SPF, DKIM, DMARC, MX | `src/lib/dns/` | Logique pure et testée, sans DOM ; décompte récursif des requêtes SPF |
+| Décodeur DNS binaire (RFC 1035 / 8484) | `src/lib/dns/wire.js` | Plusieurs résolveurs n'offrent pas de JSON ; validé contre de vraies réponses (`tests/fixtures/dns-wire.json`) |
 | En-têtes d'e-mail, calcul d'adresses (CIDR, VLSM), encodage, JWT, empreintes, mots de passe, unités | `src/lib/mail/`, `net/`, `encode/`, `password.js`, `units.js` | Fonctions pures, hors réseau ; MD5 local, SHA via `SubtleCrypto`, aléa via `crypto.getRandomValues` |
 | Front matter, sitemap, RSS, JSON-LD, index de recherche, images OG | `scripts/lib/` | Front matter volontairement strict (les titres contiennent des « : ») ; chaque artefact est vérifié par un test |
 | Interpréteur du terminal, palette de commandes | `src/lib/terminal/`, `public/js/palette.js` | Interpréteur pur ; palette en `<dialog>` natif sans framework |
@@ -173,7 +175,8 @@ src/
   lib/ics/, lib/zip.js  Bibliothèque iCalendar pure (parse, dates et fuseaux, build, split, compare) et écriture de ZIP
   data/tools/           Registre des outils (index.js), page « Outils » (hub.js) et textes de chaque outil
   lib/json.js, lib/units.js   Analyse et mise en forme de JSON ; conversions de tailles, débits et bases numériques (fonctions pures)
-  lib/dns/              Analyse DNS pure (sans React ni DOM) : résolveur DoH, spf, dkim, dmarc, mx, txt, records, extras, providers, analyze, report
+  lib/dns/              Analyse DNS pure (sans React ni DOM) : résolveur DoH, spf, dkim, dmarc, mx, txt, records, extras, providers, analyze, report ;
+                        wire.js (format DNS binaire, RFC 8484) et propagation.js (comparaison de résolveurs) pour l'outil de propagation
   lib/terminal/         Interpréteur du terminal (commands.js : fonctions pures) et données qu'il consulte (data.js)
   data/dns-tool.js      Textes de l'outil DNS (FR/EN) : interface et un message par code de constat
   data/terminal.js, data/palette.js   Textes du terminal ; textes et mots-clés de la palette
@@ -283,6 +286,7 @@ n'héberge aucun relais et ne stocke rien. La CSP autorise `cloudflare-dns.com` 
 - **DMARC** : chaque balise, politique (`none` = surveillance seulement), `pct`, alignements, adresses `rua`/`ruf`, héritage du domaine d'organisation
   pour un sous-domaine, et **autorisation des rapports envoyés à un autre domaine** (`<domaine>._report._dmarc.<destinataire>`).
 - **MX** : hôtes qui résolvent, pas de CNAME, pas d'IP, adresses non routables, MX nul (RFC 7505), doublons, redondance.
+- **Lecture directe** : peu de texte, proportionné à la gravité (« conforme » : titre seul ; information : titre et détail ; erreur et avertissement : explication et correction) ; le bloc « Doublons » n'apparaît que s'il y en a.
 - **Lecture du rapport** : en tête, une liste « À corriger en priorité » (les erreurs puis les avertissements de toutes les vérifications, chacun avec un lien vers sa section) et une « Vue d'ensemble » (une pastille par vérification, avec sa gravité). Un clic déplie la section, y fait défiler la page et y place le focus. Dans chaque section, les constats sont triés par gravité (erreurs d'abord, « conforme » à la fin).
 - Les statuts : *erreur* (invalide ou inefficace), *avertissement* (risque ou mauvaise pratique), *information*, *conforme*. Un message traduit (titre, détail,
   correction) existe pour chaque code de constat (`src/data/dns-tool.js`) ; `tests/unit/dns-tool.test.js` échoue si un code manque dans une langue.
@@ -290,6 +294,21 @@ n'héberge aucun relais et ne stocke rien. La CSP autorise `cloudflare-dns.com` 
 - Limites : le domaine d'organisation est déduit d'une courte liste de suffixes à deux niveaux (pas de liste des suffixes publics complète) ;
   la politique MTA-STS (`https://mta-sts.<domaine>/.well-known/mta-sts.txt`) n'est pas lisible depuis un navigateur (CORS) ; un sélecteur DKIM au nom
   inhabituel ne peut pas être deviné (l'outil le dit et invite à le saisir).
+
+## Propagation DNS (`/outils/propagation-dns/`, `/en/tools/dns-propagation/`)
+
+Pose la même question DNS à **9 résolveurs publics indépendants** (Cloudflare, Google, Quad9, DNS.SB, DNSForge, CZ.NIC, Control D, IIJ, AliDNS), compare leurs réponses
+et, si l'on saisit une **valeur attendue**, indique combien la voient déjà. Types : A, AAAA, CNAME, MX, NS, TXT, SOA, CAA ; domaine ou sous-domaine (`_dmarc`, sélecteur DKIM…).
+
+- **Du navigateur aux résolveurs** : DNS-over-HTTPS, en JSON (Cloudflare, Google, DNS.SB, AliDNS) ou en **format binaire RFC 8484** (les autres, via `src/lib/dns/wire.js`). Le site ne relaie rien et ne stocke rien.
+- **Verdicts** (`summarize` dans `src/lib/dns/propagation.js`) : « propagé », « en cours » (X sur N), « pas encore », « même réponse partout », « réponses différentes » (la minorité est repérée) ou « aucun résolveur n'a répondu ».
+  Un résolveur en panne est signalé et **n'entre pas dans le verdict**. Les résultats arrivent au fil de l'eau ; une relance automatique toutes les 30 s s'arrête quand tout le monde a la valeur attendue.
+  Vérification partageable par lien (`?d=nom&t=type&e=valeur`).
+- **Limite assumée** : un navigateur ne peut interroger ni un serveur par pays ni le cache d'un résolveur précis. Chaque résolveur est un service « anycast » qui répond depuis son point de présence le plus proche du visiteur :
+  l'outil compare des **opérateurs** (donc des caches), pas des pays. Ce n'est pas une carte du monde comme dnschecker.org ou whatsmydns.net, et la page le dit.
+- **Choix des résolveurs** (`PROPAGATION_RESOLVERS`) : seuls figurent des services dont l'en-tête CORS autorise la lecture depuis une page web (vérifié ; AdGuard, NextDNS, OpenDNS, Mullvad… ne l'autorisent pas).
+  **Pour en ajouter un**, il faut aussi l'ajouter à `connect-src` de `public/.htaccess` : `tests/unit/propagation.test.js` échoue sinon (en production, la CSP bloquerait la requête sans que les tests de bout en bout, qui n'appliquent pas `.htaccess`, le voient).
+- Tests : `tests/unit/wire.test.js` (vraies réponses binaires comparées à l'API JSON du même résolveur), `tests/unit/propagation.test.js` (verdicts, pannes, valeur attendue, CSP), `tests/e2e/propagation.spec.js` (faux résolveurs JSON et binaires, relance automatique avec horloge simulée, axe, mobile).
 
 ## Articles hebdomadaires (brouillon par IA, publication après relecture)
 

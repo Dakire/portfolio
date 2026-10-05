@@ -25,6 +25,8 @@ const PAGES = [
   { name: 'unit converter EN', path: '/en/tools/unit-converter/', lang: 'en' },
   { name: 'outil DNS FR', path: '/outils/dns/', lang: 'fr' },
   { name: 'outil DNS EN', path: '/en/tools/dns/', lang: 'en' },
+  { name: 'propagation DNS FR', path: '/outils/propagation-dns/', lang: 'fr' },
+  { name: 'DNS propagation EN', path: '/en/tools/dns-propagation/', lang: 'en' },
   { name: 'blog FR', path: '/blog/', lang: 'fr' },
   { name: 'blog EN', path: '/en/blog/', lang: 'en' },
   { name: 'article FR', path: '/blog/spf-dkim-dmarc-expliques/', lang: 'fr' },
@@ -426,13 +428,17 @@ test.describe('contenu produit (dist/)', () => {
     expect(existsSync('dist/.vite')).toBe(false);
   });
 
-  test("le code de l'outil DNS est dans son propre fichier, absent du bundle d'entrée", () => {
+  test("le code des outils DNS est dans des fichiers à part, absent du bundle d'entrée", () => {
     const files = readdirSync('dist/assets').filter((f) => f.endsWith('.js'));
-    const dns = files.find((f) => /^dns-.*.js$/.test(f));
-    expect(dns, 'chunk dns-*.js').toBeTruthy();
+    const read = (name) => readFileSync('dist/assets/' + name, 'utf-8');
     const entry = files.find((f) => /^index-.*.js$/.test(f));
-    expect(readFileSync('dist/assets/' + entry, 'utf-8')).not.toContain('cloudflare-dns.com');
-    expect(readFileSync('dist/assets/' + dns, 'utf-8')).toContain('cloudflare-dns.com');
+    expect(files.some((f) => /^dns-.*.js$/.test(f)), 'chunk dns-*.js').toBe(true);
+    expect(files.some((f) => /^propagation-.*.js$/.test(f)), 'chunk propagation-*.js').toBe(true);
+    // le résolveur DoH de DNS Lookup (partagé avec la propagation) et la liste des résolveurs de la propagation ne sont chargés que sur leurs pages
+    expect(read(entry)).not.toContain('cloudflare-dns.com');
+    expect(read(entry)).not.toContain('doh.dns.sb');
+    expect(files.some((f) => read(f).includes('cloudflare-dns.com')), 'résolveur Cloudflare dans un chunk').toBe(true);
+    expect(files.some((f) => /^propagation-.*.js$/.test(f) && read(f).includes('doh.dns.sb')), 'résolveurs de la propagation').toBe(true);
   });
 
   test('theme.js est chargé dans le <head> sans defer ; nav.js et fx.js en fin de page', async ({ request }) => {
