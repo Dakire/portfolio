@@ -12,7 +12,7 @@ Production : <https://grichard.eu>
 - [Bibliothèques](#bibliothèques-et-dépendances)
 - [Architecture du code](#architecture)
 - [Outils](#outils-outils-entools)
-- [Outil DNS](#outil-dns-et-e-mail-outilsdns-entoolsdns)
+- [DNS Lookup](#dns-lookup-outilsdns-entoolsdns)
 - [Articles hebdomadaires](#articles-hebdomadaires-brouillon-par-ia-publication-après-relecture)
 - [Terminal et palette](#terminal-interactif-et-palette-de-commandes)
 - [Design system](#design-system-et-thèmes)
@@ -266,9 +266,9 @@ Six outils, **sans aucun appel réseau**, dont la logique est dans des fonctions
 - **Générateur de mots de passe** (`/outils/generateur-mot-de-passe/`, `src/lib/password.js`) : `crypto.getRandomValues` avec **rejet** pour éviter le biais du modulo ; modes aléatoire,
   prononçable et PIN ; entropie réelle affichée (pas une jauge décorative). Les valeurs ne sont générées qu'**après l'hydratation** : le HTML pré-rendu ne contient jamais de mot de passe.
 
-## Outil DNS et e-mail (`/outils/dns/`, `/en/tools/dns/`)
+## DNS Lookup (`/outils/dns/`, `/en/tools/dns/`)
 
-Vérificateur de domaine : **A, AAAA, MX, SPF, DKIM, DMARC, TXT, NS, SOA, CAA, DNSSEC, MTA-STS, TLS-RPT, BIMI**, avec une section « Doublons ».
+Analyse de domaine (nom affiché : « DNS Lookup ») : **A, AAAA, MX, SPF, DKIM, DMARC, TXT, NS, SOA, CAA, DNSSEC, MTA-STS, TLS-RPT, BIMI**, avec une section « Doublons ».
 Les requêtes partent du **navigateur du visiteur** vers Cloudflare puis Google (DNS-over-HTTPS, format JSON, `do=1` pour DNSSEC) : le site
 n'héberge aucun relais et ne stocke rien. La CSP autorise `cloudflare-dns.com` et `dns.google` dans `connect-src`.
 
@@ -283,6 +283,7 @@ n'héberge aucun relais et ne stocke rien. La CSP autorise `cloudflare-dns.com` 
 - **DMARC** : chaque balise, politique (`none` = surveillance seulement), `pct`, alignements, adresses `rua`/`ruf`, héritage du domaine d'organisation
   pour un sous-domaine, et **autorisation des rapports envoyés à un autre domaine** (`<domaine>._report._dmarc.<destinataire>`).
 - **MX** : hôtes qui résolvent, pas de CNAME, pas d'IP, adresses non routables, MX nul (RFC 7505), doublons, redondance.
+- **Lecture du rapport** : en tête, une liste « À corriger en priorité » (les erreurs puis les avertissements de toutes les vérifications, chacun avec un lien vers sa section) et une « Vue d'ensemble » (une pastille par vérification, avec sa gravité). Un clic déplie la section, y fait défiler la page et y place le focus. Dans chaque section, les constats sont triés par gravité (erreurs d'abord, « conforme » à la fin).
 - Les statuts : *erreur* (invalide ou inefficace), *avertissement* (risque ou mauvaise pratique), *information*, *conforme*. Un message traduit (titre, détail,
   correction) existe pour chaque code de constat (`src/data/dns-tool.js`) ; `tests/unit/dns-tool.test.js` échoue si un code manque dans une langue.
 - Une analyse est partageable par lien (`?d=exemple.fr&s=selecteur`) ; le rapport se copie en Markdown.

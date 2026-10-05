@@ -18,7 +18,7 @@ test.beforeEach(async ({ page }) => {
 test.describe('page de l\'outil DNS', () => {
   test('affiche le titre, l\'explication et le formulaire sans exécuter d\'analyse', async ({ page }) => {
     await page.goto('/outils/dns/');
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Vérificateur DNS et e-mail');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('DNS Lookup');
     await expect(page.getByRole('heading', { name: "Ce que l'outil vérifie" })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Analyser' })).toBeVisible();
     await expect(page.locator('details.check')).toHaveCount(0);
@@ -26,13 +26,13 @@ test.describe('page de l\'outil DNS', () => {
 
   test('a ses métadonnées, son JSON-LD et sa version anglaise liée', async ({ page }) => {
     await page.goto('/outils/dns/');
-    await expect(page).toHaveTitle(/Vérificateur DNS et e-mail/);
+    await expect(page).toHaveTitle(/DNS Lookup/);
     await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute('href', 'https://grichard.eu/en/tools/dns/');
     const ld = JSON.parse(await page.locator('script[type="application/ld+json"]').textContent());
     expect(ld['@graph'].map((n) => n['@type'])).toEqual(['WebApplication', 'BreadcrumbList', 'FAQPage']);
     await page.getByRole('banner').getByRole('link', { name: 'Read this site in English' }).click();
     await expect(page).toHaveURL(/\/en\/tools\/dns\/$/);
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('DNS and email checker');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('DNS Lookup');
   });
 
   test('est référencée dans le menu et le plan du site', async ({ page, request }) => {
@@ -71,6 +71,35 @@ test.describe('analyse', () => {
     await expect(page.getByText('Aucun doublon détecté')).toBeVisible();
     for (const id of ['mx', 'spf', 'dkim', 'dmarc', 'addresses', 'dnssec']) await expect(page.locator(`#check-${id}`)).toBeVisible();
     expect(page.url()).toContain('?d=example.fr');
+  });
+
+  test('liste d\'abord ce qu\'il faut corriger, et la vue d\'ensemble déplie la vérification choisie', async ({ page }) => {
+    const zone = mailZone();
+    zone['example.fr'].TXT = ['v=spf1 -all', 'v=spf1 mx -all'];
+    await stubDoh(page, zone);
+    await page.goto('/outils/dns/');
+    await analyse(page, 'example.fr');
+    await page.getByRole('heading', { name: 'Résultats pour example.fr' }).waitFor();
+
+    const fixFirst = page.getByRole('heading', { name: 'À corriger en priorité' }).locator('xpath=..');
+    await expect(fixFirst.locator('li').filter({ hasText: /SPF/ }).first()).toBeVisible();
+
+    await page.getByRole('button', { name: 'Tout replier' }).click();
+    const spf = sectionOf(page, 'spf');
+    await expect(spf).not.toHaveAttribute('open', '');
+    await page.getByRole('navigation', { name: 'Vue d\'ensemble' }).getByRole('button', { name: /SPF/ }).click();
+    await expect(spf).toHaveAttribute('open', '');
+    await expect(spf.locator(':scope > summary')).toBeFocused();
+  });
+
+  test('sans erreur ni avertissement, le rapport le dit', async ({ page }) => {
+    await stubDoh(page, mailZone());
+    await page.goto('/outils/dns/');
+    await analyse(page, 'example.fr');
+    await page.getByRole('heading', { name: 'Résultats pour example.fr' }).waitFor();
+    const fixFirst = page.getByRole('heading', { name: 'À corriger en priorité' }).locator('xpath=..');
+    const nbToFix = await fixFirst.locator('li').count();
+    if (nbToFix === 0) await expect(fixFirst).toContainText('Rien à corriger');
   });
 
   test('devine le sélecteur DKIM d\'après le fournisseur (Google : google)', async ({ page }) => {

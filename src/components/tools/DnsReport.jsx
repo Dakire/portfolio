@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronRight, CircleAlert, Copy } from 'lucide-react';
+import { ChevronRight, CircleAlert, CircleCheck, Copy } from 'lucide-react';
 import { describeFinding, DNS_TOOL } from '../../data/dns-tool';
 import { cx } from '../../lib/cx';
 import Button from '../ui/Button';
@@ -8,6 +8,9 @@ import CopyButton from '../ui/CopyButton';
 import ScrollRegion from '../ui/ScrollRegion';
 import Finding from './Finding';
 import { SEVERITY } from './severity';
+
+const ORDER = ['error', 'warn', 'info', 'ok'];
+const bySeverity = (a, b) => ORDER.indexOf(a.severity) - ORDER.indexOf(b.severity); // tri stable : l'ordre d'origine est gardé à gravité égale
 
 function RecordTable({ records, ui, caption }) {
   const c = ui.results.recordCols;
@@ -148,7 +151,8 @@ function Extra({ check, ui }) {
 function CheckSection({ check, lang, ui, open, onToggle }) {
   const describe = (f) => describeFinding(lang, f);
   const { icon: Icon, color } = SEVERITY[check.status];
-  const headline = [...check.findings].sort((a, b) => ['error', 'warn', 'info', 'ok'].indexOf(a.severity) - ['error', 'warn', 'info', 'ok'].indexOf(b.severity))[0];
+  const findings = [...check.findings].sort(bySeverity); // les erreurs d'abord, les « conforme » à la fin
+  const headline = findings[0];
   const records = check.records ?? [];
 
   return (
@@ -168,7 +172,7 @@ function CheckSection({ check, lang, ui, open, onToggle }) {
         <div className="space-y-5 border-t border-line px-4 py-4 sm:px-5">
           {ui.checks[check.id].intro && <p className="text-copy text-muted">{ui.checks[check.id].intro}</p>}
           <ul className="space-y-3">
-            {check.findings.map((f, i) => (
+            {findings.map((f, i) => (
               <Finding key={`${f.code}-${i}`} finding={f} describe={describe} statusLabels={ui.results.status} fixLabel={ui.results.fix} />
             ))}
           </ul>
@@ -191,6 +195,15 @@ export default function DnsReport({ report, lang, onCopyReport, onCopyLink, head
   const r = ui.results;
   const [openMap, setOpenMap] = useState(() => Object.fromEntries(report.checks.map((c) => [c.id, c.status === 'error' || c.status === 'warn'])));
   const setAll = (value) => setOpenMap(Object.fromEntries(report.checks.map((c) => [c.id, value])));
+  const toFix = report.findings.filter((f) => f.severity === 'error' || f.severity === 'warn').sort(bySeverity);
+
+  // Déplie la vérification, y fait défiler la page et y place le focus (le résumé est toujours visible, même replié)
+  const goTo = (id) => {
+    setOpenMap((m) => ({ ...m, [id]: true }));
+    const title = document.getElementById(`check-${id}`);
+    title?.scrollIntoView({ block: 'start' });
+    title?.closest('summary')?.focus({ preventScroll: true });
+  };
 
   if (!report.exists) {
     return (
@@ -225,6 +238,55 @@ export default function DnsReport({ report, lang, onCopyReport, onCopyLink, head
             );
           })}
         </ul>
+
+        <div>
+          <h3 className="mb-2 font-semibold text-ink">{r.fixFirst}</h3>
+          {toFix.length === 0 ? (
+            <p className="flex items-center gap-2 text-copy text-body">
+              <CircleCheck className="h-5 w-5 shrink-0 text-link" aria-hidden="true" /> {r.fixFirstNone}
+            </p>
+          ) : (
+            <ul className="space-y-1.5">
+              {toFix.map((f, i) => {
+                const { icon: Icon, color } = SEVERITY[f.severity];
+                return (
+                  <li key={`${f.code}-${i}`} className="flex flex-wrap items-center gap-x-3 gap-y-0.5">
+                    <span className="flex min-w-0 items-start gap-2 text-copy text-ink">
+                      <Icon className={cx('mt-0.5 h-5 w-5 shrink-0', color)} aria-hidden="true" />
+                      <span><span className="sr-only">{r.status[f.severity]} : </span>{describe(f).title}</span>
+                    </span>
+                    <button type="button" className="tap link text-meta" onClick={() => goTo(f.check)}>
+                      {ui.checks[f.check]?.title ?? f.check}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+
+        <nav aria-label={r.overview}>
+          <h3 className="mb-1 font-semibold text-ink">{r.overview}</h3>
+          <p className="mb-2 text-meta text-muted">{r.overviewHint}</p>
+          <ul className="flex flex-wrap gap-2">
+            {report.checks.map((check) => {
+              const { icon: Icon, color } = SEVERITY[check.status];
+              return (
+                <li key={check.id}>
+                  <button
+                    type="button"
+                    onClick={() => goTo(check.id)}
+                    className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line-strong bg-surface px-3.5 text-copy text-ink transition-colors hover:border-brand"
+                  >
+                    <Icon className={cx('h-4 w-4 shrink-0', color)} aria-hidden="true" />
+                    <span className="sr-only">{r.status[check.status]} : </span>
+                    {ui.checks[check.id].title}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
 
         <p className="text-copy text-body">
           <strong className="text-ink">{r.providers} :</strong> {report.providers.length ? report.providers.join(', ') : r.noProvider}

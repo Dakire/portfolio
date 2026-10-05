@@ -235,7 +235,7 @@ test.describe('page « Outils »', () => {
   test('liste tous les outils avec un lien chacun, dans les deux langues', async ({ page }) => {
     await page.goto('/outils/');
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Outils pour techniciens IT');
-    for (const [name, href] of [['Outil DNS et e-mail', '/outils/dns/'], ['Découpeur de fichier ICS', '/outils/ics-decouper/'], ['Comparateur de fichiers ICS', '/outils/ics-comparer/']]) {
+    for (const [name, href] of [['DNS Lookup', '/outils/dns/'], ['Découpeur de fichier ICS', '/outils/ics-decouper/'], ['Comparateur de fichiers ICS', '/outils/ics-comparer/']]) {
       await expect(page.getByRole('link', { name: new RegExp(name) })).toHaveAttribute('href', href);
     }
     await page.getByRole('banner').getByRole('link', { name: 'Read this site in English' }).click();

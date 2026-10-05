@@ -80,11 +80,11 @@ test.describe('palette de commandes', () => {
   test('retrouve une page par son nom, ses mots-clés ou sans accent, et y mène', async ({ page }) => {
     await page.goto('/');
     await open(page);
-    await search(page).fill('outil dns');
-    await expect(options(page).first()).toContainText('Outil DNS et e-mail');
+    await search(page).fill('dns lookup');
+    await expect(options(page).first()).toContainText('DNS Lookup');
     await search(page).fill('verification');
-    await expect(palette(page).getByRole('option', { name: /Outil DNS et e-mail/ })).toBeVisible(); // trouvé par ses mots-clés
-    await search(page).fill('outil dns');
+    await expect(palette(page).getByRole('option', { name: /DNS Lookup/ })).toBeVisible(); // trouvé par ses mots-clés
+    await search(page).fill('dns lookup');
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/\/outils\/dns\/$/);
     await page.waitForLoadState('load'); // l'URL change avant que palette.js soit chargé sur la nouvelle page : Ctrl+K serait perdu

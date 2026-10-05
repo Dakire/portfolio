@@ -17,16 +17,16 @@ export function describeFinding(lang, finding) {
 const fr = {
   ui: {
     meta: {
-      title: 'Vérificateur DNS et e-mail : A, MX, SPF, DKIM, DMARC | Guillaume Richard',
+      title: 'DNS Lookup : A, MX, SPF, DKIM, DMARC, DNSSEC | Guillaume Richard',
       description: "Analysez le DNS d'un domaine : A, AAAA, MX, SPF (avec décompte des requêtes), DKIM (sélecteurs devinés selon le fournisseur), DMARC, doublons, DNSSEC, CAA, MTA-STS et BIMI. Gratuit, sans inscription.",
       appDescription: "Outil gratuit d'analyse DNS et de délivrabilité e-mail : valide la syntaxe de SPF, DKIM et DMARC, détecte les doublons et devine les sélecteurs DKIM.",
     },
-    h1: 'Vérificateur DNS et e-mail',
+    h1: 'DNS Lookup',
     intro: "Entrez un domaine : l'outil interroge son DNS et vérifie la messagerie en détail. Au-delà d'un simple dig, il valide la syntaxe de SPF, DKIM et DMARC, compte les requêtes DNS du SPF, repère les doublons et devine les sélecteurs DKIM d'après votre fournisseur (Google, Microsoft 365, OVH…).",
     breadcrumb: { home: 'Accueil', tools: 'Outils' },
-    name: 'Outil DNS et e-mail',
+    name: 'DNS Lookup',
     card: 'Vérifie A, MX, SPF, DKIM, DMARC, doublons, DNSSEC et plus ; devine les sélecteurs DKIM selon votre fournisseur.',
-    keywords: 'dns spf dkim dmarc mx dig delivrabilite domaine verification email',
+    keywords: 'dns lookup spf dkim dmarc mx dig nslookup delivrabilite domaine verification email',
     form: {
       domain: 'Domaine à analyser',
       domainHint: 'Un nom de domaine, une URL ou une adresse e-mail (ex. exemple.fr).',
@@ -76,6 +76,10 @@ const fr = {
       noProvider: 'Aucun fournisseur reconnu',
       counts: { error: 'Erreur', warn: 'Avertissement', info: 'Information', ok: 'Conforme' },
       countsPlural: { error: 'Erreurs', warn: 'Avertissements', info: 'Informations', ok: 'Conformes' },
+      fixFirst: 'À corriger en priorité',
+      fixFirstNone: 'Rien à corriger : aucune erreur ni avertissement.',
+      overview: "Vue d'ensemble",
+      overviewHint: 'Cliquez sur une vérification pour la déplier.',
       duplicates: 'Doublons',
       duplicatesNone: 'Aucun doublon détecté (SPF, DKIM, DMARC, MX, TXT, adresses, serveurs de noms).',
       duplicatesFound: 'Doublons détectés',
@@ -298,14 +302,14 @@ const fr = {
 const en = {
   ui: {
     meta: {
-      title: 'DNS and email checker: A, MX, SPF, DKIM, DMARC | Guillaume Richard',
+      title: 'DNS Lookup: A, MX, SPF, DKIM, DMARC, DNSSEC | Guillaume Richard',
       description: 'Analyse a domain\'s DNS: A, AAAA, MX, SPF (with lookup count), DKIM (selectors guessed from your provider), DMARC, duplicates, DNSSEC, CAA, MTA-STS and BIMI. Free, no sign-up.',
       appDescription: 'Free DNS and email deliverability tool: validates SPF, DKIM and DMARC syntax, detects duplicates and guesses DKIM selectors.',
     },
-    h1: 'DNS and email checker',
+    h1: 'DNS Lookup',
     intro: 'Enter a domain: the tool queries its DNS and checks email setup in depth. Beyond a plain dig, it validates SPF, DKIM and DMARC syntax, counts SPF DNS lookups, spots duplicates and guesses DKIM selectors from your provider (Google, Microsoft 365, OVH…).',
     breadcrumb: { home: 'Home', tools: 'Tools' },
-    name: 'DNS and email tool',
+    name: 'DNS Lookup',
     card: 'Check A, MX, SPF, DKIM, DMARC, duplicates, DNSSEC and more; guesses DKIM selectors from your provider.',
     keywords: 'dns spf dkim dmarc mx dig deliverability domain email checker lookup',
     form: {
@@ -357,6 +361,10 @@ const en = {
       noProvider: 'No known provider',
       counts: { error: 'Error', warn: 'Warning', info: 'Information', ok: 'Compliant' },
       countsPlural: { error: 'Errors', warn: 'Warnings', info: 'Information', ok: 'Compliant' },
+      fixFirst: 'Fix first',
+      fixFirstNone: 'Nothing to fix: no errors or warnings.',
+      overview: 'Overview',
+      overviewHint: 'Select a check to expand it.',
       duplicates: 'Duplicates',
       duplicatesNone: 'No duplicates found (SPF, DKIM, DMARC, MX, TXT, addresses, name servers).',
       duplicatesFound: 'Duplicates found',
