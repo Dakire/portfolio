@@ -17,7 +17,7 @@ export default defineConfig({
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: `npm run build && npx vite preview --strictPort --port ${PORT}`,
+    command: `pnpm run build && pnpm exec vite preview --strictPort --port ${PORT}`,
     url: `http://localhost:${PORT}/`,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

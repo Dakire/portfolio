@@ -1,0 +1,24 @@
+{
+  "name": "grichard-eu",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Monorepo de grichard.eu : site public statique, API PHP, espace client de test.",
+  "packageManager": "pnpm@10.34.6",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "legacy:build": "pnpm --filter legacy run build",
+    "legacy:check": "pnpm --filter legacy run lint && pnpm --filter legacy run test && pnpm --filter legacy run test:e2e",
+    "test:contract": "vitest run --config vitest.contract.config.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "audit:prod": "pnpm audit --prod --audit-level high",
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "lefthook": "^1.13.0",
+    "prettier": "^3.6.2",
+    "vitest": "^4.1.11"
+  }
+}

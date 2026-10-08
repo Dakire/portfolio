@@ -1,0 +1,10 @@
+# Workspaces JS. Les applications PHP (apps/api, apps/portal) ont leur propre composer.json.
+packages:
+  - legacy
+  - apps/*
+  - packages/*
+
+# Les scripts d'installation des dépendances ne s'exécutent que pour les paquets listés ici (sécurité de la chaîne d'approvisionnement).
+onlyBuiltDependencies:
+  - esbuild
+  - lefthook

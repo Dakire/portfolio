@@ -1,6 +1,6 @@
 // Contrat public du site : chaque URL listée dans contract.json doit exister, avec le bon type de contenu.
-// Sans CONTRACT_BASE_URL, vérifie dist/ (existence, JSON valide). Avec, vérifie un site en ligne (statut, Content-Type, JSON valide) :
-//   CONTRACT_BASE_URL=https://grichard.eu npm run test:contract
+// Sans CONTRACT_BASE_URL, vérifie le dossier CONTRACT_DIST (legacy/dist par défaut) : existence, JSON valide. Avec, vérifie un site en ligne (statut, Content-Type, JSON valide) :
+//   CONTRACT_BASE_URL=https://grichard.eu pnpm test:contract
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
@@ -8,7 +8,7 @@ const contract = JSON.parse(readFileSync(new URL('./contract.json', import.meta.
 const base = process.env.CONTRACT_BASE_URL?.replace(/\/$/, '');
 
 function distFile(path) {
-  const file = 'dist' + decodeURIComponent(path);
+  const file = (process.env.CONTRACT_DIST ?? 'legacy/dist') + decodeURIComponent(path);
   return path.endsWith('/') ? file + 'index.html' : file;
 }
 
@@ -16,7 +16,8 @@ describe(base ? `contrat public en ligne (${base})` : 'contrat public (dist/)', 
   it.each(contract.entries)('$path', async ({ path, type, kind }) => {
     if (!base) {
       expect(existsSync(distFile(path)), distFile(path)).toBe(true);
-      if (kind === 'json') expect(() => JSON.parse(readFileSync(distFile(path), 'utf-8'))).not.toThrow();
+      if (kind === 'json')
+        expect(() => JSON.parse(readFileSync(distFile(path), 'utf-8'))).not.toThrow();
       return;
     }
     const res = await fetch(base + path, { redirect: 'manual' });

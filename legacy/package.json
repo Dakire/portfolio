@@ -1,5 +1,5 @@
 {
-  "name": "mon-portfolio",
+  "name": "legacy",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,8 +11,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "check": "npm run lint && npm test && npm run test:e2e",
-    "test:contract": "vitest run --config vitest.contract.config.js",
+    "check": "pnpm run lint && pnpm run test && pnpm run test:e2e",
     "test:live": "vitest run --config vitest.live.config.js"
   },
   "dependencies": {
