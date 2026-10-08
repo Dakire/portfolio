@@ -1,0 +1,116 @@
+---
+// Pages « À propos », « Compétences », « Projets » et « Contact » : un même gabarit, le contenu change selon `page`.
+import Button from '@grichard/ui/components/Button.astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SkillCards from '../components/SkillCards.astro';
+import ProjectCards from '../components/ProjectCards.astro';
+import ExperienceList from '../components/ExperienceList.astro';
+import { PORTFOLIO_DATA, PROFILE } from '../data/content';
+import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+  page: 'about' | 'skills' | 'projects' | 'contact';
+}
+const { lang, page } = Astro.props;
+const t = PORTFOLIO_DATA[lang];
+const routes = ROUTES[lang];
+
+const heads = {
+  about: {
+    path: '~/about',
+    title: t.aboutTitle,
+    description: t.about.slice(0, 160).replace(/\s+\S*$/, '…'),
+  },
+  skills: {
+    path: '~/skills',
+    title: t.skillsTitle,
+    description: t.skills.map((s) => s.category).join(', ') + '.',
+  },
+  projects: {
+    path: '~/projects',
+    title: t.projectsTitle,
+    description: t.projects.map((p) => p.title).join(', ') + '.',
+  },
+  contact: {
+    path: '~/contact',
+    title: t.contactTitle,
+    description:
+      lang === 'fr'
+        ? 'Contacter Guillaume Richard : e-mail et formulaire.'
+        : 'Contact Guillaume Richard: email and form.',
+  },
+} as const;
+const head = heads[page];
+const pageTitle = `${head.title} | ${PROFILE.name}`;
+const labels =
+  lang === 'fr'
+    ? { cv: 'Télécharger mon CV (PDF)', spoken: 'Langues' }
+    : { cv: 'Download my resume (PDF)', spoken: 'Languages' };
+---
+
+<Base
+  lang={lang}
+  title={pageTitle}
+  description={head.description}
+  path={routes[page]}
+  alternates={routeAlternates(page)}
+>
+  <PageHero path={head.path} title={head.title} />
+  <div class="container stack-lg section">
+    {page === 'about' && (
+      <>
+        <section class="stack" aria-labelledby="bio">
+          <h2 id="bio" class="visually-hidden">
+            {t.aboutTitle}
+          </h2>
+          <p class="prose lead">{t.about}</p>
+          <p>
+            <Button href={t.hero.cvLink}>{labels.cv}</Button>
+          </p>
+        </section>
+        <section class="stack" aria-labelledby="exp">
+          <h2 id="exp">{t.experienceTitle}</h2>
+          <ExperienceList items={t.experiences} />
+        </section>
+        <section class="stack" aria-labelledby="edu">
+          <h2 id="edu">{t.educationTitle}</h2>
+          <ul class="prose">
+            {t.education.map((line) => (
+              <li>{line}</li>
+            ))}
+          </ul>
+          <p class="prose">
+            <strong>{labels.spoken} :</strong> {t.languagesInfo}
+          </p>
+        </section>
+      </>
+    )}
+    {page === 'skills' && (
+      <section class="stack" aria-labelledby="skills-list">
+        <h2 id="skills-list" class="visually-hidden">
+          {t.skillsTitle}
+        </h2>
+        <SkillCards skills={t.skills} />
+      </section>
+    )}
+    {page === 'projects' && (
+      <section class="stack" aria-labelledby="projects-list">
+        <h2 id="projects-list" class="visually-hidden">
+          {t.projectsTitle}
+        </h2>
+        <ProjectCards items={t.projects} lang={lang} />
+      </section>
+    )}
+    {page === 'contact' && (
+      <section class="stack" aria-labelledby="contact-direct">
+        <h2 id="contact-direct">E-mail</h2>
+        <p class="prose">
+          <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a> · {PROFILE.location}
+        </p>
+        <div id="contact-form" data-lang={lang}></div>
+      </section>
+    )}
+  </div>
+</Base>

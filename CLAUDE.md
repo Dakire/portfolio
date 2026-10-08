@@ -39,7 +39,7 @@ Les commandes des futures apps (`apps/web`, `apps/api`, `apps/portal`) seront aj
 - **Commits** : Conventional Commits (`type(portée): sujet`, en français), vérifiés par le hook `commit-msg`. Atomiques : un commit, un changement cohérent.
 - **Branches** : une branche et une PR par phase vers `refonte/monorepo`. `main` ne reçoit la refonte qu'à la bascule finale validée par Guillaume.
 - **TypeScript strict** côté JS. **PHP** : `declare(strict_types=1)`, PER-CS, PHPStan niveau max, PHPUnit.
-- Prettier pour tout sauf `legacy/`. Pas de couleur écrite en dur : utiliser les tokens de `packages/ui/src/tokens.css`. Jamais de `style=""`, de `<style>` ni de script en ligne (CSP) ; les scripts sont des fichiers externes.
+- Prettier pour tout sauf `legacy/`. Pas de couleur écrite en dur : utiliser les tokens de `packages/ui/src/tokens.css`. Jamais de `<style>` ni de script en ligne (CSP) ; les scripts sont des fichiers externes. Pas d'attribut `style=""` écrit à la main (seule la coloration syntaxique Shiki en génère : voir ADR 0005).
 - Une dépendance ajoutée doit être justifiée (poids, maintenance, sécurité, compatibilité OVH).
 
 ## Sécurité (toujours)

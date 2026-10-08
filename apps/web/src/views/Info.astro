@@ -1,0 +1,73 @@
+---
+// Mentions légales, confidentialité, accessibilité : pages de texte à sections numérotées par ancre.
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { PORTFOLIO_DATA } from '../data/content';
+import { ACCESSIBILITY, PRIVACY } from '../data/pages';
+import { ROUTES, UI, routeAlternates, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+  page: 'legal' | 'privacy' | 'accessibility';
+}
+const { lang, page } = Astro.props;
+const legal = PORTFOLIO_DATA[lang].legal;
+
+const content =
+  page === 'legal'
+    ? {
+        title: legal.title,
+        description:
+          lang === 'fr'
+            ? 'Mentions légales : éditeur, hébergement, propriété intellectuelle, données personnelles et cookies.'
+            : 'Legal notice: publisher, hosting, intellectual property, personal data and cookies.',
+        intro: undefined,
+        updated: undefined,
+        updatedLabel: undefined,
+        sections: legal.sections.map((s, i) => ({
+          id: `s${i + 1}`,
+          h: s.h,
+          p: [s.p],
+          items: undefined as string[] | undefined,
+        })),
+      }
+    : (page === 'privacy' ? PRIVACY : ACCESSIBILITY)[lang];
+---
+
+<Base
+  lang={lang}
+  title={`${content.title} | Guillaume Richard`}
+  description={content.description}
+  path={ROUTES[lang][page]}
+  alternates={routeAlternates(page)}
+>
+  <PageHero
+    path={`~/${page === 'legal' ? 'legal' : page}`}
+    title={content.title}
+    lead={content.intro}
+  />
+  <div class="container section">
+    <div class="legal-sections prose">
+      {content.sections.map((section) => (
+        <section id={section.id} aria-labelledby={`${section.id}-h`} class="stack">
+          <h2 id={`${section.id}-h`}>{section.h}</h2>
+          {section.p.map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+          {section.items && (
+            <ul>
+              {section.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))}
+    </div>
+    {content.updated && (
+      <p class="meta">
+        {content.updatedLabel} : {content.updated}
+      </p>
+    )}
+  </div>
+</Base>

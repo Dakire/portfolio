@@ -17,7 +17,7 @@ Monorepo de grichard.eu. Production sur OVH mutualisé : **fichiers statiques + 
 ## Règles
 
 - Commits Conventional Commits en français, atomiques ; une PR par phase vers `refonte/monorepo` ; pas de push sur `main` pendant la refonte.
-- Pas de couleur en dur (tokens `packages/ui`), pas de `style=""`, de `<style>` ni de script en ligne (CSP).
+- Pas de couleur en dur (tokens `packages/ui`), pas de `<style>` ni de script en ligne (CSP) ; pas d'attribut `style=""` écrit à la main.
 - TypeScript strict ; PHP `strict_types`, PER-CS, PHPStan max, PHPUnit.
 - Aucun secret dans le dépôt public ; CSP sans `unsafe-inline` pour les scripts ; SQL préparé ; Argon2id ; CSRF ; cookies `HttpOnly`/`Secure`/`SameSite`.
 - WCAG 2.2 AA : sémantique, focus visible, contrastes dans les deux thèmes, mouvement réduit respecté, axe vert.

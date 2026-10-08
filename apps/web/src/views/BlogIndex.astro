@@ -1,0 +1,120 @@
+---
+import Tag from '@grichard/ui/components/Tag.astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PostCard from '../components/PostCard.astro';
+import { PORTFOLIO_DATA } from '../data/content';
+import { CATEGORIES, categoryPath, getPosts, postPath, slugify, tagPath } from '../lib/blog';
+import { ROUTES, routeAlternates, SITE, type Alternates, type Lang } from '../lib/i18n';
+import { blogLd } from '../lib/seo';
+
+interface Props {
+  lang: Lang;
+  /** Filtre : une catégorie ou un tag (affiché en titre). */
+  category?: string;
+  tag?: string;
+}
+const { lang, category, tag } = Astro.props;
+const t = PORTFOLIO_DATA[lang].blog;
+const routes = ROUTES[lang];
+const all = await getPosts(lang);
+const posts = all.filter(
+  (p) =>
+    (category ? p.data.category === category : true) &&
+    (tag ? p.data.tags.some((x) => slugify(x) === tag) : true),
+);
+
+const categoryIds = [...new Set(all.map((p) => p.data.category))];
+const tagCounts = new Map<string, number>();
+for (const p of all) for (const x of p.data.tags) tagCounts.set(x, (tagCounts.get(x) ?? 0) + 1);
+const tagNames = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b, lang));
+
+const tagLabel = tag ? tagNames.find((x) => slugify(x) === tag) : undefined;
+const heading = category ? CATEGORIES[category]?.[lang] : tagLabel;
+const kind = category ? (lang === 'fr' ? 'Catégorie' : 'Category') : 'Tag';
+const title = heading ? `${kind} : ${heading} | ${t.siteName}` : t.siteName;
+const path = category
+  ? categoryPath(lang, category)
+  : tag
+    ? tagPath(lang, tagLabel ?? tag)
+    : routes.blog;
+// Les pages filtrées n'ont pas d'équivalent exact dans l'autre langue : seule l'index est lié par hreflang.
+const alternates: Partial<Alternates> | undefined = heading ? undefined : routeAlternates('blog');
+const labels =
+  lang === 'fr'
+    ? { categories: 'Catégories', tags: 'Tags', allPosts: 'Tous' }
+    : { categories: 'Categories', tags: 'Tags', allPosts: 'All' };
+---
+
+<Base
+  lang={lang}
+  title={title}
+  description={t.pageDescription}
+  path={path}
+  alternates={alternates}
+  noindex={Boolean(heading)}
+  ld={
+    heading
+      ? undefined
+      : blogLd(
+          lang,
+          t.siteName,
+          posts.map((p) => ({
+            title: p.data.title,
+            path: postPath(lang, p.slug),
+            date: p.data.date,
+          })),
+        )
+  }
+>
+  <PageHero
+    path={heading ? `~/blog/${category ?? tag}` : '~/blog'}
+    title={heading ?? t.siteName}
+    lead={heading ? undefined : t.pageIntro}
+  />
+  <div class="container section stack-lg">
+    <nav aria-label={labels.categories} class="stack">
+      <h2 class="visually-hidden">{labels.categories}</h2>
+      <ul class="row" role="list">
+        <li>
+          <a href={routes.blog} aria-current={heading ? undefined : 'page'}>
+            {labels.allPosts}
+          </a>
+        </li>
+        {categoryIds.map((id) => (
+          <li>
+            <a href={categoryPath(lang, id)} aria-current={category === id ? 'page' : undefined}>
+              {CATEGORIES[id]?.[lang]}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    {posts.length > 0 ? (
+      <div class="cards cards-wide">
+        {posts.map((post) => (
+          <PostCard post={post} minLabel={t.min} />
+        ))}
+      </div>
+    ) : (
+      <p>{t.emptyText}</p>
+    )}
+
+    <section class="stack" aria-labelledby="tags-title">
+      <h2 id="tags-title">{labels.tags}</h2>
+      <ul class="row" role="list">
+        {tagNames.map((name) => (
+          <li>
+            <a href={tagPath(lang, name)} class="tag-link">
+              <Tag>{name}</Tag>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+    <p>
+      <a href={`${SITE}${routes.rss}`}>RSS</a>
+    </p>
+  </div>
+</Base>
