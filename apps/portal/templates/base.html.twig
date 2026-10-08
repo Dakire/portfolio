@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="color-scheme" content="dark light">
+    <title>{% block title %}Espace client{% endblock %} | grichard.eu</title>
+    <link rel="stylesheet" href="{{ app.request.basePath }}/portal.css">
+  </head>
+  <body>
+    <a class="skip" href="#contenu">Aller au contenu</a>
+    <header class="bar">
+      <p class="brand"><span aria-hidden="true">&gt;_</span> grichard.eu / espace</p>
+      {% if is_granted('ROLE_USER') %}
+        <nav aria-label="Navigation principale">
+          <a href="{{ path('app_home') }}">Accueil</a>
+          {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_admin') }}">Administration</a>{% endif %}
+          <a href="{{ path('app_logout') }}">Déconnexion</a>
+        </nav>
+      {% endif %}
+    </header>
+    <main id="contenu" tabindex="-1">
+      {% for message in app.flashes('success') %}<p class="notice" role="status">{{ message }}</p>{% endfor %}
+      {% block body %}{% endblock %}
+    </main>
+  </body>
+</html>

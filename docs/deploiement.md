@@ -12,9 +12,10 @@ Le FTP s'ouvre dans le dossier personnel de l'hébergement :
 ├── www/                racine web publique
 │   ├── (le site)       index.html, _astro/, outils/, contact.php, .htaccess, …
 │   ├── preprod/        la préproduction (même hébergement, sous-dossier)
-│   └── espace/         le portail de test (phase 6) — jamais touché par le déploiement du site
+│   └── espace/         le portail de test (cible « portal ») — jamais touché par le déploiement du site
 ├── app/
 │   ├── api/            code PHP du formulaire de contact + vendor/ (hors racine web)
+│   ├── portal/         code du portail Symfony + vendor/ (hors racine web)
 │   └── preprod/api/    copie pour la préproduction
 └── private/            configuration, secrets, état — créé À LA MAIN, jamais livré, jamais écrasé
 ```
@@ -37,6 +38,16 @@ Le FTP s'ouvre dans le dossier personnel de l'hébergement :
    ```
 5. Créer **`private/.htpasswd`** (une ligne `utilisateur:empreinte`, empreinte générée par `htpasswd -B` ou un générateur bcrypt) pour protéger la préproduction.
 6. Vérifier dans le manager OVH que le moteur PHP est bien en **8.5**. Le fichier `.ovhconfig` livré par la production le demande ; si OVH refuse la version, le déploiement ne casse rien mais le PHP reste sur l'ancienne.
+
+## Si seul www/ est accessible en écriture
+
+La disposition ci-dessus suppose que le FTP s'ouvre dans le dossier personnel (par ex. `/home/grichay/`) et que seul `www/` est public. Si, chez vous, tout doit être placé **dans `www/`** (vous ne pouvez pas faire pointer le site ailleurs que sur `www/`), `app/` et `private/` se retrouvent exposés au web : il faut alors
+
+1. créer `www/app/` et `www/private/`, chacun avec un fichier `.htaccess` contenant uniquement `Require all denied` ;
+2. définir la variable GitHub `FTP_APP_PREFIX` = `www/` : le code PHP est alors déposé dans `www/app/…`, et la suppression finale ainsi que la sauvegarde ignorent `app/` et `private/` ;
+3. ne jamais déposer de fichier sensible hors de `private/`.
+
+`contact.php` et le portail retrouvent `app/` et `private/` en remontant l'arborescence, donc ils fonctionnent dans les deux dispositions. La disposition avec `app/` et `private/` **au-dessus** de `www/` reste préférable (rien de sensible n'est servi par Apache).
 
 ## Procédure recommandée
 

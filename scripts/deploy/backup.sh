@@ -14,6 +14,7 @@ for var in FTP_HOST FTP_USER FTP_PASSWORD; do
   [ -n "${!var:-}" ] || { echo "variable $var absente" >&2; exit 2; }
 done
 
+app_prefix="${FTP_APP_PREFIX:-}"
 tls="${FTP_TLS:-true}"
 verify="${FTP_VERIFY_CERT:-true}"
 export LFTP_PASSWORD="$FTP_PASSWORD"
@@ -34,10 +35,10 @@ mkdir -p "$work/www" "$work/app/api"
   echo "set ftp:ssl-protect-data $tls"
   echo "set ssl:verify-certificate $verify"
   echo "open -u \"$FTP_USER\" \"$FTP_HOST\""
-  echo "mirror -x '^preprod/' -x '^espace/' www \"$work/www\""
+  echo "mirror -x '^preprod/' -x '^espace/' -x '^app/' -x '^private/' www \"$work/www\""
   # app/api n'existe pas avant le premier déploiement : ce n'est pas une erreur
   echo "set cmd:fail-exit no"
-  echo "mirror app/api \"$work/app/api\""
+  echo "mirror ${app_prefix}app/api \"$work/app/api\""
   echo "bye"
 } >"$script"
 

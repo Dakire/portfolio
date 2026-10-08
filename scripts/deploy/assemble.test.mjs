@@ -107,3 +107,58 @@ describe('assemblage de la livraison', () => {
     );
   });
 });
+
+describe('livraison du portail', () => {
+  let dir;
+  before(async () => {
+    dir = await mkdtemp(join(tmpdir(), 'portal-'));
+  });
+  after(() => rm(dir, { recursive: true, force: true }));
+
+  async function fakePortal(root) {
+    for (const file of [
+      'vendor/autoload.php',
+      'src/Kernel.php',
+      'config/bundles.php',
+      'templates/base.html.twig',
+      'migrations/Version1.php',
+      'public/index.php',
+      'public/.htaccess',
+      'public/portal.css',
+      'composer.json',
+    ])
+      await write(root, file, 'x');
+  }
+
+  it('range le code dans app/portal/ et le point d’entrée dans www/espace/', async () => {
+    const portal = join(dir, 'portal');
+    const out = join(dir, 'out');
+    await fakePortal(portal);
+    await assemble({ target: 'portal', portal, out, buildId: 'abc123' });
+    await readFile(join(out, 'app', 'portal', 'vendor', 'autoload.php'));
+    assert.equal(
+      (await readFile(join(out, 'app', 'portal', 'BUILD_ID'), 'utf-8')).trim(),
+      'abc123',
+    );
+    await readFile(join(out, 'www', 'espace', 'index.php'));
+    await readFile(join(out, 'www', 'espace', '.htaccess'));
+    await assert.rejects(readFile(join(out, 'app', 'portal', 'public', 'index.php')));
+  });
+
+  it('refuse un état local (var/, .env), les dépendances de dev et une installation incomplète', async () => {
+    const portal = join(dir, 'bad');
+    await fakePortal(portal);
+    await write(portal, 'var/portal.sqlite');
+    await write(portal, '.env.local');
+    await write(portal, 'vendor/phpunit/phpunit/composer.json');
+    await rm(join(portal, 'public', 'portal.css'));
+    await assert.rejects(
+      assemble({ target: 'portal', portal, out: join(dir, 'out2') }),
+      (error) =>
+        /var présent/.test(error.message) &&
+        /\.env\.local présent/.test(error.message) &&
+        /--no-dev/.test(error.message) &&
+        /portal\.css manquant/.test(error.message),
+    );
+  });
+});

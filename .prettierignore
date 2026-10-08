@@ -8,3 +8,6 @@ tests/contract/contract.json
 .astro
 test-results
 playwright-report
+apps/portal/var
+apps/portal/composer.lock
+*.twig

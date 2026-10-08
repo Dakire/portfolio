@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+{% block title %}Accueil{% endblock %}
+{% block body %}
+  <h1>Bonjour</h1>
+  <dl class="kv">
+    <dt>Compte</dt><dd>{{ user.email }}</dd>
+    <dt>Rôles</dt><dd>{{ user.roles|join(', ') }}</dd>
+    <dt>Dernière connexion</dt><dd>{{ user.lastLoginAt ? user.lastLoginAt|date('d/m/Y H:i') : 'première connexion' }}</dd>
+  </dl>
+  <p>Banc d'essai personnel : l'authentification, les rôles, la protection CSRF et la limitation des essais sont en place ; les fonctions métier viendront ensuite.</p>
+{% endblock %}

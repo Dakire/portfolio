@@ -1,0 +1,35 @@
+monolog:
+  channels: ['portal']
+
+when@dev:
+  monolog:
+    handlers:
+      main:
+        type: stream
+        path: '%kernel.logs_dir%/portal.log'
+        level: debug
+
+when@test:
+  monolog:
+    handlers:
+      main:
+        type: test
+
+when@prod:
+  monolog:
+    handlers:
+      # Événements du portail (connexions, installation, maintenance) : sans e-mail ni adresse IP en clair.
+      portal:
+        type: rotating_file
+        path: '%kernel.logs_dir%/portal.log'
+        level: info
+        max_files: 14
+        channels: ['portal']
+      # Le reste (erreurs, alertes) : seulement à partir de « warning ». Les messages d'information de Symfony (canal security,
+      # request) citent l'identifiant saisi : on ne les conserve pas.
+      main:
+        type: rotating_file
+        path: '%kernel.logs_dir%/errors.log'
+        level: warning
+        max_files: 14
+        channels: ['!portal', '!event']

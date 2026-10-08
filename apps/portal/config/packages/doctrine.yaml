@@ -1,0 +1,14 @@
+doctrine:
+  dbal:
+    driver: pdo_sqlite
+    path: '%env(PORTAL_DB)%'
+  orm:
+    enable_native_lazy_objects: true
+    naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+    mappings:
+      Portal:
+        type: attribute
+        is_bundle: false
+        dir: '%kernel.project_dir%/src/Entity'
+        prefix: 'Grichard\Portal\Entity'
+        alias: Portal

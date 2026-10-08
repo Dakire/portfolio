@@ -8,8 +8,8 @@
 // private/ (configuration, secrets, état) n'est JAMAIS livré : il n'existe que sur le serveur.
 // Le script refuse d'assembler tout ce qui ne doit pas partir en ligne (page de style, secrets, mauvaise cible…).
 //
-// Usage : node scripts/deploy/assemble.mjs <production|preprod> [--dist apps/web/dist] [--api apps/api] [--out release]
-import { cp, mkdir, readFile, readdir, rm, stat } from 'node:fs/promises';
+// Usage : node scripts/deploy/assemble.mjs <production|preprod|portal> [--portal apps/portal --build-id <id>] [--dist apps/web/dist] [--api apps/api] [--out release]
+import { cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -102,7 +102,45 @@ export async function verifyApi(api) {
   return problems;
 }
 
-export async function assemble({ target, dist, api, out }) {
+/** Vérifie le portail Symfony prêt à livrer (vendor/ sans dépendances de développement, aucun état local). */
+export async function verifyPortal(portal) {
+  const problems = [];
+  for (const file of [
+    'vendor/autoload.php',
+    'public/index.php',
+    'public/.htaccess',
+    'public/portal.css',
+    'composer.json',
+  ])
+    if (!(await exists(join(portal, file)))) problems.push(`${file} manquant`);
+  if (await exists(join(portal, 'vendor', 'phpunit')))
+    problems.push('vendor/phpunit présent : le portail doit être installé avec --no-dev');
+  for (const local of ['var', '.env', '.env.local', 'config/reference.php'])
+    if (await exists(join(portal, local)))
+      problems.push(`${local} présent : état local, à ne pas livrer`);
+  return problems;
+}
+
+/** Livraison du portail : app/portal/ (code) et www/espace/ (point d'entrée). Jamais d'état ni de base de données. */
+async function assemblePortal({ portal, out, buildId }) {
+  const problems = await verifyPortal(portal);
+  if (problems.length) throw new Error(`Livraison refusée :\n- ${problems.join('\n- ')}`);
+  await rm(out, { recursive: true, force: true });
+  const code = join(out, 'app', 'portal');
+  const web = join(out, 'www', 'espace');
+  await mkdir(code, { recursive: true });
+  await mkdir(web, { recursive: true });
+  for (const dir of ['src', 'config', 'templates', 'migrations', 'vendor'])
+    await cp(join(portal, dir), join(code, dir), { recursive: true });
+  await cp(join(portal, 'composer.json'), join(code, 'composer.json'));
+  await writeFile(join(code, 'BUILD_ID'), `${buildId}\n`);
+  for (const file of ['index.php', '.htaccess', 'portal.css'])
+    await cp(join(portal, 'public', file), join(web, file));
+  return { web, code };
+}
+
+export async function assemble({ target, dist, api, out, portal, buildId = 'local' }) {
+  if (target === 'portal') return assemblePortal({ portal, out, buildId });
   if (target !== 'production' && target !== 'preprod')
     throw new Error(`cible inconnue : ${target}`);
   const problems = [...(await verifyBuild(dist, target)), ...(await verifyApi(api))];
@@ -144,6 +182,8 @@ if (process.argv[1]?.endsWith('assemble.mjs')) {
       dist: option('dist', 'apps/web/dist'),
       api: option('api', 'apps/api'),
       out: option('out', 'release'),
+      portal: option('portal', 'apps/portal'),
+      buildId: rest.includes('--build-id') ? rest[rest.indexOf('--build-id') + 1] : 'local',
     });
     console.log(
       `Livraison « ${target} » prête : ${relative(ROOT, web)}/ et ${relative(ROOT, code)}/`,
