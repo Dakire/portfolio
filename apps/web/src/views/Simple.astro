@@ -6,7 +6,9 @@ import PageHero from '../components/PageHero.astro';
 import SkillCards from '../components/SkillCards.astro';
 import ProjectCards from '../components/ProjectCards.astro';
 import ExperienceList from '../components/ExperienceList.astro';
+import ContactIsland from '../contact/ContactForm';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
+import '../styles/tools.css';
 import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
 
 interface Props {
@@ -109,7 +111,7 @@ const labels =
         <p class="prose">
           <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a> · {PROFILE.location}
         </p>
-        <div id="contact-form" data-lang={lang}></div>
+        <ContactIsland client:visible lang={lang} />
       </section>
     )}
   </div>

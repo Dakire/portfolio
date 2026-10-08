@@ -861,3 +861,47 @@ legend {
   color: var(--danger);
   font-weight: 600;
 }
+
+/* ---------- Formulaire de contact ---------- */
+.contact-success {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6) 0;
+  text-align: center;
+}
+.contact-success:focus {
+  outline: none;
+}
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+.captcha {
+  position: relative;
+  min-height: 65px;
+}
+.captcha-widget {
+  min-height: 65px;
+}
+.captcha-loading {
+  position: absolute;
+  inset: 0 auto auto 0;
+  display: flex;
+  align-items: center;
+  width: 300px;
+  max-width: 100%;
+  height: 65px;
+  padding-inline: var(--space-4);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-sm);
+}
+.btn-block {
+  width: 100%;
+}
+.form-status {
+  min-height: 1.25rem;
+}

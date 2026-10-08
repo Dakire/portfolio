@@ -1,3 +1,5 @@
+import { existsSync, readFileSync } from 'node:fs';
+import { parseEnv } from 'node:util';
 import { unified } from '@astrojs/markdown-remark';
 import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
@@ -12,6 +14,26 @@ const styleguide = {
       if (command === 'dev' || process.env.STYLEGUIDE === '1') {
         injectRoute({ pattern: '/design', entrypoint: './src/dev/design.astro' });
       }
+    },
+  },
+};
+
+// Sans clé de SITE Turnstile (publique), le widget disparaît et contact.php refuserait tous les messages : mieux vaut échouer au build.
+const requireTurnstileKey = {
+  name: 'require-turnstile-key',
+  hooks: {
+    'astro:config:setup': ({ command }) => {
+      if (command !== 'build') return;
+      const fromFiles = ['.env', '.env.local']
+        .filter(existsSync)
+        .map((f) => parseEnv(readFileSync(f, 'utf-8')));
+      const key =
+        process.env.PUBLIC_TURNSTILE_SITE_KEY ||
+        Object.assign({}, ...fromFiles).PUBLIC_TURNSTILE_SITE_KEY;
+      if (!key)
+        throw new Error(
+          'PUBLIC_TURNSTILE_SITE_KEY est manquante : le formulaire de contact serait inutilisable en production (voir .env.example).',
+        );
     },
   },
 };
@@ -42,6 +64,7 @@ export default defineConfig({
     processor: unified({ rehypePlugins: [rehypeTableScroll] }),
   },
   integrations: [
+    requireTurnstileKey,
     preact(),
     sitemap({ filter: (page) => !EXCLUDED.some((part) => page.includes(part)) }),
     styleguide,
