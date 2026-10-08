@@ -1,0 +1,163 @@
+---
+import { render } from 'astro:content';
+import Tag from '@grichard/ui/components/Tag.astro';
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import { PORTFOLIO_DATA, PROFILE } from '../data/content';
+import {
+  CATEGORIES,
+  categoryPath,
+  formatDate,
+  getPosts,
+  getTranslation,
+  isoDate,
+  postPath,
+  readingMinutes,
+  tagPath,
+  type Post,
+} from '../lib/blog';
+import { ROUTES, SITE, UI, type Alternates, type Lang } from '../lib/i18n';
+import { postLd } from '../lib/seo';
+
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const lang: Lang = post.lang;
+const t = PORTFOLIO_DATA[lang].blog;
+const ui = UI[lang];
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth === 2);
+const translation = await getTranslation(post);
+const path = postPath(lang, post.slug);
+const alternates: Partial<Alternates> = {
+  [lang]: path,
+  ...(translation ? { [translation.lang]: postPath(translation.lang, translation.slug) } : {}),
+};
+const related = (await getPosts(lang))
+  .filter((p) => p.slug !== post.slug && p.data.category === post.data.category)
+  .slice(0, 2);
+const image = {
+  url: `${SITE}/og/${post.slug}.png`,
+  width: 1200,
+  height: 630,
+  alt: post.data.title,
+};
+const crumbs = [
+  { name: ui.crumbHome, path: ROUTES[lang].home },
+  { name: PORTFOLIO_DATA[lang].nav.blog ?? 'Blog', path: ROUTES[lang].blog },
+  { name: post.data.title, path },
+];
+---
+
+<Base
+  lang={lang}
+  title={`${post.data.title} | ${PROFILE.name}`}
+  description={post.data.description}
+  path={path}
+  alternates={alternates}
+  type="article"
+  image={image}
+  scripts={post.data.script ? [post.data.script] : []}
+  ld={postLd({
+    lang,
+    path,
+    title: post.data.title,
+    description: post.data.description,
+    published: post.data.date,
+    modified: post.data.updated,
+    image: image.url,
+    keywords: post.data.tags,
+    crumbs,
+  })}
+>
+  <div class="container section">
+    <nav aria-label={ui.breadcrumb} class="meta breadcrumb">
+      <ol class="row" role="list">
+        {crumbs.slice(0, 2).map((c) => (
+          <li>
+            <a href={c.path}>{c.name}</a>
+          </li>
+        ))}
+        <li aria-current="page">{post.data.title}</li>
+      </ol>
+    </nav>
+
+    <article>
+      <header class="stack page-hero">
+        <p class="meta">
+          <a href={categoryPath(lang, post.data.category)}>
+            {CATEGORIES[post.data.category]?.[lang]}
+          </a>{' '}
+          ·<time datetime={isoDate(post.data.date)}>{formatDate(post.data.date, lang)}</time>
+          {post.data.updated && (
+            <>
+              {' '}
+              · {lang === 'fr' ? 'mis à jour le' : 'updated'}{' '}
+              <time datetime={isoDate(post.data.updated)}>
+                {formatDate(post.data.updated, lang)}
+              </time>
+            </>
+          )}
+          · {readingMinutes(post.body)} {t.min}
+        </p>
+        <h1>{post.data.title}</h1>
+        <p class="lead">{post.data.description}</p>
+        {translation && (
+          <p>
+            <a
+              href={postPath(translation.lang, translation.slug)}
+              hreflang={translation.lang}
+              lang={translation.lang}
+            >
+              {t.otherLang}
+            </a>
+          </p>
+        )}
+      </header>
+
+      <div class="post-layout">
+        <div class="post-body">
+          <Content />
+        </div>
+        {toc.length > 1 && (
+          <nav class="toc" aria-labelledby="toc-title">
+            <h2 id="toc-title" class="meta">
+              {t.toc}
+            </h2>
+            <ol role="list">
+              {toc.map((h) => (
+                <li>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+      </div>
+
+      <footer class="stack">
+        <ul class="row" role="list">
+          {post.data.tags.map((tag) => (
+            <li>
+              <a href={tagPath(lang, tag)}>
+                <Tag>{tag}</Tag>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </footer>
+    </article>
+
+    {related.length > 0 && (
+      <section class="stack related" aria-labelledby="related-title">
+        <h2 id="related-title">{t.related}</h2>
+        <div class="cards cards-wide">
+          {related.map((p) => (
+            <PostCard post={p} minLabel={t.min} />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</Base>

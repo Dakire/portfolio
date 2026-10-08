@@ -34,3 +34,11 @@ test-results
 
 # Caches de build (images de partage, PDF des CV)
 .cache
+
+# Monorepo
+vendor/
+.pnpm-store/
+*.sqlite
+legacy/dist
+.astro/
+apps/web/dist

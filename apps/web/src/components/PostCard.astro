@@ -1,0 +1,21 @@
+---
+import Card from '@grichard/ui/components/Card.astro';
+import Tag from '@grichard/ui/components/Tag.astro';
+import { CATEGORIES, formatDate, isoDate, postPath, readingMinutes, type Post } from '../lib/blog';
+
+interface Props {
+  post: Post;
+  minLabel: string;
+}
+const { post, minLabel } = Astro.props;
+---
+
+<Card href={postPath(post.lang, post.slug)}>
+  <p class="meta">
+    <Tag>{CATEGORIES[post.data.category]?.[post.lang]}</Tag>
+    <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date, post.lang)}</time> ·{' '}
+    {readingMinutes(post.body)} {minLabel}
+  </p>
+  <h3>{post.data.title}</h3>
+  <p>{post.data.description}</p>
+</Card>

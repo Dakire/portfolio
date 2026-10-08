@@ -1,8 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const PORT = 4173;
+const PORT = 4321;
 
-// Les tests visent le site construit (dist/), servi tel que le serveur Apache le servirait (hors en-têtes HTTP).
+// Les tests visent le site construit (dist/) servi tel quel, avec la page de style (STYLEGUIDE=1).
 export default defineConfig({
   testDir: 'tests/e2e',
   fullyParallel: true,
@@ -12,13 +12,14 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${PORT}`,
     trace: 'on-first-retry',
-    reducedMotion: 'reduce', // désactive les animations au défilement : contrastes et captures stables
-    colorScheme: 'dark', // réglage système simulé ; chaque test peut le changer (le thème suit le système par défaut)
+    reducedMotion: 'reduce',
+    colorScheme: 'dark',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: `npm run build && npx vite preview --strictPort --port ${PORT}`,
-    url: `http://localhost:${PORT}/`,
+    command: `pnpm run build && pnpm exec astro preview --port ${PORT}`,
+    env: { STYLEGUIDE: '1' },
+    url: `http://localhost:${PORT}/design/`,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
   },

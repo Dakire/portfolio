@@ -1,0 +1,5 @@
+{
+  "extends": ["../../packages/config/oxlintrc.json"],
+  "overrides": [{ "files": ["scripts/**"], "rules": { "no-console": "off" } }],
+  "ignorePatterns": ["dist", ".astro", "public"]
+}

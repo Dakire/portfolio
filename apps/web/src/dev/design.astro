@@ -1,0 +1,228 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '@grichard/ui/components/Button.astro';
+import Card from '@grichard/ui/components/Card.astro';
+import Tag from '@grichard/ui/components/Tag.astro';
+import Kbd from '@grichard/ui/components/Kbd.astro';
+import Eyebrow from '@grichard/ui/components/Eyebrow.astro';
+
+const colors = [
+  'canvas',
+  'surface',
+  'raised',
+  'line',
+  'line-strong',
+  'ink',
+  'body',
+  'muted',
+  'accent',
+  'link',
+  'ok',
+  'warn',
+  'danger',
+];
+const sizes = ['display', '2xl', 'xl', 'lg', 'base', 'sm', 'xs'];
+---
+
+<Base
+  lang="fr"
+  title="Design system"
+  description="Tokens et composants du site (page interne)."
+  path="/design/"
+  noindex
+>
+  <div class="container section stack-lg">
+    <header class="grid-bg hero">
+      <Eyebrow path="~/design-system" />
+      <h1>Design system</h1>
+      <p class="prose">
+        Tokens, typographie et composants. Basculez le thème en haut de page : tout doit rester
+        lisible dans les trois modes.
+      </p>
+    </header>
+
+    <section class="stack" aria-labelledby="couleurs">
+      <h2 id="couleurs">Couleurs</h2>
+      <ul class="swatches">
+        {colors.map((c) => (
+          <li class={`swatch swatch-${c}`}>
+            <span class="swatch-chip" />
+            <code>--{c}</code>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="stack" aria-labelledby="typo">
+      <h2 id="typo">Typographie</h2>
+      {sizes.map((s) => (
+        <p class={`type-${s}`}>
+          Administrateur systèmes et réseaux — <code>--text-{s}</code>
+        </p>
+      ))}
+      <p>
+        Monospace : <code>dig +short TXT _dmarc.exemple.fr</code>
+      </p>
+    </section>
+
+    <section class="stack" aria-labelledby="boutons">
+      <h2 id="boutons">Boutons, étiquettes, raccourcis</h2>
+      <p class="row">
+        <Button variant="primary">Principal</Button>
+        <Button>Secondaire</Button>
+        <Button variant="ghost">Discret</Button>
+        <Button disabled>Désactivé</Button>
+        <Button href="#couleurs">Lien</Button>
+      </p>
+      <p class="row">
+        <Tag>neutre</Tag>
+        <Tag tone="ok">conforme</Tag>
+        <Tag tone="warn">avertissement</Tag>
+        <Tag tone="danger">erreur</Tag>
+        <span>
+          Palette de commandes : <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
+        </span>
+      </p>
+    </section>
+
+    <section class="stack" aria-labelledby="cartes">
+      <h2 id="cartes">Cartes</h2>
+      <div class="cards">
+        <Card href="#cartes">
+          <h3>Carte lien</h3>
+          <p>Toute la carte est cliquable.</p>
+        </Card>
+        <Card>
+          <h3>Carte statique</h3>
+          <p>Surface, bordure, rayon : jamais d'ombre décorative.</p>
+        </Card>
+      </div>
+    </section>
+
+    <section class="stack" aria-labelledby="formulaire">
+      <h2 id="formulaire">Formulaire</h2>
+      <form class="stack form" novalidate>
+        <div class="field">
+          <label for="f-nom">Nom</label>
+          <input id="f-nom" name="nom" autocomplete="name" />
+          <span class="field-hint">Aide : champ facultatif.</span>
+        </div>
+        <div class="field">
+          <label for="f-mail">E-mail</label>
+          <input
+            id="f-mail"
+            name="mail"
+            type="email"
+            aria-invalid="true"
+            aria-describedby="f-mail-err"
+            value="pas-un-mail"
+          />
+          <span class="field-error" id="f-mail-err">
+            Saisissez une adresse e-mail valide.
+          </span>
+        </div>
+      </form>
+    </section>
+  </div>
+</Base>
+
+<style is:global>
+  .hero {
+    padding-block: var(--space-6);
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .cards {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  }
+  .form {
+    max-width: 28rem;
+  }
+  .swatches {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    padding: 0;
+    list-style: none;
+  }
+  .swatch {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .swatch-chip {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    background: var(--chip);
+  }
+  .swatch-canvas {
+    --chip: var(--canvas);
+  }
+  .swatch-surface {
+    --chip: var(--surface);
+  }
+  .swatch-raised {
+    --chip: var(--raised);
+  }
+  .swatch-line {
+    --chip: var(--line);
+  }
+  .swatch-line-strong {
+    --chip: var(--line-strong);
+  }
+  .swatch-ink {
+    --chip: var(--ink);
+  }
+  .swatch-body {
+    --chip: var(--body);
+  }
+  .swatch-muted {
+    --chip: var(--muted);
+  }
+  .swatch-accent {
+    --chip: var(--accent);
+  }
+  .swatch-link {
+    --chip: var(--link);
+  }
+  .swatch-ok {
+    --chip: var(--ok);
+  }
+  .swatch-warn {
+    --chip: var(--warn);
+  }
+  .swatch-danger {
+    --chip: var(--danger);
+  }
+  .type-display {
+    font-size: var(--text-display);
+    font-weight: 650;
+    line-height: var(--leading-tight);
+  }
+  .type-2xl {
+    font-size: var(--text-2xl);
+  }
+  .type-xl {
+    font-size: var(--text-xl);
+  }
+  .type-lg {
+    font-size: var(--text-lg);
+  }
+  .type-base {
+    font-size: var(--text-base);
+  }
+  .type-sm {
+    font-size: var(--text-sm);
+  }
+  .type-xs {
+    font-size: var(--text-xs);
+  }
+</style>

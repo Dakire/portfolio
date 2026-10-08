@@ -1,0 +1,121 @@
+---
+import Button from '@grichard/ui/components/Button.astro';
+import Eyebrow from '@grichard/ui/components/Eyebrow.astro';
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import SkillCards from '../components/SkillCards.astro';
+import ProjectCards from '../components/ProjectCards.astro';
+import ExperienceList from '../components/ExperienceList.astro';
+import { PORTFOLIO_DATA, PROFILE } from '../data/content';
+import { getPosts } from '../lib/blog';
+import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
+import { homeLd } from '../lib/seo';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = PORTFOLIO_DATA[lang];
+const routes = ROUTES[lang];
+const posts = (await getPosts(lang)).slice(0, 3);
+const more = lang === 'fr' ? 'Voir le détail' : 'See details';
+const toolsIntro = t.tools.intro;
+---
+
+<Base
+  lang={lang}
+  title={t.meta.title}
+  description={t.meta.description}
+  path={routes.home}
+  alternates={routeAlternates('home')}
+  ld={homeLd(lang, t.meta.title, t.hero.role)}
+>
+  <header class="page-hero grid-bg">
+    <div class="container stack">
+      <Eyebrow path="~/whoami" />
+      <h1 class="hero-title">
+        {t.hero.greeting} <span>{PROFILE.name}</span>
+      </h1>
+      <p class="lead">{t.hero.role}</p>
+      <p class="row">
+        <Button variant="primary" href={routes.contact}>
+          {t.hero.contactBtn}
+        </Button>
+        <Button href={t.hero.cvLink}>
+          {t.hero.cvBtn}
+          <span class="visually-hidden"> (PDF)</span>
+        </Button>
+      </p>
+      <dl class="hero-terminal" aria-hidden="true">
+        {t.hero.terminal.map((line) => (
+          <>
+            <dt class="cmd">{line.cmd}</dt>
+            <dd>{line.out}</dd>
+          </>
+        ))}
+      </dl>
+    </div>
+  </header>
+
+  <div class="container stack-lg">
+    <section id="about" aria-labelledby="about-title" class="stack">
+      <h2 id="about-title">{t.aboutTitle}</h2>
+      <p class="prose">{t.about}</p>
+      <p>
+        <a href={routes.about}>{more} →</a>
+      </p>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-title" class="stack">
+      <h2 id="skills-title">{t.skillsTitle}</h2>
+      <SkillCards skills={t.skills} />
+    </section>
+
+    <section id="experience" aria-labelledby="exp-title" class="stack">
+      <h2 id="exp-title">{t.experienceTitle}</h2>
+      <ExperienceList items={t.experiences.slice(0, 2)} />
+      <p>
+        <a href={routes.about}>{more} →</a>
+      </p>
+    </section>
+
+    <section id="projects" aria-labelledby="projects-title" class="stack">
+      <h2 id="projects-title">{t.projectsTitle}</h2>
+      <ProjectCards items={t.projects} lang={lang} />
+    </section>
+
+    <section id="tools" aria-labelledby="tools-title" class="stack">
+      <h2 id="tools-title">{t.tools.title}</h2>
+      <p class="prose">{toolsIntro}</p>
+      <p>
+        <a href={routes.tools}>{t.tools.all} →</a>
+      </p>
+    </section>
+
+    {posts.length > 0 && (
+      <section id="blog" aria-labelledby="blog-title" class="stack">
+        <h2 id="blog-title">{t.blog.title}</h2>
+        <div class="cards cards-wide">
+          {posts.map((post) => (
+            <PostCard post={post} minLabel={t.blog.min} />
+          ))}
+        </div>
+        <p>
+          <a href={routes.blog}>{t.blog.all} →</a>
+        </p>
+      </section>
+    )}
+
+    <section id="contact" aria-labelledby="contact-title" class="stack">
+      <h2 id="contact-title">{t.contactTitle}</h2>
+      <p class="prose">
+        <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
+      </p>
+      <p>
+        <Button variant="primary" href={routes.contact}>
+          {t.hero.contactBtn}
+        </Button>
+      </p>
+    </section>
+  </div>
+</Base>

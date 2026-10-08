@@ -1,0 +1,109 @@
+---
+import '@grichard/ui/fonts.css';
+import '@grichard/ui/tokens.css';
+import '@grichard/ui/base.css';
+import '@grichard/ui/components.css';
+import '../styles/site.css';
+import SkipLink from '@grichard/ui/components/SkipLink.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { ROUTES, SITE, UI, otherLang, type Alternates, type Lang } from '../lib/i18n';
+import { OG_DEFAULT, jsonForScript, versioned } from '../lib/seo';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  /** Chemin canonique de la page (avec « / » final). */
+  path: string;
+  /** Page équivalente dans chaque langue (hreflang et sélecteur de langue) ; absent : page sans traduction. */
+  alternates?: Partial<Alternates>;
+  type?: 'website' | 'article';
+  image?: { url: string; width: number; height: number; alt: string };
+  ld?: object;
+  noindex?: boolean;
+  /** Scripts autonomes de public/js/ à charger en plus des scripts communs. */
+  scripts?: string[];
+}
+const {
+  lang,
+  title,
+  description,
+  path,
+  alternates = {},
+  type = 'website',
+  image = OG_DEFAULT,
+  ld,
+  noindex = false,
+  scripts = [],
+} = Astro.props;
+
+const ui = UI[lang];
+const url = `${SITE}${path}`;
+const other = otherLang(lang);
+const otherHref = alternates[other];
+const hreflangs = (['fr', 'en'] as const).filter((l) => alternates[l]);
+const feed = {
+  title: lang === 'fr' ? 'Blog de Guillaume Richard' : "Guillaume Richard's blog",
+  href: `${SITE}${ROUTES[lang].rss}`,
+};
+const allScripts = [...scripts, '/js/consent.js'];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a0c0f" />
+    <meta name="color-scheme" content="dark light" />
+    <script is:inline src={versioned('/js/theme.js')}></script>
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="canonical" href={url} />
+    {hreflangs.map((l) => (
+      <link rel="alternate" hreflang={l} href={`${SITE}${alternates[l]}`} />
+    ))}
+    {alternates.fr && (
+      <link rel="alternate" hreflang="x-default" href={`${SITE}${alternates.fr}`} />
+    )}
+    <link rel="alternate" type="application/rss+xml" title={feed.title} href={feed.href} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Guillaume Richard" />
+    <meta
+      name="robots"
+      content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'}
+    />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Guillaume Richard" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:locale" content={ui.ogLocale} />
+    {otherHref && <meta property="og:locale:alternate" content={UI[other].ogLocale} />}
+    <meta property="og:image" content={image.url} />
+    <meta property="og:image:width" content={String(image.width)} />
+    <meta property="og:image:height" content={String(image.height)} />
+    <meta property="og:image:alt" content={image.alt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image.url} />
+    <meta name="twitter:image:alt" content={image.alt} />
+    {ld && <script type="application/ld+json" set:html={jsonForScript(ld)} />}
+  </head>
+  <body>
+    <SkipLink label={ui.skip} />
+    <SiteHeader lang={lang} path={path} otherHref={otherHref} />
+    <main id="contenu" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter lang={lang} />
+    {allScripts.map((src) => (
+      <script is:inline defer src={versioned(src)} />
+    ))}
+  </body>
+</html>

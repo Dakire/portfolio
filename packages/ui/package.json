@@ -1,0 +1,28 @@
+{
+  "name": "@grichard/ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Design system : tokens CSS (partagés avec l'espace client PHP), styles de base et composants Astro",
+  "exports": {
+    "./tokens.css": "./src/tokens.css",
+    "./base.css": "./src/base.css",
+    "./components.css": "./src/components.css",
+    "./fonts.css": "./src/fonts.css",
+    "./components/*": "./src/components/*"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0"
+  },
+  "devDependencies": {
+    "astro": "^7.3.8",
+    "vitest": "^4.1.11"
+  },
+  "peerDependencies": {
+    "astro": "^7.0.0"
+  }
+}

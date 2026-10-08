@@ -1,0 +1,11 @@
+---
+interface Props {
+  href?: string;
+  label: string;
+}
+const { href = '#contenu', label } = Astro.props;
+---
+
+<a class="skip-link" href={href}>
+  {label}
+</a>
