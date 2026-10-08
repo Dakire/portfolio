@@ -10,7 +10,13 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: weekly }
-  # À activer quand apps/api et apps/portal auront leur composer.json :
+  - package-ecosystem: composer
+    directory: /apps/api
+    schedule: { interval: weekly }
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+  # À activer quand apps/portal aura son composer.json :
   # - package-ecosystem: composer
-  #   directory: /apps/api
+  #   directory: /apps/portal
   #   schedule: { interval: weekly }

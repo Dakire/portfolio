@@ -14,21 +14,24 @@ Ne jamais introduire de dépendance d'exécution Node, ni d'appel à un service 
 
 ## Commandes (racine)
 
-| Besoin                       | Commande                                                       |
-| ---------------------------- | -------------------------------------------------------------- |
-| Installer                    | `pnpm install` (installe aussi les hooks)                      |
-| Formater / vérifier          | `pnpm format` / `pnpm format:check`                            |
-| Site actuel : build          | `pnpm legacy:build`                                            |
-| Site actuel : lint+tests+e2e | `pnpm legacy:check`                                            |
-| Contrat des 70 URL publiques | `pnpm test:contract` (après un build complet)                  |
-| Contrat sur le site en ligne | `CONTRACT_BASE_URL=https://grichard.eu pnpm test:contract`     |
-| Audit des dépendances        | `pnpm audit:prod`                                              |
-| Site (Astro) : dev           | `pnpm --filter @grichard/web dev` (page de style : `/design/`) |
-| Site : build / types / lint  | `pnpm --filter @grichard/web build` / `check` / `lint`         |
-| Site : e2e + axe             | `pnpm --filter @grichard/web test:e2e`                         |
-| Design system : tests        | `pnpm --filter @grichard/ui test`                              |
+| Besoin                            | Commande                                                                                                                      |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Installer                         | `pnpm install` (installe aussi les hooks)                                                                                     |
+| Formater / vérifier               | `pnpm format` / `pnpm format:check`                                                                                           |
+| Site actuel : build               | `pnpm legacy:build`                                                                                                           |
+| Site actuel : lint+tests+e2e      | `pnpm legacy:check`                                                                                                           |
+| Contrat des 70 URL publiques      | `pnpm test:contract` (après un build complet)                                                                                 |
+| Contrat sur le site en ligne      | `CONTRACT_BASE_URL=https://grichard.eu pnpm test:contract`                                                                    |
+| Audit des dépendances             | `pnpm audit:prod`                                                                                                             |
+| Site (Astro) : dev                | `pnpm --filter @grichard/web dev` (page de style : `/design/`)                                                                |
+| Site : build / types / lint       | `pnpm --filter @grichard/web build` / `check` / `lint`                                                                        |
+| Site : e2e + axe                  | `pnpm --filter @grichard/web test:e2e`                                                                                        |
+| Design system : tests             | `pnpm --filter @grichard/ui test`                                                                                             |
+| API PHP : installer               | `cd apps/api && composer install`                                                                                             |
+| API PHP : tests / style / analyse | `composer test` / `composer cs` / `composer stan` (dans `apps/api`)                                                           |
+| Site : préproduction              | `SITE_BASE=/preprod/ PUBLIC_NOINDEX=1 pnpm --filter @grichard/web build` (`PREPROD_AUTH_FILE` : chemin absolu du `.htpasswd`) |
 
-Les commandes de `apps/api` et `apps/portal` seront ajoutées ici à leur création.
+Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. Les commandes de `apps/portal` seront ajoutées à sa création.
 
 ## Architecture cible
 

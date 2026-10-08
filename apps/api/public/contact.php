@@ -16,8 +16,15 @@ use Grichard\Api\Http\Request;
 // Jamais d'erreurs PHP dans la réponse : elles pourraient révéler des chemins du serveur.
 ini_set('display_errors', '0');
 
-// Hébergement : www/contact.php, app/api/vendor/ et private/ sont voisins. En développement : apps/api/public/ et apps/api/vendor/.
+// Hébergement : www/contact.php (ou www/preprod/contact.php) ; app/api/vendor/ et private/ sont dans le dossier personnel, au-dessus de www/.
+// On le cherche en remontant l'arborescence, ce qui sert aussi à la préproduction. En développement : apps/api/public/ et apps/api/vendor/.
 $home = dirname(__DIR__);
+for ($dir = __DIR__, $i = 0; $i < 4; ++$i, $dir = dirname($dir)) {
+    if (is_file($dir . '/app/api/vendor/autoload.php')) {
+        $home = $dir;
+        break;
+    }
+}
 $autoload = is_file($home . '/app/api/vendor/autoload.php') ? $home . '/app/api/vendor/autoload.php' : $home . '/vendor/autoload.php';
 require $autoload;
 
