@@ -5,13 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/postbuild.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "oxlint",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test": "vitest run"
   },
   "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.2",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
     "@grichard/ui": "workspace:*",
     "astro": "^7.3.8"
   },
@@ -22,6 +26,7 @@
     "@playwright/test": "^1.63.0",
     "@types/node": "^22.0.0",
     "oxlint": "^1.86.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
   }
 }

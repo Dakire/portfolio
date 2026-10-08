@@ -1,0 +1,31 @@
+---
+import Button from '@grichard/ui/components/Button.astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { ROUTES } from '../lib/i18n';
+---
+
+<Base
+  lang="fr"
+  title="Page introuvable | Guillaume Richard"
+  description="Cette page n'existe pas ou a changé d'adresse."
+  path="/404.html"
+  noindex
+>
+  <PageHero
+    path="~/404"
+    title="Page introuvable"
+    lead="Cette adresse n'existe pas ou a changé. Le contenu a peut-être été déplacé."
+  />
+  <div class="container section stack">
+    <p class="row">
+      <Button variant="primary" href={ROUTES.fr.home}>
+        Retour à l'accueil
+      </Button>
+      <Button href={ROUTES.fr.blog}>Voir le blog</Button>
+      <Button href={ROUTES.en.home} hreflang="en" lang="en">
+        Go to the English site
+      </Button>
+    </p>
+  </div>
+</Base>

@@ -1,0 +1,23 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Guillaume Richard",
+    "identifier": "did:web:grichard.eu"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:grichard.eu:documents:cv-fr",
+      "displayName": "CV Guillaume Richard - Français",
+      "type": "application/pdf",
+      "url": "https://grichard.eu/CV_Guillaume_Richard_FR.pdf",
+      "description": "Curriculum Vitae de Guillaume Richard (version française)"
+    },
+    {
+      "identifier": "urn:air:grichard.eu:documents:resume-en",
+      "displayName": "Resume Guillaume Richard - English",
+      "type": "application/pdf",
+      "url": "https://grichard.eu/Resume_Guillaume_Richard_EN.pdf",
+      "description": "Resume of Guillaume Richard (English version)"
+    }
+  ]
+}

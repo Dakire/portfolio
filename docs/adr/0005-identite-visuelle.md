@@ -12,4 +12,4 @@
 
 **Comment changer.** Modifier uniquement `packages/ui/src/tokens.css` (couleurs, polices, échelles), puis `pnpm --filter @grichard/ui test`. La page `/design/` (développement, ou `STYLEGUIDE=1` en préproduction) montre le résultat.
 
-**Scripts et styles.** Jamais de script ni de style en ligne (CSP) : le script de thème est un fichier externe bloquant, versionné par empreinte. Pas d'attribut `style=""` : utiliser des classes.
+**Scripts et styles.** Jamais de script ni de style en ligne (CSP) : le script de thème est un fichier externe bloquant, versionné par empreinte. Pas d'attribut `style=""` écrit à la main : utiliser des classes. **Compromis assumé** : la coloration syntaxique (Shiki) génère des attributs `style` (variables CSS par thème) ; la CSP de production les autorise via `style-src-attr 'unsafe-inline'` tout en gardant `style-src 'self'` pour les feuilles de style (aucun `<style>` en ligne). Un attribut `style` ne peut pas exécuter de script ; le risque résiduel est celui de l'injection de style, limité par l'absence de contenu utilisateur sur le site.

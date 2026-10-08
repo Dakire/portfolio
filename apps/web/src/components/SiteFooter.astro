@@ -1,0 +1,49 @@
+---
+import { PROFILE } from '../data/content';
+import { ROUTES, UI, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ui = UI[lang];
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer-inner">
+    <p>
+      © {year}
+      {PROFILE.name}. {ui.rights}
+    </p>
+    <ul class="footer-links">
+      <li>
+        <a href={ROUTES[lang].legal}>{ui.footerLinks.legal}</a>
+      </li>
+      <li>
+        <a href={ROUTES[lang].privacy}>{ui.footerLinks.privacy}</a>
+      </li>
+      <li>
+        <a href={ROUTES[lang].accessibility}>{ui.footerLinks.accessibility}</a>
+      </li>
+      <li>
+        <a href={ROUTES[lang].rss}>{ui.footerLinks.rss}</a>
+      </li>
+      <li>
+        <a href={PROFILE.github} rel="noopener">
+          GitHub<span class="visually-hidden"> {ui.external}</span>
+        </a>
+      </li>
+      <li>
+        <a href={PROFILE.linkedin} rel="noopener">
+          LinkedIn<span class="visually-hidden"> {ui.external}</span>
+        </a>
+      </li>
+      <li>
+        <button type="button" class="link-button" data-consent-open>
+          {ui.cookies}
+        </button>
+      </li>
+    </ul>
+  </div>
+</footer>

@@ -1,0 +1,18 @@
+---
+import Card from '@grichard/ui/components/Card.astro';
+import type { Portfolio } from '../data/content';
+
+interface Props {
+  skills: Portfolio['skills'];
+}
+const { skills } = Astro.props;
+---
+
+<div class="cards">
+  {skills.map((skill) => (
+    <Card>
+      <h3>{skill.category}</h3>
+      <p>{skill.items}</p>
+    </Card>
+  ))}
+</div>

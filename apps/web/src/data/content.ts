@@ -1,0 +1,506 @@
+// Contenu du site (calqué sur le CV). Toute modification de texte se fait ici.
+// Les textes des pages « confidentialité » et « accessibilité » sont dans pages.ts.
+import type { Lang } from '../lib/i18n';
+
+export interface Project {
+  title: string;
+  desc: string;
+  tags: string[];
+  href?: string;
+}
+export interface Experience {
+  role: string;
+  company: string;
+  location: string;
+  date: string;
+  desc: string;
+}
+export interface Portfolio {
+  meta: { title: string; description: string };
+  ui: Record<string, string>;
+  blog: Record<
+    | 'title'
+    | 'intro'
+    | 'all'
+    | 'min'
+    | 'pageIntro'
+    | 'pageDescription'
+    | 'siteName'
+    | 'home'
+    | 'by'
+    | 'related'
+    | 'toc'
+    | 'tocLabel'
+    | 'crumbLabel'
+    | 'tableLabel'
+    | 'dateLocale'
+    | 'otherLang'
+    | 'emptyTitle'
+    | 'emptyText',
+    string
+  >;
+  tools: { title: string; intro: string; all: string };
+  nav: Record<
+    'about' | 'skills' | 'experience' | 'projects' | 'contact' | 'blog' | 'tools',
+    string
+  >;
+  hero: {
+    greeting: string;
+    role: string;
+    cvBtn: string;
+    contactBtn: string;
+    cvLink: string;
+    terminal: { cmd: string; out: string }[];
+  };
+  aboutTitle: string;
+  about: string;
+  skillsTitle: string;
+  skills: { category: string; items: string }[];
+  experienceTitle: string;
+  experiences: Experience[];
+  projectsTitle: string;
+  projects: Project[];
+  educationTitle: string;
+  education: string[];
+  languagesInfo: string;
+  contactTitle: string;
+  form: Record<string, string>;
+  footer: { legal: string; rights: string };
+  legal: { title: string; sections: { h: string; p: string }[] };
+}
+
+export const PROFILE = {
+  name: 'Guillaume Richard',
+  email: 'contact@grichard.eu',
+  location: 'Laval, France',
+  linkedin: 'https://www.linkedin.com/in/guillaume-richard-in',
+  github: 'https://github.com/Dakire',
+};
+
+export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
+  fr: {
+    meta: {
+      title: 'Guillaume Richard | Technicien Informatique & Systèmes Numériques',
+      description:
+        'Portfolio de Guillaume Richard, Technicien Informatique et Systèmes Numériques à Laval. Expertise en infrastructure (M365, Google Workspace, DNS, Windows Server), Cloud et développement.',
+    },
+    ui: {
+      skip: 'Aller au contenu principal',
+      home: "Retour à l'accueil",
+      menu: 'Menu principal',
+      openMenu: 'Ouvrir le menu',
+      closeMenu: 'Fermer le menu',
+      switchLang: 'Read this site in English',
+      linkedin: 'Profil LinkedIn (nouvelle fenêtre)',
+      github: 'Profil GitHub (nouvelle fenêtre)',
+      projectOpen: 'voir sur GitHub (nouvelle fenêtre)',
+      cvOpen: 'PDF, nouvelle fenêtre',
+      languages: 'Langues',
+      back: 'Retour au portfolio',
+      cookies: 'Gérer les cookies',
+      repos: 'Voir tous mes dépôts GitHub',
+      tags: 'Technologies utilisées',
+      theme: 'Thème clair',
+      mobile: 'mobile',
+      search: 'Rechercher ou lancer une commande (Ctrl + K)',
+      logo: 'GR_PORTFOLIO',
+      langName: 'English',
+    },
+    blog: {
+      title: 'Derniers articles',
+      intro: "Notes techniques sur la messagerie, le DNS et l'administration cloud.",
+      all: 'Tous les articles',
+      min: 'min de lecture',
+      pageIntro:
+        "Notes techniques sur la messagerie, le DNS, l'administration Microsoft 365 / Google Workspace et le poste de travail.",
+      pageDescription:
+        'Notes techniques sur la messagerie (SPF, DKIM, DMARC), le DNS, les migrations Microsoft 365 / Google Workspace et le poste de travail.',
+      siteName: 'Blog de Guillaume Richard',
+      home: 'Accueil',
+      by: 'Par',
+      related: 'À lire aussi',
+      toc: 'Sommaire',
+      tocLabel: "Sommaire de l'article",
+      crumbLabel: "Fil d'Ariane",
+      tableLabel: 'Tableau (défilement horizontal)',
+      dateLocale: 'fr-FR',
+      otherLang: 'Read this article in English',
+      emptyTitle: 'Les premiers articles arrivent',
+      emptyText: "Les notes techniques seront publiées ici dès qu'elles sont prêtes.",
+    },
+    tools: {
+      title: 'Outils',
+      intro:
+        "Des outils gratuits pour techniciens et administrateurs, nés de problèmes rencontrés en support : diagnostic DNS et e-mail, calendriers ICS, réseau, encodage, JSON, mots de passe, conversions. Ceux qui traitent des fichiers ou du texte s'exécutent dans votre navigateur ; seul l'outil DNS interroge des résolveurs publics.",
+      all: 'Tous les outils',
+    },
+    nav: {
+      about: 'À propos',
+      skills: 'Compétences',
+      experience: 'Expériences',
+      projects: 'Projets',
+      contact: 'Contact',
+      blog: 'Blog',
+      tools: 'Outils',
+    },
+    hero: {
+      greeting: 'Bonjour, je suis',
+      role: 'Technicien Informatique & Systèmes Numériques',
+      cvBtn: 'Télécharger mon CV',
+      contactBtn: 'Me contacter',
+      cvLink: '/CV_Guillaume_Richard_FR.pdf',
+      terminal: [
+        { cmd: 'whoami', out: 'guillaume · technicien informatique & systèmes numériques' },
+        { cmd: 'cat stack.txt', out: 'Microsoft 365 · Google Workspace · DNS · Windows Server' },
+        { cmd: 'ls ~/blog', out: 'spf-dkim-dmarc  delivrabilite  dns  migration  windows-11' },
+      ],
+    },
+    aboutTitle: 'À propos de moi',
+    about:
+      "Passionné par l'informatique depuis toujours et d'un naturel curieux, j'aime explorer et tester les nouvelles technologies. Fort de mon expérience, je possède aujourd'hui une solide expertise en administration système et réseau, gestion Cloud (M365/Workspace), troubleshooting DNS et support IT de bout en bout. Au quotidien, je déploie et administre des infrastructures complexes tout en développant des outils d'automatisation sur mesure.",
+    skillsTitle: "Domaines d'Expertise",
+    skills: [
+      {
+        category: 'Systèmes & Réseaux',
+        items:
+          'Windows Server (AD, MDT, WDS, DNS, DHCP, RDP), Linux. Gestion de Réseaux : LAN/WLAN, Stormshield, VPN, FTP/SFTP.',
+      },
+      {
+        category: 'Messagerie & Cloud',
+        items:
+          'Expertise M365 & Google Workspace. Analyse SMTP, Délivrabilité, gestion des Zones DNS (MX, SPF, DKIM, DMARC), Maintien en Conditions Opérationnelles (MCO).',
+      },
+      {
+        category: 'Web & Développement',
+        items:
+          'Création et gestion de sites (WordPress, Wix, Shopify, React). Langages : C#, Java, Python, PowerShell, Bash, SQL, PHP.',
+      },
+      {
+        category: 'Support & Projets IT',
+        items:
+          'Support utilisateur de bout en bout (N1 à N3), escalade éditeurs (N4), déploiement de logiciels métiers et accompagnement technique.',
+      },
+    ],
+    experienceTitle: 'Expériences Professionnelles',
+    experiences: [
+      {
+        role: 'Technicien informatique et systèmes numériques',
+        company: 'TIXIA Services numériques',
+        location: 'Laval, France',
+        date: 'Depuis Août 2023',
+        desc: 'Administration avancée de Microsoft 365 et Google Workspace (identités, sécurité, MCO). Migrations complexes : IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail, Outlook vers le Cloud. Gestion zones DNS, analyse headers SMTP et délivrabilité (SPF, DKIM, DMARC). Administration Windows Server (MDT, WDS, AD, DHCP, DNS, RDP). Support IT N1 à N3 (escalade N4 éditeurs) et masterisation de PC.',
+      },
+      {
+        role: 'Intervenant Dépannage Informatique',
+        company: 'AlloVoisin / Particuliers',
+        location: 'Laval & Le Mans',
+        date: 'Depuis 2021',
+        desc: 'Assistance informatique de proximité et diagnostic (matériel/logiciel). Réparation de PC, conseil technologique et optimisation de systèmes.',
+      },
+      {
+        role: 'Webmaster',
+        company: 'Les papiers de Lucas',
+        location: 'Changé, France',
+        date: 'Avril 2022 - Juin 2022',
+        desc: "Maintenance technique et administration d'un site e-commerce PrestaShop. Audits SEO détaillés, gestion DNS et correction UX/UI.",
+      },
+      {
+        role: 'Technicien de Maintenance IT',
+        company: 'Tibco (Groupe Lactalis)',
+        location: 'Laval, France',
+        date: 'Janvier 2019',
+        desc: 'Préparation et masterisation de postes informatiques industriels. Diagnostic de pannes matérielles et télé-assistance.',
+      },
+    ],
+    projectsTitle: 'Projets Techniques & GitHub',
+    projects: [
+      {
+        title: 'Outil de Conversion Email (C#)',
+        desc: "Outil métier développé en C# permettant l'extraction et la conversion d'archives mails complètes (MSG/EML) vers PDF avec gestion automatique des pièces jointes.",
+        tags: ['C#', 'Outil Métier', 'Email'],
+      },
+      {
+        title: 'Automatisation (Python, Scripts)',
+        desc: "Création de scripts Python, PowerShell et Google Apps Script pour l'automatisation de tâches récurrentes et l'optimisation des flux de travail.",
+        tags: ['Python', 'PowerShell', 'Automation'],
+      },
+      {
+        title: 'Création Web (JS, React, CMS)',
+        href: 'https://github.com/Dakire/portfolio',
+        desc: "Développement d'extensions navigateur sur mesure et déploiement de sites web modernes (WordPress, Wix, React).",
+        tags: ['JavaScript', 'React', 'Web'],
+      },
+    ],
+    educationTitle: 'Formation & Profil',
+    education: [
+      'Licence Informatique (Développement et Programmation) - Le Mans Université (2023)',
+      "Baccalauréat Scientifique (Sciences de l'Ingénieur) - Lycée Immaculée Conception, Laval (2020)",
+    ],
+    languagesInfo: 'Français (langue maternelle), Anglais (langue maternelle).',
+    contactTitle: 'Me contacter',
+    form: {
+      name: 'Votre nom complet',
+      email: 'Votre adresse email',
+      message: 'Votre message',
+      gdpr: "J'accepte que mes données soient utilisées pour me recontacter.",
+      submit: 'Envoyer le message',
+      sending: 'Envoi en cours...',
+      success: 'Message envoyé avec succès !',
+      error: 'Erreur technique. Veuillez réessayer.',
+      captcha: "Veuillez valider la vérification anti-robot avant l'envoi.",
+      captchaLabel: 'Vérification anti-robot',
+      captchaUnavailable:
+        "La vérification anti-robot n'a pas pu se charger. Rechargez la page ou écrivez-moi directement par e-mail.",
+      rateLimited:
+        'Trop de messages pour le moment. Réessayez plus tard ou écrivez-moi directement par e-mail.',
+      network: 'Connexion impossible. Vérifiez votre réseau puis réessayez.',
+      fallback: `Le formulaire est indisponible. Écrivez-moi à ${PROFILE.email}.`,
+      requiredNote: "Les champs marqués d'un * sont obligatoires.",
+      errName: 'Indiquez votre nom.',
+      errEmail: 'Indiquez une adresse e-mail valide, par exemple nom@exemple.fr.',
+      errMessage: 'Écrivez votre message.',
+      errGdpr: 'Veuillez accepter pour que je puisse vous répondre.',
+      sendAnother: 'Envoyer un autre message',
+      retryCaptcha: 'Recharger la vérification',
+      captchaLoading: 'Chargement de la vérification anti-robot…',
+    },
+    footer: { legal: 'Mentions Légales', rights: 'Tous droits réservés.' },
+    legal: {
+      title: 'Mentions Légales',
+      sections: [
+        {
+          h: '1. Éditeur du site',
+          p: 'Ce site est édité par Guillaume Richard, un particulier. Résidant à : Laval, 53000, France. Contact : contact@grichard.eu',
+        },
+        {
+          h: '2. Hébergement',
+          p: 'Ce site est hébergé par OVH SAS. Adresse : 2 rue Kellermann - 59100 Roubaix - France. Site web : www.ovh.com',
+        },
+        {
+          h: '3. Propriété intellectuelle',
+          p: "L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés.",
+        },
+        {
+          h: '4. Données personnelles (RGPD)',
+          p: "Les informations recueillies via le formulaire de contact (Nom, Email, Message) sont uniquement destinées à vous répondre. Elles ne sont stockées dans aucune base de données et ne sont jamais cédées à des tiers. Pour limiter les abus, une empreinte non réversible de votre adresse IP est conservée au plus une heure dans un fichier temporaire du serveur, uniquement pour plafonner le nombre d'envois. Le formulaire est protégé par Cloudflare Turnstile (Cloudflare, Inc., société américaine), qui vérifie que le visiteur est humain sans cookie publicitaire. Conformément à la loi « Informatique et Libertés » et au RGPD, vous disposez d'un droit d'accès, de rectification et d'effacement de vos données en me contactant par email.",
+        },
+        {
+          h: "5. Cookies et mesure d'audience",
+          p: "Ce site ne dépose aucun cookie publicitaire. Une mesure d'audience (Google Analytics 4, Google Ireland Ltd / Google LLC) n'est activée qu'après votre consentement, recueilli par le bandeau affiché à votre première visite. Elle dépose les cookies _ga et _ga_* (durée maximale de 13 mois) pour compter les visites. Votre choix est conservé 6 mois dans le stockage local de votre navigateur ; vous pouvez le modifier ou retirer votre consentement à tout moment via le lien « Gérer les cookies » en bas de page. Sans consentement, aucune donnée n'est envoyée à Google.",
+        },
+      ],
+    },
+  },
+  en: {
+    meta: {
+      title: 'Guillaume Richard | IT & Digital Systems Technician',
+      description:
+        'Portfolio of Guillaume Richard, IT and Digital Systems Technician based in Laval, France. Expertise in infrastructure (M365, Google Workspace, DNS, Windows Server), Cloud and development.',
+    },
+    ui: {
+      skip: 'Skip to main content',
+      home: 'Back to top',
+      menu: 'Main menu',
+      openMenu: 'Open menu',
+      closeMenu: 'Close menu',
+      switchLang: 'Lire ce site en français',
+      linkedin: 'LinkedIn profile (opens in a new window)',
+      github: 'GitHub profile (opens in a new window)',
+      projectOpen: 'view on GitHub (opens in a new window)',
+      cvOpen: 'PDF, opens in a new window',
+      languages: 'Languages',
+      back: 'Back to portfolio',
+      cookies: 'Cookie settings',
+      repos: 'See all my GitHub repositories',
+      tags: 'Technologies used',
+      theme: 'Light theme',
+      mobile: 'mobile',
+      search: 'Search or run a command (Ctrl + K)',
+      logo: 'GR_PORTFOLIO',
+      langName: 'Français',
+    },
+    blog: {
+      title: 'Latest articles',
+      intro: 'Technical notes on email, DNS and cloud administration.',
+      all: 'All articles',
+      min: 'min read',
+      pageIntro:
+        'Technical notes on email, DNS, Microsoft 365 / Google Workspace administration and the workstation.',
+      pageDescription:
+        'Technical notes on email (SPF, DKIM, DMARC), DNS, Microsoft 365 / Google Workspace migrations and the workstation.',
+      siteName: "Guillaume Richard's blog",
+      home: 'Home',
+      by: 'By',
+      related: 'Further reading',
+      toc: 'Contents',
+      tocLabel: 'Article contents',
+      crumbLabel: 'Breadcrumb',
+      tableLabel: 'Table (scrolls horizontally)',
+      dateLocale: 'en-GB',
+      otherLang: 'Lire cet article en français',
+      emptyTitle: 'The first articles are on their way',
+      emptyText: 'Technical notes will be published here as soon as they are ready.',
+    },
+    tools: {
+      title: 'Tools',
+      intro:
+        'Free tools for technicians and administrators, born from problems met in support: DNS and email diagnosis, ICS calendars, networking, encoding, JSON, passwords, conversions. Those that process files or text run in your browser; only the DNS tool queries public resolvers.',
+      all: 'All tools',
+    },
+    nav: {
+      about: 'About',
+      skills: 'Skills',
+      experience: 'Experience',
+      projects: 'Projects',
+      contact: 'Contact',
+      blog: 'Blog',
+      tools: 'Tools',
+    },
+    hero: {
+      greeting: 'Hello, I am',
+      role: 'IT & Digital Systems Technician',
+      cvBtn: 'Download Resume',
+      contactBtn: 'Contact Me',
+      cvLink: '/Resume_Guillaume_Richard_EN.pdf',
+      terminal: [
+        { cmd: 'whoami', out: 'guillaume · it & digital systems technician' },
+        { cmd: 'cat stack.txt', out: 'Microsoft 365 · Google Workspace · DNS · Windows Server' },
+        { cmd: 'ls ~/blog', out: 'spf-dkim-dmarc  deliverability  dns  migration  windows-11' },
+      ],
+    },
+    aboutTitle: 'About Me',
+    about:
+      'Passionate about IT from an early age and naturally curious, I love exploring and testing new technologies. Building on solid experience, I possess a strong expertise in system and network administration, Cloud management (M365/Workspace), DNS troubleshooting, and end-to-end IT support. On a daily basis, I deploy and manage complex IT infrastructures while developing custom automation tools.',
+    skillsTitle: 'Core Expertise',
+    skills: [
+      {
+        category: 'Systems & Networks',
+        items:
+          'Windows Server (AD, MDT, WDS, DNS, DHCP, RDP), Linux. Network Management: LAN/WLAN, Stormshield, VPN, FTP/SFTP.',
+      },
+      {
+        category: 'Messaging & Cloud',
+        items:
+          'M365 & Google Workspace expertise. SMTP header analysis, deliverability troubleshooting, DNS zone management (MX, SPF, DKIM, DMARC).',
+      },
+      {
+        category: 'Web & Development',
+        items:
+          'Website creation and management (WordPress, Wix, Shopify, React). Languages: C#, Java, Python, PowerShell, Bash, SQL, PHP.',
+      },
+      {
+        category: 'IT Support & Projects',
+        items:
+          'End-to-end user support (L1 to L3), software publisher escalation (L4), business application deployment, and technical consulting.',
+      },
+    ],
+    experienceTitle: 'Professional Experience',
+    experiences: [
+      {
+        role: 'IT and Digital Systems Technician',
+        company: 'TIXIA Services numériques',
+        location: 'Laval, France',
+        date: 'Since August 2023',
+        desc: 'Advanced administration of Microsoft 365 and Google Workspace (identities, security). Complex migrations: IMAP (OVH, Gandi, IONOS, Orange), Gmail, Outlook to the Cloud. DNS zone management, SMTP headers analysis, and deliverability (SPF, DKIM, DMARC). Windows Server administration (MDT, WDS, AD, DHCP, DNS, RDP). L1-L3 IT Support (L4 escalation) and PC imaging.',
+      },
+      {
+        role: 'IT Support Technician',
+        company: 'Private Individuals',
+        location: 'Laval & Le Mans',
+        date: 'Since 2021',
+        desc: 'Local IT assistance and diagnostics (hardware/software). PC repair, technological consulting, and system optimization.',
+      },
+      {
+        role: 'Webmaster',
+        company: 'Les papiers de Lucas',
+        location: 'Changé, France',
+        date: 'April 2022 - June 2022',
+        desc: 'Technical maintenance and administration of a PrestaShop e-commerce website. Detailed SEO audits, DNS management, and UX/UI fixes.',
+      },
+      {
+        role: 'IT Maintenance Technician',
+        company: 'Tibco (Lactalis Group)',
+        location: 'Laval, France',
+        date: 'January 2019',
+        desc: 'Preparation and system imaging of industrial computers. On-site hardware diagnostics and remote technical assistance.',
+      },
+    ],
+    projectsTitle: 'Technical Projects & GitHub',
+    projects: [
+      {
+        title: 'MSG/EML to PDF Converter',
+        desc: 'Business tool developed in C# allowing the extraction and conversion of complete email archives (MSG/EML) into PDFs with automated attachment handling.',
+        tags: ['C#', 'Business Tool', 'Email'],
+      },
+      {
+        title: 'Automation (Python, Scripts)',
+        desc: 'Creation of Python, PowerShell, and Google Apps Script scripts to automate recurring tasks and optimize workflows.',
+        tags: ['Python', 'PowerShell', 'Automation'],
+      },
+      {
+        title: 'Web Creation (JS, React, CMS)',
+        href: 'https://github.com/Dakire/portfolio',
+        desc: 'Development of custom browser extensions and deployment of modern websites (WordPress, Wix, React).',
+        tags: ['JavaScript', 'React', 'Web'],
+      },
+    ],
+    educationTitle: 'Education & Profile',
+    education: [
+      'Bachelor of Science in Computer Science (Development & Programming) - Le Mans University (2023)',
+      'French Scientific Baccalauréat (Engineering Sciences) - Lycée Immaculée Conception, Laval (2020)',
+    ],
+    languagesInfo: 'French (Native), English (Native).',
+    contactTitle: 'Get in touch',
+    form: {
+      name: 'Full Name',
+      email: 'Email Address',
+      message: 'Your message',
+      gdpr: 'I agree that my data may be used to contact me.',
+      submit: 'Send Message',
+      sending: 'Sending...',
+      success: 'Message sent successfully!',
+      error: 'Technical error. Please try again.',
+      captcha: 'Please complete the anti-bot check before sending.',
+      captchaLabel: 'Anti-bot check',
+      captchaUnavailable:
+        'The anti-bot check could not load. Reload the page or email me directly.',
+      rateLimited: 'Too many messages right now. Please try again later or email me directly.',
+      network: 'Connection failed. Check your network and try again.',
+      fallback: `The form is unavailable. Email me at ${PROFILE.email}.`,
+      requiredNote: 'Fields marked with * are required.',
+      errName: 'Please enter your name.',
+      errEmail: 'Please enter a valid email address, for example name@example.com.',
+      errMessage: 'Please write your message.',
+      errGdpr: 'Please accept so that I can reply to you.',
+      sendAnother: 'Send another message',
+      retryCaptcha: 'Reload the check',
+      captchaLoading: 'Loading the anti-bot check…',
+    },
+    footer: { legal: 'Legal Notice', rights: 'All rights reserved.' },
+    legal: {
+      title: 'Legal Notice',
+      sections: [
+        {
+          h: '1. Publisher',
+          p: 'This website is published by Guillaume Richard, a private individual, residing in Laval, 53000, France. Contact: contact@grichard.eu',
+        },
+        {
+          h: '2. Hosting',
+          p: 'This website is hosted by OVH SAS, 2 rue Kellermann - 59100 Roubaix - France. Website: www.ovh.com',
+        },
+        {
+          h: '3. Intellectual property',
+          p: 'This website is protected by French and international copyright and intellectual property laws. All reproduction rights are reserved.',
+        },
+        {
+          h: '4. Personal data (GDPR)',
+          p: 'Information collected through the contact form (name, email, message) is used solely to reply to you. It is not stored in any database and is never shared with third parties. To limit abuse, a non-reversible hash of your IP address is kept for at most one hour in a temporary server file, solely to cap the number of submissions. The form is protected by Cloudflare Turnstile (Cloudflare, Inc., a US company), which checks that the visitor is human without advertising cookies. Under French data protection law and the GDPR, you have the right to access, rectify and erase your data by contacting me by email.',
+        },
+        {
+          h: '5. Cookies and analytics',
+          p: 'This website sets no advertising cookies. Audience measurement (Google Analytics 4, Google Ireland Ltd / Google LLC) is enabled only after you give consent through the banner shown on your first visit. It sets the _ga and _ga_* cookies (13 months maximum) to count visits. Your choice is kept for 6 months in your browser\'s local storage; you can change it or withdraw consent at any time with the "Cookie settings" link at the bottom of the page. Without consent, no data is sent to Google.',
+        },
+      ],
+    },
+  },
+};

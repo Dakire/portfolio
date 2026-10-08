@@ -76,6 +76,7 @@ jobs:
       - run: pnpm --filter @grichard/web lint
       - run: pnpm --filter @grichard/web exec playwright install --with-deps chromium
       - run: pnpm --filter @grichard/web test:e2e
+      - run: pnpm --filter @grichard/web test # intégrité de dist/ (liens, hreflang, balisage), construit par l'étape précédente
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: failure()
         with:

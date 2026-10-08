@@ -1,0 +1,48 @@
+---
+import ThemeSwitch from '@grichard/ui/components/ThemeSwitch.astro';
+import { ROUTES, UI, type Lang, type RouteKey } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+  /** Chemin de la page courante, pour repérer le lien actif. */
+  path: string;
+  /** Page équivalente dans l'autre langue ; absent : renvoie vers l'accueil de l'autre langue. */
+  otherHref?: string;
+}
+const { lang, path, otherHref } = Astro.props;
+const ui = UI[lang];
+const other = lang === 'fr' ? 'en' : 'fr';
+const items: RouteKey[] = ['about', 'skills', 'projects', 'blog', 'tools', 'contact'];
+const isCurrent = (href: string) => path === href || path.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="container site-header-inner">
+    <a href={ROUTES[lang].home} class="site-name" aria-label={`grichard.eu, ${ui.home}`}>
+      <span aria-hidden="true">~/</span>grichard
+      <span aria-hidden="true" class="site-tld">
+        .eu
+      </span>
+    </a>
+    <nav aria-label={ui.mainNav} class="site-nav">
+      <ul>
+        {items.map((key) => (
+          <li>
+            <a
+              href={ROUTES[lang][key]}
+              aria-current={isCurrent(ROUTES[lang][key]) ? 'page' : undefined}
+            >
+              {ui.nav[key as keyof typeof ui.nav]}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="site-tools">
+      <a href={otherHref ?? ROUTES[other].home} hreflang={other} lang={other} class="lang-link">
+        {ui.langName}
+      </a>
+      <ThemeSwitch label={ui.theme} labels={ui.themeLabels} />
+    </div>
+  </div>
+</header>

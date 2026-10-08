@@ -1,0 +1,12 @@
+---
+import BlogIndex from '../../../views/BlogIndex.astro';
+import { getPosts } from '../../../lib/blog';
+
+export async function getStaticPaths() {
+  const categories = new Set((await getPosts('fr')).map((post) => post.data.category));
+  return [...categories].map((category) => ({ params: { category }, props: { category } }));
+}
+const { category } = Astro.props;
+---
+
+<BlogIndex lang="fr" category={category} />

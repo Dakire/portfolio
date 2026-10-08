@@ -3,30 +3,51 @@ import '@grichard/ui/fonts.css';
 import '@grichard/ui/tokens.css';
 import '@grichard/ui/base.css';
 import '@grichard/ui/components.css';
-import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import '../styles/site.css';
 import SkipLink from '@grichard/ui/components/SkipLink.astro';
-import ThemeSwitch from '@grichard/ui/components/ThemeSwitch.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { ROUTES, SITE, UI, otherLang, type Alternates, type Lang } from '../lib/i18n';
+import { OG_DEFAULT, jsonForScript, versioned } from '../lib/seo';
 
 interface Props {
+  lang: Lang;
   title: string;
   description: string;
-  lang?: 'fr' | 'en';
+  /** Chemin canonique de la page (avec « / » final). */
+  path: string;
+  /** Page équivalente dans chaque langue (hreflang et sélecteur de langue) ; absent : page sans traduction. */
+  alternates?: Partial<Alternates>;
+  type?: 'website' | 'article';
+  image?: { url: string; width: number; height: number; alt: string };
+  ld?: object;
   noindex?: boolean;
+  /** Scripts autonomes de public/js/ à charger en plus des scripts communs. */
+  scripts?: string[];
 }
-const { title, description, lang = 'fr', noindex = false } = Astro.props;
+const {
+  lang,
+  title,
+  description,
+  path,
+  alternates = {},
+  type = 'website',
+  image = OG_DEFAULT,
+  ld,
+  noindex = false,
+  scripts = [],
+} = Astro.props;
 
-// Empreinte du script de thème dans l'URL : cache longue durée sans risque de version périmée.
-const themeHash = createHash('sha1')
-  .update(readFileSync(resolve(process.cwd(), 'public/js/theme.js')))
-  .digest('hex')
-  .slice(0, 8);
-const canonical = new URL(Astro.url.pathname, Astro.site);
-const labels =
-  lang === 'fr'
-    ? { skip: 'Aller au contenu', theme: 'Thème', auto: 'auto', light: 'clair', dark: 'sombre' }
-    : { skip: 'Skip to content', theme: 'Theme', auto: 'auto', light: 'light', dark: 'dark' };
+const ui = UI[lang];
+const url = `${SITE}${path}`;
+const other = otherLang(lang);
+const otherHref = alternates[other];
+const hreflangs = (['fr', 'en'] as const).filter((l) => alternates[l]);
+const feed = {
+  title: lang === 'fr' ? 'Blog de Guillaume Richard' : "Guillaume Richard's blog",
+  href: `${SITE}${ROUTES[lang].rss}`,
+};
+const allScripts = [...scripts, '/js/consent.js'];
 ---
 
 <!doctype html>
@@ -34,47 +55,55 @@ const labels =
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0a0c0f" />
+    <meta name="color-scheme" content="dark light" />
+    <script is:inline src={versioned('/js/theme.js')}></script>
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="canonical" href={url} />
+    {hreflangs.map((l) => (
+      <link rel="alternate" hreflang={l} href={`${SITE}${alternates[l]}`} />
+    ))}
+    {alternates.fr && (
+      <link rel="alternate" hreflang="x-default" href={`${SITE}${alternates.fr}`} />
+    )}
+    <link rel="alternate" type="application/rss+xml" title={feed.title} href={feed.href} />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0a0c0f" />
-    <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
-    <script is:inline src={`/js/theme.js?v=${themeHash}`}></script>
+    <meta name="author" content="Guillaume Richard" />
+    <meta
+      name="robots"
+      content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'}
+    />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Guillaume Richard" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:locale" content={ui.ogLocale} />
+    {otherHref && <meta property="og:locale:alternate" content={UI[other].ogLocale} />}
+    <meta property="og:image" content={image.url} />
+    <meta property="og:image:width" content={String(image.width)} />
+    <meta property="og:image:height" content={String(image.height)} />
+    <meta property="og:image:alt" content={image.alt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image.url} />
+    <meta name="twitter:image:alt" content={image.alt} />
+    {ld && <script type="application/ld+json" set:html={jsonForScript(ld)} />}
   </head>
   <body>
-    <SkipLink label={labels.skip} />
-    <header class="container site-header">
-      <a href={lang === 'fr' ? '/' : '/en/'} class="site-name">
-        grichard<span aria-hidden="true">.eu</span>
-      </a>
-      <ThemeSwitch
-        label={labels.theme}
-        labels={{ auto: labels.auto, light: labels.light, dark: labels.dark }}
-      />
-    </header>
+    <SkipLink label={ui.skip} />
+    <SiteHeader lang={lang} path={path} otherHref={otherHref} />
     <main id="contenu" tabindex="-1">
       <slot />
     </main>
+    <SiteFooter lang={lang} />
+    {allScripts.map((src) => (
+      <script is:inline defer src={versioned(src)} />
+    ))}
   </body>
 </html>
-
-<style is:global>
-  .site-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 4rem;
-    padding-block: var(--space-2);
-    gap: var(--space-4);
-  }
-  .site-name {
-    color: var(--ink);
-    font-family: var(--font-mono);
-    font-weight: 600;
-    text-decoration: none;
-  }
-  .site-name span {
-    color: var(--accent);
-  }
-</style>

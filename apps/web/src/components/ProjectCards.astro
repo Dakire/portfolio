@@ -1,0 +1,34 @@
+---
+import Card from '@grichard/ui/components/Card.astro';
+import Tag from '@grichard/ui/components/Tag.astro';
+import type { Project } from '../data/content';
+import { UI, type Lang } from '../lib/i18n';
+
+interface Props {
+  items: Project[];
+  lang: Lang;
+}
+const { items, lang } = Astro.props;
+const ui = UI[lang];
+---
+
+<div class="cards cards-wide">
+  {items.map((project) => (
+    <Card>
+      <h3>{project.title}</h3>
+      <p>{project.desc}</p>
+      <p class="row">
+        {project.tags.map((tag) => (
+          <Tag>{tag}</Tag>
+        ))}
+      </p>
+      {project.href && (
+        <p>
+          <a href={project.href} rel="noopener">
+            GitHub<span class="visually-hidden"> {ui.external}</span>
+          </a>
+        </p>
+      )}
+    </Card>
+  ))}
+</div>
