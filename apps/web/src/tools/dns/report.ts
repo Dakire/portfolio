@@ -5,7 +5,8 @@ import type { Lang } from '../../lib/i18n';
 import { describeFinding, DNS_TOOL } from './text';
 
 const MARK: Record<Severity, string> = { ok: '✅', info: 'ℹ️', warn: '⚠️', error: '❌' };
-const cell = (s: unknown): string => String(s).replace(/\|/g, '\\|').replace(/\n/g, ' ');
+const cell = (s: unknown): string =>
+  String(s).replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/\n/g, ' ');
 
 export function buildMarkdown(
   report: DomainReport,
