@@ -40,3 +40,5 @@ vendor/
 .pnpm-store/
 *.sqlite
 legacy/dist
+.astro/
+apps/web/dist

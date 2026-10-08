@@ -1,0 +1,19 @@
+---
+interface Props {
+  /** Si href est fourni, toute la carte est un lien. */
+  href?: string;
+  class?: string;
+}
+const { href, class: extra = '', ...rest } = Astro.props;
+const classes = ['card', extra].filter(Boolean).join(' ');
+---
+
+{href ? (
+  <a href={href} class={classes} {...rest}>
+    <slot />
+  </a>
+) : (
+  <div class={classes} {...rest}>
+    <slot />
+  </div>
+)}

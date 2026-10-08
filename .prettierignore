@@ -5,3 +5,6 @@ dist
 vendor
 **/*.min.*
 tests/contract/contract.json
+.astro
+test-results
+playwright-report
