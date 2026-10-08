@@ -1,6 +1,8 @@
 // Étapes après `astro build` :
 //  1. /sitemap.xml (URL historique, citée par robots.txt) : copie de l'index produit par @astrojs/sitemap ;
-//  2. images de partage OpenGraph (1200 x 630) : une par article, dans dist/og/<slug>.png, rendue par Chromium (Playwright).
+//  2. empreintes SHA-256 des scripts en ligne (hydratation des îlots Astro) : écrites dans .cache/csp-hashes.json, lues par le générateur
+//     de .htaccess pour les autoriser dans la CSP sans 'unsafe-inline' ;
+//  3. images de partage OpenGraph (1200 x 630) : une par article, dans dist/og/<slug>.png, rendue par Chromium (Playwright).
 //     Sans Chromium, l'image générique /og-image.png est copiée à la place : l'URL existe toujours, le build ne casse jamais pour une image.
 import { createHash } from 'node:crypto';
 import { copyFile, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
@@ -146,5 +148,43 @@ async function ogImages() {
   );
 }
 
+/** Tous les fichiers .html de dist/. */
+async function htmlFiles(dir = DIST) {
+  const out = [];
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...(await htmlFiles(path)));
+    else if (entry.name.endsWith('.html')) out.push(path);
+  }
+  return out;
+}
+
+/** Empreintes (sha256-…) des scripts et feuilles de style en ligne produits par Astro pour ses îlots : la CSP se passe ainsi d'« unsafe-inline ». */
+async function cspHashes() {
+  const hashes = { script: new Set(), style: new Set() };
+  for (const file of await htmlFiles()) {
+    const html = await readFile(file, 'utf-8');
+    for (const match of html.matchAll(
+      /<script(?![^>]*src=)(?![^>]*type="application\/ld\+json")[^>]*>([\s\S]*?)<\/script>/gi,
+    )) {
+      if (match[1]?.trim())
+        hashes.script.add(`sha256-${createHash('sha256').update(match[1]).digest('base64')}`);
+    }
+    for (const match of html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)) {
+      if (match[1]?.trim())
+        hashes.style.add(`sha256-${createHash('sha256').update(match[1]).digest('base64')}`);
+    }
+  }
+  await mkdir('.cache', { recursive: true });
+  await writeFile(
+    '.cache/csp-hashes.json',
+    JSON.stringify({ script: [...hashes.script].sort(), style: [...hashes.style].sort() }, null, 2),
+  );
+  console.log(
+    `[postbuild] empreintes CSP : ${hashes.script.size} script(s), ${hashes.style.size} feuille(s) de style en ligne`,
+  );
+}
+
 await sitemap();
+await cspHashes();
 await ogImages();

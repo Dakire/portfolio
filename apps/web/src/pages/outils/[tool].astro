@@ -1,0 +1,11 @@
+---
+import ToolPage from '../../views/ToolPage.astro';
+import { TOOLS } from '../../tools/registry';
+
+export function getStaticPaths() {
+  return TOOLS.map((tool) => ({ params: { tool: tool.slug.fr }, props: { toolId: tool.id } }));
+}
+const { toolId } = Astro.props;
+---
+
+<ToolPage lang="fr" toolId={toolId} />

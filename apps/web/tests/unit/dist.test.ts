@@ -65,12 +65,19 @@ describe('site construit', () => {
       expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
     });
 
-    it('ne contient ni <style> ni script en ligne (hors JSON-LD), ni gestionnaire on*', () => {
-      expect(html).not.toMatch(/<style[\s>]/i);
-      const scripts = [...html.matchAll(/<script([^>]*)>/gi)].map((m) => m[1]!);
-      for (const s of scripts)
-        expect(s, `script: ${s}`).toMatch(/src="|type="application\/ld\+json"/);
+    it('ne contient ni <style>, ni gestionnaire on*, ni script en ligne autre que le démarrage des îlots Astro', () => {
+      // Seule feuille en ligne tolérée : la règle d'affichage des îlots Astro (autorisée par son empreinte dans la CSP).
+      for (const m of html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi))
+        expect(m[1], 'feuille de style en ligne inattendue').toMatch(/^astro-island/);
       expect(html).not.toMatch(/\son[a-z]+="/i);
+      // Les rares scripts en ligne (hydratation des îlots) sont autorisés par leur empreinte dans la CSP (voir postbuild.mjs).
+      const inline = [
+        ...html.matchAll(
+          /<script(?![^>]*src=)(?![^>]*type="application\/ld\+json")[^>]*>([\s\S]*?)<\/script>/gi,
+        ),
+      ].map((m) => m[1]!);
+      for (const code of inline)
+        expect(code, 'script en ligne inattendu').toMatch(/astro-island|self\.Astro/);
     });
 
     it('ne pointe vers aucun fichier interne absent', () => {

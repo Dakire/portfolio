@@ -1,4 +1,5 @@
 import { unified } from '@astrojs/markdown-remark';
+import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 import rehypeTableScroll from './src/lib/rehype-table-scroll.mjs';
@@ -41,6 +42,7 @@ export default defineConfig({
     processor: unified({ rehypePlugins: [rehypeTableScroll] }),
   },
   integrations: [
+    preact(),
     sitemap({ filter: (page) => !EXCLUDED.some((part) => page.includes(part)) }),
     styleguide,
   ],

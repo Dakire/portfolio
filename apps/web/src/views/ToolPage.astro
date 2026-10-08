@@ -1,0 +1,135 @@
+---
+import Card from '@grichard/ui/components/Card.astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import '../styles/tools.css';
+import { PROFILE } from '../data/content';
+import { getPosts, postPath } from '../lib/blog';
+import { ROUTES, SITE, type Alternates, type Lang } from '../lib/i18n';
+import { breadcrumbLd } from '../lib/seo';
+import { HUB } from '../tools/hub';
+import { findTool, toolPath, toolUi, type ToolId } from '../tools/registry';
+import UnitConverter from '../tools/units/Tool';
+
+interface Props {
+  lang: Lang;
+  toolId: ToolId;
+}
+const { lang, toolId } = Astro.props;
+const tool = findTool(toolId);
+if (!tool) throw new Error(`Outil inconnu : ${toolId}`);
+const ui = toolUi(tool, lang);
+const hub = HUB[lang];
+const path = toolPath(tool, lang);
+const alternates: Alternates = { fr: toolPath(tool, 'fr'), en: toolPath(tool, 'en') };
+const posts = await getPosts(lang);
+const related = (ui.relatedLinks ?? []).flatMap((slug) => posts.filter((p) => p.slug === slug));
+
+const author = { '@type': 'Person', '@id': `${SITE}/#person`, name: PROFILE.name, url: `${SITE}/` };
+const ld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: ui.name,
+      url: `${SITE}${path}`,
+      description: ui.meta.appDescription,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      browserRequirements: 'Requires JavaScript',
+      inLanguage: lang === 'fr' ? 'fr-FR' : 'en',
+      isAccessibleForFree: true,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+      author,
+    },
+    breadcrumbLd([
+      { name: hub.breadcrumb.home, path: ROUTES[lang].home },
+      { name: hub.breadcrumb.tools, path: ROUTES[lang].tools },
+      { name: ui.name, path },
+    ]),
+    {
+      '@type': 'FAQPage',
+      mainEntity: ui.seo.faq.map(([question, answer]) => ({
+        '@type': 'Question',
+        name: question,
+        acceptedAnswer: { '@type': 'Answer', text: answer },
+      })),
+    },
+  ],
+};
+---
+
+<Base
+  lang={lang}
+  title={ui.meta.title}
+  description={ui.meta.description}
+  path={path}
+  alternates={alternates}
+  ld={ld}
+>
+  <PageHero path={`~/tools/${tool.slug[lang]}`} title={ui.h1} lead={ui.intro} />
+  <div class="container section stack-lg">
+    <nav aria-label={hub.breadcrumb.tools} class="meta breadcrumb">
+      <ol class="row" role="list">
+        <li>
+          <a href={ROUTES[lang].home}>{hub.breadcrumb.home}</a>
+        </li>
+        <li>
+          <a href={ROUTES[lang].tools}>{hub.breadcrumb.tools}</a>
+        </li>
+        <li aria-current="page">{ui.name}</li>
+      </ol>
+    </nav>
+
+    <div id="outil">{toolId === 'units' && <UnitConverter client:load lang={lang} />}</div>
+
+    <section aria-labelledby="what-title" class="stack">
+      <h2 id="what-title">{ui.seo.whatTitle}</h2>
+      <ul class="cards" role="list">
+        {ui.seo.what.map(([name, text]) => (
+          <li>
+            <Card>
+              <h3>{name}</h3>
+              <p>{text}</p>
+            </Card>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="how-title" class="tool-section">
+      <h2 id="how-title">{ui.seo.howTitle}</h2>
+      <p>{ui.seo.how}</p>
+    </section>
+
+    <section aria-labelledby="faq-title" class="tool-section">
+      <h2 id="faq-title">FAQ</h2>
+      <div class="faq">
+        {ui.seo.faq.map(([question, answer]) => (
+          <details>
+            <summary>{question}</summary>
+            <p>{answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby="privacy-title" class="tool-section">
+      <h2 id="privacy-title">{hub.privacyTitle}</h2>
+      <p>{ui.seo.privacy ?? ui.privacy}</p>
+    </section>
+
+    {related.length > 0 && (
+      <aside aria-labelledby="related-title" class="tool-section">
+        <h2 id="related-title">{ui.related}</h2>
+        <ul>
+          {related.map((p) => (
+            <li>
+              <a href={postPath(lang, p.slug)}>{p.data.title}</a>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    )}
+  </div>
+</Base>
