@@ -1,0 +1,70 @@
+---
+import Card from '@grichard/ui/components/Card.astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import '../styles/tools.css';
+import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
+import { HUB } from '../tools/hub';
+import { TOOL_ICONS } from '../tools/icons';
+import { TOOLS, toolPath, toolUi } from '../tools/registry';
+import { breadcrumbLd } from '../lib/seo';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const hub = HUB[lang];
+const ld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    breadcrumbLd([
+      { name: hub.breadcrumb.home, path: ROUTES[lang].home },
+      { name: hub.breadcrumb.tools, path: ROUTES[lang].tools },
+    ]),
+    {
+      '@type': 'ItemList',
+      name: hub.schemaName,
+      itemListElement: TOOLS.map((tool, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `https://grichard.eu${toolPath(tool, lang)}`,
+        name: toolUi(tool, lang).name,
+      })),
+    },
+  ],
+};
+---
+
+<Base
+  lang={lang}
+  title={hub.meta.title}
+  description={hub.meta.description}
+  path={ROUTES[lang].tools}
+  alternates={routeAlternates('tools')}
+  ld={ld}
+>
+  <PageHero path="~/tools" title={hub.h1} lead={hub.intro} />
+  <div class="container section stack-lg">
+    <ul class="cards" role="list">
+      {TOOLS.map((tool) => {
+        const ui = toolUi(tool, lang);
+        const Icon = TOOL_ICONS[tool.icon];
+        return (
+          <li>
+            <Card href={toolPath(tool, lang)} class="tool-card">
+              <Icon size={28} class="tool-card-icon" aria-hidden="true" />
+              <h2>{ui.name}</h2>
+              <p>{ui.card}</p>
+              <p class="meta">{hub.open} →</p>
+            </Card>
+          </li>
+        );
+      })}
+    </ul>
+
+    <section class="tool-section" aria-labelledby="privacy-title">
+      <h2 id="privacy-title">{hub.privacyTitle}</h2>
+      <p>{hub.privacy}</p>
+    </section>
+  </div>
+</Base>

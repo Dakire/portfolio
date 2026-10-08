@@ -1,0 +1,9 @@
+title = "grichard.eu"
+
+[extend]
+useDefault = true
+
+# Exceptions les plus étroites possible : une valeur précise, jamais un dossier entier.
+[allowlist]
+description = "Jeton JWT d'exemple de jwt.io (« John Doe », clé de démonstration publique) utilisé comme donnée des tests de l'outil de décodage de JWT"
+regexes = ['''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ\.[A-Za-z0-9_-]+''']

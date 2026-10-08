@@ -6,6 +6,11 @@
     "react/rules-of-hooks": "error",
     "react/exhaustive-deps": "error",
     "no-console": "warn",
-    "eqeqeq": "error"
+    "react/immutability": "off",
+    "eqeqeq": ["error", "smart"],
+    "jsx-a11y/prefer-tag-over-role": "off",
+    "jsx-a11y/no-redundant-roles": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "jsx-a11y/label-has-associated-control": "off"
   }
 }

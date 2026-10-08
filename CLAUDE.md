@@ -28,7 +28,7 @@ Ne jamais introduire de dépendance d'exécution Node, ni d'appel à un service 
 | Site : e2e + axe             | `pnpm --filter @grichard/web test:e2e`                         |
 | Design system : tests        | `pnpm --filter @grichard/ui test`                              |
 
-Les commandes des futures apps (`apps/web`, `apps/api`, `apps/portal`) seront ajoutées ici à leur création.
+Les commandes de `apps/api` et `apps/portal` seront ajoutées ici à leur création.
 
 ## Architecture cible
 

@@ -14,10 +14,14 @@
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.2",
+    "@astrojs/preact": "^6.0.6",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
+    "@grichard/tools-core": "workspace:*",
     "@grichard/ui": "workspace:*",
-    "astro": "^7.3.8"
+    "astro": "^7.3.8",
+    "lucide-preact": "^1.53.0",
+    "preact": "^11.0.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

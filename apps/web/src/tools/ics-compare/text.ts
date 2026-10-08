@@ -1,0 +1,286 @@
+// Textes du comparateur de fichiers ICS (FR/EN).
+export const ICS_COMPARE = {
+  fr: {
+    ui: {
+      meta: {
+        title: 'Comparer deux fichiers ICS : source moins destination | Guillaume Richard',
+        description:
+          'Comparez deux calendriers .ics et obtenez les événements de la source absents de la destination, prêts à importer. Détecte les doublons et les événements modifiés. Gratuit, dans votre navigateur.',
+        appDescription:
+          'Outil gratuit pour comparer deux fichiers iCalendar (.ics) et extraire les événements manquants, sans envoi de données.',
+      },
+      name: 'Comparateur de fichiers ICS',
+      card: "Source moins destination : les événements d'un calendrier qui manquent dans un autre.",
+      keywords:
+        'ics ical icalendar calendrier agenda comparer difference diff doublons doublon fusion migration import google outlook',
+      h1: 'Comparer deux fichiers ICS',
+      intro:
+        "Vous migrez un agenda et la destination contient déjà une partie des événements ? Chargez la source et la destination : l'outil ne garde que ce qui manque à la destination, dans un nouveau fichier .ics prêt à importer, sans créer de doublons. Il signale aussi les événements modifiés, les doublons internes et ce qui n'existe que dans la destination.",
+      form: {
+        source: 'Source',
+        destination: 'Destination',
+        sourceHint: "Le calendrier d'origine : les événements à copier.",
+        destinationHint: 'Le calendrier qui contient déjà une partie des événements.',
+        drop: 'Déposez un fichier .ics ici ou',
+        choose: 'choisissez un fichier',
+        change: 'Changer de fichier',
+        swap: 'Inverser source et destination',
+        options: 'Comment reconnaître un même événement',
+        match: {
+          both: [
+            'Identifiant ou contenu (recommandé)',
+            'Même identifiant (UID), ou même titre et mêmes horaires : couvre les exports dont les identifiants ont été régénérés.',
+          ],
+          uid: [
+            'Identifiant (UID) seulement',
+            'Fiable quand les deux fichiers viennent du même agenda.',
+          ],
+          content: [
+            'Contenu seulement',
+            'Titre + début + fin : ignore les identifiants (ex. import Google vers Outlook).',
+          ],
+        },
+        ignoreCase: 'Ignorer la casse du titre',
+        ignoreEnd: "Ignorer l'heure de fin",
+        ignoreDescription: 'Ignorer la description pour détecter les modifications',
+        dedupe: 'Ne garder qu’un exemplaire des doublons de la source',
+        includeModified:
+          'Inclure aussi les événements modifiés (même identifiant, contenu différent)',
+      },
+      loaded: { events: 'événements', series: 'récurrents' },
+      result: {
+        title: 'Résultat',
+        toImport: 'À importer',
+        toImportHelp: 'Dans la source, absents de la destination.',
+        matched: 'Déjà présents',
+        modified: 'Modifiés',
+        onlyDestination: 'Seulement en destination',
+        duplicates: 'Doublons',
+        download: 'Télécharger les événements à importer (.ics)',
+        copy: 'Copier la liste',
+        copied: 'Liste copiée',
+        nothing:
+          'Rien à importer : tous les événements de la source sont déjà dans la destination.',
+        announce: (c: { toImport: number; matched: number }) =>
+          `Comparaison terminée : ${c.toImport} événement${c.toImport > 1 ? 's' : ''} à importer, ${c.matched} déjà présent${c.matched > 1 ? 's' : ''}.`,
+        removedDuplicates: (n: number) =>
+          `${n} doublon(s) de la source retiré(s) du fichier à importer.`,
+        orphans: (n: number) =>
+          `${n} exception(s) d'une série dont le maître est absent des deux fichiers : elles risquent d'être importées sans leur série.`,
+        lists: {
+          toImport: 'Événements à importer',
+          matched: 'Événements déjà présents',
+          modified: 'Événements modifiés',
+          onlyDestination: 'Événements seulement dans la destination',
+          duplicatesSource: 'Doublons dans la source',
+          duplicatesDestination: 'Doublons dans la destination',
+        },
+        cols: {
+          title: 'Titre',
+          start: 'Début',
+          how: 'Reconnu par',
+          changes: 'Différences',
+          copies: 'Exemplaires',
+        },
+        by: { uid: 'identifiant', content: 'contenu' },
+        fields: {
+          summary: 'titre',
+          start: 'début',
+          end: 'fin',
+          location: 'lieu',
+          description: 'description',
+          recurrence: 'récurrence',
+          status: 'statut',
+        },
+        more: (n: number) => `Afficher ${n} de plus`,
+        empty: 'Aucun.',
+        untitled: '(sans titre)',
+      },
+      errors: {
+        tooBig: 'Ce fichier dépasse 50 Mo.',
+        notIcs:
+          'Ce fichier ne ressemble pas à un calendrier iCalendar (BEGIN:VCALENDAR introuvable).',
+        read: 'Impossible de lire ce fichier.',
+      },
+      privacy:
+        'Vos fichiers ne sont jamais envoyés : ils sont lus et comparés dans votre navigateur.',
+      seo: {
+        whatTitle: "Ce que fait l'outil",
+        what: [
+          [
+            'Source moins destination',
+            "Il extrait les événements de la source qui n'existent pas dans la destination, dans un fichier .ics prêt à importer.",
+          ],
+          [
+            'Trois façons de reconnaître un événement',
+            "Par identifiant (UID), par contenu (titre, début, fin, récurrence) ou les deux : l'import d'un agenda dans un autre régénère souvent les identifiants, d'où l'intérêt de comparer le contenu.",
+          ],
+          [
+            'Fuseaux horaires comparés en UTC',
+            "Deux événements à la même heure exprimée dans des fuseaux différents (10 h à Paris, 9 h UTC) sont reconnus comme identiques ; les noms de fuseaux Windows d'Outlook sont compris.",
+          ],
+          [
+            'Modifiés, doublons, orphelins',
+            'Il signale les événements au même identifiant mais au contenu différent, les doublons dans chaque fichier et les exceptions de séries qui seraient importées sans leur série.',
+          ],
+        ],
+        howTitle: 'Comment l’utiliser',
+        how: "Chargez la source puis la destination. Le résultat s'affiche aussitôt. Choisissez au besoin la façon de reconnaître un même événement, vérifiez les listes, puis téléchargez le fichier des événements à importer.",
+        faq: [
+          [
+            'Pourquoi mes événements apparaissent-ils en double après un import ?',
+            "Importer un fichier .ics dans un agenda qui contient déjà ces événements les duplique quand leurs identifiants diffèrent. Comparer d'abord, puis n'importer que la différence, évite les doublons.",
+          ],
+          [
+            'Quelle différence entre « identifiant » et « contenu » ?',
+            "L'identifiant (UID) est propre à chaque événement et suit l'agenda d'origine. Après un passage par un autre service, il peut avoir changé : le contenu (titre, horaires) permet alors de reconnaître le même événement.",
+          ],
+          [
+            'Mes fichiers sont-ils envoyés quelque part ?',
+            'Non. Tout se passe dans votre navigateur ; aucune donnée ne quitte votre ordinateur.',
+          ],
+        ],
+      },
+      related: 'Voir aussi',
+      relatedLinks: [],
+    },
+  },
+  en: {
+    ui: {
+      meta: {
+        title: 'Compare two ICS files: source minus destination | Guillaume Richard',
+        description:
+          'Compare two .ics calendars and get the source events missing from the destination, ready to import. Detects duplicates and modified events. Free, in your browser.',
+        appDescription:
+          'Free tool to compare two iCalendar (.ics) files and extract the missing events, with no data upload.',
+      },
+      name: 'ICS file comparer',
+      card: 'Source minus destination: the events of one calendar that are missing from another.',
+      keywords:
+        'ics ical icalendar calendar compare difference diff duplicates merge migration import google outlook',
+      h1: 'Compare two ICS files',
+      intro:
+        'Migrating a calendar and the destination already holds some of the events? Load the source and the destination: the tool keeps only what the destination is missing, in a new .ics file ready to import, without creating duplicates. It also flags modified events, internal duplicates and what exists only in the destination.',
+      form: {
+        source: 'Source',
+        destination: 'Destination',
+        sourceHint: 'The original calendar: the events to copy.',
+        destinationHint: 'The calendar that already holds some of the events.',
+        drop: 'Drop an .ics file here or',
+        choose: 'choose a file',
+        change: 'Change file',
+        swap: 'Swap source and destination',
+        options: 'How to recognise the same event',
+        match: {
+          both: [
+            'Identifier or content (recommended)',
+            'Same identifier (UID), or same title and times: covers exports whose identifiers were regenerated.',
+          ],
+          uid: ['Identifier (UID) only', 'Reliable when both files come from the same calendar.'],
+          content: [
+            'Content only',
+            'Title + start + end: ignores identifiers (e.g. Google to Outlook import).',
+          ],
+        },
+        ignoreCase: 'Ignore title case',
+        ignoreEnd: 'Ignore end time',
+        ignoreDescription: 'Ignore the description when detecting changes',
+        dedupe: 'Keep a single copy of the source duplicates',
+        includeModified: 'Also include modified events (same identifier, different content)',
+      },
+      loaded: { events: 'events', series: 'recurring' },
+      result: {
+        title: 'Result',
+        toImport: 'To import',
+        toImportHelp: 'In the source, missing from the destination.',
+        matched: 'Already present',
+        modified: 'Modified',
+        onlyDestination: 'Only in destination',
+        duplicates: 'Duplicates',
+        download: 'Download the events to import (.ics)',
+        copy: 'Copy the list',
+        copied: 'List copied',
+        nothing: 'Nothing to import: every source event is already in the destination.',
+        announce: (c: { toImport: number; matched: number }) =>
+          `Comparison complete: ${c.toImport} event${c.toImport === 1 ? '' : 's'} to import, ${c.matched} already present.`,
+        removedDuplicates: (n: number) =>
+          `${n} source duplicate(s) removed from the file to import.`,
+        orphans: (n: number) =>
+          `${n} exception(s) of a series whose master is in neither file: they may be imported without their series.`,
+        lists: {
+          toImport: 'Events to import',
+          matched: 'Events already present',
+          modified: 'Modified events',
+          onlyDestination: 'Events only in the destination',
+          duplicatesSource: 'Duplicates in the source',
+          duplicatesDestination: 'Duplicates in the destination',
+        },
+        cols: {
+          title: 'Title',
+          start: 'Start',
+          how: 'Matched by',
+          changes: 'Differences',
+          copies: 'Copies',
+        },
+        by: { uid: 'identifier', content: 'content' },
+        fields: {
+          summary: 'title',
+          start: 'start',
+          end: 'end',
+          location: 'location',
+          description: 'description',
+          recurrence: 'recurrence',
+          status: 'status',
+        },
+        more: (n: number) => `Show ${n} more`,
+        empty: 'None.',
+        untitled: '(untitled)',
+      },
+      errors: {
+        tooBig: 'This file exceeds 50 MB.',
+        notIcs: 'This file does not look like an iCalendar file (BEGIN:VCALENDAR not found).',
+        read: 'This file could not be read.',
+      },
+      privacy: 'Your files are never uploaded: they are read and compared in your browser.',
+      seo: {
+        whatTitle: 'What the tool does',
+        what: [
+          [
+            'Source minus destination',
+            'It extracts the source events that do not exist in the destination, in an .ics file ready to import.',
+          ],
+          [
+            'Three ways to recognise an event',
+            'By identifier (UID), by content (title, start, end, recurrence) or both: importing one calendar into another often regenerates identifiers, hence the value of comparing content.',
+          ],
+          [
+            'Time zones compared in UTC',
+            "Two events at the same time expressed in different zones (10:00 Paris, 09:00 UTC) are recognised as identical; Outlook's Windows time zone names are understood.",
+          ],
+          [
+            'Modified, duplicates, orphans',
+            'It flags events with the same identifier but different content, duplicates in each file and series exceptions that would be imported without their series.',
+          ],
+        ],
+        howTitle: 'How to use it',
+        how: 'Load the source then the destination. The result appears immediately. Choose how to recognise the same event if needed, check the lists, then download the file of events to import.',
+        faq: [
+          [
+            'Why do my events appear twice after an import?',
+            'Importing an .ics file into a calendar that already holds these events duplicates them when their identifiers differ. Compare first, then import only the difference, to avoid duplicates.',
+          ],
+          [
+            'What is the difference between "identifier" and "content"?',
+            'The identifier (UID) belongs to each event and follows the original calendar. After going through another service it may have changed: content (title, times) then lets you recognise the same event.',
+          ],
+          [
+            'Are my files sent anywhere?',
+            'No. Everything happens in your browser; no data leaves your computer.',
+          ],
+        ],
+      },
+      related: 'See also',
+      relatedLinks: [],
+    },
+  },
+};

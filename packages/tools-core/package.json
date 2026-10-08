@@ -1,0 +1,22 @@
+{
+  "name": "@grichard/tools-core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Logique pure des outils en ligne (DNS, ICS, JSON, réseau, encodage, mots de passe, unités) : sans DOM, sans texte d'interface, testée.",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "oxlint"
+  },
+  "devDependencies": {
+    "@grichard/config": "workspace:*",
+    "@types/node": "^22.0.0",
+    "oxlint": "^1.86.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  }
+}
