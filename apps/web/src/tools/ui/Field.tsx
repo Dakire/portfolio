@@ -1,6 +1,7 @@
 import type {
   AccessibleInputHTMLAttributes,
   ComponentChildren,
+  Ref,
   TextareaHTMLAttributes,
 } from 'preact';
 import { cx } from './cx';
@@ -14,6 +15,8 @@ interface BaseProps {
   counter?: string | undefined;
   required?: boolean;
   class?: string;
+  /** Référence vers le champ (focus, sélection) : `ref` n'est pas transmis à travers un composant fonction. */
+  fieldRef?: Ref<HTMLInputElement & HTMLTextAreaElement>;
 }
 
 type InputProps = BaseProps &
@@ -36,6 +39,7 @@ export default function Field(props: InputProps | TextareaProps) {
     counter,
     required = false,
     class: className,
+    fieldRef,
     as: Control = 'input',
     ...rest
   } = props;
@@ -58,9 +62,17 @@ export default function Field(props: InputProps | TextareaProps) {
         {required && <span aria-hidden="true"> *</span>}
       </label>
       {Control === 'textarea' ? (
-        <textarea {...common} {...(rest as TextareaHTMLAttributes<HTMLTextAreaElement>)} />
+        <textarea
+          {...common}
+          {...(rest as TextareaHTMLAttributes<HTMLTextAreaElement>)}
+          ref={fieldRef as Ref<HTMLTextAreaElement>}
+        />
       ) : (
-        <input {...common} {...(rest as AccessibleInputHTMLAttributes<HTMLInputElement>)} />
+        <input
+          {...common}
+          {...(rest as AccessibleInputHTMLAttributes<HTMLInputElement>)}
+          ref={fieldRef as Ref<HTMLInputElement>}
+        />
       )}
       {hint && (
         <p id={`${id}-hint`} class="field-hint">

@@ -340,3 +340,142 @@ legend {
 .faq > * + * {
   margin-top: var(--space-3);
 }
+
+/* ---------- Actions, choix, jauges ---------- */
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+}
+.row-end {
+  margin-left: auto;
+}
+.row-between {
+  justify-content: space-between;
+}
+.row-bottom {
+  align-items: flex-end;
+}
+.status-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target);
+  font-weight: 600;
+}
+.field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.field-narrow {
+  width: 8rem;
+}
+.choice-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.pill-choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+  font-weight: 500;
+  cursor: pointer;
+}
+.pill-choice:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--raised);
+}
+.pill-choice input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent);
+}
+.stat-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.stat-list strong {
+  color: var(--ink);
+}
+.range label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-1);
+  color: var(--ink);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+.range input[type='range'] {
+  width: 100%;
+  height: var(--target);
+  accent-color: var(--accent);
+}
+.secret-list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.secret-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-left: var(--space-4);
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+.secret-list code {
+  flex: 1;
+  min-width: 0;
+  padding-block: var(--space-2);
+  color: var(--ink);
+}
+.strength > * {
+  margin: 0;
+}
+.meter {
+  height: 0.5rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--raised);
+}
+.meter-bar {
+  height: 100%;
+  border-radius: inherit;
+}
+.meter-veryWeak {
+  width: 12%;
+  background: var(--danger);
+}
+.meter-weak {
+  width: 30%;
+  background: var(--danger);
+}
+.meter-fair {
+  width: 55%;
+  background: var(--warn);
+}
+.meter-good {
+  width: 78%;
+  background: var(--link);
+}
+.meter-strong {
+  width: 100%;
+  background: var(--accent);
+}

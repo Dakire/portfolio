@@ -45,7 +45,7 @@ export const JSON_TOOL = {
         keys: 'clés',
         items: 'éléments de tableau',
         depth: 'profondeur',
-        saved: (before: number, after: number) => `${before} → ${after} octets`,
+        saved: (before: string, after: string) => `${before} → ${after} octets`,
         duplicates: (list: string) =>
           `Clés en double : ${list}. JSON.parse ne garde que la dernière valeur de chaque clé ; l'outil les conserve toutes.`,
       },
@@ -165,7 +165,7 @@ export const JSON_TOOL = {
         keys: 'keys',
         items: 'array items',
         depth: 'depth',
-        saved: (before: number, after: number) => `${before} → ${after} bytes`,
+        saved: (before: string, after: string) => `${before} → ${after} bytes`,
         duplicates: (list: string) =>
           `Duplicate keys: ${list}. JSON.parse keeps only the last value of each key; this tool keeps them all.`,
       },

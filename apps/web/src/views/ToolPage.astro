@@ -9,6 +9,8 @@ import { ROUTES, SITE, type Alternates, type Lang } from '../lib/i18n';
 import { breadcrumbLd } from '../lib/seo';
 import { HUB } from '../tools/hub';
 import { findTool, toolPath, toolUi, type ToolId } from '../tools/registry';
+import JsonFormatter from '../tools/json/Tool';
+import PasswordGenerator from '../tools/password/Tool';
 import UnitConverter from '../tools/units/Tool';
 
 interface Props {
@@ -81,7 +83,11 @@ const ld = {
       </ol>
     </nav>
 
-    <div id="outil">{toolId === 'units' && <UnitConverter client:load lang={lang} />}</div>
+    <div id="outil">
+      {toolId === 'json' && <JsonFormatter client:load lang={lang} />}
+      {toolId === 'password' && <PasswordGenerator client:load lang={lang} />}
+      {toolId === 'units' && <UnitConverter client:load lang={lang} />}
+    </div>
 
     <section aria-labelledby="what-title" class="stack">
       <h2 id="what-title">{ui.seo.whatTitle}</h2>

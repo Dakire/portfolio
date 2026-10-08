@@ -63,3 +63,36 @@ test.describe('convertisseur d’unités', () => {
     }
   });
 });
+
+test.describe('formateur JSON', () => {
+  test('valide, localise une erreur et formate', async ({ page }) => {
+    await ready(page, '/outils/formateur-json/');
+    await page.getByLabel('JSON à analyser').fill('{"a":1,"b":[1,2,]}');
+    await expect(page.getByRole('status').filter({ hasText: 'JSON invalide' })).toBeVisible();
+    await expect(page.locator('#json-input-error')).toContainText('Virgule en trop');
+
+    await page
+      .getByLabel('JSON à analyser')
+      .fill('{"nom":"x","valeurs":[1,2],"n":12345678901234567890}');
+    await expect(page.getByRole('status').filter({ hasText: 'JSON valide' })).toBeVisible();
+    await expect(page.getByLabel('Résultat', { exact: true })).toHaveValue(/ {2}"nom": "x"/);
+    await expect(page.getByLabel('Résultat', { exact: true })).toHaveValue(/12345678901234567890/); // jamais arrondi
+  });
+});
+
+test.describe('générateur de mots de passe', () => {
+  test('génère des mots de passe de la bonne longueur', async ({ page }) => {
+    await ready(page, '/outils/generateur-mot-de-passe/');
+    const first = page.locator('.secret-list code').first();
+    await expect(first).toHaveText(/.{20}/);
+    await page.getByRole('button', { name: 'Générer' }).click();
+    await expect(page.locator('.secret-list li')).toHaveCount(5);
+  });
+
+  test('refuse un jeu de caractères vide', async ({ page }) => {
+    await ready(page, '/outils/generateur-mot-de-passe/');
+    for (const name of ['Minuscules', 'Majuscules', 'Chiffres', 'Symboles'])
+      await page.getByLabel(new RegExp(name)).uncheck();
+    await expect(page.getByRole('alert')).toBeVisible();
+  });
+});
