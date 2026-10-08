@@ -8,6 +8,7 @@ import ProjectCards from '../components/ProjectCards.astro';
 import ExperienceList from '../components/ExperienceList.astro';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
 import { getPosts } from '../lib/blog';
+import { withBase } from '../lib/base';
 import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
 import { homeLd } from '../lib/seo';
 
@@ -41,7 +42,7 @@ const toolsIntro = t.tools.intro;
         <Button variant="primary" href={routes.contact}>
           {t.hero.contactBtn}
         </Button>
-        <Button href={t.hero.cvLink}>
+        <Button href={withBase(t.hero.cvLink)}>
           {t.hero.cvBtn}
           <span class="visually-hidden"> (PDF)</span>
         </Button>

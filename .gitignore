@@ -42,3 +42,4 @@ vendor/
 legacy/dist
 .astro/
 apps/web/dist
+apps/web/dist-preprod

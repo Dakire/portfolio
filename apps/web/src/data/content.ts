@@ -64,7 +64,31 @@ export interface Portfolio {
   education: string[];
   languagesInfo: string;
   contactTitle: string;
-  form: Record<string, string>;
+  form: Record<
+    | 'name'
+    | 'email'
+    | 'message'
+    | 'gdpr'
+    | 'submit'
+    | 'sending'
+    | 'success'
+    | 'error'
+    | 'captcha'
+    | 'captchaLabel'
+    | 'captchaUnavailable'
+    | 'rateLimited'
+    | 'network'
+    | 'fallback'
+    | 'requiredNote'
+    | 'errName'
+    | 'errEmail'
+    | 'errMessage'
+    | 'errGdpr'
+    | 'sendAnother'
+    | 'retryCaptcha'
+    | 'captchaLoading',
+    string
+  >;
   footer: { legal: string; rights: string };
   legal: { title: string; sections: { h: string; p: string }[] };
 }

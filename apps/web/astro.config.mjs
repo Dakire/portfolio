@@ -1,7 +1,14 @@
+import { existsSync, readFileSync } from 'node:fs';
+import { parseEnv } from 'node:util';
 import { unified } from '@astrojs/markdown-remark';
+import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
+import rehypeBase from './src/lib/rehype-base.mjs';
 import rehypeTableScroll from './src/lib/rehype-table-scroll.mjs';
+
+// Préproduction : le site est servi depuis un sous-dossier (SITE_BASE=/preprod/). Production : racine.
+const base = process.env.SITE_BASE ?? '/';
 
 // Page de style (design system) : uniquement en développement, ou avec STYLEGUIDE=1 (préproduction). Jamais en production.
 const styleguide = {
@@ -11,6 +18,26 @@ const styleguide = {
       if (command === 'dev' || process.env.STYLEGUIDE === '1') {
         injectRoute({ pattern: '/design', entrypoint: './src/dev/design.astro' });
       }
+    },
+  },
+};
+
+// Sans clé de SITE Turnstile (publique), le widget disparaît et contact.php refuserait tous les messages : mieux vaut échouer au build.
+const requireTurnstileKey = {
+  name: 'require-turnstile-key',
+  hooks: {
+    'astro:config:setup': ({ command }) => {
+      if (command !== 'build') return;
+      const fromFiles = ['.env', '.env.local']
+        .filter(existsSync)
+        .map((f) => parseEnv(readFileSync(f, 'utf-8')));
+      const key =
+        process.env.PUBLIC_TURNSTILE_SITE_KEY ||
+        Object.assign({}, ...fromFiles).PUBLIC_TURNSTILE_SITE_KEY;
+      if (!key)
+        throw new Error(
+          'PUBLIC_TURNSTILE_SITE_KEY est manquante : le formulaire de contact serait inutilisable en production (voir .env.example).',
+        );
     },
   },
 };
@@ -27,6 +54,7 @@ const EXCLUDED = [
 
 export default defineConfig({
   site: 'https://grichard.eu',
+  base,
   output: 'static',
   trailingSlash: 'always',
   build: {
@@ -38,9 +66,11 @@ export default defineConfig({
   markdown: {
     // Coloration au build (aucun JavaScript côté visiteur) ; couleurs par variables CSS, une par thème (voir styles/site.css).
     shikiConfig: { themes: { light: 'github-light', dark: 'github-dark' }, defaultColor: false },
-    processor: unified({ rehypePlugins: [rehypeTableScroll] }),
+    processor: unified({ rehypePlugins: [rehypeTableScroll, [rehypeBase, { base }]] }),
   },
   integrations: [
+    requireTurnstileKey,
+    preact(),
     sitemap({ filter: (page) => !EXCLUDED.some((part) => page.includes(part)) }),
     styleguide,
   ],

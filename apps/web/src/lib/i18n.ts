@@ -1,6 +1,8 @@
 // Langues et URL du site. Les URL françaises et anglaises existantes sont figées par tests/contract/contract.json :
 // ne jamais en modifier une sans redirection 301 et mise à jour du contrat.
 
+import { withBase } from './base';
+
 export type Lang = 'fr' | 'en';
 export const LANGS: Lang[] = ['fr', 'en'];
 export const SITE = 'https://grichard.eu';
@@ -18,7 +20,13 @@ export type RouteKey =
   | 'accessibility'
   | 'rss';
 
-export const ROUTES: Record<Lang, Record<RouteKey, string>> = {
+const mapRoutes = (routes: Record<RouteKey, string>): Record<RouteKey, string> =>
+  Object.fromEntries(Object.entries(routes).map(([key, path]) => [key, withBase(path)])) as Record<
+    RouteKey,
+    string
+  >;
+
+const RAW_ROUTES: Record<Lang, Record<RouteKey, string>> = {
   fr: {
     home: '/',
     about: '/a-propos/',
@@ -45,6 +53,12 @@ export const ROUTES: Record<Lang, Record<RouteKey, string>> = {
     accessibility: '/en/accessibility/',
     rss: '/en/rss.xml',
   },
+};
+
+/** Routes publiques, préfixées par la base du site (vide en production). */
+export const ROUTES: Record<Lang, Record<RouteKey, string>> = {
+  fr: mapRoutes(RAW_ROUTES.fr),
+  en: mapRoutes(RAW_ROUTES.en),
 };
 
 export const otherLang = (lang: Lang): Lang => (lang === 'fr' ? 'en' : 'fr');

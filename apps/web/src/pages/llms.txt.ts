@@ -1,6 +1,7 @@
 // llms.txt : présentation du site pour les assistants IA (https://llmstxt.org). Généré : aucune URL à maintenir à la main.
 import { PROFILE } from '../data/content';
 import { getPosts, postPath } from '../lib/blog';
+import { withBase } from '../lib/base';
 import { ROUTES, SITE } from '../lib/i18n';
 
 const link = (label: string, path: string, note: string) =>
@@ -46,8 +47,8 @@ export async function GET() {
     ...en.map((p) => link(p.data.title, postPath('en', p.slug), p.data.description)),
     '',
     '## Documents',
-    `- [CV en français (PDF)](${SITE}/CV_Guillaume_Richard_FR.pdf)`,
-    `- [Resume in English (PDF)](${SITE}/Resume_Guillaume_Richard_EN.pdf)`,
+    `- [CV en français (PDF)](${SITE}${withBase('/CV_Guillaume_Richard_FR.pdf')})`,
+    `- [Resume in English (PDF)](${SITE}${withBase('/Resume_Guillaume_Richard_EN.pdf')})`,
     '',
     '## Contact',
     `- E-mail : ${PROFILE.email}`,

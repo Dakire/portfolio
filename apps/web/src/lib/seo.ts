@@ -3,10 +3,11 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { PROFILE } from '../data/content';
+import { withBase } from './base';
 import { ROUTES, SITE, type Lang } from './i18n';
 
 export const OG_DEFAULT = {
-  url: `${SITE}/og-image.png`,
+  url: `${SITE}${withBase('/og-image.png')}`,
   width: 1200,
   height: 630,
   alt: 'Guillaume Richard, Technicien Informatique & Systèmes Numériques',
@@ -22,9 +23,9 @@ export const versioned = (src: string) => {
       .update(readFileSync(resolve(process.cwd(), 'public', src.slice(1))))
       .digest('hex')
       .slice(0, 8);
-    return `${src}?v=${hash}`;
+    return `${withBase(src)}?v=${hash}`;
   } catch {
-    return src;
+    return withBase(src);
   }
 };
 

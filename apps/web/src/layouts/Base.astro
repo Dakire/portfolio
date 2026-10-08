@@ -8,6 +8,7 @@ import SkipLink from '@grichard/ui/components/SkipLink.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { ROUTES, SITE, UI, otherLang, type Alternates, type Lang } from '../lib/i18n';
+import { BASE, withBase } from '../lib/base';
 import { OG_DEFAULT, jsonForScript, versioned } from '../lib/seo';
 
 interface Props {
@@ -34,10 +35,12 @@ const {
   type = 'website',
   image = OG_DEFAULT,
   ld,
-  noindex = false,
+  noindex: noindexProp = false,
   scripts = [],
 } = Astro.props;
 
+// Préproduction (PUBLIC_NOINDEX=1) : aucune page n'est indexable, quoi que demande la page.
+const noindex = noindexProp || import.meta.env.PUBLIC_NOINDEX === '1';
 const ui = UI[lang];
 const url = `${SITE}${path}`;
 const other = otherLang(lang);
@@ -51,17 +54,17 @@ const allScripts = [...scripts, '/js/consent.js'];
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} data-base={BASE || undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0a0c0f" />
     <meta name="color-scheme" content="dark light" />
     <script is:inline src={versioned('/js/theme.js')}></script>
-    <link rel="icon" href="/favicon.ico" sizes="48x48" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" href={withBase('/favicon.ico')} sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+    <link rel="manifest" href={withBase('/site.webmanifest')} />
     <link rel="canonical" href={url} />
     {hreflangs.map((l) => (
       <link rel="alternate" hreflang={l} href={`${SITE}${alternates[l]}`} />
