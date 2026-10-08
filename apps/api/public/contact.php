@@ -18,14 +18,19 @@ ini_set('display_errors', '0');
 
 // Hébergement : www/contact.php (ou www/preprod/contact.php) ; app/api/vendor/ et private/ sont dans le dossier personnel, au-dessus de www/.
 // On le cherche en remontant l'arborescence, ce qui sert aussi à la préproduction. En développement : apps/api/public/ et apps/api/vendor/.
+// La préproduction (www/preprod/) a sa propre copie du code, app/preprod/api/, pour essayer une version avant la production.
 $home = dirname(__DIR__);
+$autoload = $home . '/vendor/autoload.php';
+$apiDirs = 'preprod' === basename(__DIR__) ? ['app/preprod/api', 'app/api'] : ['app/api'];
 for ($dir = __DIR__, $i = 0; $i < 4; ++$i, $dir = dirname($dir)) {
-    if (is_file($dir . '/app/api/vendor/autoload.php')) {
-        $home = $dir;
-        break;
+    foreach ($apiDirs as $apiDir) {
+        if (is_file($dir . '/' . $apiDir . '/vendor/autoload.php')) {
+            $home = $dir;
+            $autoload = $dir . '/' . $apiDir . '/vendor/autoload.php';
+            break 2;
+        }
     }
 }
-$autoload = is_file($home . '/app/api/vendor/autoload.php') ? $home . '/app/api/vendor/autoload.php' : $home . '/vendor/autoload.php';
 require $autoload;
 
 $privateDir = is_dir($home . '/private') ? $home . '/private' : sys_get_temp_dir();
