@@ -1,0 +1,290 @@
+{
+  "notFound": [
+    "/page-inexistante-contrat/"
+  ],
+  "entries": [
+    {
+      "path": "/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/",
+      "type": "text/html"
+    },
+    {
+      "path": "/blog/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/blog/",
+      "type": "text/html"
+    },
+    {
+      "path": "/blog/diagnostic-dns-dig-nslookup-propagation-ttl/",
+      "type": "text/html"
+    },
+    {
+      "path": "/blog/fin-support-windows-10-passer-a-windows-11/",
+      "type": "text/html"
+    },
+    {
+      "path": "/blog/delivrabilite-diagnostiquer-mails-spam-rejetes/",
+      "type": "text/html"
+    },
+    {
+      "path": "/blog/migration-messagerie-google-workspace-microsoft-365/",
+      "type": "text/html"
+    },
+    {
+      "path": "/blog/securiser-microsoft-365-google-workspace-reglages-de-base/",
+      "type": "text/html"
+    },
+    {
+      "path": "/blog/spf-dkim-dmarc-expliques/",
+      "type": "text/html"
+    },
+    {
+      "path": "/blog/touches-bios-uefi-boot-menu-par-marque/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/blog/bios-uefi-boot-menu-keys-by-brand/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/blog/email-deliverability-troubleshooting-spam-bounces/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/blog/email-migration-google-workspace-microsoft-365/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/blog/secure-microsoft-365-google-workspace-baseline-settings/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/blog/spf-dkim-dmarc-explained/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/blog/dns-troubleshooting-dig-nslookup-propagation-ttl/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/blog/windows-10-end-of-support-upgrade-to-windows-11/",
+      "type": "text/html"
+    },
+    {
+      "path": "/outils/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/tools/",
+      "type": "text/html"
+    },
+    {
+      "path": "/outils/dns/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/tools/dns/",
+      "type": "text/html"
+    },
+    {
+      "path": "/outils/propagation-dns/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/tools/dns-propagation/",
+      "type": "text/html"
+    },
+    {
+      "path": "/outils/ics-decouper/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/tools/ics-splitter/",
+      "type": "text/html"
+    },
+    {
+      "path": "/outils/ics-comparer/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/tools/ics-compare/",
+      "type": "text/html"
+    },
+    {
+      "path": "/outils/en-tetes-email/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/tools/email-headers/",
+      "type": "text/html"
+    },
+    {
+      "path": "/outils/calculateur-reseau/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/tools/subnet-calculator/",
+      "type": "text/html"
+    },
+    {
+      "path": "/outils/encodeur-decodeur/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/tools/encoder-decoder/",
+      "type": "text/html"
+    },
+    {
+      "path": "/outils/generateur-mot-de-passe/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/tools/password-generator/",
+      "type": "text/html"
+    },
+    {
+      "path": "/outils/formateur-json/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/tools/json-formatter/",
+      "type": "text/html"
+    },
+    {
+      "path": "/outils/convertisseur-unites/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/tools/unit-converter/",
+      "type": "text/html"
+    },
+    {
+      "path": "/mentions-legales/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/legal-notice/",
+      "type": "text/html"
+    },
+    {
+      "path": "/CV_Guillaume_Richard_FR.pdf",
+      "type": "application/pdf"
+    },
+    {
+      "path": "/Resume_Guillaume_Richard_EN.pdf",
+      "type": "application/pdf"
+    },
+    {
+      "path": "/.well-known/ai-catalog.json",
+      "type": "application/json",
+      "kind": "json"
+    },
+    {
+      "path": "/.well-known/security.txt",
+      "type": "text/plain"
+    },
+    {
+      "path": "/rss.xml",
+      "type": "application/xml"
+    },
+    {
+      "path": "/en/rss.xml",
+      "type": "application/xml"
+    },
+    {
+      "path": "/sitemap.xml",
+      "type": "application/xml"
+    },
+    {
+      "path": "/robots.txt",
+      "type": "text/plain"
+    },
+    {
+      "path": "/llms.txt",
+      "type": "text/plain"
+    },
+    {
+      "path": "/search-index.json",
+      "type": "application/json",
+      "kind": "json"
+    },
+    {
+      "path": "/site.webmanifest",
+      "type": "application/manifest+json",
+      "kind": "json"
+    },
+    {
+      "path": "/favicon.ico",
+      "type": "image/"
+    },
+    {
+      "path": "/favicon.svg",
+      "type": "image/svg+xml"
+    },
+    {
+      "path": "/og-image.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/bios-uefi-boot-menu-keys-by-brand.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/delivrabilite-diagnostiquer-mails-spam-rejetes.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/diagnostic-dns-dig-nslookup-propagation-ttl.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/dns-troubleshooting-dig-nslookup-propagation-ttl.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/email-deliverability-troubleshooting-spam-bounces.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/email-migration-google-workspace-microsoft-365.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/fin-support-windows-10-passer-a-windows-11.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/migration-messagerie-google-workspace-microsoft-365.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/secure-microsoft-365-google-workspace-baseline-settings.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/securiser-microsoft-365-google-workspace-reglages-de-base.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/spf-dkim-dmarc-explained.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/spf-dkim-dmarc-expliques.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/touches-bios-uefi-boot-menu-par-marque.png",
+      "type": "image/png"
+    },
+    {
+      "path": "/og/windows-10-end-of-support-upgrade-to-windows-11.png",
+      "type": "image/png"
+    }
+  ]
+}
