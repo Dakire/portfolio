@@ -63,16 +63,29 @@ export async function generateOgImages(items, outDir) {
       try {
         await copyFile(cached, out); // déjà produite par un build précédent
       } catch {
-        if (!browser) {
-          const { chromium } = await import('@playwright/test');
-          browser = await chromium.launch();
+        // Une capture peut échouer ponctuellement (Chromium sur un exécuteur chargé) : trois essais, avec un navigateur neuf à chaque reprise.
+        let lastError;
+        for (let attempt = 1; attempt <= 3; attempt += 1) {
+          try {
+            if (!browser) {
+              const { chromium } = await import('@playwright/test');
+              browser = await chromium.launch();
+            }
+            const page = await browser.newPage({ viewport: OG_SIZE });
+            await page.setContent(html, { waitUntil: 'load' });
+            const png = await page.screenshot({ type: 'png' });
+            await page.close();
+            await writeFile(cached, png);
+            await writeFile(out, png);
+            lastError = undefined;
+            break;
+          } catch (error) {
+            lastError = error;
+            await browser?.close().catch(() => {});
+            browser = undefined;
+          }
         }
-        const page = await browser.newPage({ viewport: OG_SIZE });
-        await page.setContent(html, { waitUntil: 'load' });
-        const png = await page.screenshot({ type: 'png' });
-        await page.close();
-        await writeFile(cached, png);
-        await writeFile(out, png);
+        if (lastError) throw lastError;
       }
       done.add(item.key);
     }
