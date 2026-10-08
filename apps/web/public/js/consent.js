@@ -8,12 +8,13 @@
   const COOKIE_LIFETIME_S = 395 * 24 * 60 * 60; // 13 mois, durée maximale recommandée par la CNIL
 
   const en = document.documentElement.lang === 'en';
+  const base = document.documentElement.dataset.base ?? ''; // « /preprod » en préproduction
   const text = en
     ? {
         label: 'Cookie settings',
         body: 'This site uses Google Analytics to measure its audience. Analytics cookies are only set with your consent.',
         more: 'More about cookies',
-        legal: '/en/privacy/#cookies',
+        legal: `${base}/en/privacy/#cookies`,
         accept: 'Accept',
         refuse: 'Refuse',
       }
@@ -21,7 +22,7 @@
         label: 'Gestion des cookies',
         body: "Ce site utilise Google Analytics pour mesurer son audience. Les cookies de mesure ne sont déposés qu'avec votre accord.",
         more: 'En savoir plus sur les cookies',
-        legal: '/confidentialite/#cookies',
+        legal: `${base}/confidentialite/#cookies`,
         accept: 'Accepter',
         refuse: 'Refuser',
       };

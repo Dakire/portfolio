@@ -9,6 +9,7 @@ import ExperienceList from '../components/ExperienceList.astro';
 import ContactIsland from '../contact/ContactForm';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
 import '../styles/tools.css';
+import { withBase } from '../lib/base';
 import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
 
 interface Props {
@@ -69,7 +70,7 @@ const labels =
           </h2>
           <p class="prose lead">{t.about}</p>
           <p>
-            <Button href={t.hero.cvLink}>{labels.cv}</Button>
+            <Button href={withBase(t.hero.cvLink)}>{labels.cv}</Button>
           </p>
         </section>
         <section class="stack" aria-labelledby="exp">

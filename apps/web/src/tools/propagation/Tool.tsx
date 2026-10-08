@@ -18,6 +18,7 @@ import {
   TriangleAlert,
 } from 'lucide-preact';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { withBase } from '../../lib/base';
 import type { Lang } from '../../lib/i18n';
 import Button from '../ui/Button';
 import { Check } from '../ui/Choice';
@@ -426,7 +427,7 @@ export default function PropagationChecker({ lang }: { lang: Lang }) {
             </Button>
             <a
               class="btn btn-ghost"
-              href={`${ui.results.lookupPath}?d=${encodeURIComponent(query.domain)}`}
+              href={`${withBase(ui.results.lookupPath)}?d=${encodeURIComponent(query.domain)}`}
             >
               {ui.results.lookup}
             </a>

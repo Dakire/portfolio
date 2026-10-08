@@ -18,7 +18,8 @@ export default defineConfig({
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
     command: `pnpm run build && pnpm exec astro preview --port ${PORT}`,
-    env: { STYLEGUIDE: '1' },
+    // Clé de test Cloudflare (publique, passe toujours) : le build exige une clé de site Turnstile.
+    env: { STYLEGUIDE: '1', PUBLIC_TURNSTILE_SITE_KEY: '1x00000000000000000000AA' },
     url: `http://localhost:${PORT}/design/`,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

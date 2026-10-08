@@ -4,7 +4,11 @@ import { unified } from '@astrojs/markdown-remark';
 import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
+import rehypeBase from './src/lib/rehype-base.mjs';
 import rehypeTableScroll from './src/lib/rehype-table-scroll.mjs';
+
+// Préproduction : le site est servi depuis un sous-dossier (SITE_BASE=/preprod/). Production : racine.
+const base = process.env.SITE_BASE ?? '/';
 
 // Page de style (design system) : uniquement en développement, ou avec STYLEGUIDE=1 (préproduction). Jamais en production.
 const styleguide = {
@@ -50,6 +54,7 @@ const EXCLUDED = [
 
 export default defineConfig({
   site: 'https://grichard.eu',
+  base,
   output: 'static',
   trailingSlash: 'always',
   build: {
@@ -61,7 +66,7 @@ export default defineConfig({
   markdown: {
     // Coloration au build (aucun JavaScript côté visiteur) ; couleurs par variables CSS, une par thème (voir styles/site.css).
     shikiConfig: { themes: { light: 'github-light', dark: 'github-dark' }, defaultColor: false },
-    processor: unified({ rehypePlugins: [rehypeTableScroll] }),
+    processor: unified({ rehypePlugins: [rehypeTableScroll, [rehypeBase, { base }]] }),
   },
   integrations: [
     requireTurnstileKey,

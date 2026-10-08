@@ -1,6 +1,7 @@
 // Registre des outils : un identifiant, un segment d'URL par langue, une icône et les textes. Une seule liste alimente la page « Outils »,
 // l'accueil, le sitemap, llms.txt et l'index de recherche.
 // Pour ajouter un outil : un dossier src/tools/<id>/ (text.ts, Tool.tsx), une entrée ci-dessous et son composant dans components.ts.
+import { withBase } from '../lib/base';
 import type { Lang } from '../lib/i18n';
 import { DNS_TOOL } from './dns/text';
 import { EMAIL_HEADERS } from './email-headers/text';
@@ -14,7 +15,10 @@ import { SUBNET } from './subnet/text';
 import type { ToolIcon, ToolTexts } from './types';
 import { UNITS_TOOL } from './units/text';
 
-export const TOOLS_BASE: Record<Lang, string> = { fr: '/outils/', en: '/en/tools/' };
+export const TOOLS_BASE: Record<Lang, string> = {
+  fr: withBase('/outils/'),
+  en: withBase('/en/tools/'),
+};
 
 export interface ToolDef {
   id: string;

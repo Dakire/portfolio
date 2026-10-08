@@ -17,6 +17,7 @@ import {
   type Post,
 } from '../lib/blog';
 import { ROUTES, SITE, UI, type Alternates, type Lang } from '../lib/i18n';
+import { withBase } from '../lib/base';
 import { postLd } from '../lib/seo';
 
 interface Props {
@@ -38,7 +39,7 @@ const related = (await getPosts(lang))
   .filter((p) => p.slug !== post.slug && p.data.category === post.data.category)
   .slice(0, 2);
 const image = {
-  url: `${SITE}/og/${post.slug}.png`,
+  url: `${SITE}${withBase(`/og/${post.slug}.png`)}`,
   width: 1200,
   height: 630,
   alt: post.data.title,

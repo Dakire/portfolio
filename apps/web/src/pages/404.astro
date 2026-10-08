@@ -2,6 +2,7 @@
 import Button from '@grichard/ui/components/Button.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
+import { withBase } from '../lib/base';
 import { ROUTES } from '../lib/i18n';
 ---
 
@@ -9,7 +10,7 @@ import { ROUTES } from '../lib/i18n';
   lang="fr"
   title="Page introuvable | Guillaume Richard"
   description="Cette page n'existe pas ou a changé d'adresse."
-  path="/404.html"
+  path={withBase('/404.html')}
   noindex
 >
   <PageHero

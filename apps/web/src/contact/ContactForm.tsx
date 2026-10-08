@@ -266,7 +266,7 @@ class ErrorBoundary extends Component<
 > {
   override state = { failed: false };
 
-  static getDerivedStateFromError() {
+  static override getDerivedStateFromError() {
     return { failed: true };
   }
 
