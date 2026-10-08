@@ -8,7 +8,7 @@ Monorepo de grichard.eu. Production sur OVH mutualisé : **fichiers statiques + 
 
 ## Commandes
 
-`pnpm install` · `pnpm format:check` · `pnpm legacy:check` · `pnpm legacy:build` · `pnpm test:contract` · `pnpm audit:prod` · site : `pnpm --filter @grichard/web build|check|lint|test:e2e` · design system : `pnpm --filter @grichard/ui test` · outils : `pnpm --filter @grichard/tools-core check|test` · contrat du nouveau site : `CONTRACT_DIST=apps/web/dist pnpm test:contract` · API PHP (dans `apps/api`) : `composer install`, `composer test|cs|stan` · préproduction : `SITE_BASE=/preprod/ PUBLIC_NOINDEX=1 pnpm --filter @grichard/web build`. Le `.htaccess` est généré par `apps/web/scripts/lib/htaccess.mjs` (ne pas l'éditer à la main).
+`pnpm install` · `pnpm format:check` · `pnpm legacy:check` · `pnpm legacy:build` · `pnpm test:contract` · `pnpm audit:prod` · site : `pnpm --filter @grichard/web build|check|lint|test:e2e` · design system : `pnpm --filter @grichard/ui test` · outils : `pnpm --filter @grichard/tools-core check|test` · contrat du nouveau site : `CONTRACT_DIST=apps/web/dist pnpm test:contract` · API PHP (dans `apps/api`) : `composer install`, `composer test|cs|stan` · préproduction : `SITE_BASE=/preprod/ PUBLIC_NOINDEX=1 pnpm --filter @grichard/web build`. Portail Symfony (dans `apps/portal`) : `composer install`, `composer test|cs|stan` ; doc : docs/portail.md et docs/deploiement.md. Le `.htaccess` est généré par `apps/web/scripts/lib/htaccess.mjs` (ne pas l'éditer à la main).
 
 ## Structure cible
 
@@ -16,7 +16,7 @@ Monorepo de grichard.eu. Production sur OVH mutualisé : **fichiers statiques + 
 
 ## Règles
 
-- Commits Conventional Commits en français, atomiques ; une PR par phase vers `refonte/monorepo` ; pas de push sur `main` pendant la refonte.
+- Commits Conventional Commits en français, atomiques ; une PR par phase vers `main` (le propriétaire fusionne) ; jamais de déploiement lancé par un agent.
 - Pas de couleur en dur (tokens `packages/ui`), pas de `<style>` ni de script en ligne (CSP) ; pas d'attribut `style=""` écrit à la main.
 - TypeScript strict ; PHP `strict_types`, PER-CS, PHPStan max, PHPUnit.
 - Aucun secret dans le dépôt public ; CSP sans `unsafe-inline` pour les scripts ; SQL préparé ; Argon2id ; CSRF ; cookies `HttpOnly`/`Secure`/`SameSite`.

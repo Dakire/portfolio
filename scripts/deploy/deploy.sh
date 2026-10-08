@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # Transfert FTP/FTPS de la livraison (dossier release/, voir assemble.mjs) vers l'hébergement OVH.
 #
-#   scripts/deploy/deploy.sh <production|preprod> [dossier-livraison]
+#   scripts/deploy/deploy.sh <production|preprod|portal> [dossier-livraison]
 #
 # Variables : FTP_HOST, FTP_USER, FTP_PASSWORD (obligatoires, jamais affichées)
 #             FTP_TLS=true|false        (défaut true : FTPS explicite, certificat vérifié)
 #             FTP_VERIFY_CERT=true|false (défaut true)
+#             FTP_APP_PREFIX=www/       (repli : app/ et private/ placés dans www/ ; vide par défaut)
 #             DRY_RUN=true|false        (défaut true : rien n'est écrit sur le serveur, lftp ne fait que simuler)
 #
 # Ordre (un visiteur ne doit jamais voir une page qui référence un fichier pas encore transféré) :
@@ -34,8 +35,16 @@ case "$target" in
     code_remote="app/preprod/api"
     keep=()
     ;;
+  portal)
+    # Espace client : code dans app/portal/, point d'entrée dans www/espace/. Les données (private/) ne sont jamais concernées.
+    web_local="$release/www/espace"
+    web_remote="www/espace"
+    code_local="$release/app/portal"
+    code_remote="app/portal"
+    keep=()
+    ;;
   *)
-    echo "cible inconnue : $target (production ou preprod)" >&2
+    echo "cible inconnue : $target (production, preprod ou portal)" >&2
     exit 2
     ;;
 esac
@@ -50,6 +59,13 @@ done
 if [ -e "$release/private" ] || [ -e "$release/www/private" ]; then
   echo "private/ ne doit jamais être livré" >&2
   exit 2
+fi
+
+# Disposition de repli : si app/ et private/ doivent vivre DANS www/, FTP_APP_PREFIX=www/ (voir docs/deploiement.md).
+app_prefix="${FTP_APP_PREFIX:-}"
+code_remote="${app_prefix}${code_remote}"
+if [ -n "$app_prefix" ] && [ "$target" = "production" ]; then
+  keep+=(-x "^app/" -x "^private/") # ils sont dans www/ : la suppression finale ne doit jamais les atteindre
 fi
 
 tls="${FTP_TLS:-true}"

@@ -1,0 +1,21 @@
+parameters:
+  env(PORTAL_DB): '%kernel.project_dir%/var/portal.sqlite'
+  env(PORTAL_VAR_DIR): '%kernel.project_dir%/var'
+  env(PORTAL_SETUP_TOKEN): ''
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Grichard\Portal\:
+    resource: '../src/'
+    exclude:
+      - '../src/Entity/'
+      - '../src/Kernel.php'
+
+  Grichard\Portal\Setup\SetupToken:
+    arguments:
+      $token: '%env(PORTAL_SETUP_TOKEN)%'
+
+  Doctrine\Migrations\DependencyFactory: '@doctrine.migrations.dependency_factory'

@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+// Console Symfony, pour le développement et la CI (l'hébergement n'a pas de ligne de commande : voir /admin/maintenance).
+use Grichard\Portal\Kernel;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+$env = (string) ($_SERVER['APP_ENV'] ?? 'dev');
+$_SERVER['APP_SECRET'] ??= 'secret-de-developpement-uniquement';
+$kernel = new Kernel($env, 'prod' !== $env);
+
+(new Application($kernel))->run();

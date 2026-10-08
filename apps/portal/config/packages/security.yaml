@@ -1,0 +1,43 @@
+security:
+  password_hashers:
+    Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+      # Argon2id, paramètres de l'OWASP (12 Mio, 3 itérations, 1 fil — PHP n'en utilise qu'un), adaptés à un hébergement mutualisé.
+      algorithm: argon2id
+      memory_cost: 12288
+      time_cost: 3
+
+  providers:
+    app_user_provider:
+      entity:
+        class: Grichard\Portal\Entity\User
+        property: email
+
+  firewalls:
+    main:
+      lazy: true
+      provider: app_user_provider
+      form_login:
+        login_path: app_login
+        check_path: app_login
+        enable_csrf: true
+        default_target_path: app_home
+      logout:
+        path: app_logout
+        target: app_login
+      # 5 essais par 15 minutes, par identifiant et par adresse IP
+      login_throttling:
+        max_attempts: 5
+        interval: '15 minutes'
+
+  access_control:
+    - { path: ^/login$, roles: PUBLIC_ACCESS }
+    - { path: ^/setup$, roles: PUBLIC_ACCESS }
+    - { path: ^/admin, roles: ROLE_ADMIN }
+    - { path: ^/, roles: ROLE_USER }
+
+when@test:
+  security:
+    password_hashers:
+      Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+        algorithm: bcrypt
+        cost: 4

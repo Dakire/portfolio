@@ -8,7 +8,7 @@ on:
       target:
         description: Cible
         type: choice
-        options: [preprod, production]
+        options: [preprod, production, portal]
         default: preprod
       ref:
         description: Branche, tag ou SHA à livrer (retour arrière = tag précédent)
@@ -42,15 +42,15 @@ jobs:
           REF: ${{ inputs.ref }}
         run: |
           [[ "$REF" =~ ^[A-Za-z0-9._/-]+$ ]] || { echo "::error::ref invalide"; exit 1; }
-          if [ "$TARGET" = "production" ] && [ "$REF" != "main" ] && [[ ! "$REF" =~ ^(v[0-9]|deploy-production-) ]]; then
-            echo "::error::la production se livre depuis main ou depuis un tag (v… ou deploy-production-…)"
+          if [ "$TARGET" != "preprod" ] && [ "$REF" != "main" ] && [[ ! "$REF" =~ ^(v[0-9]|deploy-) ]]; then
+            echo "::error::la production et le portail se livrent depuis main ou depuis un tag (v… ou deploy-…)"
             exit 1
           fi
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ inputs.ref }}
-      - name: La CI de ce commit doit être verte (production)
-        if: inputs.target == 'production'
+      - name: La CI de ce commit doit être verte (production et portail)
+        if: inputs.target != 'preprod'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -86,14 +86,19 @@ jobs:
         if: inputs.target == 'production'
         run: CONTRACT_DIST=apps/web/dist pnpm test:contract
       - name: API PHP sans dépendances de développement
+        if: inputs.target != 'portal'
         working-directory: apps/api
+        run: composer install --no-dev --classmap-authoritative --no-interaction --prefer-dist
+      - name: Portail sans dépendances de développement
+        if: inputs.target == 'portal'
+        working-directory: apps/portal
         run: composer install --no-dev --classmap-authoritative --no-interaction --prefer-dist
       - name: Assembler la livraison
         env:
           TARGET: ${{ inputs.target }}
         run: |
           node --test "scripts/deploy/*.test.mjs"
-          node scripts/deploy/assemble.mjs "$TARGET"
+          node scripts/deploy/assemble.mjs "$TARGET" --build-id "$GITHUB_SHA"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-${{ inputs.target }}
@@ -108,7 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     # Environnement GitHub : la production y exige une validation manuelle (Settings > Environments).
-    environment: ${{ inputs.target }}
+    environment: ${{ inputs.target == 'portal' && 'production' || inputs.target }}
     permissions:
       contents: read
     env:
@@ -117,6 +122,7 @@ jobs:
       FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
       FTP_TLS: ${{ vars.FTP_TLS || 'true' }}
       FTP_VERIFY_CERT: ${{ vars.FTP_VERIFY_CERT || 'true' }}
+      FTP_APP_PREFIX: ${{ vars.FTP_APP_PREFIX }}
       DRY_RUN: ${{ inputs.dry_run }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -152,13 +158,18 @@ jobs:
           TARGET: ${{ inputs.target }}
           CONTRACT_BASIC_AUTH: ${{ secrets.PREPROD_BASIC_AUTH }}
         run: |
+          if [ "$TARGET" = "portal" ]; then
+            # le portail n'est pas dans le contrat public : la page de connexion doit répondre, et noindex
+            curl -fsS -o /dev/null -D - https://grichard.eu/espace/login | grep -i "x-robots-tag: noindex"
+            exit 0
+          fi
           if [ "$TARGET" = "production" ]; then url="https://grichard.eu"; else url="https://grichard.eu/preprod"; fi
           CONTRACT_BASE_URL="$url" pnpm test:contract
 
   tag:
     name: Poser le tag de retour arrière
     needs: deploy
-    if: inputs.target == 'production' && !inputs.dry_run
+    if: inputs.target != 'preprod' && !inputs.dry_run
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -168,8 +179,10 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
       - name: Tag
+        env:
+          TARGET: ${{ inputs.target }}
         run: |
-          tag="deploy-production-$(date -u +%Y%m%d-%H%M%S)"
+          tag="deploy-$TARGET-$(date -u +%Y%m%d-%H%M%S)"
           git tag "$tag"
           git push origin "$tag"
           echo "Tag posé : $tag (retour arrière : relancer ce workflow avec ref = $tag précédent)" >> "$GITHUB_STEP_SUMMARY"

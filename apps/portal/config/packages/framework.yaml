@@ -1,0 +1,30 @@
+framework:
+  secret: '%env(APP_SECRET)%'
+  http_method_override: false
+  handle_all_throwables: true
+  # Derrière un proxy (OVH), à renseigner dans private/portal.php (voir docs/portail.md) : sinon l'IP vue est celle du proxy.
+  trusted_proxies: '%env(default::PORTAL_TRUSTED_PROXIES)%'
+  trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-host', 'x-forwarded-port']
+  session:
+    name: PORTALSESSID
+    save_path: '%env(PORTAL_VAR_DIR)%/sessions'
+    cookie_secure: auto
+    cookie_httponly: true
+    cookie_samesite: lax
+    gc_maxlifetime: 7200
+  cache:
+    # Compteurs de limitation de débit : conservés d'un déploiement à l'autre (le cache de l'application, lui, est propre à chaque livraison).
+    directory: '%env(PORTAL_VAR_DIR)%/pools'
+  rate_limiter:
+    setup:
+      policy: fixed_window
+      limit: 5
+      interval: '15 minutes'
+  php_errors:
+    log: true
+
+when@test:
+  framework:
+    test: true
+    session:
+      storage_factory_id: session.storage.factory.mock_file
