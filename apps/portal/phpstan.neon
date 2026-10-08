@@ -10,4 +10,4 @@ parameters:
         - tests
         - migrations
     excludePaths:
-        - var
+        - var (?)
