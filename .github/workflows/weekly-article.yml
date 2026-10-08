@@ -55,17 +55,19 @@ jobs:
         run: |
           if [ -n "$ANTHROPIC_API_KEY" ] && [ "${{ steps.pending.outputs.count || 0 }}" = "0" ]; then echo "run=true" >> "$GITHUB_OUTPUT"; else echo "run=false" >> "$GITHUB_OUTPUT"; fi
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: steps.go.outputs.run == 'true'
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        if: steps.go.outputs.run == 'true'
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         if: steps.go.outputs.run == 'true'
         with:
           node-version: 22
-          cache: npm
+          cache: pnpm
       - if: steps.go.outputs.run == 'true'
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Rédiger le brouillon
         id: generate
@@ -76,20 +78,20 @@ jobs:
         run: |
           args=(--report "$RUNNER_TEMP/report.md")
           if [ -n "$INPUT_TOPIC" ]; then args+=(--topic "$INPUT_TOPIC"); elif [ -n "$INPUT_TOPIC_ID" ]; then args+=(--id "$INPUT_TOPIC_ID"); fi
-          node scripts/generate-article.js "${args[@]}"
+          pnpm --filter legacy exec node scripts/generate-article.js "${args[@]}"
 
       # L'article doit passer les mêmes contrôles que n'importe quel changement avant qu'une PR soit ouverte.
       - name: Contrôles (lint, tests unitaires, build)
         if: steps.go.outputs.run == 'true'
         run: |
-          npm run lint
-          npm test
-          BUILD_FAST=1 npm run build
+          pnpm --filter legacy run lint
+          pnpm --filter legacy run test
+          BUILD_FAST=1 pnpm --filter legacy run build
       - name: Tests de bout en bout
         if: steps.go.outputs.run == 'true'
         run: |
-          npx playwright install --with-deps chromium
-          npm run test:e2e
+          pnpm --filter legacy exec playwright install --with-deps chromium
+          pnpm --filter legacy run test:e2e
 
       - name: Ouvrir la pull request
         if: steps.go.outputs.run == 'true'
@@ -101,7 +103,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add content/blog content/topics.json
+          git add legacy/content/blog legacy/content/topics.json
           git commit -m "Brouillon d'article : $TITLE"
           git push origin "$branch"
           gh pr create --title "Brouillon d'article : $TITLE" --body-file "$RUNNER_TEMP/report.md" --base main --head "$branch" --label article 2>/dev/null \
