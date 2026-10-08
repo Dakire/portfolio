@@ -1,0 +1,10 @@
+{
+  "name": "@grichard/config",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Configurations partagées (TypeScript, oxlint)",
+  "exports": {
+    "./tsconfig.base.json": "./tsconfig.base.json",
+    "./oxlintrc.json": "./oxlintrc.json"
+  }
+}

@@ -1,0 +1,80 @@
+---
+import '@grichard/ui/fonts.css';
+import '@grichard/ui/tokens.css';
+import '@grichard/ui/base.css';
+import '@grichard/ui/components.css';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import SkipLink from '@grichard/ui/components/SkipLink.astro';
+import ThemeSwitch from '@grichard/ui/components/ThemeSwitch.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: 'fr' | 'en';
+  noindex?: boolean;
+}
+const { title, description, lang = 'fr', noindex = false } = Astro.props;
+
+// Empreinte du script de thème dans l'URL : cache longue durée sans risque de version périmée.
+const themeHash = createHash('sha1')
+  .update(readFileSync(resolve(process.cwd(), 'public/js/theme.js')))
+  .digest('hex')
+  .slice(0, 8);
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const labels =
+  lang === 'fr'
+    ? { skip: 'Aller au contenu', theme: 'Thème', auto: 'auto', light: 'clair', dark: 'sombre' }
+    : { skip: 'Skip to content', theme: 'Theme', auto: 'auto', light: 'light', dark: 'dark' };
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0a0c0f" />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <script is:inline src={`/js/theme.js?v=${themeHash}`}></script>
+  </head>
+  <body>
+    <SkipLink label={labels.skip} />
+    <header class="container site-header">
+      <a href={lang === 'fr' ? '/' : '/en/'} class="site-name">
+        grichard<span aria-hidden="true">.eu</span>
+      </a>
+      <ThemeSwitch
+        label={labels.theme}
+        labels={{ auto: labels.auto, light: labels.light, dark: labels.dark }}
+      />
+    </header>
+    <main id="contenu" tabindex="-1">
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  .site-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 4rem;
+    padding-block: var(--space-2);
+    gap: var(--space-4);
+  }
+  .site-name {
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .site-name span {
+    color: var(--accent);
+  }
+</style>

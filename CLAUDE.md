@@ -14,15 +14,19 @@ Ne jamais introduire de dépendance d'exécution Node, ni d'appel à un service 
 
 ## Commandes (racine)
 
-| Besoin                       | Commande                                                   |
-| ---------------------------- | ---------------------------------------------------------- |
-| Installer                    | `pnpm install` (installe aussi les hooks)                  |
-| Formater / vérifier          | `pnpm format` / `pnpm format:check`                        |
-| Site actuel : build          | `pnpm legacy:build`                                        |
-| Site actuel : lint+tests+e2e | `pnpm legacy:check`                                        |
-| Contrat des 70 URL publiques | `pnpm test:contract` (après un build complet)              |
-| Contrat sur le site en ligne | `CONTRACT_BASE_URL=https://grichard.eu pnpm test:contract` |
-| Audit des dépendances        | `pnpm audit:prod`                                          |
+| Besoin                       | Commande                                                       |
+| ---------------------------- | -------------------------------------------------------------- |
+| Installer                    | `pnpm install` (installe aussi les hooks)                      |
+| Formater / vérifier          | `pnpm format` / `pnpm format:check`                            |
+| Site actuel : build          | `pnpm legacy:build`                                            |
+| Site actuel : lint+tests+e2e | `pnpm legacy:check`                                            |
+| Contrat des 70 URL publiques | `pnpm test:contract` (après un build complet)                  |
+| Contrat sur le site en ligne | `CONTRACT_BASE_URL=https://grichard.eu pnpm test:contract`     |
+| Audit des dépendances        | `pnpm audit:prod`                                              |
+| Site (Astro) : dev           | `pnpm --filter @grichard/web dev` (page de style : `/design/`) |
+| Site : build / types / lint  | `pnpm --filter @grichard/web build` / `check` / `lint`         |
+| Site : e2e + axe             | `pnpm --filter @grichard/web test:e2e`                         |
+| Design system : tests        | `pnpm --filter @grichard/ui test`                              |
 
 Les commandes des futures apps (`apps/web`, `apps/api`, `apps/portal`) seront ajoutées ici à leur création.
 
@@ -35,7 +39,7 @@ Les commandes des futures apps (`apps/web`, `apps/api`, `apps/portal`) seront aj
 - **Commits** : Conventional Commits (`type(portée): sujet`, en français), vérifiés par le hook `commit-msg`. Atomiques : un commit, un changement cohérent.
 - **Branches** : une branche et une PR par phase vers `refonte/monorepo`. `main` ne reçoit la refonte qu'à la bascule finale validée par Guillaume.
 - **TypeScript strict** côté JS. **PHP** : `declare(strict_types=1)`, PER-CS, PHPStan niveau max, PHPUnit.
-- Prettier pour tout sauf `legacy/`. Pas de couleur écrite en dur : utiliser les tokens du design system.
+- Prettier pour tout sauf `legacy/`. Pas de couleur écrite en dur : utiliser les tokens de `packages/ui/src/tokens.css`. Jamais de `style=""`, de `<style>` ni de script en ligne (CSP) ; les scripts sont des fichiers externes.
 - Une dépendance ajoutée doit être justifiée (poids, maintenance, sécurité, compatibilité OVH).
 
 ## Sécurité (toujours)

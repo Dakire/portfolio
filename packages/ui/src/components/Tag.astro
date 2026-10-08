@@ -1,0 +1,11 @@
+---
+interface Props {
+  tone?: 'neutral' | 'ok' | 'warn' | 'danger';
+}
+const { tone = 'neutral' } = Astro.props;
+const classes = ['tag', tone !== 'neutral' && `tag-${tone}`].filter(Boolean).join(' ');
+---
+
+<span class={classes}>
+  <slot />
+</span>

@@ -8,7 +8,7 @@ Monorepo de grichard.eu. Production sur OVH mutualisé : **fichiers statiques + 
 
 ## Commandes
 
-`pnpm install` · `pnpm format:check` · `pnpm legacy:check` · `pnpm legacy:build` · `pnpm test:contract` · `pnpm audit:prod`.
+`pnpm install` · `pnpm format:check` · `pnpm legacy:check` · `pnpm legacy:build` · `pnpm test:contract` · `pnpm audit:prod` · site : `pnpm --filter @grichard/web build|check|lint|test:e2e` · design system : `pnpm --filter @grichard/ui test`.
 
 ## Structure cible
 
@@ -17,6 +17,7 @@ Monorepo de grichard.eu. Production sur OVH mutualisé : **fichiers statiques + 
 ## Règles
 
 - Commits Conventional Commits en français, atomiques ; une PR par phase vers `refonte/monorepo` ; pas de push sur `main` pendant la refonte.
+- Pas de couleur en dur (tokens `packages/ui`), pas de `style=""`, de `<style>` ni de script en ligne (CSP).
 - TypeScript strict ; PHP `strict_types`, PER-CS, PHPStan max, PHPUnit.
 - Aucun secret dans le dépôt public ; CSP sans `unsafe-inline` pour les scripts ; SQL préparé ; Argon2id ; CSRF ; cookies `HttpOnly`/`Secure`/`SameSite`.
 - WCAG 2.2 AA : sémantique, focus visible, contrastes dans les deux thèmes, mouvement réduit respecté, axe vert.

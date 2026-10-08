@@ -1,0 +1,11 @@
+---
+/** Invite de terminal décorative au-dessus d'un titre de section (ex. « ~/blog »). Masquée aux lecteurs d'écran : le titre suffit. */
+interface Props {
+  path: string;
+}
+const { path } = Astro.props;
+---
+
+<p class="eyebrow prompt" aria-hidden="true">
+  <span>{path}</span>
+</p>

@@ -1,0 +1,20 @@
+---
+/** Choix du thème : auto (système), clair, sombre. Piloté par /js/theme.js ; sans JavaScript le groupe reste masqué (le thème suit le système). */
+interface Props {
+  label: string;
+  labels: { auto: string; light: string; dark: string };
+}
+const { label, labels } = Astro.props;
+---
+
+<div class="theme-switch" role="group" aria-label={label} data-theme-switch hidden>
+  <button type="button" data-theme-set="auto" aria-pressed="false">
+    {labels.auto}
+  </button>
+  <button type="button" data-theme-set="light" aria-pressed="false">
+    {labels.light}
+  </button>
+  <button type="button" data-theme-set="dark" aria-pressed="false">
+    {labels.dark}
+  </button>
+</div>
