@@ -9,8 +9,15 @@ import { ROUTES, SITE, type Alternates, type Lang } from '../lib/i18n';
 import { breadcrumbLd } from '../lib/seo';
 import { HUB } from '../tools/hub';
 import { findTool, toolPath, toolUi, type ToolId } from '../tools/registry';
+import EncoderDecoder from '../tools/encoder/Tool';
+import DnsChecker from '../tools/dns/Tool';
+import EmailHeaders from '../tools/email-headers/Tool';
+import IcsCompare from '../tools/ics-compare/Tool';
+import IcsSplit from '../tools/ics-split/Tool';
 import JsonFormatter from '../tools/json/Tool';
 import PasswordGenerator from '../tools/password/Tool';
+import PropagationChecker from '../tools/propagation/Tool';
+import SubnetCalculator from '../tools/subnet/Tool';
 import UnitConverter from '../tools/units/Tool';
 
 interface Props {
@@ -84,6 +91,13 @@ const ld = {
     </nav>
 
     <div id="outil">
+      {toolId === 'encoder' && <EncoderDecoder client:load lang={lang} />}
+      {toolId === 'dns' && <DnsChecker client:load lang={lang} />}
+      {toolId === 'email-headers' && <EmailHeaders client:load lang={lang} />}
+      {toolId === 'ics-compare' && <IcsCompare client:load lang={lang} />}
+      {toolId === 'ics-split' && <IcsSplit client:load lang={lang} />}
+      {toolId === 'propagation' && <PropagationChecker client:load lang={lang} />}
+      {toolId === 'subnet' && <SubnetCalculator client:load lang={lang} />}
       {toolId === 'json' && <JsonFormatter client:load lang={lang} />}
       {toolId === 'password' && <PasswordGenerator client:load lang={lang} />}
       {toolId === 'units' && <UnitConverter client:load lang={lang} />}

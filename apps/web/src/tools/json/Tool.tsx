@@ -3,6 +3,7 @@ import { CircleAlert, CircleCheck, Download, Eraser, FileJson } from 'lucide-pre
 import { useMemo, useRef, useState } from 'preact/hooks';
 import type { Lang } from '../../lib/i18n';
 import Button from '../ui/Button';
+import { Radio } from '../ui/Choice';
 import CopyButton from '../ui/CopyButton';
 import Field from '../ui/Field';
 import { downloadBlob } from '../ui/download';
@@ -11,29 +12,6 @@ import { JSON_TOOL } from './text';
 
 const INDENTS = { '2': 2, '4': 4, tab: '\t', min: 0 } as const;
 type IndentKey = keyof typeof INDENTS;
-
-interface RadioProps {
-  name: string;
-  value: string;
-  current: string;
-  onChange: (value: string) => void;
-  children: string;
-}
-
-function Radio({ name, value, current, onChange, children }: RadioProps) {
-  return (
-    <label class="pill-choice">
-      <input
-        type="radio"
-        name={name}
-        value={value}
-        checked={current === value}
-        onChange={() => onChange(value)}
-      />
-      <span>{children}</span>
-    </label>
-  );
-}
 
 type Failure = Extract<JsonParseResult, { ok: false }>;
 

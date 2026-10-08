@@ -80,7 +80,19 @@ export function decodeUrl(
 }
 
 /** Décompose une URL en parties lisibles (protocole, hôte, chemin, paramètres, ancre). */
-export function parseUrl(text: string) {
+export interface ParsedUrl {
+  ok: true;
+  protocol: string;
+  username: string;
+  password: string;
+  host: string;
+  port: string;
+  path: string;
+  hash: string;
+  params: [string, string][];
+}
+
+export function parseUrl(text: string): ParsedUrl | { ok: false } {
   try {
     const u = new URL(text.trim());
     return {

@@ -30,7 +30,7 @@ export interface ZipFile {
 export function zipStore(
   files: ZipFile[],
   { date = new Date() }: { date?: Date } = {},
-): Uint8Array {
+): Uint8Array<ArrayBuffer> {
   if (files.length > 65535) throw new Error('trop de fichiers pour une archive ZIP');
   const dosTime = (date.getHours() << 11) | (date.getMinutes() << 5) | (date.getSeconds() >> 1);
   const dosDate =

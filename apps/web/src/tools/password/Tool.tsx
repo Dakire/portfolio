@@ -10,10 +10,10 @@ import {
   type PasswordOptions,
 } from '@grichard/tools-core/password';
 import { Eye, EyeOff, RefreshCw } from 'lucide-preact';
-import type { ComponentChildren } from 'preact';
 import { useCallback, useEffect, useState } from 'preact/hooks';
 import type { Lang } from '../../lib/i18n';
 import Button from '../ui/Button';
+import { Check } from '../ui/Choice';
 import CopyButton from '../ui/CopyButton';
 import { SelectField } from '../ui/Field';
 import { PASSWORD } from './text';
@@ -30,27 +30,6 @@ function formatDuration(seconds: number, d: Durations): string {
   const years = seconds / 31_536_000;
   if (years < 1000) return d.years(Math.round(years).toLocaleString());
   return years < 1e6 ? d.centuries : d.millennia;
-}
-
-function Check({
-  checked,
-  onChange,
-  children,
-}: {
-  checked: boolean;
-  onChange: (value: boolean) => void;
-  children: ComponentChildren;
-}) {
-  return (
-    <label class="check">
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={(e) => onChange(e.currentTarget.checked)}
-      />
-      <span>{children}</span>
-    </label>
-  );
 }
 
 interface RangeProps {

@@ -44,7 +44,7 @@ const attr = (html: string, re: RegExp) =>
   [...html.matchAll(new RegExp(re.source, 'g'))].map((m) => m[1]!);
 
 /** Pages prévues dans une phase suivante (outils : phase 3). Vider cette liste quand elles existent. */
-const PENDING = ['/outils/', '/en/tools/'];
+const PENDING: string[] = [];
 
 describe('site construit', () => {
   it('contient des pages', () => {

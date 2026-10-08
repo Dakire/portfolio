@@ -83,7 +83,7 @@ export const SUBNET = {
       split: {
         title: 'Découper en sous-réseaux',
         prefix: 'Nouveau préfixe',
-        help: (count: number) => `${count} sous-réseaux`,
+        help: (count: string) => `${count} sous-réseaux`,
         columns: {
           network: 'Réseau',
           first: 'Première',
@@ -91,7 +91,7 @@ export const SUBNET = {
           broadcast: 'Broadcast',
           hosts: 'Hôtes',
         },
-        truncated: (shown: number, total: number) =>
+        truncated: (shown: number, total: string) =>
           `${shown} premiers sous-réseaux affichés sur ${total}.`,
         invalid:
           'Le nouveau préfixe doit être supérieur ou égal à celui du réseau, et ne pas dépasser la longueur de l’adresse.',
@@ -110,13 +110,13 @@ export const SUBNET = {
           hosts: 'Hôtes',
           wasted: 'Perdus',
         },
-        free: (n: number) => `${n} adresse(s) restée(s) libre(s) dans le réseau.`,
+        free: (n: string) => `${n} adresse(s) restée(s) libre(s) dans le réseau.`,
         errors: {
           ipv4only: 'Le VLSM n’est proposé que pour IPv4.',
-          tooBig: (n: number) => `« ${n} » ne tient pas dans ce réseau, même seul.`,
-          noRoom: (n: number) =>
+          tooBig: (n: string) => `« ${n} » ne tient pas dans ce réseau, même seul.`,
+          noRoom: (n: string) =>
             `Plus de place pour « ${n} » : agrandissez le réseau ou réduisez les besoins.`,
-          invalid: (l: number) => `Ligne illisible : « ${l} ».`,
+          invalid: (l: string) => `Ligne illisible : « ${l} ».`,
         },
       },
       check: {
@@ -254,7 +254,7 @@ export const SUBNET = {
       split: {
         title: 'Split into subnets',
         prefix: 'New prefix',
-        help: (count: number) => `${count} subnets`,
+        help: (count: string) => `${count} subnets`,
         columns: {
           network: 'Network',
           first: 'First',
@@ -262,7 +262,7 @@ export const SUBNET = {
           broadcast: 'Broadcast',
           hosts: 'Hosts',
         },
-        truncated: (shown: number, total: number) =>
+        truncated: (shown: number, total: string) =>
           `First ${shown} subnets shown out of ${total}.`,
         invalid:
           'The new prefix must be greater than or equal to the network prefix, and not exceed the address length.',
@@ -281,13 +281,13 @@ export const SUBNET = {
           hosts: 'Hosts',
           wasted: 'Unused',
         },
-        free: (n: number) => `${n} address(es) left free in the network.`,
+        free: (n: string) => `${n} address(es) left free in the network.`,
         errors: {
           ipv4only: 'VLSM is only offered for IPv4.',
-          tooBig: (n: number) => `"${n}" does not fit in this network, even alone.`,
-          noRoom: (n: number) =>
+          tooBig: (n: string) => `"${n}" does not fit in this network, even alone.`,
+          noRoom: (n: string) =>
             `No room left for "${n}": enlarge the network or reduce the needs.`,
-          invalid: (l: number) => `Unreadable line: "${l}".`,
+          invalid: (l: string) => `Unreadable line: "${l}".`,
         },
       },
       check: {
