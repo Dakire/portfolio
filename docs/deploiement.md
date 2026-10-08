@@ -79,3 +79,7 @@ Toucher au DNS ; lire ou écrire `private/` ; se lancer sans clic ; livrer la pr
 - Le transfert FTP n'est pas atomique : l'ordre ci-dessus limite la fenêtre d'incohérence à quelques secondes.
 - `lftp` n'a pas pu être exécuté dans l'environnement de développement (Windows) : le **premier passage doit être la simulation en préproduction**. Le script a été vérifié avec un faux `lftp` qui affiche les commandes reçues ; leur effet réel est à confirmer par cette simulation.
 - Le dépôt est public : les artefacts (livraison, sauvegarde) sont téléchargeables par quiconque a accès au dépôt. Ils ne contiennent que du contenu public et du code, jamais de secret.
+
+## SFTP (hébergement qui n'ouvre que le port 22)
+
+Créer la variable GitHub `FTP_PROTOCOL` = `sftp` (et `FTP_PORT` si ce n'est pas 22). Le workflow enregistre la clé de l'hôte avec `ssh-keyscan` et affiche son empreinte dans le journal. `FTP_TLS` et `FTP_VERIFY_CERT` ne servent alors plus. Même hôte, même utilisateur, mêmes secrets.

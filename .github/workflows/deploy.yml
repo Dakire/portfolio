@@ -120,6 +120,8 @@ jobs:
       FTP_HOST: ${{ secrets.FTP_HOST }}
       FTP_USER: ${{ secrets.FTP_USER }}
       FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      FTP_PROTOCOL: ${{ vars.FTP_PROTOCOL || 'ftp' }}
+      FTP_PORT: ${{ vars.FTP_PORT || '22' }}
       FTP_TLS: ${{ vars.FTP_TLS || 'true' }}
       FTP_VERIFY_CERT: ${{ vars.FTP_VERIFY_CERT || 'true' }}
       FTP_APP_PREFIX: ${{ vars.FTP_APP_PREFIX }}
@@ -139,6 +141,13 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile --ignore-scripts # pour vitest (contrat) ; aucun script d'installation
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+      - name: Clé de l'hôte SFTP
+        if: env.FTP_PROTOCOL == 'sftp'
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -t ed25519,ecdsa,rsa -p "$FTP_PORT" "$FTP_HOST" > ~/.ssh/known_hosts 2>/dev/null
+          test -s ~/.ssh/known_hosts || { echo "clé de l'hôte introuvable" >&2; exit 1; }
+          ssh-keygen -lf ~/.ssh/known_hosts # empreinte à comparer à celle d'OVH si besoin
       - name: Sauvegarde du site en ligne
         if: inputs.target == 'production' && !inputs.dry_run
         run: scripts/deploy/backup.sh "backup-www-$(date -u +%Y%m%d-%H%M%S).tar.gz"

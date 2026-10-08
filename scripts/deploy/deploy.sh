@@ -4,6 +4,7 @@
 #   scripts/deploy/deploy.sh <production|preprod|portal> [dossier-livraison]
 #
 # Variables : FTP_HOST, FTP_USER, FTP_PASSWORD (obligatoires, jamais affichées)
+#             FTP_PROTOCOL=ftp|sftp    (défaut ftp ; sftp : FTP_PORT=22, clé de l'hôte déjà dans ~/.ssh/known_hosts)
 #             FTP_TLS=true|false        (défaut true : FTPS explicite, certificat vérifié)
 #             FTP_VERIFY_CERT=true|false (défaut true)
 #             FTP_APP_PREFIX=www/       (repli : app/ et private/ placés dans www/ ; vide par défaut)
@@ -68,6 +69,8 @@ if [ -n "$app_prefix" ] && [ "$target" = "production" ]; then
   keep+=(-x "^app/" -x "^private/") # ils sont dans www/ : la suppression finale ne doit jamais les atteindre
 fi
 
+proto="${FTP_PROTOCOL:-ftp}" # ftp (FTPS) ou sftp
+auto_confirm="${FTP_SFTP_AUTO_CONFIRM:-false}"
 tls="${FTP_TLS:-true}"
 verify="${FTP_VERIFY_CERT:-true}"
 sim=()
@@ -85,14 +88,29 @@ chmod 600 "$script"
   echo "set cmd:fail-exit yes"
   echo "set net:max-retries 3"
   echo "set net:timeout 30"
-  echo "set ftp:list-options -a" # voir les fichiers cachés (.htaccess, .well-known)
-  echo "set ftp:ssl-allow $tls"
-  echo "set ftp:ssl-force $tls"
-  echo "set ftp:ssl-protect-data $tls"
-  echo "set ssl:verify-certificate $verify"
   echo "set mirror:parallel-transfer-count 4"
   echo "set mirror:set-permissions no"
-  echo "open -u \"$FTP_USER\" \"$FTP_HOST\"" # le mot de passe est lu dans LFTP_PASSWORD : ni dans ce fichier, ni dans la liste des processus
+  if [ "$proto" = "sftp" ]; then
+    echo "set sftp:auto-confirm $auto_confirm" # faux : la clé de l'hôte doit déjà être dans ~/.ssh/known_hosts
+  if [ "$proto" = "sftp" ]; then
+    echo "set sftp:auto-confirm $auto_confirm" # faux : la clé de l'hôte doit déjà être dans ~/.ssh/known_hosts
+    echo "open -u \"$FTP_USER\" \"sftp://$FTP_HOST:${FTP_PORT:-22}\""
+  else
+    echo "set ftp:list-options -a" # voir les fichiers cachés (.htaccess, .well-known)
+    echo "set ftp:ssl-allow $tls"
+    echo "set ftp:ssl-force $tls"
+    echo "set ftp:ssl-protect-data $tls"
+    echo "set ssl:verify-certificate $verify"
+    echo "open -u \"$FTP_USER\" \"$FTP_HOST\""
+  fi
+  else
+    echo "set ftp:list-options -a" # voir les fichiers cachés (.htaccess, .well-known)
+    echo "set ftp:ssl-allow $tls"
+    echo "set ftp:ssl-force $tls"
+    echo "set ftp:ssl-protect-data $tls"
+    echo "set ssl:verify-certificate $verify"
+    echo "open -u \"$FTP_USER\" \"$FTP_HOST\""
+  fi
 
   # 1. Code de l'API (remplacé en entier : vendor/ doit correspondre au composer.lock livré)
   echo "mirror -R --delete ${sim[*]} \"$code_local\" \"$code_remote\""

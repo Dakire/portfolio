@@ -15,6 +15,8 @@ for var in FTP_HOST FTP_USER FTP_PASSWORD; do
 done
 
 app_prefix="${FTP_APP_PREFIX:-}"
+proto="${FTP_PROTOCOL:-ftp}" # ftp (FTPS) ou sftp
+auto_confirm="${FTP_SFTP_AUTO_CONFIRM:-false}"
 tls="${FTP_TLS:-true}"
 verify="${FTP_VERIFY_CERT:-true}"
 export LFTP_PASSWORD="$FTP_PASSWORD"
@@ -29,14 +31,19 @@ mkdir -p "$work/www" "$work/app/api"
   echo "set cmd:fail-exit yes"
   echo "set net:max-retries 3"
   echo "set net:timeout 30"
-  echo "set ftp:list-options -a"
-  echo "set ftp:ssl-allow $tls"
-  echo "set ftp:ssl-force $tls"
-  echo "set ftp:ssl-protect-data $tls"
-  echo "set ssl:verify-certificate $verify"
-  echo "open -u \"$FTP_USER\" \"$FTP_HOST\""
+  if [ "$proto" = "sftp" ]; then
+    echo "set sftp:auto-confirm $auto_confirm" # faux : la clé de l'hôte doit déjà être dans ~/.ssh/known_hosts
+    echo "open -u \"$FTP_USER\" \"sftp://$FTP_HOST:${FTP_PORT:-22}\""
+  else
+    echo "set ftp:list-options -a" # voir les fichiers cachés (.htaccess, .well-known)
+    echo "set ftp:ssl-allow $tls"
+    echo "set ftp:ssl-force $tls"
+    echo "set ftp:ssl-protect-data $tls"
+    echo "set ssl:verify-certificate $verify"
+    echo "open -u \"$FTP_USER\" \"$FTP_HOST\""
+  fi
   echo "mirror -x '^preprod/' -x '^espace/' -x '^app/' -x '^private/' www \"$work/www\""
-  # app/api n'existe pas avant le premier déploiement : ce n'est pas une erreur
+  # app/api n’existe pas avant le premier déploiement : ce n'est pas une erreur
   echo "set cmd:fail-exit no"
   echo "mirror ${app_prefix}app/api \"$work/app/api\""
   echo "bye"
