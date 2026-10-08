@@ -1,38 +1,24 @@
 {
-  "name": "mon-portfolio",
+  "name": "grichard-eu",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build && node scripts/prerender.js",
-    "lint": "oxlint",
-    "article": "node scripts/generate-article.js",
-    "preview": "vite preview",
-    "test": "vitest run",
-    "test:e2e": "playwright test",
-    "check": "npm run lint && npm test && npm run test:e2e",
-    "test:contract": "vitest run --config vitest.contract.config.js",
-    "test:live": "vitest run --config vitest.live.config.js"
-  },
-  "dependencies": {
-    "lucide-react": "^1.50.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
-  },
-  "devDependencies": {
-    "@anthropic-ai/sdk": "^0.131.0",
-    "@axe-core/playwright": "^4.13.0",
-    "@playwright/test": "^1.63.0",
-    "@tailwindcss/vite": "^4.3.3",
-    "@vitejs/plugin-react": "^6.1.1",
-    "marked": "^18.0.14",
-    "oxlint": "^1.81.0",
-    "tailwindcss": "^4.3.3",
-    "vite": "^8.3.0",
-    "vitest": "^4.1.11"
-  },
+  "description": "Monorepo de grichard.eu : site public statique, API PHP, espace client de test.",
+  "packageManager": "pnpm@10.34.6",
   "engines": {
     "node": ">=22"
+  },
+  "scripts": {
+    "legacy:build": "pnpm --filter legacy run build",
+    "legacy:check": "pnpm --filter legacy run lint && pnpm --filter legacy run test && pnpm --filter legacy run test:e2e",
+    "test:contract": "vitest run --config vitest.contract.config.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "audit:prod": "pnpm audit --prod --audit-level high",
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "lefthook": "^1.13.0",
+    "prettier": "^3.6.2",
+    "vitest": "^4.1.11"
   }
 }

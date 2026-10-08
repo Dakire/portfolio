@@ -1,0 +1,16 @@
+# Hooks Git (installés par `pnpm install` via le script prepare).
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      glob: '*.{js,mjs,ts,tsx,json,md,yml,yaml,css,astro}'
+      exclude: '^legacy/|pnpm-lock.yaml'
+      run: pnpm exec prettier --check {staged_files}
+    legacy-lint:
+      glob: 'legacy/**/*.{js,jsx}'
+      run: pnpm --filter legacy run lint
+
+commit-msg:
+  commands:
+    conventional:
+      run: node scripts/check-commit-msg.mjs {1}

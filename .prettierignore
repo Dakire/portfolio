@@ -1,0 +1,7 @@
+# Le site actuel n'est pas reformaté : il est figé comme référence jusqu'à sa suppression.
+legacy
+pnpm-lock.yaml
+dist
+vendor
+**/*.min.*
+tests/contract/contract.json

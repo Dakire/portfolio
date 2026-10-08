@@ -2,33 +2,71 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'refonte/**']
   pull_request:
 
+# Permissions minimales : la CI ne fait que lire le dépôt.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  check:
+  format:
+    name: Formatage
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+
+  legacy:
+    name: Site actuel (legacy) - lint, tests, e2e, contrat
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
     env:
       # Clé de test Cloudflare (publique, passe toujours) : le build exige une clé de site Turnstile.
       VITE_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0 # le pré-rendu lit l'historique Git pour les dates de dernière modification
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run lint
-      - run: npm audit --omit=dev --audit-level=high
-      - run: npm test
-      - run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e
-      - uses: actions/upload-artifact@v4
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter legacy run lint
+      - run: pnpm audit --prod --audit-level high
+      - run: pnpm --filter legacy run test
+      - run: pnpm --filter legacy exec playwright install --with-deps chromium
+      - run: pnpm --filter legacy run test:e2e # construit legacy/dist puis lance Playwright + axe
+      - name: Contrat public (70 URL) sur le build
+        run: pnpm test:contract
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: failure()
         with:
           name: playwright-report
-          path: playwright-report/
+          path: legacy/playwright-report/
           retention-days: 7
+
+  secrets:
+    name: Recherche de secrets (historique complet)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
