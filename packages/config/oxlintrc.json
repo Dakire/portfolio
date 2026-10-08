@@ -6,6 +6,6 @@
     "react/rules-of-hooks": "error",
     "react/exhaustive-deps": "error",
     "no-console": "warn",
-    "eqeqeq": "error"
+    "eqeqeq": ["error", "smart"]
   }
 }
