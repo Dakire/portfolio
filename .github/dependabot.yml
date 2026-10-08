@@ -16,7 +16,9 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
-  # À activer quand apps/portal aura son composer.json :
-  # - package-ecosystem: composer
-  #   directory: /apps/portal
-  #   schedule: { interval: weekly }
+  - package-ecosystem: composer
+    directory: /apps/portal
+    schedule: { interval: weekly }
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]

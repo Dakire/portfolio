@@ -80,6 +80,10 @@ jobs:
       - run: pnpm --filter @grichard/web exec playwright install --with-deps chromium
       - run: pnpm --filter @grichard/web test:e2e
       - run: pnpm --filter @grichard/web test # intégrité de dist/ (liens, hreflang, balisage), construit par l'étape précédente
+      - name: Scripts de déploiement (assemblage de la livraison)
+        run: |
+          node --test "scripts/deploy/*.test.mjs"
+          bash -n scripts/deploy/deploy.sh scripts/deploy/backup.sh
       - name: Contrat public (70 URL) sur le nouveau site
         run: CONTRACT_DIST=apps/web/dist pnpm test:contract
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -107,6 +111,27 @@ jobs:
       - run: composer audit
       - run: vendor/bin/php-cs-fixer fix --dry-run --diff
       - run: vendor/bin/phpstan analyse --no-progress
+      - run: vendor/bin/phpunit
+
+  portal:
+    name: Portail Symfony 7.4 - style, analyse statique, tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/portal
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.5'
+          extensions: pdo_sqlite, intl, mbstring
+          tools: composer:v2
+          coverage: none
+      - run: composer install --no-interaction --prefer-dist --no-progress
+      - run: composer audit
+      - run: vendor/bin/php-cs-fixer fix --dry-run --diff
+      - run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G
       - run: vendor/bin/phpunit
 
   secrets:

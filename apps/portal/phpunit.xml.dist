@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache"
+         failOnWarning="true"
+         failOnDeprecation="false"
+         failOnRisky="true">
+    <php>
+        <ini name="display_errors" value="1"/>
+        <ini name="error_reporting" value="-1"/>
+        <server name="APP_ENV" value="test" force="true"/>
+        <server name="KERNEL_CLASS" value="Grichard\Portal\Kernel" force="true"/>
+        <server name="APP_SECRET" value="secret-de-test" force="true"/>
+        <server name="PORTAL_DB" value="./var/test/portal.sqlite" force="true"/>
+        <server name="PORTAL_VAR_DIR" value="./var/test" force="true"/>
+        <server name="PORTAL_SETUP_TOKEN" value="jeton-installation-de-test-0123456789" force="true"/>
+    </php>
+    <testsuites>
+        <testsuite name="portal">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+</phpunit>

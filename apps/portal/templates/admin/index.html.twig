@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+{% block title %}Administration{% endblock %}
+{% block body %}
+  <h1>Administration</h1>
+  <p>{{ userCount }} utilisateur(s).</p>
+  <p><a href="{{ path('app_admin_maintenance') }}">Maintenance de la base de données</a></p>
+{% endblock %}

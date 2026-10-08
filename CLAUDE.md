@@ -31,7 +31,7 @@ Ne jamais introduire de dépendance d'exécution Node, ni d'appel à un service 
 | API PHP : tests / style / analyse | `composer test` / `composer cs` / `composer stan` (dans `apps/api`)                                                           |
 | Site : préproduction              | `SITE_BASE=/preprod/ PUBLIC_NOINDEX=1 pnpm --filter @grichard/web build` (`PREPROD_AUTH_FILE` : chemin absolu du `.htpasswd`) |
 
-Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. Les commandes de `apps/portal` seront ajoutées à sa création.
+Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. Portail Symfony (`apps/portal`, voir [docs/portail.md](docs/portail.md)) : `composer install`, `composer test|cs|stan` dans `apps/portal`. Déploiement : [docs/deploiement.md](docs/deploiement.md) (workflow manuel, cibles `preprod`, `production`, `portal`).
 
 ## Architecture cible
 
@@ -40,7 +40,7 @@ Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` 
 ## Conventions
 
 - **Commits** : Conventional Commits (`type(portée): sujet`, en français), vérifiés par le hook `commit-msg`. Atomiques : un commit, un changement cohérent.
-- **Branches** : une branche et une PR par phase vers `refonte/monorepo`. `main` ne reçoit la refonte qu'à la bascule finale validée par Guillaume.
+- **Branches** : une branche et une PR par phase, vers `main` (ou vers la branche de la phase précédente tant qu'elle n'est pas fusionnée). Seul le propriétaire fusionne. Aucun déploiement sans son clic : le workflow `Déploiement` est manuel.
 - **TypeScript strict** côté JS. **PHP** : `declare(strict_types=1)`, PER-CS, PHPStan niveau max, PHPUnit.
 - Prettier pour tout sauf `legacy/`. Pas de couleur écrite en dur : utiliser les tokens de `packages/ui/src/tokens.css`. Jamais de `<style>` ni de script en ligne (CSP) ; les scripts sont des fichiers externes. Pas d'attribut `style=""` écrit à la main (seule la coloration syntaxique Shiki en génère : voir ADR 0005).
 - Une dépendance ajoutée doit être justifiée (poids, maintenance, sécurité, compatibilité OVH).
