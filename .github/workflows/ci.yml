@@ -89,6 +89,26 @@ jobs:
           path: apps/web/playwright-report/
           retention-days: 7
 
+  api:
+    name: API PHP 8.5 - style, analyse statique, tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/api
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.5'
+          tools: composer:v2
+          coverage: none
+      - run: composer install --no-interaction --prefer-dist --no-progress
+      - run: composer audit
+      - run: vendor/bin/php-cs-fixer fix --dry-run --diff
+      - run: vendor/bin/phpstan analyse --no-progress
+      - run: vendor/bin/phpunit
+
   secrets:
     name: Recherche de secrets (historique complet)
     runs-on: ubuntu-latest

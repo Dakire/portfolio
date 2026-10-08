@@ -8,7 +8,7 @@ Monorepo de grichard.eu. Production sur OVH mutualisé : **fichiers statiques + 
 
 ## Commandes
 
-`pnpm install` · `pnpm format:check` · `pnpm legacy:check` · `pnpm legacy:build` · `pnpm test:contract` · `pnpm audit:prod` · site : `pnpm --filter @grichard/web build|check|lint|test:e2e` · design system : `pnpm --filter @grichard/ui test` · outils : `pnpm --filter @grichard/tools-core check|test` · contrat du nouveau site : `CONTRACT_DIST=apps/web/dist pnpm test:contract`.
+`pnpm install` · `pnpm format:check` · `pnpm legacy:check` · `pnpm legacy:build` · `pnpm test:contract` · `pnpm audit:prod` · site : `pnpm --filter @grichard/web build|check|lint|test:e2e` · design system : `pnpm --filter @grichard/ui test` · outils : `pnpm --filter @grichard/tools-core check|test` · contrat du nouveau site : `CONTRACT_DIST=apps/web/dist pnpm test:contract` · API PHP (dans `apps/api`) : `composer install`, `composer test|cs|stan` · préproduction : `SITE_BASE=/preprod/ PUBLIC_NOINDEX=1 pnpm --filter @grichard/web build`. Le `.htaccess` est généré par `apps/web/scripts/lib/htaccess.mjs` (ne pas l'éditer à la main).
 
 ## Structure cible
 

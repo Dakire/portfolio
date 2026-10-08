@@ -2,11 +2,13 @@
 //  1. /sitemap.xml (URL historique, citée par robots.txt) : copie de l'index produit par @astrojs/sitemap ;
 //  2. empreintes SHA-256 des scripts en ligne (hydratation des îlots Astro) : écrites dans .cache/csp-hashes.json, lues par le générateur
 //     de .htaccess pour les autoriser dans la CSP sans 'unsafe-inline' ;
-//  3. images de partage OpenGraph (1200 x 630) : une par article, dans dist/og/<slug>.png, rendue par Chromium (Playwright).
+//  3. dist/.htaccess (en-têtes de sécurité, CSP, cache, redirections), généré avec ces empreintes ;
+//  4. images de partage OpenGraph (1200 x 630) : une par article, dans dist/og/<slug>.png, rendue par Chromium (Playwright).
 //     Sans Chromium, l'image générique /og-image.png est copiée à la place : l'URL existe toujours, le build ne casse jamais pour une image.
 import { createHash } from 'node:crypto';
 import { copyFile, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { buildHtaccess } from './lib/htaccess.mjs';
 
 const DIST = 'dist';
 const CACHE = '.cache/og';
@@ -159,6 +161,18 @@ async function htmlFiles(dir = DIST) {
   return out;
 }
 
+/** .htaccess : production à la racine ; préproduction (SITE_BASE=/preprod/) dans son sous-dossier, protégée si PREPROD_AUTH_FILE (chemin absolu du .htpasswd) est défini. */
+async function htaccess(hashes) {
+  const base = (process.env.SITE_BASE ?? '/').replace(/\/$/, '');
+  const file = buildHtaccess({
+    hashes,
+    base,
+    authFile: process.env.PREPROD_AUTH_FILE || undefined,
+  });
+  await writeFile(join(DIST, '.htaccess'), file);
+  console.log(`[postbuild] .htaccess (${base || 'production'}), CSP de ${file.length} octets`);
+}
+
 /** Empreintes (sha256-…) des scripts et feuilles de style en ligne produits par Astro pour ses îlots : la CSP se passe ainsi d'« unsafe-inline ». */
 async function cspHashes() {
   const hashes = { script: new Set(), style: new Set() };
@@ -180,11 +194,14 @@ async function cspHashes() {
     '.cache/csp-hashes.json',
     JSON.stringify({ script: [...hashes.script].sort(), style: [...hashes.style].sort() }, null, 2),
   );
+  const result = { script: [...hashes.script].sort(), style: [...hashes.style].sort() };
   console.log(
     `[postbuild] empreintes CSP : ${hashes.script.size} script(s), ${hashes.style.size} feuille(s) de style en ligne`,
   );
+  return result;
 }
 
 await sitemap();
-await cspHashes();
+const hashes = await cspHashes();
+await htaccess(hashes);
 await ogImages();

@@ -2,6 +2,7 @@ import { CircleAlert, CircleCheck, RefreshCw, Send } from 'lucide-preact';
 import { Component, type ComponentChildren } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { PORTFOLIO_DATA } from '../data/content';
+import { withBase } from '../lib/base';
 import type { Lang } from '../lib/i18n';
 import Button from '../tools/ui/Button';
 import Field from '../tools/ui/Field';
@@ -87,7 +88,7 @@ function ContactForm({ form: f, lang }: { form: FormText; lang: Lang }) {
     setStatus('loading');
 
     try {
-      const response = await fetch('/contact.php', {
+      const response = await fetch(withBase('/contact.php'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
