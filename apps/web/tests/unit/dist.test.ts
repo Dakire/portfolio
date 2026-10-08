@@ -28,11 +28,14 @@ const pages = walk(DIST)
 /** Chemin de fichier dans dist/ pour une URL du site (ou undefined si elle sort du site). */
 function resolveTarget(href: string, from: string): string | undefined {
   if (/^(mailto:|tel:|#|javascript:)/.test(href)) return undefined;
-  let url = href.startsWith(SITE) ? href.slice(SITE.length) || '/' : href;
-  if (/^[a-z][a-z0-9+.-]*:/i.test(url) || url.startsWith('//')) return undefined; // externe
-  url = url.split('#')[0]!.split('?')[0]!;
-  if (!url) return undefined;
-  const abs = url.startsWith('/') ? url : new URL(url, SITE + from).pathname;
+  let target: URL;
+  try {
+    target = new URL(href, SITE + from);
+  } catch {
+    return undefined;
+  }
+  if (target.origin !== SITE) return undefined; // externe (comparaison d'origine, pas de préfixe : grichard.eu.exemple.org est externe)
+  const abs = target.pathname;
   const path = join(DIST, decodeURIComponent(abs));
   return abs.endsWith('/') ? join(path, 'index.html') : path;
 }
@@ -63,11 +66,11 @@ describe('site construit', () => {
     });
 
     it('ne contient ni <style> ni script en ligne (hors JSON-LD), ni gestionnaire on*', () => {
-      expect(html).not.toMatch(/<style[\s>]/);
-      const scripts = [...html.matchAll(/<script([^>]*)>/g)].map((m) => m[1]!);
+      expect(html).not.toMatch(/<style[\s>]/i);
+      const scripts = [...html.matchAll(/<script([^>]*)>/gi)].map((m) => m[1]!);
       for (const s of scripts)
         expect(s, `script: ${s}`).toMatch(/src="|type="application\/ld\+json"/);
-      expect(html).not.toMatch(/\son[a-z]+="/);
+      expect(html).not.toMatch(/\son[a-z]+="/i);
     });
 
     it('ne pointe vers aucun fichier interne absent', () => {
