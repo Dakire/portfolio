@@ -8,16 +8,18 @@ Monorepo de grichard.eu. Production sur OVH mutualisé : **fichiers statiques + 
 
 ## Commandes
 
+**Avant tout push : `pnpm verify`** (mêmes contrôles que la CI, PHP compris ; code de retour non nul = ne pas pousser).
+
 `pnpm install` · `pnpm format:check` · `pnpm legacy:check` · `pnpm legacy:build` · `pnpm test:contract` · `pnpm audit:prod` · site : `pnpm --filter @grichard/web build|check|lint|test:e2e` · design system : `pnpm --filter @grichard/ui test` · outils : `pnpm --filter @grichard/tools-core check|test` · contrat du nouveau site : `CONTRACT_DIST=apps/web/dist pnpm test:contract` · API PHP (dans `apps/api`) : `composer install`, `composer test|cs|stan`. Portail Symfony (dans `apps/portal`) : `composer install`, `composer test|cs|stan` ; doc : docs/portail.md et docs/deploiement.md. Le `.htaccess` est généré par `apps/web/scripts/lib/htaccess.mjs` (ne pas l'éditer à la main).
 
 ## Structure cible
 
-`apps/web` (Astro statique FR/EN), `apps/api` (PHP, formulaire de contact), `apps/portal` (Symfony, espace client de test, SQLite), `packages/ui|tools-core|config|content-schema`, `docs/adr/` (décisions).
+`apps/web` (Astro statique FR/EN), `apps/api` (PHP : formulaire de contact et outils serveur SEO/sitemap via `tools.php`, couche `Net/` anti-SSRF, ADR 0007), `apps/portal` (Symfony, espace client de test, SQLite), `packages/ui|tools-core|config|content-schema`, `docs/adr/` (décisions).
 
 ## Règles
 
 - **Push direct sur `main`, pas de PR, pas de préproduction** : chaque push sur `main` est livré en production automatiquement après une CI verte. Commits Conventional Commits en français, atomiques, chacun laissant le site fonctionnel (fonctionnalité inachevée masquée).
-- Avant chaque push : `pnpm format:check`, lint/typecheck/tests/e2e de ce qui est touché, `composer test|cs|stan` et `php -l` pour le PHP, contrat d'URL, rendu 1440/768/375 px au clavier dans les deux thèmes, `git diff --staged` sans secret. Échec = on corrige avant de pousser. Régression en ligne = `git revert` + push.
+- Avant chaque push : `pnpm verify`, qui enchaîne `pnpm format:check`, lint/typecheck/tests/e2e de ce qui est touché, `composer test|cs|stan` et `php -l` pour le PHP, contrat d'URL, rendu 1440/768/375 px au clavier dans les deux thèmes, `git diff --staged` sans secret. Échec = on corrige avant de pousser. Régression en ligne = `git revert` + push.
 - Pas de couleur en dur (tokens `packages/ui`), pas de `<style>` ni de script en ligne (CSP) ; pas d'attribut `style=""` écrit à la main.
 - TypeScript strict ; PHP `strict_types`, PER-CS, PHPStan max, PHPUnit.
 - Aucun secret dans le dépôt public ; CSP sans `unsafe-inline` pour les scripts ; SQL préparé ; Argon2id ; CSRF ; cookies `HttpOnly`/`Secure`/`SameSite`.

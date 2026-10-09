@@ -11,6 +11,7 @@
     "legacy:build": "pnpm --filter legacy run build",
     "legacy:check": "pnpm --filter legacy run lint && pnpm --filter legacy run test && pnpm --filter legacy run test:e2e",
     "test:contract": "vitest run --config vitest.contract.config.js",
+    "verify": "bash scripts/verify.sh",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "audit:prod": "pnpm audit --prod --audit-level high",

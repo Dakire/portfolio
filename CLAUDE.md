@@ -18,6 +18,7 @@ Ne jamais introduire de dépendance d'exécution Node, ni d'appel à un service 
 | --------------------------------- | -------------------------------------------------------------------------------------------- |
 | Installer                         | `pnpm install` (installe aussi les hooks)                                                    |
 | Formater / vérifier               | `pnpm format` / `pnpm format:check`                                                          |
+| **Tout vérifier avant un push**   | `pnpm verify` (mêmes contrôles que la CI, PHP compris ; `--no-e2e` pour aller plus vite)     |
 | Site actuel : build               | `pnpm legacy:build`                                                                          |
 | Site actuel : lint+tests+e2e      | `pnpm legacy:check`                                                                          |
 | Contrat des 70 URL publiques      | `pnpm test:contract` (après un build complet)                                                |
@@ -35,13 +36,13 @@ Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` 
 
 ## Architecture cible
 
-`apps/web` (Astro, statique, FR/EN) · `apps/api` (PHP, contact) · `apps/portal` (Symfony, espace client) · `packages/ui` (tokens CSS, composants) · `packages/tools-core` (logique pure des outils, TS) · `packages/config` · `packages/content-schema`. Décisions : [docs/adr/](docs/adr/).
+`apps/web` (Astro, statique, FR/EN) · `apps/api` (PHP : `contact.php` et `tools.php`, les outils serveur rapport SEO et vérificateur de sitemap, avec la couche `Net/` protégée contre la SSRF, voir ADR 0007) · `apps/portal` (Symfony, espace client) · `packages/ui` (tokens CSS, composants) · `packages/tools-core` (logique pure des outils, TS) · `packages/config` · `packages/content-schema`. Décisions : [docs/adr/](docs/adr/).
 
 ## Conventions
 
 - **Commits** : Conventional Commits (`type(portée): sujet`, en français), vérifiés par le hook `commit-msg`. Atomiques : un commit, un changement cohérent.
 - **Git : push direct sur `main`, pas de PR, pas de préproduction.** Chaque push sur `main` part en production dès que la CI est verte (workflow `Déploiement`). Commits atomiques et fréquents, un `git push origin main` après chaque étape cohérente et terminée. Chaque commit laisse le site fonctionnel ; une fonctionnalité inachevée reste masquée (pas d'entrée dans le registre, pas de lien).
-- **Avant chaque push** (il n'y a pas de filet en aval) : `pnpm format:check` ; lint, typecheck, tests et e2e de ce qui est touché (`pnpm --filter @grichard/web lint|check|test|build|test:e2e`) ; `composer test|cs|stan` et `php -l` sur les fichiers PHP modifiés ; `CONTRACT_DIST=apps/web/dist pnpm test:contract` ; rendu vérifié en 1440/768/375 px, au clavier, thèmes clair et sombre ; `git diff --staged` relu (aucun secret ni donnée personnelle). Une vérification échoue : on corrige avant de pousser.
+- **Avant chaque push** (il n'y a pas de filet en aval) : `pnpm verify` (s'arrête au premier échec ; ne jamais se fier à un filtre de sortie, seulement au code de retour), qui couvre `pnpm format:check` ; lint, typecheck, tests et e2e de ce qui est touché (`pnpm --filter @grichard/web lint|check|test|build|test:e2e`) ; `composer test|cs|stan` et `php -l` sur les fichiers PHP modifiés ; `CONTRACT_DIST=apps/web/dist pnpm test:contract` ; rendu vérifié en 1440/768/375 px, au clavier, thèmes clair et sombre ; `git diff --staged` relu (aucun secret ni donnée personnelle). Une vérification échoue : on corrige avant de pousser.
 - **Régression en production** : `git revert` du commit fautif et push immédiat (la CI verte relivre), puis analyse. Retour arrière d'urgence : workflow `Déploiement` à la main avec `ref` = tag `deploy-production-…` précédent. Tag `pre-refonte` : état d'avant la refonte UX/outils SEO.
 - **TypeScript strict** côté JS. **PHP** : `declare(strict_types=1)`, PER-CS, PHPStan niveau max, PHPUnit.
 - Prettier pour tout sauf `legacy/`. Pas de couleur écrite en dur : utiliser les tokens de `packages/ui/src/tokens.css`. Jamais de `<style>` ni de script en ligne (CSP) ; les scripts sont des fichiers externes. Pas d'attribut `style=""` écrit à la main (seule la coloration syntaxique Shiki en génère : voir ADR 0005).

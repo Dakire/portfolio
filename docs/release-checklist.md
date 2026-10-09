@@ -2,6 +2,8 @@
 
 Chaque push sur `main` part en production après une CI verte : cette liste se fait **avant** le push.
 
+**`pnpm verify`** enchaîne tous les contrôles automatiques ci-dessous (ceux de la CI) et s'arrête au premier échec. PHP 8.5 doit être dans le `PATH` (et Composer, ou `COMPOSER_BIN`).
+
 - [ ] `pnpm format:check` vert.
 - [ ] Lint, typecheck, tests et e2e (avec axe) de ce qui est touché : `pnpm --filter @grichard/web lint`, `check`, `test`, `build`, `test:e2e` ; `pnpm --filter @grichard/ui test` ; `pnpm --filter @grichard/tools-core test`.
 - [ ] PHP modifié : `php -l` sur chaque fichier, puis `composer test`, `composer cs`, `composer stan` dans l'app concernée.
