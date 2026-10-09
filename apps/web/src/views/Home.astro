@@ -52,10 +52,13 @@ const more = lang === 'fr' ? 'Voir le détail' : 'See details';
     </div>
   </header>
 
-  <div class="container stack-lg">
+  <div class="container sections">
     <section id="projects" aria-labelledby="projects-title" class="stack">
       <h2 id="projects-title">{t.projectsTitle}</h2>
-      <ProjectCards items={t.projects} lang={lang} />
+      <ProjectCards items={t.projects} lang={lang} limit={6} />
+      <p>
+        <a href={routes.projects}>{t.projectsAll} →</a>
+      </p>
     </section>
 
     <section id="skills" aria-labelledby="skills-title" class="stack">
@@ -83,7 +86,7 @@ const more = lang === 'fr' ? 'Voir le détail' : 'See details';
     <section id="tools" aria-labelledby="tools-title" class="stack">
       <h2 id="tools-title">{t.tools.title}</h2>
       <p class="prose">{t.tools.intro}</p>
-      <ToolCards lang={lang} headingLevel={3} />
+      <ToolCards lang={lang} headingLevel={3} limit={4} />
       <p>
         <a href={routes.tools}>{t.tools.all} →</a>
       </p>

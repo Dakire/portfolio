@@ -64,6 +64,7 @@ export interface Portfolio {
   experienceTitle: string;
   experiences: Experience[];
   projectsTitle: string;
+  projectsAll: string;
   projects: Project[];
   educationTitle: string;
   education: string[];
@@ -259,6 +260,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
       },
     ],
     projectsTitle: 'Projets & réalisations',
+    projectsAll: 'Tous les projets',
     projects: [
       {
         title: 'Homelab Proxmox, OPNsense et WireGuard',
@@ -514,6 +516,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
       },
     ],
     projectsTitle: 'Projects & work',
+    projectsAll: 'All projects',
     projects: [
       {
         title: 'Proxmox, OPNsense and WireGuard homelab',

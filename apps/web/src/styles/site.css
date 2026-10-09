@@ -303,6 +303,10 @@ body:has(.consent) {
   padding-block: var(--space-5);
   border-top: 1px solid var(--line);
 }
+.timeline > li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
 .timeline {
   margin: 0;
   padding: 0;
@@ -712,4 +716,9 @@ body:has(.consent) {
   background:
     radial-gradient(circle at 1.45rem 50%, var(--accent-ink) 0.35rem, transparent 0.4rem) no-repeat,
     var(--accent-strong);
+}
+
+/* Ancres de l'accueil : la section visée ne passe pas sous l'en-tête collant */
+.sections > section {
+  scroll-margin-top: calc(var(--space-8) + var(--space-3));
 }

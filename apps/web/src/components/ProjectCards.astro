@@ -7,13 +7,15 @@ import { UI, type Lang } from '../lib/i18n';
 interface Props {
   items: Project[];
   lang: Lang;
+  /** Nombre maximal de cartes (aperçu de l'accueil) ; toutes par défaut. */
+  limit?: number;
 }
-const { items, lang } = Astro.props;
+const { items, lang, limit } = Astro.props;
 const ui = UI[lang];
 ---
 
 <div class="cards cards-wide">
-  {items.map((project) => (
+  {items.slice(0, limit).map((project) => (
     <Card>
       <h3>{project.title}</h3>
       <p>{project.desc}</p>

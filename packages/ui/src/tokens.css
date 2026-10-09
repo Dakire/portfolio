@@ -31,8 +31,9 @@
   --space-5: 1.5rem;
   --space-6: 2rem;
   --space-7: 3rem;
-  --space-8: 4.5rem;
-  --space-section: clamp(3rem, 2rem + 5vw, 6rem);
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-section: clamp(var(--space-7), 2rem + 5vw, var(--space-9));
 
   /* Formes et profondeur */
   --radius-sm: 0.375rem;

@@ -150,6 +150,13 @@ hr {
 .stack-lg > * + * {
   margin-top: var(--space-7);
 }
+/* Sections d'une page d'accueil : rythme vertical égal, un peu plus large que .stack-lg */
+.sections > * + * {
+  margin-top: var(--space-section);
+}
+.sections {
+  padding-bottom: var(--space-section);
+}
 .section {
   padding-block: var(--space-section);
 }
