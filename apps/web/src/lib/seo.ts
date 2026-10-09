@@ -32,7 +32,7 @@ export const versioned = (src: string) => {
 const person = { '@type': 'Person', '@id': `${SITE}/#person`, name: PROFILE.name, url: `${SITE}/` };
 
 const KNOWS_ABOUT = [
-  'Administration Système',
+  'Systèmes informatiques',
   'Réseaux informatiques',
   'Google Workspace',
   'Microsoft 365',
@@ -51,8 +51,8 @@ const KNOWS_ABOUT = [
 ];
 
 const PERSON_DESCRIPTION: Record<Lang, string> = {
-  fr: 'Technicien Informatique et Systèmes Numériques basé à Laval. Expert en infrastructure IT, migrations Cloud (Google Workspace, M365) et automatisation.',
-  en: 'IT and Digital Systems Technician based in Laval, France. Expert in IT infrastructure, Cloud migrations (Google Workspace, M365) and automation.',
+  fr: 'Technicien Informatique et Systèmes Numériques basé à Laval. Systèmes, réseau, migrations Cloud (Google Workspace, M365) et automatisation.',
+  en: 'IT and Digital Systems Technician based in Laval, France. Systems, networks, Cloud migrations (Google Workspace, M365) and automation.',
 };
 
 export function homeLd(lang: Lang, title: string, role: string) {

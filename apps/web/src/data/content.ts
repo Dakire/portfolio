@@ -177,7 +177,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
       greeting: 'Bonjour, je suis',
       role: 'Technicien Informatique & Systèmes Numériques',
       pitch:
-        "Administration réseau et systèmes, sécurité IT et formation à l'IA, à Microsoft 365 et au RGPD : je déploie, je sécurise et j'accompagne les équipes.",
+        "Technicien informatique : réseau, systèmes, sécurité et messagerie (Microsoft 365, Google Workspace). Je déploie, je dépanne, j'accompagne les utilisateurs et je les forme à l'IA, à Microsoft 365 et au RGPD.",
       cvBtn: 'Télécharger mon CV',
       contactBtn: 'Me contacter',
       projectsBtn: 'Voir mes projets',
@@ -194,7 +194,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
     },
     aboutTitle: 'À propos de moi',
     about:
-      "Passionné par l'informatique depuis toujours et d'un naturel curieux, j'aime explorer et tester les nouvelles technologies. Fort de mon expérience, je possède aujourd'hui une solide expertise en administration système et réseau, gestion Cloud (M365/Workspace), troubleshooting DNS et support IT de bout en bout. Au quotidien, je déploie et administre des infrastructures complexes tout en développant des outils d'automatisation sur mesure.",
+      "Passionné par l'informatique depuis toujours et d'un naturel curieux, j'aime explorer et tester les nouvelles technologies. Technicien informatique, je travaille au quotidien sur les systèmes et le réseau, la messagerie Cloud (M365/Workspace), le DNS et le support IT de bout en bout, et je développe des outils d'automatisation sur mesure.",
     skillsTitle: "Domaines d'Expertise",
     skills: [
       {
@@ -215,7 +215,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
       {
         category: 'Formation IA, M365 & RGPD',
         items:
-          "Formation et accompagnement des équipes à l'intelligence artificielle, à Microsoft 365 et aux bonnes pratiques du RGPD.",
+          "Formation et accompagnement des utilisateurs à l'intelligence artificielle, à Microsoft 365 et aux bonnes pratiques du RGPD.",
       },
       {
         category: 'Développement & Automatisation',
@@ -433,7 +433,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
       greeting: 'Hello, I am',
       role: 'IT & Digital Systems Technician',
       pitch:
-        'Network and systems administration, IT security, and training in AI, Microsoft 365 and GDPR: I deploy, secure and support teams.',
+        'IT technician: networks, systems, security and messaging (Microsoft 365, Google Workspace). I deploy, troubleshoot, support users and train them in AI, Microsoft 365 and GDPR.',
       cvBtn: 'Download Resume',
       contactBtn: 'Contact Me',
       projectsBtn: 'See my projects',
@@ -450,7 +450,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
     },
     aboutTitle: 'About Me',
     about:
-      'Passionate about IT from an early age and naturally curious, I love exploring and testing new technologies. Building on solid experience, I possess a strong expertise in system and network administration, Cloud management (M365/Workspace), DNS troubleshooting, and end-to-end IT support. On a daily basis, I deploy and manage complex IT infrastructures while developing custom automation tools.',
+      'Passionate about IT from an early age and naturally curious, I love exploring and testing new technologies. As an IT technician, I work every day on systems and networks, Cloud messaging (M365/Workspace), DNS and end-to-end IT support, and I build custom automation tools.',
     skillsTitle: 'Core Expertise',
     skills: [
       {
@@ -471,7 +471,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
       {
         category: 'AI, M365 & GDPR Training',
         items:
-          'Training and supporting teams on artificial intelligence, Microsoft 365 and GDPR best practices.',
+          'Training and supporting users on artificial intelligence, Microsoft 365 and GDPR best practices.',
       },
       {
         category: 'Development & Automation',
