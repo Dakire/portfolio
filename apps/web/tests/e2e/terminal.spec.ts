@@ -79,6 +79,33 @@ test('peut être désactivé, et le choix est mémorisé', async ({ page }) => {
   await expect(page.getByRole('textbox', { name: 'Commande du terminal' })).toBeFocused();
 });
 
+test('boutons de la fenêtre : réduire, agrandir (Échap) et fermer', async ({ page }) => {
+  await page.goto('/');
+  const input = page.getByRole('textbox', { name: 'Commande du terminal' });
+  const minimize = page.getByRole('button', { name: 'Réduire le terminal' });
+  const maximize = page.getByRole('button', { name: /^Agrandir le terminal/ });
+  const close = page.getByRole('button', { name: 'Fermer le terminal' });
+  await expect(input).toBeVisible();
+
+  await minimize.click();
+  await expect(minimize).toHaveAttribute('aria-pressed', 'true');
+  await expect(input).toBeHidden();
+  await minimize.click();
+  await expect(input).toBeFocused();
+
+  await maximize.click();
+  await expect(maximize).toHaveAttribute('aria-pressed', 'true');
+  const box = await page.locator('.terminal-window').boundingBox();
+  expect(box?.height ?? 0).toBeGreaterThan(500);
+  await page.keyboard.press('Escape');
+  await expect(maximize).toHaveAttribute('aria-pressed', 'false');
+  await expect(maximize).toBeFocused();
+
+  await close.click();
+  await expect(input).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Activer le terminal' })).toBeFocused();
+});
+
 test('sans JavaScript : présentation et raccourcis, pas de champ inutilisable', async ({
   browser,
 }) => {

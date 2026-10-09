@@ -162,6 +162,44 @@ export function mountTerminal(root: HTMLElement): void {
     el.disabled = false;
   toggle.hidden = false;
   setOff(storedOff());
+
+  // Boutons de la fenêtre. Fermer = désactiver (le bouton « Activer le terminal » le rouvre) ; réduire = barre de titre
+  // seule ; agrandir = plein écran de la fenêtre (Échap ou re-clic pour revenir). Réduire et agrandir s'excluent.
+  const closeBtn = root.querySelector<HTMLButtonElement>('[data-terminal-close]');
+  const minBtn = root.querySelector<HTMLButtonElement>('[data-terminal-min]');
+  const maxBtn = root.querySelector<HTMLButtonElement>('[data-terminal-max]');
+  if (closeBtn && minBtn && maxBtn) {
+    const setMode = (mode: 'normal' | 'min' | 'max') => {
+      root.toggleAttribute('data-minimized', mode === 'min');
+      root.toggleAttribute('data-maximized', mode === 'max');
+      document.documentElement.toggleAttribute('data-terminal-max', mode === 'max');
+      minBtn.setAttribute('aria-pressed', String(mode === 'min'));
+      maxBtn.setAttribute('aria-pressed', String(mode === 'max'));
+    };
+    closeBtn.addEventListener('click', () => {
+      setMode('normal');
+      storeOff(true);
+      setOff(true);
+      toggle.focus(); // le bouton qui rouvre le terminal prend le focus : il ne se perd pas
+    });
+    minBtn.addEventListener('click', () => {
+      const min = !root.hasAttribute('data-minimized');
+      setMode(min ? 'min' : 'normal');
+      if (!min) input.focus();
+    });
+    maxBtn.addEventListener('click', () => {
+      const max = !root.hasAttribute('data-maximized');
+      setMode(max ? 'max' : 'normal');
+      if (max) input.focus();
+    });
+    root.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && root.hasAttribute('data-maximized')) {
+        setMode('normal');
+        maxBtn.focus();
+      }
+    });
+    for (const button of [closeBtn, minBtn, maxBtn]) button.hidden = false;
+  }
 }
 
 for (const root of document.querySelectorAll<HTMLElement>('[data-terminal]')) mountTerminal(root);

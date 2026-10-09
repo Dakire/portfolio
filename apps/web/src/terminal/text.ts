@@ -14,6 +14,9 @@ export interface TerminalStrings {
   log: string;
   disable: string;
   enable: string;
+  close: string;
+  minimize: string;
+  maximize: string;
   disabled: string;
   shortcuts: string;
   notFound: string;
@@ -64,6 +67,9 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
     hint: 'Tapez une commande (help pour la liste), ↑ ↓ pour l’historique, Tab pour compléter.',
     suggestions: ['help', 'skills', 'projects', 'tools', 'contact'],
     log: 'Résultats des commandes',
+    close: 'Fermer le terminal',
+    minimize: 'Réduire le terminal',
+    maximize: 'Agrandir le terminal (Échap pour revenir)',
     disable: 'Désactiver le terminal',
     enable: 'Activer le terminal',
     disabled: 'Terminal désactivé. Les mêmes informations sont dans les sections de la page.',
@@ -151,6 +157,9 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
     hint: 'Type a command (help for the list), ↑ ↓ for history, Tab to complete.',
     suggestions: ['help', 'skills', 'projects', 'tools', 'contact'],
     log: 'Command output',
+    close: 'Close the terminal',
+    minimize: 'Minimize the terminal',
+    maximize: 'Enlarge the terminal (Esc to go back)',
     disable: 'Turn off the terminal',
     enable: 'Turn on the terminal',
     disabled: 'Terminal turned off. The same information is in the sections of this page.',

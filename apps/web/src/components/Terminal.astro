@@ -31,11 +31,41 @@ const shortcuts = [
     {s.label}
   </h2>
   <div class="terminal-window">
-    <div class="terminal-bar" aria-hidden="true">
-      <span class="terminal-dot"></span>
-      <span class="terminal-dot"></span>
-      <span class="terminal-dot"></span>
-      <span class="terminal-name">{s.title}</span>
+    <div class="terminal-bar">
+      <div class="terminal-controls" role="group" aria-label={s.title}>
+        <button
+          type="button"
+          class="terminal-ctl terminal-ctl-close"
+          aria-label={s.close}
+          hidden
+          data-terminal-close
+        >
+          <span aria-hidden="true"></span>
+        </button>
+        <button
+          type="button"
+          class="terminal-ctl terminal-ctl-min"
+          aria-label={s.minimize}
+          aria-pressed="false"
+          hidden
+          data-terminal-min
+        >
+          <span aria-hidden="true"></span>
+        </button>
+        <button
+          type="button"
+          class="terminal-ctl terminal-ctl-max"
+          aria-label={s.maximize}
+          aria-pressed="false"
+          hidden
+          data-terminal-max
+        >
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <span class="terminal-name" aria-hidden="true">
+        {s.title}
+      </span>
     </div>
     <div class="terminal-screen" data-terminal-screen>
       <dl class="terminal-boot">
@@ -81,7 +111,7 @@ const shortcuts = [
         />
       </form>
     </div>
-    <div class="terminal-footer">
+    <div class="terminal-footer" data-terminal-footer>
       <ul class="terminal-chips" role="list">
         {s.suggestions.map((command) => (
           <li>
