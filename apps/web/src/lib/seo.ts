@@ -43,7 +43,11 @@ const KNOWS_ABOUT = [
   'Python',
   'Java',
   'PowerShell',
-  'Stormshield',
+  'Stormshield SNS',
+  'Sécurité informatique',
+  'Formation Microsoft 365',
+  'Intelligence artificielle',
+  'RGPD',
 ];
 
 const PERSON_DESCRIPTION: Record<Lang, string> = {
@@ -57,11 +61,20 @@ export function homeLd(lang: Lang, title: string, role: string) {
     '@context': 'https://schema.org',
     '@graph': [
       {
+        '@type': 'WebSite',
+        '@id': `${SITE}/#website`,
+        url: `${SITE}/`,
+        name: 'Guillaume Richard',
+        inLanguage: ['fr-FR', 'en'],
+        publisher: { '@id': `${SITE}/#person` },
+      },
+      {
         '@type': 'ProfilePage',
         '@id': `${SITE}${path}#profilepage`,
         url: `${SITE}${path}`,
         name: title,
         inLanguage: lang === 'fr' ? 'fr-FR' : 'en',
+        isPartOf: { '@id': `${SITE}/#website` },
         mainEntity: { '@id': `${SITE}/#person` },
       },
       {

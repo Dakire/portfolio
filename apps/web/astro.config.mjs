@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { parseEnv } from 'node:util';
 import { unified } from '@astrojs/markdown-remark';
 import preact from '@astrojs/preact';
@@ -42,6 +42,33 @@ const requireTurnstileKey = {
   },
 };
 
+// <lastmod> du sitemap : seulement des dates réelles (publication ou mise à jour des articles, lues dans leur en-tête).
+// Les autres pages n'en ont pas : une date de build, qui change à chaque livraison, serait ignorée par Google.
+function articleDates() {
+  const dates = new Map();
+  for (const [dir, prefix] of [
+    ['src/content/blog', '/blog/'],
+    ['src/content/blog/en', '/en/blog/'],
+  ]) {
+    for (const file of readdirSync(dir).filter((f) => f.endsWith('.md'))) {
+      const head = readFileSync(`${dir}/${file}`, 'utf-8').split('---')[1] ?? '';
+      const date = /^updated:\s*(\S+)/m.exec(head)?.[1] ?? /^date:\s*(\S+)/m.exec(head)?.[1];
+      if (date) dates.set(`${prefix}${file.replace(/\.md$/, '')}/`, date);
+    }
+  }
+  // l'index du blog change avec son article le plus récent
+  for (const prefix of ['/blog/', '/en/blog/']) {
+    const latest = [...dates]
+      .filter(([path]) => path.startsWith(prefix) && path !== prefix)
+      .map(([, d]) => d)
+      .sort()
+      .at(-1);
+    if (latest) dates.set(prefix, latest);
+  }
+  return dates;
+}
+const LASTMOD = articleDates();
+
 // Pages absentes du sitemap : interne, erreur, et pages de filtre du blog (noindex).
 const EXCLUDED = [
   '/design/',
@@ -71,7 +98,15 @@ export default defineConfig({
   integrations: [
     requireTurnstileKey,
     preact(),
-    sitemap({ filter: (page) => !EXCLUDED.some((part) => page.includes(part)) }),
+    sitemap({
+      filter: (page) => !EXCLUDED.some((part) => page.includes(part)),
+      serialize(item) {
+        const date = LASTMOD.get(
+          new URL(item.url).pathname.replace(base.replace(/\/$/, ''), '') || '/',
+        );
+        return date ? { ...item, lastmod: new Date(`${date}T00:00:00Z`).toISOString() } : item;
+      },
+    }),
     styleguide,
   ],
 });

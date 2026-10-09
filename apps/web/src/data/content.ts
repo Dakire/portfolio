@@ -109,9 +109,9 @@ export const PROFILE = {
 export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
   fr: {
     meta: {
-      title: 'Guillaume Richard | Technicien Informatique & Systèmes Numériques',
+      title: 'Guillaume Richard | Technicien IT, réseau et sécurité',
       description:
-        'Portfolio de Guillaume Richard, Technicien Informatique et Systèmes Numériques à Laval. Expertise en infrastructure (M365, Google Workspace, DNS, Windows Server), Cloud et développement.',
+        'Portfolio de Guillaume Richard, technicien informatique à Laval : réseau, sécurité (Stormshield), Microsoft 365, Google Workspace, DNS et formation IA et RGPD.',
     },
     ui: {
       skip: 'Aller au contenu principal',
@@ -341,7 +341,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
     meta: {
       title: 'Guillaume Richard | IT & Digital Systems Technician',
       description:
-        'Portfolio of Guillaume Richard, IT and Digital Systems Technician based in Laval, France. Expertise in infrastructure (M365, Google Workspace, DNS, Windows Server), Cloud and development.',
+        'Portfolio of Guillaume Richard, IT technician in Laval, France: networks, security (Stormshield), Microsoft 365, Google Workspace, DNS, AI and GDPR training.',
     },
     ui: {
       skip: 'Skip to main content',

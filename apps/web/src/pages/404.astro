@@ -1,4 +1,5 @@
 ---
+// Page d'erreur unique (ErrorDocument 404 et 403) : servie à toutes les adresses inconnues, en français et en anglais.
 import Button from '@grichard/ui/components/Button.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
@@ -18,15 +19,28 @@ import { ROUTES } from '../lib/i18n';
     title="Page introuvable"
     lead="Cette adresse n'existe pas ou a changé. Le contenu a peut-être été déplacé."
   />
-  <div class="container section stack">
+  <div class="container section stack-lg">
     <p class="row">
       <Button variant="primary" href={ROUTES.fr.home}>
         Retour à l'accueil
       </Button>
       <Button href={ROUTES.fr.blog}>Voir le blog</Button>
-      <Button href={ROUTES.en.home} hreflang="en" lang="en">
-        Go to the English site
-      </Button>
+      <Button href={ROUTES.fr.tools}>Voir les outils</Button>
     </p>
+    <section lang="en" class="stack" aria-labelledby="not-found-en">
+      <h2 id="not-found-en">Page not found</h2>
+      <p class="prose">This address does not exist or has changed. The content may have moved.</p>
+      <p class="row">
+        <Button href={ROUTES.en.home} hreflang="en">
+          Go to the home page
+        </Button>
+        <Button href={ROUTES.en.blog} hreflang="en">
+          Read the blog
+        </Button>
+        <Button href={ROUTES.en.tools} hreflang="en">
+          See the tools
+        </Button>
+      </p>
+    </section>
   </div>
 </Base>
