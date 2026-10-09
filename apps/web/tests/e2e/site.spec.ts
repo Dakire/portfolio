@@ -196,23 +196,22 @@ test.describe('menu de navigation sur petit écran', () => {
 test('le bandeau de consentement ne décale pas la page (CLS) et ne masque pas la fin de page', async ({
   page,
 }) => {
+  // Position du contenu avec le bandeau, puis sans (choix déjà fait) : elle doit être identique.
   await page.goto('/');
   await expect(page.locator('.consent')).toBeVisible();
-  const shift = await page.evaluate(
-    () =>
-      new Promise<number>((resolve) => {
-        let total = 0;
-        new PerformanceObserver((list) => {
-          for (const entry of list.getEntries())
-            total += (entry as PerformanceEntry & { value: number }).value;
-        }).observe({ type: 'layout-shift', buffered: true });
-        setTimeout(() => resolve(total), 500);
-      }),
-  );
-  expect(shift).toBeLessThan(0.05);
+  const mainTop = () =>
+    page.locator('#contenu').evaluate((el) => el.getBoundingClientRect().top + window.scrollY);
+  const withBanner = await mainTop();
+  await expect(page.locator('.consent')).toHaveCSS('position', 'fixed');
+
   const footerLink = page.getByRole('button', { name: 'Gérer les cookies' });
   await footerLink.scrollIntoViewIfNeeded();
   const banner = await page.locator('.consent').boundingBox();
   const link = await footerLink.boundingBox();
   expect(link!.y + link!.height).toBeLessThanOrEqual(banner!.y);
+
+  await page.getByRole('button', { name: 'Refuser' }).click();
+  await page.reload();
+  await expect(page.locator('.consent')).toHaveCount(0);
+  expect(await mainTop()).toBe(withBanner);
 });
