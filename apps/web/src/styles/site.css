@@ -258,8 +258,13 @@ body:has(.consent) {
 .page-hero {
   padding-block: var(--space-7) var(--space-6);
 }
-.page-hero > * + * {
+.page-hero > * + *,
+.page-hero > .container > * + * {
   margin-top: var(--space-4);
+}
+/* Le bas du hero et le haut de la section suivante ne s'additionnent pas en un grand vide */
+.page-hero + .section {
+  padding-top: var(--space-6);
 }
 .lead {
   color: var(--body);
@@ -465,6 +470,11 @@ body:has(.consent) {
 }
 .tool-card-icon {
   color: var(--accent);
+}
+.tool-card :is(h2, h3) {
+  font-size: var(--text-lg);
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 /* ---------- Articles ---------- */
