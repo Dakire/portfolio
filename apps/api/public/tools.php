@@ -16,6 +16,7 @@ use Grichard\Api\Net\DnsResolver;
 use Grichard\Api\Net\SafeHttpClient;
 use Grichard\Api\Net\Url;
 use Grichard\Api\Seo\SeoAnalyzer;
+use Grichard\Api\Sitemap\SitemapChecker;
 use Grichard\Api\Tools\ToolGuard;
 use Grichard\Api\Tools\ToolsHandler;
 
@@ -60,8 +61,12 @@ $guard = static fn(string $tool, int $perHour, int $perIpPerHour): ToolGuard => 
 $client = static fn(float $budget): SafeHttpClient => new SafeHttpClient(new CurlTransport(), new DnsResolver(), $budget);
 
 $handler = new ToolsHandler(
-    guards: ['seo' => $guard('seo', 150, 12)],
-    tools: ['seo' => static fn(Url $url): array => new SeoAnalyzer($client(22.0))->analyze($url)],
+    // quotas par heure : global, puis par visiteur (le sitemap déclenche jusqu'à ~30 requêtes, il est plus limité)
+    guards: ['seo' => $guard('seo', 150, 12), 'sitemap' => $guard('sitemap', 80, 6)],
+    tools: [
+        'seo' => static fn(Url $url): array => new SeoAnalyzer($client(22.0))->analyze($url),
+        'sitemap' => static fn(Url $url): array => new SitemapChecker($client(25.0))->check($url),
+    ],
 );
 
 $handler->handle(Request::fromGlobals(), static function (string $message): void {
