@@ -33,7 +33,10 @@ mkdir -p "$work/www" "$work/app/api"
   echo "set net:timeout 30"
   if [ "$proto" = "sftp" ]; then
     echo "set sftp:auto-confirm $auto_confirm" # faux : la clé de l'hôte doit déjà être dans ~/.ssh/known_hosts
-    echo "open -u \"$FTP_USER\" \"sftp://$FTP_HOST:${FTP_PORT:-22}\""
+    # lftp ne lit LFTP_PASSWORD qu'en FTP : en SFTP, le mot de passe va dans ce fichier temporaire (droits 600, supprimé en fin de script)
+    pw="${FTP_PASSWORD//\\/\\\\}"
+    pw="${pw//\"/\\\"}"
+    echo "open -u \"$FTP_USER,$pw\" \"sftp://$FTP_HOST:${FTP_PORT:-22}\""
   else
     echo "set ftp:list-options -a" # voir les fichiers cachés (.htaccess, .well-known)
     echo "set ftp:ssl-allow $tls"
