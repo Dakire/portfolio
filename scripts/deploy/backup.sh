@@ -9,7 +9,7 @@
 # (le retour arrière normal est de relancer le déploiement sur la version précédente : voir docs/deploiement.md).
 set -euo pipefail
 
-archive="${1:?chemin de l'archive manquant}"
+archive="${1:?chemin de larchive manquant}"
 for var in FTP_HOST FTP_USER FTP_PASSWORD; do
   [ -n "${!var:-}" ] || { echo "variable $var absente" >&2; exit 2; }
 done
