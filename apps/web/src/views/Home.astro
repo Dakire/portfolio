@@ -5,7 +5,8 @@ import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import SkillCards from '../components/SkillCards.astro';
 import ProjectCards from '../components/ProjectCards.astro';
-import ExperienceList from '../components/ExperienceList.astro';
+import Terminal from '../components/Terminal.astro';
+import ToolCards from '../components/ToolCards.astro';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
 import { getPosts } from '../lib/blog';
 import { withBase } from '../lib/base';
@@ -20,7 +21,6 @@ const t = PORTFOLIO_DATA[lang];
 const routes = ROUTES[lang];
 const posts = (await getPosts(lang)).slice(0, 3);
 const more = lang === 'fr' ? 'Voir le détail' : 'See details';
-const toolsIntro = t.tools.intro;
 ---
 
 <Base
@@ -32,49 +32,35 @@ const toolsIntro = t.tools.intro;
   ld={homeLd(lang, t.meta.title, t.hero.role)}
 >
   <header class="page-hero grid-bg">
-    <div class="container stack">
-      <Eyebrow path="~/whoami" />
-      <h1 class="hero-title">
-        {t.hero.greeting} <span>{PROFILE.name}</span>
-      </h1>
-      <p class="lead">{t.hero.role}</p>
-      <p class="row">
-        <Button variant="primary" href={routes.contact}>
-          {t.hero.contactBtn}
-        </Button>
-        <Button href={withBase(t.hero.cvLink)}>
-          {t.hero.cvBtn}
-          <span class="visually-hidden"> (PDF)</span>
-        </Button>
-      </p>
-      <dl class="hero-terminal" aria-hidden="true">
-        {t.hero.terminal.map((line) => (
-          <>
-            <dt class="cmd">{line.cmd}</dt>
-            <dd>{line.out}</dd>
-          </>
-        ))}
-      </dl>
+    <div class="container hero-grid">
+      <div class="stack">
+        <Eyebrow path="~/whoami" />
+        <h1 class="hero-title">
+          {t.hero.greeting} <span>{PROFILE.name}</span>
+        </h1>
+        <p class="lead">{t.hero.role}</p>
+        <p class="prose">{t.hero.pitch}</p>
+        <p class="row">
+          <Button variant="primary" href={routes.contact}>
+            {t.hero.contactBtn}
+          </Button>
+          <Button href={withBase(t.hero.cvLink)}>
+            {t.hero.cvBtn}
+            <span class="visually-hidden"> (PDF)</span>
+          </Button>
+          <Button variant="ghost" href="#projects">
+            {t.hero.projectsBtn}
+          </Button>
+        </p>
+      </div>
+      <Terminal lang={lang} />
     </div>
   </header>
 
   <div class="container stack-lg">
-    <section id="about" aria-labelledby="about-title" class="stack">
-      <h2 id="about-title">{t.aboutTitle}</h2>
-      <p class="prose">{t.about}</p>
-      <p>
-        <a href={routes.about}>{more} →</a>
-      </p>
-    </section>
-
     <section id="skills" aria-labelledby="skills-title" class="stack">
       <h2 id="skills-title">{t.skillsTitle}</h2>
       <SkillCards skills={t.skills} />
-    </section>
-
-    <section id="experience" aria-labelledby="exp-title" class="stack">
-      <h2 id="exp-title">{t.experienceTitle}</h2>
-      <ExperienceList items={t.experiences.slice(0, 2)} />
       <p>
         <a href={routes.about}>{more} →</a>
       </p>
@@ -87,7 +73,8 @@ const toolsIntro = t.tools.intro;
 
     <section id="tools" aria-labelledby="tools-title" class="stack">
       <h2 id="tools-title">{t.tools.title}</h2>
-      <p class="prose">{toolsIntro}</p>
+      <p class="prose">{t.tools.intro}</p>
+      <ToolCards lang={lang} headingLevel={3} />
       <p>
         <a href={routes.tools}>{t.tools.all} →</a>
       </p>
@@ -112,6 +99,15 @@ const toolsIntro = t.tools.intro;
       <p class="prose">
         <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
       </p>
+      <ul class="row" role="list">
+        {t.hero.cvLinks.map((cv) => (
+          <li>
+            <a href={withBase(cv.href)} hreflang={cv.lang} lang={cv.lang}>
+              {cv.label}
+            </a>
+          </li>
+        ))}
+      </ul>
       <p>
         <Button variant="primary" href={routes.contact}>
           {t.hero.contactBtn}

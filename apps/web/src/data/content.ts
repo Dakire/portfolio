@@ -47,9 +47,14 @@ export interface Portfolio {
   hero: {
     greeting: string;
     role: string;
+    /** Phrase d'accroche sous le titre. */
+    pitch: string;
     cvBtn: string;
     contactBtn: string;
+    projectsBtn: string;
     cvLink: string;
+    /** Liens vers les deux CV (section contact de l'accueil). */
+    cvLinks: { href: string; label: string; lang: Lang }[];
     terminal: { cmd: string; out: string }[];
   };
   aboutTitle: string;
@@ -170,9 +175,16 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
     hero: {
       greeting: 'Bonjour, je suis',
       role: 'Technicien Informatique & Systèmes Numériques',
+      pitch:
+        "Administration réseau et systèmes, sécurité IT et formation à l'IA, à Microsoft 365 et au RGPD : je déploie, je sécurise et j'accompagne les équipes.",
       cvBtn: 'Télécharger mon CV',
       contactBtn: 'Me contacter',
+      projectsBtn: 'Voir les projets',
       cvLink: '/CV_Guillaume_Richard_FR.pdf',
+      cvLinks: [
+        { href: '/CV_Guillaume_Richard_FR.pdf', label: 'CV en français (PDF)', lang: 'fr' },
+        { href: '/Resume_Guillaume_Richard_EN.pdf', label: 'Resume in English (PDF)', lang: 'en' },
+      ],
       terminal: [
         { cmd: 'whoami', out: 'guillaume · technicien informatique & systèmes numériques' },
         { cmd: 'cat stack.txt', out: 'Microsoft 365 · Google Workspace · DNS · Windows Server' },
@@ -185,9 +197,14 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
     skillsTitle: "Domaines d'Expertise",
     skills: [
       {
-        category: 'Systèmes & Réseaux',
+        category: 'Réseau & Systèmes',
         items:
-          'Windows Server (AD, MDT, WDS, DNS, DHCP, RDP), Linux. Gestion de Réseaux : LAN/WLAN, Stormshield, VPN, FTP/SFTP.',
+          'Windows Server (AD, MDT, WDS, DNS, DHCP, RDP), Linux. Réseaux LAN/WLAN, VPN, FTP/SFTP. Homelab pour tester configurations et services avant de les déployer.',
+      },
+      {
+        category: 'Sécurité IT',
+        items:
+          'Pare-feu Stormshield SNS, VPN, sécurité des identités Microsoft 365 et Google Workspace, authentification des e-mails (SPF, DKIM, DMARC).',
       },
       {
         category: 'Messagerie & Cloud',
@@ -195,9 +212,14 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
           'Expertise M365 & Google Workspace. Analyse SMTP, Délivrabilité, gestion des Zones DNS (MX, SPF, DKIM, DMARC), Maintien en Conditions Opérationnelles (MCO).',
       },
       {
-        category: 'Web & Développement',
+        category: 'Formation IA, M365 & RGPD',
         items:
-          'Création et gestion de sites (WordPress, Wix, Shopify, React). Langages : C#, Java, Python, PowerShell, Bash, SQL, PHP.',
+          "Formation et accompagnement des équipes à l'intelligence artificielle, à Microsoft 365 et aux bonnes pratiques du RGPD.",
+      },
+      {
+        category: 'Développement & Automatisation',
+        items:
+          'Création et gestion de sites (WordPress, Wix, Shopify, React). Scripts et outils : C#, Java, Python, PowerShell, Bash, SQL, PHP.',
       },
       {
         category: 'Support & Projets IT',
@@ -383,9 +405,16 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
     hero: {
       greeting: 'Hello, I am',
       role: 'IT & Digital Systems Technician',
+      pitch:
+        'Network and systems administration, IT security, and training in AI, Microsoft 365 and GDPR: I deploy, secure and support teams.',
       cvBtn: 'Download Resume',
       contactBtn: 'Contact Me',
+      projectsBtn: 'See projects',
       cvLink: '/Resume_Guillaume_Richard_EN.pdf',
+      cvLinks: [
+        { href: '/Resume_Guillaume_Richard_EN.pdf', label: 'Resume in English (PDF)', lang: 'en' },
+        { href: '/CV_Guillaume_Richard_FR.pdf', label: 'CV en français (PDF)', lang: 'fr' },
+      ],
       terminal: [
         { cmd: 'whoami', out: 'guillaume · it & digital systems technician' },
         { cmd: 'cat stack.txt', out: 'Microsoft 365 · Google Workspace · DNS · Windows Server' },
@@ -398,9 +427,14 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
     skillsTitle: 'Core Expertise',
     skills: [
       {
-        category: 'Systems & Networks',
+        category: 'Networks & Systems',
         items:
-          'Windows Server (AD, MDT, WDS, DNS, DHCP, RDP), Linux. Network Management: LAN/WLAN, Stormshield, VPN, FTP/SFTP.',
+          'Windows Server (AD, MDT, WDS, DNS, DHCP, RDP), Linux. LAN/WLAN networks, VPN, FTP/SFTP. Homelab to test configurations and services before deploying them.',
+      },
+      {
+        category: 'IT Security',
+        items:
+          'Stormshield SNS firewalls, VPN, Microsoft 365 and Google Workspace identity security, email authentication (SPF, DKIM, DMARC).',
       },
       {
         category: 'Messaging & Cloud',
@@ -408,9 +442,14 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
           'M365 & Google Workspace expertise. SMTP header analysis, deliverability troubleshooting, DNS zone management (MX, SPF, DKIM, DMARC).',
       },
       {
-        category: 'Web & Development',
+        category: 'AI, M365 & GDPR Training',
         items:
-          'Website creation and management (WordPress, Wix, Shopify, React). Languages: C#, Java, Python, PowerShell, Bash, SQL, PHP.',
+          'Training and supporting teams on artificial intelligence, Microsoft 365 and GDPR best practices.',
+      },
+      {
+        category: 'Development & Automation',
+        items:
+          'Website creation and management (WordPress, Wix, Shopify, React). Scripts and tools: C#, Java, Python, PowerShell, Bash, SQL, PHP.',
       },
       {
         category: 'IT Support & Projects',

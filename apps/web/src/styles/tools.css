@@ -307,15 +307,6 @@ legend {
 }
 
 /* ---------- Page « Outils » et page d'un outil ---------- */
-.tool-card {
-  display: grid;
-  gap: var(--space-3);
-  align-content: start;
-  height: 100%;
-}
-.tool-card-icon {
-  color: var(--accent);
-}
 .tool-section {
   max-width: 52rem;
 }

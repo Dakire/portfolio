@@ -1,0 +1,124 @@
+---
+// Terminal interactif de l'accueil. Sans JavaScript : présentation statique (commandes d'accueil) et liens vers les pages.
+// Avec JavaScript : src/terminal/ui.ts (module externe) active le champ, l'historique, la complétion et les suggestions.
+import { PORTFOLIO_DATA } from '../data/content';
+import { withBase } from '../lib/base';
+import { ROUTES, type Lang } from '../lib/i18n';
+import { terminalData } from '../terminal/data';
+import { TERMINAL } from '../terminal/text';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const s = TERMINAL[lang];
+const t = PORTFOLIO_DATA[lang];
+const routes = ROUTES[lang];
+const data = await terminalData(lang);
+const shortcuts = [
+  { href: routes.about, label: t.nav.about },
+  { href: routes.skills, label: t.nav.skills },
+  { href: routes.projects, label: t.nav.projects },
+  { href: routes.tools, label: t.nav.tools },
+  { href: routes.blog, label: t.nav.blog },
+  { href: routes.contact, label: t.nav.contact },
+  { href: withBase(t.hero.cvLink), label: s.cvName },
+];
+---
+
+<section class="terminal" aria-labelledby="terminal-title" data-terminal={JSON.stringify(data)}>
+  <h2 id="terminal-title" class="visually-hidden">
+    {s.label}
+  </h2>
+  <div class="terminal-window">
+    <div class="terminal-bar" aria-hidden="true">
+      <span class="terminal-dot"></span>
+      <span class="terminal-dot"></span>
+      <span class="terminal-dot"></span>
+      <span class="terminal-name">{s.title}</span>
+    </div>
+    <div class="terminal-screen" data-terminal-screen>
+      <dl class="terminal-boot">
+        {t.hero.terminal.map((line) => (
+          <>
+            <dt>
+              <span class="term-accent" aria-hidden="true">
+                {'$ '}
+              </span>
+              {line.cmd}
+            </dt>
+            <dd>{line.out}</dd>
+          </>
+        ))}
+      </dl>
+      <div
+        class="terminal-log"
+        role="log"
+        aria-live="polite"
+        aria-label={s.log}
+        data-terminal-log
+      ></div>
+      <form class="terminal-prompt" data-terminal-form>
+        <span class="term-accent" aria-hidden="true">
+          $
+        </span>
+        <label for="terminal-input" class="visually-hidden">
+          {s.inputLabel}
+        </label>
+        <input
+          id="terminal-input"
+          type="text"
+          placeholder={s.placeholder}
+          aria-describedby="terminal-hint"
+          autocomplete="off"
+          autocapitalize="none"
+          autocorrect="off"
+          spellcheck="false"
+          enterkeyhint="send"
+          disabled
+          data-terminal-input
+          data-terminal-enable
+        />
+      </form>
+    </div>
+    <div class="terminal-footer">
+      <ul class="terminal-chips" role="list">
+        {s.suggestions.map((command) => (
+          <li>
+            <button
+              type="button"
+              class="chip"
+              disabled
+              data-terminal-run={command}
+              data-terminal-enable
+            >
+              {command}
+            </button>
+          </li>
+        ))}
+      </ul>
+      <p id="terminal-hint" class="terminal-hint">
+        {s.hint}
+      </p>
+    </div>
+  </div>
+  <p class="terminal-off">{s.disabled}</p>
+  <nav class="terminal-links" aria-label={s.shortcuts}>
+    <ul class="row" role="list">
+      {shortcuts.map((link) => (
+        <li>
+          <a href={link.href} class="chip">
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+  <button type="button" class="btn btn-ghost terminal-toggle" hidden data-terminal-toggle>
+    {s.disable}
+  </button>
+</section>
+
+<script>
+  import '../terminal/ui';
+</script>

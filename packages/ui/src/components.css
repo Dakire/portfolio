@@ -290,15 +290,21 @@ a.card:hover {
   padding: 0 var(--space-4);
   border: 1px solid var(--line-strong);
   border-radius: 999px;
+  background: transparent;
   color: var(--body);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   text-decoration: none;
+  cursor: pointer;
   transition:
     border-color var(--duration-fast) var(--ease),
     background-color var(--duration-fast) var(--ease);
 }
-.chip:hover {
+.chip:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.chip:hover:not(:disabled) {
   border-color: var(--accent);
   color: var(--ink);
 }

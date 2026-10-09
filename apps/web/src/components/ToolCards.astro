@@ -1,0 +1,33 @@
+---
+// Cartes des outils, tirées du registre : page « Outils » (titres h2) et accueil (titres h3).
+import Card from '@grichard/ui/components/Card.astro';
+import type { Lang } from '../lib/i18n';
+import { HUB } from '../tools/hub';
+import { TOOL_ICONS } from '../tools/icons';
+import { TOOLS, toolPath, toolUi } from '../tools/registry';
+
+interface Props {
+  lang: Lang;
+  headingLevel?: 2 | 3;
+}
+const { lang, headingLevel = 2 } = Astro.props;
+const hub = HUB[lang];
+const Heading = headingLevel === 2 ? 'h2' : 'h3';
+---
+
+<ul class="cards" role="list">
+  {TOOLS.map((tool) => {
+    const ui = toolUi(tool, lang);
+    const Icon = TOOL_ICONS[tool.icon];
+    return (
+      <li>
+        <Card href={toolPath(tool, lang)} class="tool-card">
+          <Icon size={28} class="tool-card-icon" aria-hidden="true" />
+          <Heading>{ui.name}</Heading>
+          <p>{ui.card}</p>
+          <p class="meta">{hub.open} →</p>
+        </Card>
+      </li>
+    );
+  })}
+</ul>

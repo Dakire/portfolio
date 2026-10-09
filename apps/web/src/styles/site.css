@@ -306,25 +306,165 @@ body:has(.consent) {
 .hero-title span {
   color: var(--accent);
 }
-.hero-terminal {
-  max-width: 40rem;
-  padding: var(--space-4) var(--space-5);
-  background: var(--surface);
-  border: 1px solid var(--line);
+.hero-grid {
+  display: grid;
+  gap: var(--space-6);
+  align-items: center;
+}
+@media (min-width: 64rem) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 32rem);
+  }
+}
+
+/* ---------- Terminal de l'accueil (components/Terminal.astro, src/terminal/ui.ts) ----------
+   Sans JavaScript : présentation statique et liens. La classe « js » (posée par /js/theme.js avant le premier rendu)
+   affiche l'invite et les suggestions dès le départ : aucun décalage quand le script arrive. */
+.terminal {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.terminal-window {
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
 }
-.hero-terminal .cmd::before {
-  content: '$ ';
-  color: var(--accent);
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--raised);
 }
-.hero-terminal dd {
+.terminal-dot {
+  flex: none;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+.terminal-name {
+  overflow: hidden;
+  margin-left: var(--space-2);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.terminal-screen {
+  height: 19rem;
+  overflow-y: auto;
+  padding: var(--space-4);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.terminal-boot dt {
+  color: var(--ink);
+}
+.terminal-boot dd {
   margin: 0 0 var(--space-3);
   color: var(--body);
 }
-.hero-terminal dt {
+.term-entry {
+  margin-top: var(--space-3);
+  color: var(--body);
+}
+.term-entry p {
+  padding-left: 2ch;
+  text-indent: -2ch; /* une ligne longue repart sous le texte, pas sous la puce */
+  white-space: pre-wrap;
+}
+.term-entry p:first-child {
   color: var(--ink);
+}
+.term-accent {
+  color: var(--accent);
+}
+.term-dim {
+  color: var(--muted);
+}
+.term-error {
+  color: var(--danger);
+}
+.terminal-prompt {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding-inline: var(--space-1);
+  border-radius: var(--radius-sm);
+}
+.terminal-prompt:focus-within {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.terminal-prompt input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--target);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+}
+.terminal-prompt input:focus-visible {
+  outline: none; /* le focus est montré sur toute la ligne d'invite (:focus-within) */
+}
+.terminal-prompt input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+.terminal-footer {
+  display: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--line);
+  background: var(--raised);
+}
+.terminal-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.terminal-hint {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+.js .terminal-prompt,
+.js .terminal-footer {
+  display: flex;
+}
+.js .terminal:not([data-off]) .terminal-links,
+.terminal-off,
+.terminal[data-off] .terminal-window {
+  display: none;
+}
+.terminal[data-off] .terminal-off {
+  display: block;
+}
+.terminal-toggle {
+  justify-self: end;
+  font-weight: 500;
+}
+
+/* Cartes d'outils (page « Outils » et accueil) */
+.tool-card {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  height: 100%;
+}
+.tool-card-icon {
+  color: var(--accent);
 }
 
 /* ---------- Articles ---------- */
