@@ -615,24 +615,36 @@ body:has(.consent) {
 }
 
 /* ---------- Curseur collaboratif (/js/cursor.js) ----------
-   Décoratif : le curseur natif reste affiché, cet élément le suit avec un léger retard. Seul transform change. */
+   La flèche remplace le curseur du système pendant qu'elle est affichée (classe has-custom-cursor posée par le script).
+   Pointe de la flèche = point de clic ; l'étiquette suit avec un retard. Seul transform change. */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
 .figma-cursor {
   position: fixed;
   top: 0;
   left: 0;
   z-index: var(--z-cursor);
-  display: flex;
-  align-items: flex-start;
+  width: 0;
+  height: 0;
   pointer-events: none;
   opacity: 0;
   will-change: transform;
-  transition: opacity var(--duration-base) var(--ease);
+  transition: opacity var(--duration-fast) var(--ease);
 }
 .figma-cursor.is-visible {
   opacity: 1;
 }
+.figma-cursor > * {
+  position: absolute;
+}
 .figma-cursor-arrow {
-  margin: 12px 0 0 12px;
+  top: -1px;
+  left: -1px;
+  width: 16px;
+  max-width: none; /* le conteneur fait 0 px de large : sans cela, svg { max-width: 100% } l'écraserait */
+  height: 20px;
   fill: var(--accent);
   stroke: var(--canvas);
   stroke-width: 1.5;
@@ -641,14 +653,17 @@ body:has(.consent) {
 }
 .figma-cursor-bar {
   display: none;
+  top: -10px;
+  left: -1px;
   width: 2px;
   height: 1.25rem;
-  margin: 10px 0 0 14px;
   border-radius: 1px;
   background: var(--accent);
+  box-shadow: 0 0 0 1px var(--canvas);
 }
 .figma-cursor-label {
-  margin: 28px 0 0 2px;
+  top: 20px;
+  left: 14px;
   padding: 0.125rem 0.5rem;
   border-radius: 0.25rem 999px 999px;
   background: var(--accent-strong);
@@ -659,11 +674,9 @@ body:has(.consent) {
   font-weight: 600;
   line-height: 1.5;
   white-space: nowrap;
-  transform-origin: 0 0;
-  transition: transform var(--duration-fast) var(--ease);
+  will-change: transform;
 }
-.figma-cursor[data-state='link'] .figma-cursor-arrow,
-.figma-cursor[data-state='link'] .figma-cursor-label {
+.figma-cursor[data-state='link'] .figma-cursor-arrow {
   transform: scale(1.15);
 }
 .figma-cursor[data-state='text'] .figma-cursor-arrow {

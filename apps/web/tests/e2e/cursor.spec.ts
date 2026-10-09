@@ -14,6 +14,8 @@ test('mouvement réduit (réglage par défaut des tests) : aucun curseur animé,
   await page.mouse.move(400, 350);
   await expect(page.locator('.figma-cursor')).toHaveCount(0);
   await expect(page.locator('[data-cursor-toggle]')).toBeHidden();
+  await expect(page.locator('html')).not.toHaveClass(/has-custom-cursor/);
+  await expect(page.locator('body')).toHaveCSS('cursor', 'auto');
 });
 
 test.describe('souris, animations autorisées', () => {
@@ -29,7 +31,16 @@ test.describe('souris, animations autorisées', () => {
     await expect(cursor).toHaveAttribute('aria-hidden', 'true');
     await expect(cursor).toHaveCSS('pointer-events', 'none');
     await expect(cursor).toContainText('Guillaume');
-    await expect(page.locator('html')).not.toHaveCSS('cursor', 'none');
+    // remplace le curseur du système, pointe de la flèche exactement sous le pointeur (aucun retard)
+    await expect(page.locator('html')).toHaveClass(/has-custom-cursor/);
+    await expect(page.locator('body')).toHaveCSS('cursor', 'none');
+    await page.mouse.move(420, 260);
+    await expect
+      .poll(async () => {
+        const box = await page.locator('.figma-cursor-arrow').boundingBox();
+        return box ? [Math.round(box.x + 1), Math.round(box.y + 1)] : null;
+      })
+      .toEqual([420, 260]);
 
     await page.getByRole('link', { name: 'Me contacter' }).first().hover();
     await expect(cursor).toHaveAttribute('data-state', 'link');
@@ -50,6 +61,7 @@ test.describe('souris, animations autorisées', () => {
     await expect(toggle).toHaveAttribute('aria-checked', 'false');
     await page.mouse.move(300, 300);
     await expect(page.locator('.figma-cursor')).not.toHaveClass(/is-visible/);
+    await expect(page.locator('body')).toHaveCSS('cursor', 'auto'); // le curseur du système revient
     await page.reload();
     await page.mouse.move(320, 320);
     await expect(page.locator('.figma-cursor')).toHaveCount(0);

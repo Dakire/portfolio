@@ -1,14 +1,19 @@
-// Curseur « collaboratif » façon Figma : une flèche étiquetée « Guillaume » suit la souris avec un léger retard (lerp).
-// Amélioration progressive, purement décorative :
-// - le curseur natif n'est jamais masqué ; l'élément est aria-hidden et pointer-events: none ;
-// - actif seulement avec un pointeur fin qui survole (souris, pavé tactile), jamais si l'utilisateur réduit les animations ;
-// - désactivable (bouton du pied de page, commande « cursor off » du terminal), choix mémorisé ;
-// - une seule boucle requestAnimationFrame, arrêtée dès que la flèche a rejoint la souris ; seul transform est modifié.
+// Curseur « collaboratif » façon Figma : une flèche remplace le curseur du système, et l'étiquette « Guillaume » la suit
+// avec un léger retard (lerp). Amélioration progressive :
+// - la flèche est calée exactement sur le pointeur (aucun retard : un clic tombe toujours où on le voit) ;
+// - le curseur du système n'est masqué (classe has-custom-cursor) que pendant que la flèche est affichée : sans
+//   JavaScript, sur écran tactile, en mouvement réduit, en contraste élevé (forced-colors) ou une fois désactivé,
+//   c'est le curseur normal ; dans une iframe (Turnstile), celle-ci garde son propre curseur ;
+// - élément aria-hidden et pointer-events: none : aucune incidence sur le clavier ni les lecteurs d'écran ;
+// - désactivable (interrupteur du pied de page, commande « cursor off » du terminal), choix mémorisé ;
+// - boucle requestAnimationFrame arrêtée dès que l'étiquette a rejoint la flèche ; seul transform est modifié.
 (() => {
   const KEY = 'cursor';
   const LERP = 0.22;
   const fine = matchMedia('(hover: hover) and (pointer: fine)');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const forced = matchMedia('(forced-colors: active)');
+  const root = document.documentElement;
 
   const preference = () => {
     try {
@@ -27,6 +32,7 @@
   };
 
   let el;
+  let tag;
   let frame = 0;
   let visible = false;
   const target = { x: 0, y: 0 };
@@ -50,10 +56,12 @@
     const name = document.createElement('span');
     name.className = 'figma-cursor-label';
     name.textContent = 'Guillaume';
+    tag = name;
     el.append(svg, bar, name);
     document.body.append(el);
   };
 
+  // pos : position lissée de l'étiquette ; la flèche, elle, est toujours exactement sur le pointeur (target).
   const render = () => {
     pos.x += (target.x - pos.x) * LERP;
     pos.y += (target.y - pos.y) * LERP;
@@ -62,7 +70,8 @@
       pos.x = target.x;
       pos.y = target.y;
     }
-    el.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0)`;
+    el.style.transform = `translate3d(${target.x}px, ${target.y}px, 0)`;
+    tag.style.transform = `translate3d(${pos.x - target.x}px, ${pos.y - target.y}px, 0)`;
     frame = settled ? 0 : requestAnimationFrame(render);
   };
   const schedule = () => {
@@ -73,6 +82,7 @@
     if (visible === on) return;
     visible = on;
     el.classList.toggle('is-visible', on);
+    root.classList.toggle('has-custom-cursor', on);
   };
 
   const onMove = (event) => {
@@ -103,8 +113,9 @@
       { duration: 260, easing: 'ease-out' },
     );
   };
+  // Sortie de la fenêtre, ou entrée dans une iframe (qui affiche son propre curseur) : la flèche disparaît.
   const onLeave = (event) => {
-    if (!event.relatedTarget) show(false);
+    if (!event.relatedTarget || event.relatedTarget.tagName === 'IFRAME') show(false);
   };
 
   let active = false;
@@ -129,7 +140,7 @@
     show(false);
   };
 
-  const supported = () => fine.matches && !reduced.matches;
+  const supported = () => fine.matches && !reduced.matches && !forced.matches;
   const update = () => (supported() && preference() === 'on' ? start() : stop());
 
   // Interrupteur du pied de page : visible seulement là où le curseur peut exister.
@@ -149,7 +160,7 @@
   });
   document.addEventListener('cursor:set', (event) => set(event.detail === 'off' ? 'off' : 'on'));
 
-  for (const query of [fine, reduced])
+  for (const query of [fine, reduced, forced])
     query.addEventListener('change', () => {
       update();
       syncToggles();
