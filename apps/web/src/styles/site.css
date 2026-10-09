@@ -4,7 +4,7 @@
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: var(--z-header);
   background: var(--canvas);
   border-bottom: 1px solid var(--line);
 }
@@ -29,8 +29,95 @@
 .site-tld {
   color: var(--accent);
 }
+.site-menu {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-5);
+}
 .site-nav {
   flex: 1 1 auto;
+}
+
+/* Bouton « Menu » : seulement sur petit écran et avec JavaScript (classe « js » posée par /js/theme.js) */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target);
+  margin-left: auto;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+.nav-toggle-icon,
+.nav-toggle-icon::before,
+.nav-toggle-icon::after {
+  display: block;
+  width: 1.1rem;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+  transition: transform var(--duration-base) var(--ease);
+}
+.nav-toggle-icon {
+  position: relative;
+}
+.nav-toggle-icon::before,
+.nav-toggle-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+}
+.nav-toggle-icon::before {
+  top: -6px;
+}
+.nav-toggle-icon::after {
+  top: 6px;
+}
+.nav-toggle[aria-expanded='true'] .nav-toggle-icon {
+  background: transparent;
+}
+.nav-toggle[aria-expanded='true'] .nav-toggle-icon::before {
+  transform: translateY(6px) rotate(45deg);
+}
+.nav-toggle[aria-expanded='true'] .nav-toggle-icon::after {
+  transform: translateY(-6px) rotate(-45deg);
+}
+@media (max-width: 59.99rem) {
+  .js .nav-toggle {
+    display: inline-flex;
+  }
+  .js .site-menu {
+    display: none;
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    padding-block: var(--space-2) var(--space-4);
+    border-top: 1px solid var(--line);
+  }
+  .js .site-menu[data-open] {
+    display: flex;
+    max-height: calc(100dvh - 5rem);
+    overflow-y: auto;
+  }
+  .js .site-nav ul {
+    flex-direction: column;
+  }
+  .js .site-nav a {
+    display: flex;
+    font-size: var(--text-base);
+  }
+  .js .site-tools {
+    flex-wrap: wrap;
+  }
 }
 .site-nav ul {
   display: flex;
@@ -81,6 +168,7 @@
 .site-footer-inner {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
   padding-block: var(--space-6);
@@ -113,22 +201,41 @@ main:focus {
   outline: none;
 }
 
-/* ---------- Bandeau de consentement (injecté par /js/consent.js) ---------- */
+/* ---------- Bandeau de consentement (injecté par /js/consent.js) ----------
+   En surimpression, fixé en bas : son apparition ne déplace rien (aucun décalage de mise en page, CLS).
+   Premier élément du <body> dans le DOM, il reste atteint dès le premier Tab. Tant qu'il est affiché, scroll-padding-bottom
+   et une marge basse évitent qu'il masque l'élément qui a le focus ou la fin de la page (WCAG 2.4.11). */
 .consent {
-  position: sticky;
-  top: 0;
-  z-index: 50;
+  position: fixed;
+  inset: auto 0 0;
+  z-index: var(--z-banner);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-5);
+  max-height: 50vh;
+  overflow-y: auto;
   padding: var(--space-4) var(--gutter);
   background: var(--raised);
-  border-bottom: 1px solid var(--line-strong);
+  border-top: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-lg);
   color: var(--ink);
 }
+html:has(.consent) {
+  scroll-padding-bottom: 12rem;
+}
+body:has(.consent) {
+  padding-bottom: 12rem;
+}
 .consent p {
-  margin-bottom: var(--space-3);
+  flex: 1 1 28rem;
+  max-width: var(--measure);
   font-size: var(--text-sm);
 }
 .consent-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-3);
 }
 .consent-actions button {
@@ -180,6 +287,12 @@ main:focus {
   color: var(--muted);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
+}
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
 }
 .timeline > li {
   padding-block: var(--space-5);
@@ -337,6 +450,14 @@ main:focus {
 }
 
 /* Fil d'Ariane : séparateur décoratif entre les niveaux */
+.breadcrumb ol {
+  gap: 0 var(--space-2);
+}
+.breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+}
 .breadcrumb li:not(:last-child)::after {
   content: '/';
   margin-left: var(--space-2);

@@ -24,25 +24,37 @@ const isCurrent = (href: string) => path === href || path.startsWith(href);
         .eu
       </span>
     </a>
-    <nav aria-label={ui.mainNav} class="site-nav">
-      <ul>
-        {items.map((key) => (
-          <li>
-            <a
-              href={ROUTES[lang][key]}
-              aria-current={isCurrent(ROUTES[lang][key]) ? 'page' : undefined}
-            >
-              {ui.nav[key as keyof typeof ui.nav]}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-    <div class="site-tools">
-      <a href={otherHref ?? ROUTES[other].home} hreflang={other} lang={other} class="lang-link">
-        {ui.langName}
-      </a>
-      <ThemeSwitch label={ui.theme} labels={ui.themeLabels} />
+    <button
+      type="button"
+      class="nav-toggle"
+      aria-expanded="false"
+      aria-controls="site-menu"
+      data-nav-toggle
+    >
+      <span class="nav-toggle-icon" aria-hidden="true"></span>
+      {ui.menu}
+    </button>
+    <div id="site-menu" class="site-menu">
+      <nav aria-label={ui.mainNav} class="site-nav">
+        <ul>
+          {items.map((key) => (
+            <li>
+              <a
+                href={ROUTES[lang][key]}
+                aria-current={isCurrent(ROUTES[lang][key]) ? 'page' : undefined}
+              >
+                {ui.nav[key as keyof typeof ui.nav]}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <div class="site-tools">
+        <a href={otherHref ?? ROUTES[other].home} hreflang={other} lang={other} class="lang-link">
+          {ui.langName}
+        </a>
+        <ThemeSwitch label={ui.theme} labels={ui.themeLabels} />
+      </div>
     </div>
   </div>
 </header>

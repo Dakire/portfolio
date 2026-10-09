@@ -1,5 +1,4 @@
 ---
-import Tag from '@grichard/ui/components/Tag.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import PostCard from '../components/PostCard.astro';
@@ -77,13 +76,17 @@ const labels =
       <h2 class="visually-hidden">{labels.categories}</h2>
       <ul class="row" role="list">
         <li>
-          <a href={routes.blog} aria-current={heading ? undefined : 'page'}>
+          <a href={routes.blog} class="chip" aria-current={heading ? undefined : 'page'}>
             {labels.allPosts}
           </a>
         </li>
         {categoryIds.map((id) => (
           <li>
-            <a href={categoryPath(lang, id)} aria-current={category === id ? 'page' : undefined}>
+            <a
+              href={categoryPath(lang, id)}
+              class="chip"
+              aria-current={category === id ? 'page' : undefined}
+            >
               {CATEGORIES[id]?.[lang]}
             </a>
           </li>
@@ -106,8 +109,12 @@ const labels =
       <ul class="row" role="list">
         {tagNames.map((name) => (
           <li>
-            <a href={tagPath(lang, name)} class="tag-link">
-              <Tag>{name}</Tag>
+            <a
+              href={tagPath(lang, name)}
+              class="chip"
+              aria-current={tagLabel === name ? 'page' : undefined}
+            >
+              {name}
             </a>
           </li>
         ))}

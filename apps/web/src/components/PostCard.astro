@@ -11,10 +11,12 @@ const { post, minLabel } = Astro.props;
 ---
 
 <Card href={postPath(post.lang, post.slug)}>
-  <p class="meta">
+  <p class="meta post-meta">
     <Tag>{CATEGORIES[post.data.category]?.[post.lang]}</Tag>
-    <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date, post.lang)}</time> ·{' '}
-    {readingMinutes(post.body)} {minLabel}
+    <span>
+      <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date, post.lang)}</time>
+      {` · ${readingMinutes(post.body)} ${minLabel}`}
+    </span>
   </p>
   <h3>{post.data.title}</h3>
   <p>{post.data.description}</p>

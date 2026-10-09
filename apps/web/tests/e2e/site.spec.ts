@@ -156,3 +156,63 @@ test("le lien d'évitement est le premier élément atteint au clavier et mène 
   await page.keyboard.press('Enter');
   await expect(page.locator('#contenu')).toBeFocused();
 });
+
+test.describe('menu de navigation sur petit écran', () => {
+  test.use({ viewport: { width: 375, height: 812 } });
+
+  test('le bouton Menu déplie la navigation ; Échap la replie et rend le focus', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const toggle = page.getByRole('button', { name: 'Menu' });
+    const nav = page.getByRole('navigation', { name: 'Navigation principale' });
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(nav).toBeHidden();
+    await toggle.click();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    await expect(nav).toBeVisible();
+    await nav.getByRole('link', { name: 'Projets' }).focus();
+    await page.keyboard.press('Escape');
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(toggle).toBeFocused();
+    await expect(nav).toBeHidden();
+  });
+
+  test('sans JavaScript, la navigation reste visible et le bouton est absent', async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({
+      javaScriptEnabled: false,
+      viewport: { width: 375, height: 812 },
+    });
+    const page = await context.newPage();
+    await page.goto('http://localhost:4321/');
+    await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toBeVisible();
+    await expect(page.locator('[data-nav-toggle]')).toBeHidden();
+    await context.close();
+  });
+});
+
+test('le bandeau de consentement ne décale pas la page (CLS) et ne masque pas la fin de page', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await expect(page.locator('.consent')).toBeVisible();
+  const shift = await page.evaluate(
+    () =>
+      new Promise<number>((resolve) => {
+        let total = 0;
+        new PerformanceObserver((list) => {
+          for (const entry of list.getEntries())
+            total += (entry as PerformanceEntry & { value: number }).value;
+        }).observe({ type: 'layout-shift', buffered: true });
+        setTimeout(() => resolve(total), 500);
+      }),
+  );
+  expect(shift).toBeLessThan(0.05);
+  const footerLink = page.getByRole('button', { name: 'Gérer les cookies' });
+  await footerLink.scrollIntoViewIfNeeded();
+  const banner = await page.locator('.consent').boundingBox();
+  const link = await footerLink.boundingBox();
+  expect(link!.y + link!.height).toBeLessThanOrEqual(banner!.y);
+});

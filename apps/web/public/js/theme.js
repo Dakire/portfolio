@@ -4,6 +4,9 @@
 (() => {
   const KEY = 'theme';
   const root = document.documentElement;
+  // JavaScript disponible : posé avant le premier rendu, il permet au CSS de replier le menu mobile sans décalage
+  // de mise en page (voir /js/nav.js). Sans JavaScript, la navigation reste dépliée.
+  root.classList.add('js');
   const system = matchMedia('(prefers-color-scheme: light)');
 
   const stored = () => {

@@ -89,8 +89,9 @@ const crumbs = [
         <p class="meta">
           <a href={categoryPath(lang, post.data.category)}>
             {CATEGORIES[post.data.category]?.[lang]}
-          </a>{' '}
-          ·<time datetime={isoDate(post.data.date)}>{formatDate(post.data.date, lang)}</time>
+          </a>
+          {' · '}
+          <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date, lang)}</time>
           {post.data.updated && (
             <>
               {' '}
