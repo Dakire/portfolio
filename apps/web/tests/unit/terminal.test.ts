@@ -160,6 +160,13 @@ describe('commandes', () => {
     expect(run('clear', ctx()).action).toEqual({ type: 'clear' });
   });
 
+  it('cursor active ou désactive le curseur animé', () => {
+    expect(run('cursor off', ctx()).action).toEqual({ type: 'cursor', value: 'off' });
+    expect(run('cursor ON', ctx()).action).toEqual({ type: 'cursor', value: 'on' });
+    expect(text(run('cursor', ctx()))).toContain('usage');
+    expect(complete('cursor of')).toBe('cursor off');
+  });
+
   it('neofetch résume le profil', () => {
     const out = text(run('neofetch', ctx()));
     expect(out).toContain('Guillaume Richard');

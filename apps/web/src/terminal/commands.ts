@@ -70,6 +70,7 @@ export const COMMANDS = [
   'theme',
   'lang',
   'neofetch',
+  'cursor',
   'clear',
 ] as const;
 export type Command = (typeof COMMANDS)[number];
@@ -113,6 +114,7 @@ export function complete(raw: string, d?: Pick<TerminalData, 'tools'>): string |
     cat: FILES,
     goto: SECTIONS,
     theme: ['dark', 'light', 'auto'],
+    cursor: ['on', 'off'],
     lang: ['fr', 'en'],
     ls: ['blog'],
     open: d?.tools.map((tool) => tool.id) ?? [],
@@ -270,6 +272,13 @@ export function run(raw: string, { s, d, theme = 'dark' }: Context): Result {
       return {
         lines: [[seg(fill(s.langSwitching, { lang: s.languages[arg] }), 'dim')]],
         action: { type: 'navigate', href: d.paths.otherHome },
+      };
+    }
+    case 'cursor': {
+      if (arg !== 'on' && arg !== 'off') return { lines: [[seg(s.cursorUsage, 'dim')]] };
+      return {
+        lines: [[seg(arg === 'on' ? s.cursorOn : s.cursorOff, 'dim')]],
+        action: { type: 'cursor', value: arg },
       };
     }
     case 'neofetch': {

@@ -603,3 +603,90 @@ body:has(.consent) {
   margin-left: var(--space-2);
   color: var(--muted);
 }
+
+/* ---------- Curseur collaboratif (/js/cursor.js) ----------
+   Décoratif : le curseur natif reste affiché, cet élément le suit avec un léger retard. Seul transform change. */
+.figma-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-cursor);
+  display: flex;
+  align-items: flex-start;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+  transition: opacity var(--duration-base) var(--ease);
+}
+.figma-cursor.is-visible {
+  opacity: 1;
+}
+.figma-cursor-arrow {
+  margin: 12px 0 0 12px;
+  fill: var(--accent);
+  stroke: var(--canvas);
+  stroke-width: 1.5;
+  transform-origin: 1px 1px;
+  transition: transform var(--duration-fast) var(--ease);
+}
+.figma-cursor-bar {
+  display: none;
+  width: 2px;
+  height: 1.25rem;
+  margin: 10px 0 0 14px;
+  border-radius: 1px;
+  background: var(--accent);
+}
+.figma-cursor-label {
+  margin: 28px 0 0 2px;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem 999px 999px;
+  background: var(--accent-strong);
+  box-shadow: 0 0 0 1.5px var(--canvas); /* se détache même sur un bouton de la couleur d'accent */
+  color: var(--accent-ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  transform-origin: 0 0;
+  transition: transform var(--duration-fast) var(--ease);
+}
+.figma-cursor[data-state='link'] .figma-cursor-arrow,
+.figma-cursor[data-state='link'] .figma-cursor-label {
+  transform: scale(1.15);
+}
+.figma-cursor[data-state='text'] .figma-cursor-arrow {
+  display: none;
+}
+.figma-cursor[data-state='text'] .figma-cursor-bar {
+  display: block;
+}
+@media print {
+  .figma-cursor {
+    display: none;
+  }
+}
+
+/* Interrupteur (role="switch") : libellé constant, état montré par la pastille et annoncé par aria-checked */
+.switch-button {
+  gap: var(--space-2);
+  text-decoration: none;
+}
+.switch-button::after {
+  content: '';
+  width: 2rem;
+  height: 1.125rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 0.55rem 50%, var(--muted) 0.35rem, transparent 0.4rem) no-repeat,
+    var(--surface);
+  transition: background-position var(--duration-fast) var(--ease);
+}
+.switch-button[aria-checked='true']::after {
+  border-color: var(--accent-strong);
+  background:
+    radial-gradient(circle at 1.45rem 50%, var(--accent-ink) 0.35rem, transparent 0.4rem) no-repeat,
+    var(--accent-strong);
+}

@@ -43,6 +43,9 @@ export interface TerminalStrings {
   openUsage: string;
   openMissing: string;
   opening: string;
+  cursorUsage: string;
+  cursorOn: string;
+  cursorOff: string;
   sudo: string;
   rm: string;
   exit: string;
@@ -87,6 +90,7 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
       theme: 'theme [dark|light|auto] : changer de thème',
       lang: 'lang [fr|en] : changer de langue',
       neofetch: 'informations système',
+      cursor: 'cursor [on|off] : curseur animé (souris)',
       clear: "effacer l'écran",
     },
     files: 'about.txt  stack.txt  contact.txt  blog/',
@@ -112,6 +116,10 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
     openUsage: 'usage : open <outil> (tools pour la liste)',
     openMissing: 'open : outil inconnu : {tool} (tapez tools)',
     opening: 'ouverture : {name}…',
+    cursorUsage:
+      'usage : cursor [on|off] (souris uniquement, jamais si les animations sont réduites)',
+    cursorOn: 'curseur animé activé',
+    cursorOff: 'curseur animé désactivé',
     sudo: 'Bien essayé. Cet incident sera signalé à l’administrateur (moi).',
     rm: 'Permission refusée : je tiens à mon portfolio.',
     exit: "Il n'y a nulle part où fuir : ce n'est qu'un navigateur.",
@@ -169,6 +177,7 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
       theme: 'theme [dark|light|auto]: change theme',
       lang: 'lang [fr|en]: change language',
       neofetch: 'system information',
+      cursor: 'cursor [on|off]: animated cursor (mouse)',
       clear: 'clear the screen',
     },
     files: 'about.txt  stack.txt  contact.txt  blog/',
@@ -194,6 +203,9 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
     openUsage: 'usage: open <tool> (type tools for the list)',
     openMissing: 'open: unknown tool: {tool} (type tools)',
     opening: 'opening: {name}…',
+    cursorUsage: 'usage: cursor [on|off] (mouse only, never with reduced motion)',
+    cursorOn: 'animated cursor on',
+    cursorOff: 'animated cursor off',
     sudo: 'Nice try. This incident will be reported to the administrator (me).',
     rm: 'Permission denied: I am attached to my portfolio.',
     exit: 'There is nowhere to run: it is just a browser.',

@@ -24,6 +24,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* L'attribut hidden l'emporte toujours, même sur un composant qui impose son propre display (.btn, .link-button…) */
+[hidden] {
+  display: none !important;
+}
+
 ::selection {
   background: var(--selection);
 }
