@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Transfert FTP/FTPS de la livraison (dossier release/, voir assemble.mjs) vers l'hébergement OVH.
 #
-#   scripts/deploy/deploy.sh <production|preprod|portal> [dossier-livraison]
+#   scripts/deploy/deploy.sh <production|portal> [dossier-livraison]
 #
 # Variables : FTP_HOST, FTP_USER, FTP_PASSWORD (obligatoires, jamais affichées)
 #             FTP_PROTOCOL=ftp|sftp    (défaut ftp ; sftp : FTP_PORT=22, clé de l'hôte déjà dans ~/.ssh/known_hosts)
@@ -13,10 +13,10 @@
 # Ordre (un visiteur ne doit jamais voir une page qui référence un fichier pas encore transféré) :
 #   1. le code de l'API (app/…) ; 2. les ressources versionnées (_astro/, js/, images, PDF…) ; 3. les pages ;
 #   4. le .htaccess en dernier (il active la nouvelle CSP) ; 5. suppression des fichiers qui n'existent plus.
-# Jamais touchés : private/ (secrets, état), www/espace/ (portail), et en production www/preprod/.
+# Jamais touchés : private/ (secrets, état), www/espace/ (portail), et en production l'ancien www/preprod/ (à supprimer à la main).
 set -euo pipefail
 
-target="${1:?cible manquante : production ou preprod}"
+target="${1:?cible manquante : production ou portal}"
 release="${2:-release}"
 dry_run="${DRY_RUN:-true}"
 
@@ -26,15 +26,9 @@ case "$target" in
     web_remote="www"
     code_local="$release/app/api"
     code_remote="app/api"
-    # En production, la suppression ne doit jamais atteindre la préproduction, le portail ni ce que l'hébergeur crée (cgi-bin/).
+    # En production, la suppression ne doit jamais atteindre le portail, ce que l'hébergeur crée (cgi-bin/), ni l'ancienne
+    # préproduction (preprod/), retirée du dépôt : elle se supprime à la main par FTP, jamais par une livraison automatique.
     keep=(-x '^preprod/' -x '^espace/' -x '^cgi-bin/')
-    ;;
-  preprod)
-    web_local="$release/www/preprod"
-    web_remote="www/preprod"
-    code_local="$release/app/preprod/api"
-    code_remote="app/preprod/api"
-    keep=()
     ;;
   portal)
     # Espace client : code dans app/portal/, point d'entrée dans www/espace/. Les données (private/) ne sont jamais concernées.
@@ -45,7 +39,7 @@ case "$target" in
     keep=()
     ;;
   *)
-    echo "cible inconnue : $target (production, preprod ou portal)" >&2
+    echo "cible inconnue : $target (production ou portal)" >&2
     exit 2
     ;;
 esac

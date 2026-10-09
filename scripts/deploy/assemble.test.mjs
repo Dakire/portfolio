@@ -13,15 +13,15 @@ const write = async (root, file, content = '') => {
 };
 
 const HTACCESS_PROD = 'RewriteBase /\n';
-const HTACCESS_PREPROD = 'RewriteBase /preprod/\n';
+const HTACCESS_SUB = 'RewriteBase /sous-dossier/\n';
 const INDEX_PROD = '<html lang="fr"><meta name="robots" content="index, follow">';
-const INDEX_PREPROD =
-  '<html lang="fr" data-base="/preprod"><meta name="robots" content="noindex, follow">';
+const INDEX_SUB =
+  '<html lang="fr" data-base="/sous-dossier"><meta name="robots" content="noindex, follow">';
 
-async function fakeBuild(root, { preprod = false } = {}) {
-  await write(root, 'index.html', preprod ? INDEX_PREPROD : INDEX_PROD);
+async function fakeBuild(root, { subfolder = false } = {}) {
+  await write(root, 'index.html', subfolder ? INDEX_SUB : INDEX_PROD);
   await write(root, '404.html');
-  await write(root, '.htaccess', preprod ? HTACCESS_PREPROD : HTACCESS_PROD);
+  await write(root, '.htaccess', subfolder ? HTACCESS_SUB : HTACCESS_PROD);
   await write(root, '.well-known/security.txt');
   await write(root, '.well-known/ai-catalog.json', '{}');
   await write(root, '_astro/app.abc123.js');
@@ -54,21 +54,6 @@ describe('assemblage de la livraison', () => {
     await assert.rejects(readFile(join(out, 'private', 'config.php')));
   });
 
-  it('préproduction : tout sous www/preprod/ et app/preprod/api/, jamais à la racine', async () => {
-    const [dist, api, out] = ['dist', 'api', 'out'].map((n) => join(dir, `pre-${n}`));
-    await fakeBuild(dist, { preprod: true });
-    await fakeApi(api);
-    await assemble({ target: 'preprod', dist, api, out });
-    await readFile(join(out, 'www', 'preprod', 'index.html'));
-    await readFile(join(out, 'www', 'preprod', 'contact.php'));
-    await readFile(join(out, 'app', 'preprod', 'api', 'vendor', 'autoload.php'));
-    await assert.rejects(readFile(join(out, 'www', 'index.html')));
-    await assert.rejects(
-      readFile(join(out, '.ovhconfig')),
-      'la préproduction ne touche pas à .ovhconfig',
-    );
-  });
-
   it('refuse la page de style, les secrets, les cartes de source et une base de données', async () => {
     const dist = join(dir, 'bad-dist');
     await fakeBuild(dist);
@@ -76,22 +61,20 @@ describe('assemblage de la livraison', () => {
     await write(dist, 'contact.config.php');
     await write(dist, '_astro/app.js.map');
     await write(dist, 'espace/data.sqlite');
-    const problems = (await verifyBuild(dist, 'production')).join('\n');
+    const problems = (await verifyBuild(dist)).join('\n');
     assert.match(problems, /design\//);
     assert.match(problems, /contact\.config\.php/);
     assert.match(problems, /app\.js\.map/);
     assert.match(problems, /data\.sqlite/);
   });
 
-  it('refuse de livrer un build de préproduction en production, et inversement', async () => {
-    const pre = join(dir, 'mix-pre');
+  it('refuse un build fait pour un sous-dossier ou en noindex (SITE_BASE, PUBLIC_NOINDEX)', async () => {
+    const sub = join(dir, 'mix-sub');
     const prod = join(dir, 'mix-prod');
-    await fakeBuild(pre, { preprod: true });
+    await fakeBuild(sub, { subfolder: true });
     await fakeBuild(prod);
-    assert.ok((await verifyBuild(pre, 'production')).length >= 2);
-    assert.ok((await verifyBuild(prod, 'preprod')).length >= 2);
-    assert.deepEqual(await verifyBuild(prod, 'production'), []);
-    assert.deepEqual(await verifyBuild(pre, 'preprod'), []);
+    assert.ok((await verifyBuild(sub)).length >= 3);
+    assert.deepEqual(await verifyBuild(prod), []);
   });
 
   it('refuse une API sans vendor/ ou installée avec les dépendances de développement', async () => {

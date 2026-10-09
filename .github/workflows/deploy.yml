@@ -1,15 +1,20 @@
 name: Déploiement
 
-# Déclenché UNIQUEMENT à la main (onglet Actions > Déploiement > Run workflow). Aucun déploiement automatique, jamais.
-# Par défaut c'est une SIMULATION (dry_run) : le serveur n'est pas modifié. Voir docs/deploiement.md.
+# Production : livrée AUTOMATIQUEMENT après chaque CI verte d'un push sur main (le commit exact testé par la CI).
+# À la main (onglet Actions > Déploiement > Run workflow) : retour arrière vers un tag deploy-production-…, portail, simulation.
+# Voir docs/deploiement.md.
 on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
     inputs:
       target:
         description: Cible
         type: choice
-        options: [preprod, production, portal]
-        default: preprod
+        options: [production, portal]
+        default: production
       ref:
         description: Branche, tag ou SHA à livrer (retour arrière = tag précédent)
         type: string
@@ -30,27 +35,46 @@ concurrency:
 jobs:
   build:
     name: Construction et contrôles
+    # Automatique : seulement une CI réussie, lancée par un push sur main (jamais une PR ni une autre branche).
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
       contents: read
       actions: read # lire le résultat de la CI du commit
+    outputs:
+      target: ${{ steps.params.outputs.target }}
+      ref: ${{ steps.params.outputs.ref }}
+      dry_run: ${{ steps.params.outputs.dry_run }}
     steps:
       - name: Contrôler les paramètres
+        id: params
         env:
-          TARGET: ${{ inputs.target }}
-          REF: ${{ inputs.ref }}
+          EVENT: ${{ github.event_name }}
+          RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+          IN_TARGET: ${{ inputs.target }}
+          IN_REF: ${{ inputs.ref }}
+          IN_DRY_RUN: ${{ inputs.dry_run }}
         run: |
-          [[ "$REF" =~ ^[A-Za-z0-9._/-]+$ ]] || { echo "::error::ref invalide"; exit 1; }
-          if [ "$TARGET" != "preprod" ] && [ "$REF" != "main" ] && [[ ! "$REF" =~ ^(v[0-9]|deploy-) ]]; then
-            echo "::error::la production et le portail se livrent depuis main ou depuis un tag (v… ou deploy-…)"
-            exit 1
+          if [ "$EVENT" = "workflow_run" ]; then
+            TARGET=production; REF="$RUN_SHA"; DRY_RUN=false
+          else
+            TARGET="$IN_TARGET"; REF="$IN_REF"; DRY_RUN="$IN_DRY_RUN"
+            [[ "$REF" =~ ^[A-Za-z0-9._/-]+$ ]] || { echo "::error::ref invalide"; exit 1; }
+            if [ "$REF" != "main" ] && [[ ! "$REF" =~ ^(v[0-9]|deploy-) ]]; then
+              echo "::error::à la main, on livre depuis main ou depuis un tag (v… ou deploy-…)"
+              exit 1
+            fi
           fi
+          { echo "target=$TARGET"; echo "ref=$REF"; echo "dry_run=$DRY_RUN"; } >> "$GITHUB_OUTPUT"
+          echo "Cible : $TARGET · ref : $REF · simulation : $DRY_RUN" >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ inputs.ref }}
-      - name: La CI de ce commit doit être verte (production et portail)
-        if: inputs.target != 'preprod'
+          ref: ${{ steps.params.outputs.ref }}
+      - name: La CI de ce commit doit être verte
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -69,51 +93,43 @@ jobs:
           coverage: none
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @grichard/web exec playwright install --with-deps chromium # images de partage (OG)
-      - name: Construire le site (production)
-        if: inputs.target == 'production'
+      - name: Construire le site
+        if: steps.params.outputs.target == 'production'
         env:
           PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
         run: pnpm --filter @grichard/web build
-      - name: Construire le site (préproduction, sous /preprod/)
-        if: inputs.target == 'preprod'
-        env:
-          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
-          SITE_BASE: /preprod/
-          PUBLIC_NOINDEX: '1'
-          PREPROD_AUTH_FILE: ${{ vars.PREPROD_AUTH_FILE }}
-        run: pnpm --filter @grichard/web build
-      - name: Contrat public (70 URL) sur le site construit
-        if: inputs.target == 'production'
+      - name: Contrat public (URL figées) sur le site construit
+        if: steps.params.outputs.target == 'production'
         run: CONTRACT_DIST=apps/web/dist pnpm test:contract
       - name: API PHP sans dépendances de développement
-        if: inputs.target != 'portal'
+        if: steps.params.outputs.target == 'production'
         working-directory: apps/api
         run: composer install --no-dev --classmap-authoritative --no-interaction --prefer-dist
       - name: Portail sans dépendances de développement
-        if: inputs.target == 'portal'
+        if: steps.params.outputs.target == 'portal'
         working-directory: apps/portal
         run: composer install --no-dev --classmap-authoritative --no-interaction --prefer-dist
       - name: Assembler la livraison
         env:
-          TARGET: ${{ inputs.target }}
+          TARGET: ${{ steps.params.outputs.target }}
         run: |
           node --test "scripts/deploy/*.test.mjs"
           node scripts/deploy/assemble.mjs "$TARGET" --build-id "$GITHUB_SHA"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: release-${{ inputs.target }}
+          name: release-${{ steps.params.outputs.target }}
           path: release/
           include-hidden-files: true # .htaccess, .ovhconfig, .well-known
           retention-days: 3
           if-no-files-found: error
 
   deploy:
-    name: Transfert FTP (${{ inputs.target }}${{ inputs.dry_run && ', simulation' || '' }})
+    name: Transfert FTP (${{ needs.build.outputs.target }}${{ needs.build.outputs.dry_run == 'true' && ', simulation' || '' }})
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    # Environnement GitHub : la production y exige une validation manuelle (Settings > Environments).
-    environment: ${{ inputs.target == 'portal' && 'production' || inputs.target }}
+    # Environnement GitHub « production » (secrets FTP). S'il exige une validation (Required reviewers), la livraison l'attend.
+    environment: production
     permissions:
       contents: read
     env:
@@ -125,14 +141,15 @@ jobs:
       FTP_TLS: ${{ vars.FTP_TLS || 'true' }}
       FTP_VERIFY_CERT: ${{ vars.FTP_VERIFY_CERT || 'true' }}
       FTP_APP_PREFIX: ${{ vars.FTP_APP_PREFIX }}
-      DRY_RUN: ${{ inputs.dry_run }}
+      DRY_RUN: ${{ needs.build.outputs.dry_run }}
+      TARGET: ${{ needs.build.outputs.target }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ inputs.ref }}
+          ref: ${{ needs.build.outputs.ref }}
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: release-${{ inputs.target }}
+          name: release-${{ needs.build.outputs.target }}
           path: release/
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
@@ -149,36 +166,30 @@ jobs:
           test -s ~/.ssh/known_hosts || { echo "clé de l'hôte introuvable" >&2; exit 1; }
           ssh-keygen -lf ~/.ssh/known_hosts # empreinte à comparer à celle d'OVH si besoin
       - name: Sauvegarde du site en ligne
-        if: inputs.target == 'production' && !inputs.dry_run
+        if: env.TARGET == 'production' && env.DRY_RUN != 'true'
         run: scripts/deploy/backup.sh "backup-www-$(date -u +%Y%m%d-%H%M%S).tar.gz"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        if: inputs.target == 'production' && !inputs.dry_run
+        if: env.TARGET == 'production' && env.DRY_RUN != 'true'
         with:
           name: sauvegarde-avant-deploiement
           path: backup-www-*.tar.gz
           retention-days: 30
       - name: Transférer
-        env:
-          TARGET: ${{ inputs.target }}
         run: scripts/deploy/deploy.sh "$TARGET" release
       - name: Vérifier le site en ligne (contrat public)
-        if: ${{ !inputs.dry_run }}
-        env:
-          TARGET: ${{ inputs.target }}
-          CONTRACT_BASIC_AUTH: ${{ secrets.PREPROD_BASIC_AUTH }}
+        if: env.DRY_RUN != 'true'
         run: |
           if [ "$TARGET" = "portal" ]; then
             # le portail n'est pas dans le contrat public : la page de connexion doit répondre, et noindex
             curl -fsS -o /dev/null -D - https://grichard.eu/espace/login | grep -i "x-robots-tag: noindex"
             exit 0
           fi
-          if [ "$TARGET" = "production" ]; then url="https://grichard.eu"; else url="https://grichard.eu/preprod"; fi
-          CONTRACT_BASE_URL="$url" pnpm test:contract
+          CONTRACT_BASE_URL=https://grichard.eu pnpm test:contract
 
   tag:
     name: Poser le tag de retour arrière
-    needs: deploy
-    if: inputs.target != 'preprod' && !inputs.dry_run
+    needs: [build, deploy]
+    if: needs.build.outputs.dry_run != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -186,10 +197,10 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ inputs.ref }}
+          ref: ${{ needs.build.outputs.ref }}
       - name: Tag
         env:
-          TARGET: ${{ inputs.target }}
+          TARGET: ${{ needs.build.outputs.target }}
         run: |
           tag="deploy-$TARGET-$(date -u +%Y%m%d-%H%M%S)"
           git tag "$tag"

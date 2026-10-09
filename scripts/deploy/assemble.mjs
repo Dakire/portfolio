@@ -1,14 +1,13 @@
 // Assemble la livraison (dossier release/) à partir du site construit et de l'API PHP, dans la disposition de l'hébergement OVH :
 //
-//   production                     préproduction
-//   release/.ovhconfig             (aucun)
-//   release/www/                   release/www/preprod/
-//   release/app/api/               release/app/preprod/api/
+//   release/.ovhconfig
+//   release/www/
+//   release/app/api/
 //
 // private/ (configuration, secrets, état) n'est JAMAIS livré : il n'existe que sur le serveur.
 // Le script refuse d'assembler tout ce qui ne doit pas partir en ligne (page de style, secrets, mauvaise cible…).
 //
-// Usage : node scripts/deploy/assemble.mjs <production|preprod|portal> [--portal apps/portal --build-id <id>] [--dist apps/web/dist] [--api apps/api] [--out release]
+// Usage : node scripts/deploy/assemble.mjs <production|portal> [--portal apps/portal --build-id <id>] [--dist apps/web/dist] [--api apps/api] [--out release]
 import { cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -44,7 +43,7 @@ const exists = (path) =>
   );
 
 /** Vérifie le site construit avant de le livrer. @returns {Promise<string[]>} les problèmes trouvés (vide = livrable) */
-export async function verifyBuild(dist, target) {
+export async function verifyBuild(dist) {
   const problems = [];
   const need = async (file, why) => {
     if (!(await exists(join(dist, file)))) problems.push(`${file} manquant (${why})`);
@@ -64,22 +63,11 @@ export async function verifyBuild(dist, target) {
   const htaccess = (await exists(join(dist, '.htaccess')))
     ? await readFile(join(dist, '.htaccess'), 'utf-8')
     : '';
-  if (target === 'production') {
-    if (noindex)
-      problems.push(
-        'la page d’accueil est en noindex : build de préproduction livré en production ?',
-      );
-    if (/RewriteBase \/preprod\//.test(htaccess))
-      problems.push('.htaccess de préproduction dans une livraison de production');
-    if (/data-base=/.test(index))
-      problems.push('data-base présent : build avec SITE_BASE livré en production');
-  } else {
-    if (!noindex) problems.push('la préproduction doit être en noindex (PUBLIC_NOINDEX=1)');
-    if (!/RewriteBase \/preprod\//.test(htaccess))
-      problems.push('.htaccess sans RewriteBase /preprod/ : build sans SITE_BASE=/preprod/ ?');
-    if (!/data-base="\/preprod"/.test(index))
-      problems.push('liens non préfixés par /preprod : build sans SITE_BASE=/preprod/ ?');
-  }
+  if (noindex) problems.push('la page d’accueil est en noindex : build avec PUBLIC_NOINDEX=1 ?');
+  if (/RewriteBase \/\S/.test(htaccess))
+    problems.push('.htaccess avec un RewriteBase sous-dossier : build avec SITE_BASE ?');
+  if (/data-base=/.test(index))
+    problems.push('data-base présent : build avec SITE_BASE livré en production');
 
   for (const file of await walk(dist)) {
     const rel = relative(dist, file).replaceAll('\\', '/');
@@ -141,15 +129,13 @@ async function assemblePortal({ portal, out, buildId }) {
 
 export async function assemble({ target, dist, api, out, portal, buildId = 'local' }) {
   if (target === 'portal') return assemblePortal({ portal, out, buildId });
-  if (target !== 'production' && target !== 'preprod')
-    throw new Error(`cible inconnue : ${target}`);
-  const problems = [...(await verifyBuild(dist, target)), ...(await verifyApi(api))];
+  if (target !== 'production') throw new Error(`cible inconnue : ${target}`);
+  const problems = [...(await verifyBuild(dist)), ...(await verifyApi(api))];
   if (problems.length) throw new Error(`Livraison refusée :\n- ${problems.join('\n- ')}`);
 
   await rm(out, { recursive: true, force: true });
-  const web = target === 'production' ? join(out, 'www') : join(out, 'www', 'preprod');
-  const code =
-    target === 'production' ? join(out, 'app', 'api') : join(out, 'app', 'preprod', 'api');
+  const web = join(out, 'www');
+  const code = join(out, 'app', 'api');
 
   await mkdir(web, { recursive: true });
   await cp(dist, web, { recursive: true });
@@ -160,8 +146,7 @@ export async function assemble({ target, dist, api, out, portal, buildId = 'loca
   await cp(join(api, 'vendor'), join(code, 'vendor'), { recursive: true });
   await cp(join(api, 'composer.json'), join(code, 'composer.json'));
 
-  if (target === 'production')
-    await cp(join(ROOT, 'deploy', 'ovh', '.ovhconfig'), join(out, '.ovhconfig'));
+  await cp(join(ROOT, 'deploy', 'ovh', '.ovhconfig'), join(out, '.ovhconfig'));
 
   const leaked = (await walk(out))
     .map((f) => relative(out, f).replaceAll('\\', '/'))
