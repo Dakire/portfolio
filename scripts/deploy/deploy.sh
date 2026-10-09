@@ -69,7 +69,7 @@ if [ -n "$app_prefix" ] && [ "$target" = "production" ]; then
   keep+=(-x "^app/" -x "^private/") # ils sont dans www/ : la suppression finale ne doit jamais les atteindre
 fi
 
-proto="${FTP_PROTOCOL:-ftp}" # ftp (FTPS) ou sftp
+proto="${FTP_PROTOCOL:-sftp}" # ftp (FTPS) ou sftp
 auto_confirm="${FTP_SFTP_AUTO_CONFIRM:-false}"
 tls="${FTP_TLS:-true}"
 verify="${FTP_VERIFY_CERT:-true}"
