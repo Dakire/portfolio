@@ -164,6 +164,16 @@
       "type": "text/html"
     },
     {
+      "path": "/outils/seo/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/tools/seo/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
       "path": "/mentions-legales/",
       "type": "text/html"
     },

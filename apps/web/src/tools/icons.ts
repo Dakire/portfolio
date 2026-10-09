@@ -9,6 +9,8 @@ import {
   Mail,
   Network,
   Ruler,
+  ListTree,
+  ScanSearch,
   Scissors,
 } from 'lucide-preact';
 import type { ToolIcon } from './types';
@@ -24,4 +26,6 @@ export const TOOL_ICONS = {
   braces: Braces,
   ruler: Ruler,
   globe: Globe,
+  search: ScanSearch,
+  sitemap: ListTree,
 } as const satisfies Record<ToolIcon, unknown>;

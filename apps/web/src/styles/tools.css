@@ -896,3 +896,106 @@ legend {
 .form-status {
   min-height: 1.25rem;
 }
+
+/* ---------- Rapport SEO ---------- */
+.seo-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+.seo-head > .stack {
+  flex: 1 1 22rem;
+  min-width: 0;
+}
+.seo-urls {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+}
+.seo-urls dt {
+  color: var(--muted);
+}
+.seo-urls dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.seo-score {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: center;
+  min-width: 9rem;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--raised);
+}
+.seo-score-value {
+  font-size: var(--text-display);
+  font-weight: 700;
+  line-height: 1;
+}
+.seo-score-of {
+  color: var(--muted);
+}
+.seo-score meter {
+  width: 100%;
+  height: 0.5rem;
+}
+.seo-severity {
+  margin-left: var(--space-1);
+  vertical-align: 0.1em;
+}
+.seo-critical {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.seo-important {
+  border-color: var(--warn);
+  color: var(--warn);
+}
+.seo-detail,
+.seo-fix {
+  overflow-wrap: anywhere;
+}
+.seo-detail {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+.seo-passed > summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--target);
+  color: var(--ink);
+  font-weight: 650;
+  cursor: pointer;
+}
+
+/* Impression / PDF : le rapport seul, sur fond blanc, sans formulaire ni navigation */
+@media print {
+  .site-header,
+  .site-footer,
+  .skip-link,
+  .breadcrumb,
+  .page-hero,
+  .no-print,
+  .tool-section,
+  .consent,
+  .figma-cursor,
+  section[aria-labelledby='what-title'] {
+    display: none !important;
+  }
+  .seo-report {
+    border: 0;
+    padding: 0;
+  }
+  .seo-report .finding {
+    break-inside: avoid;
+  }
+  .seo-score {
+    border-color: #000;
+    background: none;
+  }
+}

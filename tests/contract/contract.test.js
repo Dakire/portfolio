@@ -18,8 +18,13 @@ function distFile(path) {
   return path.endsWith('/') ? file + 'index.html' : file;
 }
 
+// Les URL apparues avec le nouveau site (« since": "web" ») n'existent pas dans l'ancien site (legacy/dist) : elles ne sont
+// vérifiées que sur le nouveau build (CONTRACT_DIST) et en ligne.
+const legacyDist = !base && !process.env.CONTRACT_DIST;
+const entries = contract.entries.filter((entry) => !(legacyDist && entry.since === 'web'));
+
 describe(base ? `contrat public en ligne (${base})` : 'contrat public (dist/)', () => {
-  it.each(contract.entries)('$path', async ({ path, type, kind }) => {
+  it.each(entries)('$path', async ({ path, type, kind }) => {
     if (!base) {
       expect(existsSync(distFile(path)), distFile(path)).toBe(true);
       if (kind === 'json')

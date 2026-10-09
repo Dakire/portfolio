@@ -37,4 +37,6 @@ export type ToolIcon =
   | 'key'
   | 'braces'
   | 'ruler'
-  | 'globe';
+  | 'globe'
+  | 'search'
+  | 'sitemap';

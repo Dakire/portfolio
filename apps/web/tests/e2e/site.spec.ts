@@ -38,6 +38,8 @@ const PAGES = [
   '/en/tools/json-formatter/',
   '/outils/convertisseur-unites/',
   '/en/tools/unit-converter/',
+  '/outils/seo/',
+  '/en/tools/seo/',
   '/mentions-legales/',
   '/confidentialite/',
   '/en/privacy/',

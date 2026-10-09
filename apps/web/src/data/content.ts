@@ -160,7 +160,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
     tools: {
       title: 'Outils',
       intro:
-        "Des outils gratuits pour techniciens et administrateurs, nés de problèmes rencontrés en support : diagnostic DNS et e-mail, calendriers ICS, réseau, encodage, JSON, mots de passe, conversions. Ceux qui traitent des fichiers ou du texte s'exécutent dans votre navigateur ; seul l'outil DNS interroge des résolveurs publics.",
+        "Des outils gratuits pour techniciens et administrateurs, nés de problèmes rencontrés en support : diagnostic DNS et e-mail, audit SEO, calendriers ICS, réseau, encodage, JSON, mots de passe, conversions. Ceux qui traitent des fichiers ou du texte s'exécutent dans votre navigateur ; les outils DNS interrogent des résolveurs publics et le rapport SEO passe par le site, sans rien conserver.",
       all: 'Tous les outils',
     },
     nav: {
@@ -390,7 +390,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
     tools: {
       title: 'Tools',
       intro:
-        'Free tools for technicians and administrators, born from problems met in support: DNS and email diagnosis, ICS calendars, networking, encoding, JSON, passwords, conversions. Those that process files or text run in your browser; only the DNS tool queries public resolvers.',
+        'Free tools for technicians and administrators, born from problems met in support: DNS and email diagnosis, SEO audit, ICS calendars, networking, encoding, JSON, passwords, conversions. Those that process files or text run in your browser; the DNS tools query public resolvers and the SEO report goes through the site, keeping nothing.',
       all: 'All tools',
     },
     nav: {

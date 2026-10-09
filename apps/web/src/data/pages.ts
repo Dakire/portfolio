@@ -61,6 +61,7 @@ export const PRIVACY: Record<Lang, InfoPage> = {
         h: 'Outils en ligne',
         p: [
           "Les outils qui traitent du texte ou des fichiers (JSON, ICS, encodage, mots de passe, calculs réseau…) s'exécutent entièrement dans votre navigateur : ce que vous saisissez n'est pas envoyé au site. Les outils DNS interrogent directement, depuis votre navigateur, des résolveurs DNS publics (par exemple Cloudflare, Google, Quad9) : ces services voient le nom de domaine demandé et votre adresse IP, selon leurs propres politiques. Le site ne relaie ni ne stocke ces requêtes.",
+          "Le rapport SEO fonctionne différemment : l'adresse que vous saisissez est envoyée au site, qui interroge la page indiquée (avec son robots.txt et un échantillon de ses liens) puis vous renvoie le rapport. Ni l'adresse, ni la page, ni le rapport ne sont conservés ou journalisés. Comme pour le formulaire, l'analyse est protégée par Cloudflare Turnstile, une empreinte non réversible de votre adresse IP est conservée au plus une heure pour limiter le nombre d'analyses, et un cookie technique strictement nécessaire (__Host-grtools, jeton anti-falsification de requête, sans durée de vie au-delà de la session) est déposé.",
         ],
       },
       {
@@ -122,6 +123,7 @@ export const PRIVACY: Record<Lang, InfoPage> = {
         h: 'Online tools',
         p: [
           'Tools that process text or files (JSON, ICS, encoding, passwords, network calculations…) run entirely in your browser: what you type is not sent to the site. The DNS tools query public DNS resolvers (for example Cloudflare, Google, Quad9) directly from your browser: those services see the requested domain name and your IP address, under their own policies. The site neither relays nor stores these queries.',
+          'The SEO report works differently: the address you enter is sent to the site, which fetches that page (with its robots.txt and a sample of its links) and returns the report. Neither the address, the page nor the report is kept or logged. As with the form, the analysis is protected by Cloudflare Turnstile, a non-reversible hash of your IP address is kept for at most one hour to cap the number of analyses, and a strictly necessary technical cookie (__Host-grtools, an anti-request-forgery token that does not outlive the session) is set.',
         ],
       },
       {

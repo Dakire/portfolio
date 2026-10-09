@@ -3,7 +3,7 @@ export const HUB = {
   fr: {
     meta: {
       title:
-        'Outils en ligne pour techniciens IT : DNS, e-mail, calendriers, réseau | Guillaume Richard',
+        'Outils en ligne pour techniciens IT : DNS, SEO, e-mail, calendriers, réseau | Guillaume Richard',
       description:
         "Outils gratuits pour techniciens et administrateurs : DNS Lookup (A, MX, SPF, DKIM, DMARC), propagation DNS, découpeur et comparateur de fichiers ICS, calculatrice réseau, analyseur d'en-têtes d'e-mail, encodeurs, formateur JSON, convertisseurs d'unités. Dans votre navigateur.",
     },
@@ -14,7 +14,7 @@ export const HUB = {
     breadcrumb: { home: 'Accueil', tools: 'Outils' },
     privacyTitle: 'Confidentialité',
     privacy:
-      "Les fichiers que vous déposez et les textes que vous saisissez sont traités dans votre navigateur et ne quittent jamais votre ordinateur. Seul l'outil DNS interroge des résolveurs publics (Cloudflare, Google) pour lire les enregistrements du domaine demandé.",
+      'Les fichiers que vous déposez et les textes que vous saisissez sont traités dans votre navigateur et ne quittent jamais votre ordinateur. Les outils DNS interrogent des résolveurs publics (Cloudflare, Google) pour lire les enregistrements du domaine demandé. Le rapport SEO passe par grichard.eu, qui interroge la page indiquée sans rien conserver.',
     schemaName: 'Outils pour techniciens IT',
   },
   en: {
@@ -31,7 +31,7 @@ export const HUB = {
     breadcrumb: { home: 'Home', tools: 'Tools' },
     privacyTitle: 'Privacy',
     privacy:
-      'Files you drop and text you type are processed in your browser and never leave your computer. Only the DNS tool queries public resolvers (Cloudflare, Google) to read the records of the domain you ask about.',
+      'Files you drop and text you type are processed in your browser and never leave your computer. The DNS tools query public resolvers (Cloudflare, Google) to read the records of the domain you ask about. The SEO report goes through grichard.eu, which fetches the given page without keeping anything.',
     schemaName: 'Tools for IT technicians',
   },
 };

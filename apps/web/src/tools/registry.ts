@@ -13,6 +13,7 @@ import { PASSWORD } from './password/text';
 import { PROPAGATION } from './propagation/text';
 import { SUBNET } from './subnet/text';
 import type { ToolIcon, ToolTexts } from './types';
+import { SEO_TOOL } from './seo/text';
 import { UNITS_TOOL } from './units/text';
 
 export const TOOLS_BASE: Record<Lang, string> = {
@@ -84,6 +85,7 @@ export const TOOLS = [
     icon: 'ruler',
     text: UNITS_TOOL,
   },
+  { id: 'seo', slug: { fr: 'seo', en: 'seo' }, icon: 'search', text: SEO_TOOL },
 ] as const satisfies readonly ToolDef[];
 
 export type ToolId = (typeof TOOLS)[number]['id'];
