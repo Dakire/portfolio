@@ -2,28 +2,37 @@
 
 Monorepo de [grichard.eu](https://grichard.eu) : portfolio, blog, outils en ligne et espace client de test de Guillaume Richard.
 
-> **Refonte en cours** (branche `refonte/monorepo`). Le site actuellement en ligne est dans [legacy/](legacy/) (voir son [README](legacy/README.md)) ; il sert de référence jusqu'à la bascule.
-
 ## Contrainte d'hébergement
 
-Production OVH mutualisé : **fichiers statiques + PHP 8.5**, accès FTP uniquement. Node et pnpm n'existent qu'au build (local et GitHub Actions). Voir [ADR 0002](docs/adr/0002-production-statique-et-php.md).
+Production OVH mutualisé : **fichiers statiques + PHP 8.5**, accès FTP/SFTP uniquement. Node et pnpm n'existent qu'au build (local et GitHub Actions). Voir [ADR 0002](docs/adr/0002-production-statique-et-php.md).
 
 ## Structure
 
 ```
-legacy/      Site actuel (React + Vite pré-rendu), conservé comme référence
-apps/        web (Astro), api (PHP), portal (Symfony)      [à venir]
-packages/    ui, tools-core, config, content-schema        [à venir]
-tests/       contract/ : les 70 URL publiques à ne jamais casser
-docs/        ADR, contribution, checklist de release
+apps/web        Site public (Astro statique, FR/EN) : pages, blog, outils (îlots Preact)
+apps/api        PHP sans dépendance d'exécution : formulaire de contact (contact.php)
+apps/portal     Espace client de test (Symfony, SQLite)
+packages/ui     Design system : tokens CSS, thèmes clair/sombre, composants
+packages/tools-core  Logique pure des outils (TypeScript, testée)
+packages/config Configuration partagée
+legacy/         Ancien site (React + Vite), conservé comme référence
+tests/contract  Les URL publiques à ne jamais casser
+docs/           ADR, déploiement, contribution, checklist
 ```
 
-## Démarrage
+## Installation et build
 
 ```bash
-pnpm install          # Node >= 22 ; installe aussi les hooks Git
-pnpm legacy:check     # lint + tests + e2e du site actuel
-pnpm legacy:build && pnpm test:contract
+pnpm install                                  # Node >= 22 ; installe aussi les hooks Git
+pnpm --filter @grichard/web dev               # site en local (page de style : /design/)
+pnpm --filter @grichard/web build             # build statique dans apps/web/dist (PUBLIC_TURNSTILE_SITE_KEY requis)
+pnpm --filter @grichard/web lint check test test:e2e
+CONTRACT_DIST=apps/web/dist pnpm test:contract
+cd apps/api && composer install && composer test && composer cs && composer stan
 ```
 
-Documentation : [CLAUDE.md](CLAUDE.md) / [AGENTS.md](AGENTS.md) (conventions, sécurité, accessibilité), [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md), [docs/release-checklist.md](docs/release-checklist.md), [SECURITY.md](SECURITY.md).
+## Déploiement
+
+**Push direct sur `main`, pas de PR, pas de préproduction.** Chaque push sur `main` lance la CI ; si elle est verte, le workflow **Déploiement** livre automatiquement en production par FTP/SFTP (sauvegarde préalable, contrat des URL vérifié en ligne, tag `deploy-production-…`). On vérifie donc tout **avant** de pousser : [docs/release-checklist.md](docs/release-checklist.md). Détails, secrets et retour arrière : [docs/deploiement.md](docs/deploiement.md).
+
+Documentation : [CLAUDE.md](CLAUDE.md) / [AGENTS.md](AGENTS.md) (conventions, sécurité, accessibilité), [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md), [SECURITY.md](SECURITY.md).

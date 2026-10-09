@@ -1,6 +1,8 @@
-# Déploiement (OVH hosting-free, FTP)
+# Déploiement (OVH hosting-free, FTP/SFTP)
 
-Le déploiement ne se déclenche **que à la main** : onglet **Actions → Déploiement → Run workflow**. Rien ne part tout seul, ni sur un push, ni sur une fusion. Par défaut, le workflow fait une **simulation** (`dry_run`) : lftp liste ce qu'il ferait sans rien écrire.
+**Push direct sur `main` = mise en production.** Il n'y a ni pull request ni préproduction : chaque push sur `main` déclenche la CI, et le workflow **Déploiement** livre automatiquement en production le commit exact que la CI vient de valider. La vérification se fait donc **avant** le push, en local (voir [CONTRIBUTING.md](CONTRIBUTING.md)).
+
+À la main (onglet **Actions → Déploiement → Run workflow**), le même workflow sert au retour arrière (`ref` = un tag `deploy-production-…`), à la livraison du portail (`target = portal`) et aux simulations (`dry_run = true`).
 
 ## Disposition sur l'hébergement
 
@@ -8,15 +10,13 @@ Le FTP s'ouvre dans le dossier personnel de l'hébergement :
 
 ```
 /                       dossier personnel
-├── .ovhconfig          moteur PHP (PHP 8.5, production) — livré par la production seulement
+├── .ovhconfig          moteur PHP (PHP 8.5, production)
 ├── www/                racine web publique
 │   ├── (le site)       index.html, _astro/, outils/, contact.php, .htaccess, …
-│   ├── preprod/        la préproduction (même hébergement, sous-dossier)
 │   └── espace/         le portail de test (cible « portal ») — jamais touché par le déploiement du site
 ├── app/
-│   ├── api/            code PHP du formulaire de contact + vendor/ (hors racine web)
-│   ├── portal/         code du portail Symfony + vendor/ (hors racine web)
-│   └── preprod/api/    copie pour la préproduction
+│   ├── api/            code PHP (contact, outils) + vendor/ (hors racine web)
+│   └── portal/         code du portail Symfony + vendor/ (hors racine web)
 └── private/            configuration, secrets, état — créé À LA MAIN, jamais livré, jamais écrasé
 ```
 
@@ -24,9 +24,9 @@ Le FTP s'ouvre dans le dossier personnel de l'hébergement :
 
 ## Mise en place unique (à faire par le propriétaire)
 
-1. **GitHub → Settings → Environments** : créer `preprod` et `production`. Sur `production`, activer **Required reviewers** (vous) : le transfert attend alors votre validation.
-2. Dans **chaque environnement** → _Secrets_ : `FTP_HOST` (ex. `ftp.cluster0XX.hosting.ovh.net`), `FTP_USER`, `FTP_PASSWORD`. Dans `preprod` seulement : `PREPROD_BASIC_AUTH` au format `utilisateur:mot-de-passe` (pour que la vérification automatique passe le mot de passe de la préproduction).
-3. **Settings → Secrets and variables → Actions → Variables** (dépôt) : `PUBLIC_TURNSTILE_SITE_KEY` (clé de site Turnstile, publique). Facultatives : `FTP_TLS` (`true` par défaut : FTPS explicite) et `FTP_VERIFY_CERT` (`true` par défaut). Dans l'environnement `preprod` : `PREPROD_AUTH_FILE` = chemin **absolu** du `.htpasswd` sur le serveur (ex. `/home/identifiant/private/.htpasswd`).
+1. **GitHub → Settings → Environments** : un environnement `production`. Ses _Secrets_ : `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`. **Ne pas** y activer « Required reviewers » si la livraison doit être vraiment automatique (sinon chaque livraison attend un clic).
+2. **Settings → Branches** : aucune règle n'exigeant de pull request sur `main` (le push direct doit être accepté).
+3. **Settings → Secrets and variables → Actions → Variables** (dépôt) : `PUBLIC_TURNSTILE_SITE_KEY` (clé de site Turnstile, publique). Facultatives : `FTP_PROTOCOL` (`sftp` si seul le port 22 est ouvert), `FTP_PORT`, `FTP_TLS` (`true` par défaut : FTPS explicite), `FTP_VERIFY_CERT` (`true` par défaut), `FTP_APP_PREFIX` (voir plus bas).
 4. Sur le serveur, par FTP, créer **`private/config.php`** (jamais dans le dépôt) :
    ```php
    <?php
@@ -36,48 +36,48 @@ Le FTP s'ouvre dans le dossier personnel de l'hébergement :
        'mail_from' => 'noreply@grichard.eu',
    ];
    ```
-5. Créer **`private/.htpasswd`** (une ligne `utilisateur:empreinte`, empreinte générée par `htpasswd -B` ou un générateur bcrypt) pour protéger la préproduction.
-6. Vérifier dans le manager OVH que le moteur PHP est bien en **8.5**. Le fichier `.ovhconfig` livré par la production le demande ; si OVH refuse la version, le déploiement ne casse rien mais le PHP reste sur l'ancienne.
+5. Vérifier dans le manager OVH que le moteur PHP est bien en **8.5**.
+6. Ancienne préproduction : supprimer à la main, par FTP, `www/preprod/` et `app/preprod/` s'ils existent. La livraison ne les supprime jamais d'elle-même.
 
 ## Si seul www/ est accessible en écriture
 
-La disposition ci-dessus suppose que le FTP s'ouvre dans le dossier personnel (par ex. `/home/grichay/`) et que seul `www/` est public. Si, chez vous, tout doit être placé **dans `www/`** (vous ne pouvez pas faire pointer le site ailleurs que sur `www/`), `app/` et `private/` se retrouvent exposés au web : il faut alors
+La disposition ci-dessus suppose que le FTP s'ouvre dans le dossier personnel (par ex. `/home/grichay/`) et que seul `www/` est public. Si, chez vous, tout doit être placé **dans `www/`**, `app/` et `private/` se retrouvent exposés au web : il faut alors
 
 1. créer `www/app/` et `www/private/`, chacun avec un fichier `.htaccess` contenant uniquement `Require all denied` ;
 2. définir la variable GitHub `FTP_APP_PREFIX` = `www/` : le code PHP est alors déposé dans `www/app/…`, et la suppression finale ainsi que la sauvegarde ignorent `app/` et `private/` ;
 3. ne jamais déposer de fichier sensible hors de `private/`.
 
-`contact.php` et le portail retrouvent `app/` et `private/` en remontant l'arborescence, donc ils fonctionnent dans les deux dispositions. La disposition avec `app/` et `private/` **au-dessus** de `www/` reste préférable (rien de sensible n'est servi par Apache).
+## Déroulé d'une livraison automatique
 
-## Procédure recommandée
+1. Push sur `main` → **CI** (formatage, lint, typecheck, tests, e2e, axe, PHP, audits).
+2. CI verte → **Déploiement** (`workflow_run`) : construction du site, contrat des URL sur le build, `composer install --no-dev`, assemblage contrôlé (`scripts/deploy/assemble.mjs` refuse la page de style, un secret, une carte de source, une base de données, un build en sous-dossier ou en noindex).
+3. **Sauvegarde** de `www/` et `app/api/` (artefact `sauvegarde-avant-deploiement`, 30 jours).
+4. **Transfert** (`scripts/deploy/deploy.sh`), puis **contrat des URL vérifié sur https://grichard.eu**.
+5. **Tag** `deploy-production-AAAAMMJJ-HHMMSS` (point de retour arrière).
 
-1. **Préproduction en simulation** : `target = preprod`, `ref = main`, `dry_run = true`. Lire le journal : les `mirror` doivent ne viser que `www/preprod` et `app/preprod/api`.
-2. **Préproduction réelle** : `dry_run = false`. La vérification du contrat (70 URL) tourne sur `https://grichard.eu/preprod`.
-3. Contrôles manuels sur `https://grichard.eu/preprod/` : [release-checklist.md](release-checklist.md) (clavier, lecteur d'écran, formulaire de contact avec Turnstile réel, en-têtes).
-4. **Production en simulation** : `target = production`, `dry_run = true`. Lire attentivement les lignes de **suppression** : la première livraison supprime les fichiers de l'ancien site qui n'existent plus (`assets/`, anciennes pages…). Jamais touchés : `preprod/`, `espace/`, `cgi-bin/`.
-5. **Production réelle** : `dry_run = false`, puis valider l'environnement. Le workflow sauvegarde d'abord `www/` et `app/api/` (artefact `sauvegarde-avant-deploiement`, 30 jours), transfère, vérifie les 70 URL sur `https://grichard.eu`, puis pose le tag `deploy-production-AAAAMMJJ-HHMMSS`.
-
-Garde-fous du workflow : la production ne se livre que depuis `main` ou un tag, et seulement si la CI de ce commit est verte ; l'assemblage (`scripts/deploy/assemble.mjs`) refuse une livraison contenant la page de style, un secret, une carte de source, une base de données, ou un build de préproduction destiné à la production (et inversement).
+Une CI rouge ne livre rien. Un seul déploiement tourne à la fois ; si plusieurs pushes s'enchaînent, seule la dernière livraison en attente part.
 
 ## Ordre des transferts
 
 Un visiteur ne doit jamais voir une page qui référence un fichier pas encore arrivé :
 
-1. le code de l'API (`app/…`) ; 2. les ressources versionnées (`_astro/`, `js/`, images, PDF) ; 3. les pages, flux et fichiers de données ; 4. le `.htaccess`, en dernier (il active la nouvelle CSP, calculée sur les nouvelles pages) ; 5. la suppression de ce qui n'existe plus.
+1. le code de l'API (`app/…`) ; 2. les ressources versionnées (`_astro/`, `js/`, images, PDF) ; 3. les pages, flux et fichiers de données ; 4. le `.htaccess`, en dernier (il active la nouvelle CSP, calculée sur les nouvelles pages) ; 5. la suppression de ce qui n'existe plus. Jamais touchés : `espace/`, `cgi-bin/`, l'ancien `preprod/`.
 
 ## Retour arrière
 
-- **Normal** : relancer le workflow en production avec `ref` = le **tag précédent** (`deploy-production-…`). La construction est reproductible : le même tag redonne le même site.
+- **Régression** : `git revert` du commit fautif, puis push sur `main` : la CI verte relivre l'état corrigé.
+- **Urgence** (la CI ne peut pas passer) : lancer le workflow à la main en production avec `ref` = le **tag précédent** (`deploy-production-…`). La construction est reproductible : le même tag redonne le même site.
 - **Secours** : télécharger l'artefact `sauvegarde-avant-deploiement` (contenu public et code seulement, sans `private/` ni `espace/`) et remettre les fichiers par FTP.
+- Le tag `pre-refonte` marque l'état en production avant la refonte UX/UI et les outils SEO (9 octobre 2026).
 
 ## Ce que le workflow ne fait jamais
 
-Toucher au DNS ; lire ou écrire `private/` ; se lancer sans clic ; livrer la production sans validation d'environnement (si elle est configurée) ; utiliser un secret autrement que par les variables d'environnement du job.
+Toucher au DNS ; lire ou écrire `private/` ; livrer un commit dont la CI n'est pas verte ; livrer depuis une autre branche que `main` (ou un tag, à la main) ; utiliser un secret autrement que par les variables d'environnement du job.
 
 ## Limites connues
 
 - Le transfert FTP n'est pas atomique : l'ordre ci-dessus limite la fenêtre d'incohérence à quelques secondes.
-- `lftp` n'a pas pu être exécuté dans l'environnement de développement (Windows) : le **premier passage doit être la simulation en préproduction**. Le script a été vérifié avec un faux `lftp` qui affiche les commandes reçues ; leur effet réel est à confirmer par cette simulation.
+- Sans préproduction, le seul filet est la vérification locale avant push, la CI, la sauvegarde et le retour arrière par tag.
 - Le dépôt est public : les artefacts (livraison, sauvegarde) sont téléchargeables par quiconque a accès au dépôt. Ils ne contiennent que du contenu public et du code, jamais de secret.
 
 ## SFTP (hébergement qui n'ouvre que le port 22)

@@ -1,16 +1,21 @@
-# Checklist de release
+# Checklist avant push sur `main`
 
-Avant la mise en production (déclenchée à la main par le propriétaire) :
+Chaque push sur `main` part en production après une CI verte : cette liste se fait **avant** le push.
 
-- [ ] CI verte : formatage, lint, typecheck, tests, e2e, axe, audits, secrets, CodeQL.
-- [ ] `pnpm test:contract` vert sur le build **et** sur la préproduction (`CONTRACT_BASE_URL`).
-- [ ] Lighthouse ≥ 95 (performance, accessibilité, bonnes pratiques, SEO) sur l'accueil, un article et un outil.
-- [ ] En-têtes vérifiés (securityheaders.com, Mozilla Observatory) ; CSP sans violation en préproduction.
-- [ ] Tests manuels : clavier seul, lecteur d'écran (NVDA), zoom 200 %, thème clair/sombre, mouvement réduit.
-- [ ] Formulaire de contact testé de bout en bout (Turnstile réel, e-mail reçu).
-- [ ] `ai-catalog.json` servi en `application/json` ; PDF du CV FR/EN aux mêmes URL.
-- [ ] Simulation (`dry_run`) relue, en particulier les suppressions ; la sauvegarde automatique du `www/` actuel est produite par le workflow.
-- [ ] Tag Git de la release posé (point de retour arrière).
-- [ ] Après déploiement : `CONTRACT_BASE_URL=https://grichard.eu pnpm test:contract`, puis surveillance de l'uptime.
+- [ ] `pnpm format:check` vert.
+- [ ] Lint, typecheck, tests et e2e (avec axe) de ce qui est touché : `pnpm --filter @grichard/web lint`, `check`, `test`, `build`, `test:e2e` ; `pnpm --filter @grichard/ui test` ; `pnpm --filter @grichard/tools-core test`.
+- [ ] PHP modifié : `php -l` sur chaque fichier, puis `composer test`, `composer cs`, `composer stan` dans l'app concernée.
+- [ ] `CONTRACT_DIST=apps/web/dist pnpm test:contract` vert ; toute URL modifiée a sa redirection 301 et le contrat est à jour.
+- [ ] Rendu vérifié à 1440, 768 et 375 px, au clavier seul, en thème clair et sombre (et zoom 200 % si la mise en page change).
+- [ ] `git diff --staged` relu : aucun secret, aucune clé, aucune donnée personnelle.
+- [ ] Le commit laisse le site fonctionnel ; une fonctionnalité inachevée est masquée.
 
-Procédure détaillée, secrets à configurer et retour arrière : [deploiement.md](deploiement.md). Retour arrière : relancer le workflow de déploiement sur le tag précédent (`deploy-production-…`).
+Après le push :
+
+- [ ] CI puis **Déploiement** verts (le workflow vérifie le contrat sur https://grichard.eu et pose le tag `deploy-production-…`).
+- [ ] Contrôle rapide en ligne de ce qui a changé ; en-têtes (`curl -sI https://grichard.eu/`) ; `/.well-known/ai-catalog.json` en `application/json` ; PDF du CV FR/EN.
+- [ ] Régression : `git revert` + push, puis analyse.
+
+Périodiquement : Lighthouse ≥ 95 sur l'accueil, un article et un outil ; securityheaders.com / Mozilla Observatory ; test au lecteur d'écran (NVDA) ; formulaire de contact de bout en bout (Turnstile réel, e-mail reçu).
+
+Procédure, secrets et retour arrière : [deploiement.md](deploiement.md).
