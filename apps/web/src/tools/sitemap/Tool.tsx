@@ -1,5 +1,6 @@
 import type { Lang } from '../../lib/i18n';
 import ServerTool from '../server/ServerTool';
+import ScrollRegion from '../ui/ScrollRegion';
 import { describeCheck, type SitemapReport } from './checks';
 import { SITEMAP_TOOL } from './text';
 
@@ -20,8 +21,8 @@ function Details({ report, lang }: { report: SitemapReport; lang: Lang }) {
       {report.files.length > 0 && (
         <div class="stack">
           <h3 id="sitemap-files">{ui.files}</h3>
-          <div class="table-wrap" tabIndex={0} role="region" aria-labelledby="sitemap-files">
-            <table class="table">
+          <ScrollRegion label={ui.files}>
+            <table class="data-table">
               <thead>
                 <tr>
                   <th scope="col">{ui.file}</th>
@@ -51,14 +52,14 @@ function Details({ report, lang }: { report: SitemapReport; lang: Lang }) {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollRegion>
         </div>
       )}
       {report.sample.length > 0 && (
         <div class="stack">
           <h3 id="sitemap-sample">{ui.sample}</h3>
-          <div class="table-wrap" tabIndex={0} role="region" aria-labelledby="sitemap-sample">
-            <table class="table">
+          <ScrollRegion label={ui.sample}>
+            <table class="data-table">
               <thead>
                 <tr>
                   <th scope="col">{ui.page}</th>
@@ -90,7 +91,7 @@ function Details({ report, lang }: { report: SitemapReport; lang: Lang }) {
                 })}
               </tbody>
             </table>
-          </div>
+          </ScrollRegion>
         </div>
       )}
     </>
