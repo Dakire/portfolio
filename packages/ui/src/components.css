@@ -131,6 +131,7 @@ a.card:hover {
 /* Champs de formulaire */
 .field {
   display: grid;
+  align-content: start; /* dans une rangée de champs, un voisin plus haut n'étire ni l'étiquette ni le champ */
   gap: var(--space-2);
 }
 .field label {

@@ -10,6 +10,7 @@
 (() => {
   const KEY = 'cursor';
   const LERP = 0.22;
+  const MAX_LAG = 28; // l'étiquette ne s'éloigne jamais de la flèche de plus de 28 px, même souris très rapide
   const fine = matchMedia('(hover: hover) and (pointer: fine)');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const forced = matchMedia('(forced-colors: active)');
@@ -69,6 +70,11 @@
     if (settled) {
       pos.x = target.x;
       pos.y = target.y;
+    }
+    const lag = Math.hypot(pos.x - target.x, pos.y - target.y);
+    if (lag > MAX_LAG) {
+      pos.x = target.x + ((pos.x - target.x) * MAX_LAG) / lag;
+      pos.y = target.y + ((pos.y - target.y) * MAX_LAG) / lag;
     }
     el.style.transform = `translate3d(${target.x}px, ${target.y}px, 0)`;
     tag.style.transform = `translate3d(${pos.x - target.x}px, ${pos.y - target.y}px, 0)`;
