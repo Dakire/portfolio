@@ -175,7 +175,7 @@ a.card:hover {
   content: '';
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: var(--z-below);
   background-image:
     linear-gradient(to right, var(--line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--line) 1px, transparent 1px);
@@ -211,4 +211,99 @@ a.card:hover {
 }
 .theme-switch[hidden] {
   display: none;
+}
+
+/* Alertes : message d'état dans le flux. Le rôle se pose dans le HTML : role="status" (info, succès) ou role="alert" (erreur).
+   La couleur n'est jamais seule porteuse du sens : un titre ou une icône nomme le type. */
+.alert {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-left-width: 4px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--body);
+}
+.alert-title {
+  color: var(--ink);
+  font-weight: 650;
+}
+.alert-ok {
+  border-left-color: var(--ok);
+}
+.alert-warn {
+  border-left-color: var(--warn);
+}
+.alert-danger {
+  border-left-color: var(--danger);
+}
+.alert-ok .alert-title {
+  color: var(--ok);
+}
+.alert-warn .alert-title {
+  color: var(--warn);
+}
+.alert-danger .alert-title {
+  color: var(--danger);
+}
+
+/* Tableaux : à placer dans .table-wrap (région focusable, tabindex="0", nommée) pour défiler sans élargir la page */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+.table caption {
+  padding: var(--space-3);
+  color: var(--muted);
+  text-align: left;
+}
+.table th,
+.table td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+.table thead th {
+  background: var(--raised);
+  color: var(--ink);
+}
+.table tbody tr:nth-child(even) {
+  background: var(--surface);
+}
+.table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+/* Puces interactives (filtres, tags cliquables) : cible >= 44 px ; aria-current="page" marque le filtre actif */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--body);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-decoration: none;
+  transition:
+    border-color var(--duration-fast) var(--ease),
+    background-color var(--duration-fast) var(--ease);
+}
+.chip:hover {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.chip[aria-current='page'] {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+  color: var(--accent-ink);
 }

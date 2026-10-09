@@ -99,6 +99,69 @@ const sizes = ['display', '2xl', 'xl', 'lg', 'base', 'sm', 'xs'];
       </div>
     </section>
 
+    <section class="stack" aria-labelledby="alertes">
+      <h2 id="alertes">Alertes</h2>
+      <div class="alert" role="status">
+        <p class="alert-title">Information</p>
+        <p>Message neutre : le rôle « status » l'annonce sans interrompre.</p>
+      </div>
+      <div class="alert alert-ok" role="status">
+        <p class="alert-title">Conforme</p>
+        <p>Le contrôle est passé.</p>
+      </div>
+      <div class="alert alert-warn" role="status">
+        <p class="alert-title">Avertissement</p>
+        <p>À corriger quand c'est possible.</p>
+      </div>
+      <div class="alert alert-danger" role="alert">
+        <p class="alert-title">Erreur</p>
+        <p>Le rôle « alert » est réservé aux erreurs qui demandent une action.</p>
+      </div>
+    </section>
+
+    <section class="stack" aria-labelledby="tableaux">
+      <h2 id="tableaux">Tableaux</h2>
+      <div class="table-wrap" tabindex="0" role="region" aria-labelledby="tableaux-legende">
+        <table class="table">
+          <caption id="tableaux-legende">En-têtes de sécurité (exemple)</caption>
+          <thead>
+            <tr>
+              <th scope="col">En-tête</th>
+              <th scope="col">Valeur</th>
+              <th scope="col">État</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Strict-Transport-Security</th>
+              <td>
+                <code>max-age=31536000; includeSubDomains</code>
+              </td>
+              <td>
+                <Tag tone="ok">présent</Tag>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Content-Security-Policy</th>
+              <td>
+                <code>default-src 'self'</code>
+              </td>
+              <td>
+                <Tag tone="ok">présent</Tag>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Permissions-Policy</th>
+              <td>—</td>
+              <td>
+                <Tag tone="warn">absent</Tag>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <section class="stack" aria-labelledby="formulaire">
       <h2 id="formulaire">Formulaire</h2>
       <form class="stack form" novalidate>

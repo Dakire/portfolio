@@ -117,7 +117,7 @@ hr {
   position: fixed;
   top: var(--space-3);
   left: var(--space-3);
-  z-index: 100;
+  z-index: var(--z-skip);
   padding: var(--space-3) var(--space-4);
   background: var(--accent-strong);
   color: var(--accent-ink);
