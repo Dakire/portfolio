@@ -44,6 +44,11 @@ h4 {
   letter-spacing: -0.015em;
   text-wrap: balance;
 }
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
 h1 {
   font-size: var(--text-display);
   letter-spacing: -0.03em;

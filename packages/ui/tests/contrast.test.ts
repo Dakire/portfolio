@@ -35,7 +35,17 @@ describe.each(Object.entries(themes))('thème %s', (_name, t) => {
   const surfaces = ['canvas', 'surface', 'raised'] as const;
 
   it.each(surfaces)('le texte lisible atteint 4.5:1 sur %s', (surface) => {
-    for (const text of ['ink', 'body', 'muted', 'link', 'accent', 'danger', 'warn', 'ok']) {
+    for (const text of [
+      'ink',
+      'body',
+      'muted',
+      'link',
+      'accent',
+      'accent-alt',
+      'danger',
+      'warn',
+      'ok',
+    ]) {
       expect(ratio(t[text]!, t[surface]!), `${text} sur ${surface}`).toBeGreaterThanOrEqual(4.5);
     }
   });
