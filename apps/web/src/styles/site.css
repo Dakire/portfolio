@@ -618,14 +618,14 @@ body:has(.consent) {
   color: var(--muted);
 }
 
-/* ---------- Curseur collaboratif (/js/cursor.js) ----------
-   La flèche remplace le curseur du système pendant qu'elle est affichée (classe has-custom-cursor posée par le script).
-   Pointe de la flèche = point de clic ; l'étiquette suit avec un retard. Seul transform change. */
+/* ---------- Curseur discret (/js/cursor.js) ----------
+   Le point remplace le curseur du système pendant qu'il est affiché (classe has-custom-cursor posée par le script).
+   Centre du point = point de clic. Seuls transform et opacity changent (aucun reflow). */
 .has-custom-cursor,
 .has-custom-cursor * {
   cursor: none !important;
 }
-.figma-cursor {
+.cursor {
   position: fixed;
   top: 0;
   left: 0;
@@ -637,26 +637,26 @@ body:has(.consent) {
   will-change: transform;
   transition: opacity var(--duration-fast) var(--ease);
 }
-.figma-cursor.is-visible {
+.cursor.is-visible {
   opacity: 1;
 }
-.figma-cursor > * {
+.cursor > * {
   position: absolute;
+  transition:
+    transform 180ms var(--ease),
+    opacity 180ms var(--ease),
+    background-color 180ms var(--ease);
 }
-.figma-cursor-arrow {
-  top: -1px;
-  left: -1px;
-  width: 16px;
-  max-width: none; /* le conteneur fait 0 px de large : sans cela, svg { max-width: 100% } l'écraserait */
-  height: 20px;
-  fill: var(--accent);
-  stroke: var(--canvas);
-  stroke-width: 1.5;
-  transform-origin: 1px 1px;
-  transition: transform var(--duration-fast) var(--ease);
+.cursor-dot {
+  top: -4px;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 1.5px var(--canvas); /* se détache sur un fond clair, sombre ou de la couleur d'accent */
 }
-.figma-cursor-bar {
-  display: none;
+.cursor-bar {
   top: -10px;
   left: -1px;
   width: 2px;
@@ -664,33 +664,27 @@ body:has(.consent) {
   border-radius: 1px;
   background: var(--accent);
   box-shadow: 0 0 0 1px var(--canvas);
+  opacity: 0;
 }
-.figma-cursor-label {
-  top: 20px;
-  left: 14px;
-  padding: 0.125rem 0.5rem;
-  border-radius: 0.25rem 999px 999px;
-  background: var(--accent-strong);
-  box-shadow: 0 0 0 1.5px var(--canvas); /* se détache même sur un bouton de la couleur d'accent */
-  color: var(--accent-ink);
-  font-family: var(--font-sans);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  line-height: 1.5;
-  white-space: nowrap;
-  will-change: transform;
+.cursor[data-state='link'] .cursor-dot {
+  transform: scale(3.5);
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  box-shadow: 0 0 0 0.4px var(--accent);
 }
-.figma-cursor[data-state='link'] .figma-cursor-arrow {
-  transform: scale(1.15);
+.cursor[data-state='text'] .cursor-dot {
+  opacity: 0;
 }
-.figma-cursor[data-state='text'] .figma-cursor-arrow {
-  display: none;
+.cursor[data-state='text'] .cursor-bar {
+  opacity: 1;
 }
-.figma-cursor[data-state='text'] .figma-cursor-bar {
-  display: block;
+.cursor[data-pressed] .cursor-dot {
+  transform: scale(0.75);
+}
+.cursor[data-state='link'][data-pressed] .cursor-dot {
+  transform: scale(2.8);
 }
 @media print {
-  .figma-cursor {
+  .cursor {
     display: none;
   }
 }

@@ -983,7 +983,7 @@ legend {
   .no-print,
   .tool-section,
   .consent,
-  .figma-cursor,
+  .cursor,
   section[aria-labelledby='what-title'] {
     display: none !important;
   }
