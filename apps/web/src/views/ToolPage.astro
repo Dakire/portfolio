@@ -20,6 +20,7 @@ import PropagationChecker from '../tools/propagation/Tool';
 import SubnetCalculator from '../tools/subnet/Tool';
 import UnitConverter from '../tools/units/Tool';
 import SeoTool from '../tools/seo/Tool';
+import SitemapTool from '../tools/sitemap/Tool';
 
 interface Props {
   lang: Lang;
@@ -103,6 +104,7 @@ const ld = {
       {toolId === 'password' && <PasswordGenerator client:load lang={lang} />}
       {toolId === 'units' && <UnitConverter client:load lang={lang} />}
       {toolId === 'seo' && <SeoTool client:load lang={lang} />}
+      {toolId === 'sitemap' && <SitemapTool client:load lang={lang} />}
     </div>
 
     <section aria-labelledby="what-title" class="stack">

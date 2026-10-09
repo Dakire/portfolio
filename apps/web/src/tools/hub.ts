@@ -14,7 +14,7 @@ export const HUB = {
     breadcrumb: { home: 'Accueil', tools: 'Outils' },
     privacyTitle: 'Confidentialité',
     privacy:
-      'Les fichiers que vous déposez et les textes que vous saisissez sont traités dans votre navigateur et ne quittent jamais votre ordinateur. Les outils DNS interrogent des résolveurs publics (Cloudflare, Google) pour lire les enregistrements du domaine demandé. Le rapport SEO passe par grichard.eu, qui interroge la page indiquée sans rien conserver.',
+      'Les fichiers que vous déposez et les textes que vous saisissez sont traités dans votre navigateur et ne quittent jamais votre ordinateur. Les outils DNS interrogent des résolveurs publics (Cloudflare, Google) pour lire les enregistrements du domaine demandé. Le rapport SEO et le vérificateur de sitemap passent par grichard.eu, qui interroge le site indiqué sans rien conserver.',
     schemaName: 'Outils pour techniciens IT',
   },
   en: {
@@ -31,7 +31,7 @@ export const HUB = {
     breadcrumb: { home: 'Home', tools: 'Tools' },
     privacyTitle: 'Privacy',
     privacy:
-      'Files you drop and text you type are processed in your browser and never leave your computer. The DNS tools query public resolvers (Cloudflare, Google) to read the records of the domain you ask about. The SEO report goes through grichard.eu, which fetches the given page without keeping anything.',
+      'Files you drop and text you type are processed in your browser and never leave your computer. The DNS tools query public resolvers (Cloudflare, Google) to read the records of the domain you ask about. The SEO report and the sitemap checker go through grichard.eu, which queries the given site without keeping anything.',
     schemaName: 'Tools for IT technicians',
   },
 };

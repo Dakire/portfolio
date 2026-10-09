@@ -40,6 +40,8 @@ const PAGES = [
   '/en/tools/unit-converter/',
   '/outils/seo/',
   '/en/tools/seo/',
+  '/outils/sitemap/',
+  '/en/tools/sitemap/',
   '/mentions-legales/',
   '/confidentialite/',
   '/en/privacy/',

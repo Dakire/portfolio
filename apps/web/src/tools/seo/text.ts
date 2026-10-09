@@ -1,5 +1,6 @@
 // Textes de l'outil « Rapport SEO » (FR/EN) : page, formulaire, états, erreurs. La rédaction de chaque contrôle est dans checks.ts.
-import type { CheckCategory, CheckSeverity, CheckStatus } from './checks';
+import type { CheckSeverity, CheckStatus } from '../server/types';
+import type { CheckCategory } from './checks';
 
 const fr = {
   ui: {

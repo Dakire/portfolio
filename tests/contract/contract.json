@@ -1,7 +1,5 @@
 {
-  "notFound": [
-    "/page-inexistante-contrat/"
-  ],
+  "notFound": ["/page-inexistante-contrat/"],
   "entries": [
     {
       "path": "/",
@@ -170,6 +168,16 @@
     },
     {
       "path": "/en/tools/seo/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/outils/sitemap/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/tools/sitemap/",
       "type": "text/html",
       "since": "web"
     },

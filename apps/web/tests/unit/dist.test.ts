@@ -126,7 +126,9 @@ describe('site construit', () => {
     for (const loc of locs) {
       const target = resolveTarget(loc, '/')!;
       expect(existsSync(target), loc).toBe(true);
-      expect(readFileSync(target, 'utf-8'), loc).not.toContain('noindex');
+      expect(readFileSync(target, 'utf-8'), loc).not.toMatch(
+        /<meta name="robots" content="[^"]*noindex/,
+      );
     }
   });
 

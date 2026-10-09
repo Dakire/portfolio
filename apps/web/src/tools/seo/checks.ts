@@ -2,41 +2,19 @@
 // Le serveur ne renvoie que des identifiants et des valeurs ; le titre, l'explication et la recommandation sont écrits ici,
 // à partir des valeurs mesurées. tests/unit/tools/seo.test.ts vérifie que chaque contrôle est rédigé dans les deux langues.
 import type { Lang } from '../../lib/i18n';
+import { list, num, rec, str } from '../server/types';
+import type { CheckStatus, Described, ServerCheck, ServerReport } from '../server/types';
 
-export type CheckStatus = 'pass' | 'warn' | 'fail' | 'info';
-export type CheckSeverity = 'critical' | 'important' | 'info';
+export type { CheckSeverity, CheckStatus, Described } from '../server/types';
 export type CheckCategory =
   'http' | 'meta' | 'content' | 'links' | 'social' | 'crawl' | 'security' | 'accessibility';
 
-export interface SeoCheck {
-  id: string;
-  category: CheckCategory;
-  severity: CheckSeverity;
-  status: CheckStatus;
-  data: Record<string, unknown>;
-}
-
-export interface SeoReport {
-  url: string;
+export type SeoCheck = ServerCheck;
+export interface SeoReport extends ServerReport {
   finalUrl: string;
   status: number;
-  score: number;
-  summary: { critical: number; important: number; info: number; passed: number };
-  checks: SeoCheck[];
 }
 
-export interface Described {
-  title: string;
-  detail: string;
-  fix: string;
-}
-
-// Lecture prudente des valeurs (le JSON vient du réseau)
-const str = (v: unknown): string => (typeof v === 'string' ? v : v == null ? '' : String(v));
-const num = (v: unknown): number => (typeof v === 'number' ? v : Number(v) || 0);
-const list = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
-const rec = (v: unknown): Record<string, unknown> =>
-  v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
 const quote = (lang: Lang, s: string) => (lang === 'fr' ? `« ${s} »` : `“${s}”`);
 
 type Writer = (d: Record<string, unknown>, status: CheckStatus, lang: Lang) => Described;
@@ -587,7 +565,7 @@ export const WRITERS: Record<string, Writer> = {
     ),
 };
 
-export function describeCheck(check: SeoCheck, lang: Lang): Described {
+export function describeCheck(check: ServerCheck, lang: Lang): Described {
   const writer = WRITERS[check.id];
   return writer ? writer(check.data ?? {}, check.status, lang) : D(check.id);
 }
