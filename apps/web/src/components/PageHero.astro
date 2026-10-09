@@ -1,18 +1,15 @@
 ---
-import Eyebrow from '@grichard/ui/components/Eyebrow.astro';
-
 interface Props {
-  /** Chemin décoratif façon terminal (ex. « ~/blog »). */
-  path: string;
+  /** Conservé pour les appelants ; plus affiché (le fil d'Ariane et le titre suffisent). */
+  path?: string;
   title: string;
   lead?: string;
 }
-const { path, title, lead } = Astro.props;
+const { title, lead } = Astro.props;
 ---
 
 <header class="page-hero grid-bg">
   <div class="container">
-    <Eyebrow path={path} />
     <h1>{title}</h1>
     {lead && <p class="lead">{lead}</p>}
     <slot />

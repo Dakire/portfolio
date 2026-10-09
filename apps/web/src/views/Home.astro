@@ -1,6 +1,5 @@
 ---
 import Button from '@grichard/ui/components/Button.astro';
-import Eyebrow from '@grichard/ui/components/Eyebrow.astro';
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import SkillCards from '../components/SkillCards.astro';
@@ -35,7 +34,9 @@ const more = lang === 'fr' ? 'Voir le détail' : 'See details';
   <header class="page-hero grid-bg">
     <div class="container hero-grid">
       <div class="stack">
-        <Eyebrow path="~/whoami" />
+        <p class="hero-badge">
+          {PROFILE.location} · {t.hero.role}
+        </p>
         <h1 class="hero-title">
           {t.hero.greeting} <span>{PROFILE.name}</span>
         </h1>
