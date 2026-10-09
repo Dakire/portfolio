@@ -1,7 +1,7 @@
-// Curseur personnalisé discret (inspiré de Figma) : un petit point remplace le curseur du système.
-// Amélioration progressive :
-// - le point est calé exactement sur le pointeur (aucun retard : un clic tombe toujours où on le voit) ;
-// - états : défaut (point), cliquable (disque qui grandit), texte (barre fine), pressé (léger retrait) ;
+// Curseur personnalisé (inspiré de Figma) : une flèche remplace le curseur du système, entourée d'un halo qui la suit
+// avec un léger retard. Amélioration progressive :
+// - la flèche est calée exactement sur le pointeur (aucun retard : un clic tombe toujours où on le voit) ;
+// - états : défaut (flèche, halo discret), cliquable (halo qui s'élargit), texte (barre en I), pressé (retrait) ;
 //   un élément peut forcer son état avec data-cursor="link|text|<nom>" ;
 // - le curseur du système n'est masqué (classe has-custom-cursor) que pendant que le point est affiché : sans
 //   JavaScript, sur écran tactile, en mouvement réduit, en contraste élevé (forced-colors) ou une fois désactivé,
@@ -9,7 +9,7 @@
 // - élément aria-hidden et pointer-events: none : aucune incidence sur le clavier ni les lecteurs d'écran ;
 // - désactivable (interrupteur du pied de page, commande « cursor off » du terminal), choix mémorisé ;
 // - états détectés par délégation (un seul écouteur pointerover), position écrite une fois par image
-//   (requestAnimationFrame) ; seuls transform et opacity changent, sans reflow.
+//   (requestAnimationFrame, arrêtée dès que le halo a rejoint la flèche) ; seuls transform et opacity changent.
 (() => {
   const KEY = 'cursor';
   const fine = matchMedia('(hover: hover) and (pointer: fine)');
@@ -39,23 +39,67 @@
   let el;
   let frame = 0;
   let visible = false;
+  let halo;
+  const LERP = 0.2;
+  const MAX_LAG = 24; // le halo ne s'éloigne jamais de la flèche de plus de 24 px, même souris très rapide
   const target = { x: 0, y: 0 };
+  const pos = { x: 0, y: 0 };
 
   const build = () => {
     el = document.createElement('div');
     el.className = 'cursor';
     el.setAttribute('aria-hidden', 'true');
-    const dot = document.createElement('span');
-    dot.className = 'cursor-dot';
-    const bar = document.createElement('span');
-    bar.className = 'cursor-bar';
-    el.append(dot, bar);
+    const svgNs = 'http://www.w3.org/2000/svg';
+    const icon = (cls, w, h, box, d) => {
+      const svg = document.createElementNS(svgNs, 'svg');
+      svg.setAttribute('viewBox', box);
+      svg.setAttribute('width', String(w));
+      svg.setAttribute('height', String(h));
+      svg.setAttribute('class', cls);
+      const path = document.createElementNS(svgNs, 'path');
+      path.setAttribute('d', d);
+      svg.append(path);
+      return svg;
+    };
+    halo = document.createElement('span');
+    halo.className = 'cursor-halo';
+    const ring = document.createElement('span');
+    ring.className = 'cursor-ring';
+    halo.append(ring);
+    el.append(
+      halo,
+      icon('cursor-arrow', 16, 20, '0 0 16 20', 'M1 1 L1 16 L5 12 L8 19 L11 17.5 L8 11 L14 11 Z'),
+      icon(
+        'cursor-beam',
+        10,
+        20,
+        '0 0 10 20',
+        'M1 1 H4 Q5 1 5 3 Q5 1 6 1 H9 V3 H6.5 V17 H9 V19 H6 Q5 19 5 17 Q5 19 4 19 H1 V17 H3.5 V3 H1 Z',
+      ),
+    );
     document.body.append(el);
   };
 
+  // La flèche est toujours exactement sur le pointeur (target) ; le halo (pos) la rattrape.
   const render = () => {
-    frame = 0;
+    pos.x += (target.x - pos.x) * LERP;
+    pos.y += (target.y - pos.y) * LERP;
+    const settled = Math.abs(target.x - pos.x) < 0.1 && Math.abs(target.y - pos.y) < 0.1;
+    if (settled) {
+      pos.x = target.x;
+      pos.y = target.y;
+    }
+    const lag = Math.hypot(pos.x - target.x, pos.y - target.y);
+    if (lag > MAX_LAG) {
+      pos.x = target.x + ((pos.x - target.x) * MAX_LAG) / lag;
+      pos.y = target.y + ((pos.y - target.y) * MAX_LAG) / lag;
+    }
     el.style.transform = `translate3d(${target.x}px, ${target.y}px, 0)`;
+    halo.style.transform = `translate3d(${pos.x - target.x}px, ${pos.y - target.y}px, 0)`;
+    frame = settled ? 0 : requestAnimationFrame(render);
+  };
+  const schedule = () => {
+    if (!frame) frame = requestAnimationFrame(render);
   };
 
   const show = (on) => {
@@ -69,8 +113,13 @@
     if (event.pointerType && event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
     target.x = event.clientX;
     target.y = event.clientY;
-    if (!visible) show(true);
-    if (!frame) frame = requestAnimationFrame(render);
+    if (!visible) {
+      // première apparition : directement à la position de la souris, sans glisser depuis le coin
+      pos.x = target.x;
+      pos.y = target.y;
+      show(true);
+    }
+    schedule();
   };
   const onOver = (event) => {
     const node = event.target instanceof Element ? event.target : null;
@@ -88,7 +137,7 @@
   const onUp = () => {
     delete el.dataset.pressed;
   };
-  // Sortie de la fenêtre, ou entrée dans une iframe (qui affiche son propre curseur) : le point disparaît.
+  // Sortie de la fenêtre, ou entrée dans une iframe (qui affiche son propre curseur) : la flèche disparaît.
   const onLeave = (event) => {
     if (!event.relatedTarget || event.relatedTarget.tagName === 'IFRAME') show(false);
   };

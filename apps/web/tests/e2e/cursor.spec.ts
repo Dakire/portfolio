@@ -31,14 +31,14 @@ test.describe('souris, animations autorisées', () => {
     await expect(cursor).toHaveAttribute('aria-hidden', 'true');
     await expect(cursor).toHaveCSS('pointer-events', 'none');
     await expect(cursor).not.toContainText('Guillaume');
-    // remplace le curseur du système, centre du point exactement sous le pointeur (aucun retard)
+    // remplace le curseur du système, pointe de la flèche exactement sous le pointeur (aucun retard)
     await expect(page.locator('html')).toHaveClass(/has-custom-cursor/);
     await expect(page.locator('body')).toHaveCSS('cursor', 'none');
     await page.mouse.move(420, 260);
     await expect
       .poll(async () => {
-        const box = await page.locator('.cursor-dot').boundingBox();
-        return box ? [Math.round(box.x + box.width / 2), Math.round(box.y + box.height / 2)] : null;
+        const box = await page.locator('.cursor-arrow').boundingBox();
+        return box ? [Math.round(box.x + 1), Math.round(box.y + 1)] : null;
       })
       .toEqual([420, 260]);
 
