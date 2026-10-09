@@ -347,16 +347,100 @@ body:has(.consent) {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-2);
   border-bottom: 1px solid var(--line);
   background: var(--raised);
 }
-.terminal-dot {
+/* Boutons de la fenêtre : visibles seulement avec JavaScript (le script les révèle) ; cible tactile de 44 px,
+   pastille de 14 px, symbole au survol et au focus comme dans une vraie fenêtre. */
+.terminal-controls {
+  display: flex;
   flex: none;
-  width: 0.75rem;
-  height: 0.75rem;
+  align-items: center;
+}
+.terminal-ctl {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--target);
+  height: var(--target);
+  margin-block: calc(var(--space-3) * -1);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.terminal-ctl[hidden] {
+  display: none;
+}
+.terminal-ctl > span {
+  display: grid;
+  place-items: center;
+  width: 0.875rem;
+  height: 0.875rem;
   border-radius: 50%;
-  background: var(--line-strong);
+  color: var(--surface);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  transition: transform var(--duration-fast) var(--ease);
+}
+.terminal-ctl-close > span {
+  background: var(--danger);
+}
+.terminal-ctl-min > span {
+  background: var(--warn);
+}
+.terminal-ctl-max > span {
+  background: var(--ok);
+}
+.terminal-ctl:hover > span::before,
+.terminal-ctl:focus-visible > span::before {
+  display: block;
+}
+.terminal-ctl > span::before {
+  display: none;
+}
+.terminal-ctl-close > span::before {
+  content: '×';
+}
+.terminal-ctl-min > span::before {
+  content: '−';
+}
+.terminal-ctl-max > span::before {
+  content: '+';
+}
+.terminal-ctl:active > span {
+  transform: scale(0.88);
+}
+.terminal-ctl[aria-pressed='true'] > span {
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 3px currentColor;
+}
+.terminal[data-minimized] .terminal-screen,
+.terminal[data-minimized] .terminal-footer {
+  display: none;
+}
+.terminal[data-minimized] .terminal-bar {
+  border-bottom: 0;
+}
+/* Agrandi : la fenêtre couvre la page (fond estompé), l'écran occupe la hauteur disponible */
+.terminal[data-maximized] .terminal-window {
+  position: fixed;
+  inset: calc(var(--space-8) + var(--space-5)) var(--space-5) var(--space-5);
+  z-index: var(--z-overlay);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 0 100vmax color-mix(in srgb, var(--canvas) 82%, transparent);
+}
+.terminal[data-maximized] .terminal-screen {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+}
+html[data-terminal-max] {
+  overflow: hidden;
 }
 .terminal-name {
   overflow: hidden;
@@ -618,9 +702,9 @@ body:has(.consent) {
   color: var(--muted);
 }
 
-/* ---------- Curseur discret (/js/cursor.js) ----------
-   Le point remplace le curseur du système pendant qu'il est affiché (classe has-custom-cursor posée par le script).
-   Centre du point = point de clic. Seuls transform et opacity changent (aucun reflow). */
+/* ---------- Curseur (/js/cursor.js) ----------
+   La flèche remplace le curseur du système pendant qu'elle est affichée (classe has-custom-cursor posée par le script).
+   Pointe de la flèche = point de clic ; le halo la suit avec un léger retard. Seuls transform et opacity changent. */
 .has-custom-cursor,
 .has-custom-cursor * {
   cursor: none !important;
@@ -642,46 +726,78 @@ body:has(.consent) {
 }
 .cursor > * {
   position: absolute;
+}
+.cursor-halo {
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+.cursor-ring {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  width: 28px;
+  height: 28px;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  transform: scale(0.6);
   transition:
     transform 180ms var(--ease),
-    opacity 180ms var(--ease),
-    background-color 180ms var(--ease);
+    background-color 180ms var(--ease),
+    border-color 180ms var(--ease),
+    opacity 180ms var(--ease);
 }
-.cursor-dot {
-  top: -4px;
-  left: -4px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 1.5px var(--canvas); /* se détache sur un fond clair, sombre ou de la couleur d'accent */
+.cursor-arrow,
+.cursor-beam {
+  max-width: none; /* le conteneur fait 0 px de large : sans cela, svg { max-width: 100% } l'écraserait */
+  fill: var(--accent);
+  stroke: var(--canvas);
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 1px 1.5px color-mix(in srgb, var(--ink) 35%, transparent));
+  transform-origin: 1px 1px;
+  transition:
+    transform 180ms var(--ease),
+    opacity 180ms var(--ease);
 }
-.cursor-bar {
-  top: -10px;
+.cursor-arrow {
+  top: -1px;
   left: -1px;
-  width: 2px;
-  height: 1.25rem;
-  border-radius: 1px;
-  background: var(--accent);
-  box-shadow: 0 0 0 1px var(--canvas);
+  width: 16px;
+  height: 20px;
+}
+.cursor-beam {
+  top: -10px;
+  left: -5px;
+  width: 10px;
+  height: 20px;
+  opacity: 0;
+  transform-origin: 5px 10px;
+}
+.cursor[data-state='link'] .cursor-arrow {
+  transform: scale(1.12) rotate(-6deg);
+}
+.cursor[data-state='link'] .cursor-ring {
+  transform: scale(1.35);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.cursor[data-state='text'] .cursor-arrow,
+.cursor[data-state='text'] .cursor-ring {
   opacity: 0;
 }
-.cursor[data-state='link'] .cursor-dot {
-  transform: scale(3.5);
-  background: color-mix(in srgb, var(--accent) 28%, transparent);
-  box-shadow: 0 0 0 0.4px var(--accent);
-}
-.cursor[data-state='text'] .cursor-dot {
-  opacity: 0;
-}
-.cursor[data-state='text'] .cursor-bar {
+.cursor[data-state='text'] .cursor-beam {
   opacity: 1;
 }
-.cursor[data-pressed] .cursor-dot {
-  transform: scale(0.75);
+.cursor[data-pressed] .cursor-arrow {
+  transform: scale(0.85);
 }
-.cursor[data-state='link'][data-pressed] .cursor-dot {
-  transform: scale(2.8);
+.cursor[data-pressed] .cursor-ring {
+  transform: scale(0.45);
+}
+.cursor[data-state='link'][data-pressed] .cursor-ring {
+  transform: scale(1);
 }
 @media print {
   .cursor {
