@@ -49,7 +49,7 @@ mkdir -p "$work/www" "$work/app/api"
   # app/api n’existe pas avant le premier déploiement : ce n'est pas une erreur
   echo "set cmd:fail-exit no"
   echo "mirror ${app_prefix}app/api \"$work/app/api\""
-  echo "bye"
+  echo "bye 0"
 } >"$script"
 
 lftp -f "$script"
