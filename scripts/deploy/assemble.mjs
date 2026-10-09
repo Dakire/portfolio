@@ -14,6 +14,9 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
+/** Points d'entrée PHP déposés à la racine web (le reste du code vit hors de la racine, dans app/api/). */
+const ENTRY_POINTS = ['contact.php', 'tools.php'];
+
 /** Fichiers et dossiers qui n'ont rien à faire sur un serveur public. */
 const FORBIDDEN = [
   /(^|\/)\.env(\.|$)/,
@@ -85,8 +88,8 @@ export async function verifyApi(api) {
     );
   if (await exists(join(api, 'vendor', 'phpunit')))
     problems.push('vendor/phpunit présent : l’API doit être installée avec --no-dev');
-  if (!(await exists(join(api, 'public', 'contact.php'))))
-    problems.push('public/contact.php manquant');
+  for (const entry of ENTRY_POINTS)
+    if (!(await exists(join(api, 'public', entry)))) problems.push(`public/${entry} manquant`);
   return problems;
 }
 
@@ -139,7 +142,7 @@ export async function assemble({ target, dist, api, out, portal, buildId = 'loca
 
   await mkdir(web, { recursive: true });
   await cp(dist, web, { recursive: true });
-  await cp(join(api, 'public', 'contact.php'), join(web, 'contact.php'));
+  for (const entry of ENTRY_POINTS) await cp(join(api, 'public', entry), join(web, entry));
 
   await mkdir(code, { recursive: true });
   await cp(join(api, 'src'), join(code, 'src'), { recursive: true });

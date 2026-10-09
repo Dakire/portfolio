@@ -103,7 +103,7 @@ chmod 600 "$script"
   echo "mirror -R --delete ${sim[*]} \"$code_local\" \"$code_remote\""
 
   # 2. Ressources (tout sauf les pages et le .htaccess)
-  echo "mirror -R ${sim[*]} --exclude-glob .htaccess --exclude-glob '*.html' --exclude-glob '*.xml' --exclude-glob '*.txt' --exclude-glob '*.json' --exclude-glob contact.php ${keep[*]} \"$web_local\" \"$web_remote\""
+  echo "mirror -R ${sim[*]} --exclude-glob .htaccess --exclude-glob '*.html' --exclude-glob '*.xml' --exclude-glob '*.txt' --exclude-glob '*.json' --exclude-glob '*.php' ${keep[*]} \"$web_local\" \"$web_remote\""
 
   # 3. Pages, flux, plans de site et fichiers de données (le dossier complet : ce qui est déjà à jour n'est pas renvoyé ;
   #    exclusions seulement, sans règles d'inclusion, pour que le résultat ne dépende pas de leur ordre)

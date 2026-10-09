@@ -29,6 +29,7 @@ async function fakeBuild(root, { subfolder = false } = {}) {
 
 async function fakeApi(root) {
   await write(root, 'public/contact.php', '<?php');
+  await write(root, 'public/tools.php', '<?php');
   await write(root, 'src/Http/Request.php', '<?php');
   await write(root, 'vendor/autoload.php', '<?php');
   await write(root, 'composer.json', '{}');
@@ -49,6 +50,7 @@ describe('assemblage de la livraison', () => {
     assert.equal(await readFile(join(out, 'www', 'index.html'), 'utf-8'), INDEX_PROD);
     await readFile(join(out, 'www', '.htaccess'));
     await readFile(join(out, 'www', 'contact.php'));
+    await readFile(join(out, 'www', 'tools.php'));
     await readFile(join(out, 'app', 'api', 'vendor', 'autoload.php'));
     assert.match(await readFile(join(out, '.ovhconfig'), 'utf-8'), /app\.engine\.version=8\.5/);
     await assert.rejects(readFile(join(out, 'private', 'config.php')));
