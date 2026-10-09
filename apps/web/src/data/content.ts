@@ -179,7 +179,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
         "Administration réseau et systèmes, sécurité IT et formation à l'IA, à Microsoft 365 et au RGPD : je déploie, je sécurise et j'accompagne les équipes.",
       cvBtn: 'Télécharger mon CV',
       contactBtn: 'Me contacter',
-      projectsBtn: 'Voir les projets',
+      projectsBtn: 'Voir mes projets',
       cvLink: '/CV_Guillaume_Richard_FR.pdf',
       cvLinks: [
         { href: '/CV_Guillaume_Richard_FR.pdf', label: 'CV en français (PDF)', lang: 'fr' },
@@ -258,8 +258,33 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
         desc: 'Préparation et masterisation de postes informatiques industriels. Diagnostic de pannes matérielles et télé-assistance.',
       },
     ],
-    projectsTitle: 'Projets Techniques & GitHub',
+    projectsTitle: 'Projets & réalisations',
     projects: [
+      {
+        title: 'Homelab Proxmox, OPNsense et WireGuard',
+        desc: 'Laboratoire personnel sous Proxmox pour tester configurations et services avant de les déployer : pare-feu OPNsense, VPN WireGuard, segmentation du réseau et machines virtuelles de test.',
+        tags: ['Proxmox', 'OPNsense', 'WireGuard', 'Virtualisation'],
+      },
+      {
+        title: 'Déploiement Windows Server (MDT, WDS)',
+        desc: 'Configuration de serveurs Windows pour déployer des postes en série : images maîtres avec MDT, démarrage réseau avec WDS, annuaire Active Directory, DHCP et DNS.',
+        tags: ['Windows Server', 'MDT', 'WDS', 'Active Directory'],
+      },
+      {
+        title: 'Migrations de comptes de messagerie',
+        desc: 'Migration de boîtes Gmail, Outlook et IMAP (OVH, Gandi, IONOS, Orange…) vers Microsoft 365 ou Google Workspace, avec reprise des zones DNS et contrôle de la délivrabilité.',
+        tags: ['Microsoft 365', 'Google Workspace', 'IMAP', 'DNS'],
+      },
+      {
+        title: 'Support utilisateur N1 à N3',
+        desc: 'Assistance de bout en bout auprès des utilisateurs : diagnostic, résolution, escalade vers les éditeurs (N4) et accompagnement technique.',
+        tags: ['Support', 'Diagnostic', 'Microsoft 365'],
+      },
+      {
+        title: 'PC sur mesure, personnels et professionnels',
+        desc: "Choix des composants selon l'usage et le budget, montage, configuration et mise en service de PC pour les particuliers et les professionnels.",
+        tags: ['Matériel', 'Montage', 'Configuration'],
+      },
       {
         title: 'Outil de Conversion Email (C#)',
         desc: "Outil métier développé en C# permettant l'extraction et la conversion d'archives mails complètes (MSG/EML) vers PDF avec gestion automatique des pièces jointes.",
@@ -409,7 +434,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
         'Network and systems administration, IT security, and training in AI, Microsoft 365 and GDPR: I deploy, secure and support teams.',
       cvBtn: 'Download Resume',
       contactBtn: 'Contact Me',
-      projectsBtn: 'See projects',
+      projectsBtn: 'See my projects',
       cvLink: '/Resume_Guillaume_Richard_EN.pdf',
       cvLinks: [
         { href: '/Resume_Guillaume_Richard_EN.pdf', label: 'Resume in English (PDF)', lang: 'en' },
@@ -488,8 +513,33 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
         desc: 'Preparation and system imaging of industrial computers. On-site hardware diagnostics and remote technical assistance.',
       },
     ],
-    projectsTitle: 'Technical Projects & GitHub',
+    projectsTitle: 'Projects & work',
     projects: [
+      {
+        title: 'Proxmox, OPNsense and WireGuard homelab',
+        desc: 'Personal lab on Proxmox to test configurations and services before deploying them: OPNsense firewall, WireGuard VPN, network segmentation and test virtual machines.',
+        tags: ['Proxmox', 'OPNsense', 'WireGuard', 'Virtualization'],
+      },
+      {
+        title: 'Windows Server deployment (MDT, WDS)',
+        desc: 'Windows server setup to deploy workstations at scale: master images with MDT, network boot with WDS, Active Directory, DHCP and DNS.',
+        tags: ['Windows Server', 'MDT', 'WDS', 'Active Directory'],
+      },
+      {
+        title: 'Mailbox account migrations',
+        desc: 'Migration of Gmail, Outlook and IMAP mailboxes (OVH, Gandi, IONOS, Orange…) to Microsoft 365 or Google Workspace, including DNS zones and deliverability checks.',
+        tags: ['Microsoft 365', 'Google Workspace', 'IMAP', 'DNS'],
+      },
+      {
+        title: 'User support L1 to L3',
+        desc: 'End-to-end user assistance: diagnosis, resolution, escalation to software publishers (L4) and technical guidance.',
+        tags: ['Support', 'Troubleshooting', 'Microsoft 365'],
+      },
+      {
+        title: 'Custom-built PCs, personal and professional',
+        desc: 'Choosing components for the use case and budget, building, configuring and commissioning PCs for individuals and businesses.',
+        tags: ['Hardware', 'Build', 'Configuration'],
+      },
       {
         title: 'MSG/EML to PDF Converter',
         desc: 'Business tool developed in C# allowing the extraction and conversion of complete email archives (MSG/EML) into PDFs with automated attachment handling.',

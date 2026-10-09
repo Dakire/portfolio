@@ -4,6 +4,7 @@ import Eyebrow from '@grichard/ui/components/Eyebrow.astro';
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import SkillCards from '../components/SkillCards.astro';
+import ExperienceList from '../components/ExperienceList.astro';
 import ProjectCards from '../components/ProjectCards.astro';
 import Terminal from '../components/Terminal.astro';
 import ToolCards from '../components/ToolCards.astro';
@@ -41,16 +42,10 @@ const more = lang === 'fr' ? 'Voir le détail' : 'See details';
         <p class="lead">{t.hero.role}</p>
         <p class="prose">{t.hero.pitch}</p>
         <p class="row">
-          <Button variant="primary" href={routes.contact}>
-            {t.hero.contactBtn}
-          </Button>
-          <Button href={withBase(t.hero.cvLink)}>
-            {t.hero.cvBtn}
-            <span class="visually-hidden"> (PDF)</span>
-          </Button>
-          <Button variant="ghost" href="#projects">
+          <Button variant="primary" href="#projects">
             {t.hero.projectsBtn}
           </Button>
+          <Button href={routes.contact}>{t.hero.contactBtn}</Button>
         </p>
       </div>
       <Terminal lang={lang} />
@@ -58,6 +53,11 @@ const more = lang === 'fr' ? 'Voir le détail' : 'See details';
   </header>
 
   <div class="container stack-lg">
+    <section id="projects" aria-labelledby="projects-title" class="stack">
+      <h2 id="projects-title">{t.projectsTitle}</h2>
+      <ProjectCards items={t.projects} lang={lang} />
+    </section>
+
     <section id="skills" aria-labelledby="skills-title" class="stack">
       <h2 id="skills-title">{t.skillsTitle}</h2>
       <SkillCards skills={t.skills} />
@@ -66,9 +66,18 @@ const more = lang === 'fr' ? 'Voir le détail' : 'See details';
       </p>
     </section>
 
-    <section id="projects" aria-labelledby="projects-title" class="stack">
-      <h2 id="projects-title">{t.projectsTitle}</h2>
-      <ProjectCards items={t.projects} lang={lang} />
+    <section id="experience" aria-labelledby="experience-title" class="stack">
+      <h2 id="experience-title">{t.experienceTitle}</h2>
+      <ExperienceList items={t.experiences} />
+      <ul class="row" role="list">
+        {t.hero.cvLinks.map((cv) => (
+          <li>
+            <Button href={withBase(cv.href)} hreflang={cv.lang} lang={cv.lang}>
+              {cv.label}
+            </Button>
+          </li>
+        ))}
+      </ul>
     </section>
 
     <section id="tools" aria-labelledby="tools-title" class="stack">
@@ -99,15 +108,6 @@ const more = lang === 'fr' ? 'Voir le détail' : 'See details';
       <p class="prose">
         <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
       </p>
-      <ul class="row" role="list">
-        {t.hero.cvLinks.map((cv) => (
-          <li>
-            <a href={withBase(cv.href)} hreflang={cv.lang} lang={cv.lang}>
-              {cv.label}
-            </a>
-          </li>
-        ))}
-      </ul>
       <p>
         <Button variant="primary" href={routes.contact}>
           {t.hero.contactBtn}
