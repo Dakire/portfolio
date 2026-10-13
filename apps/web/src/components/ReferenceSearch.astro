@@ -1,0 +1,68 @@
+---
+// Composant de recherche réutilisable : le même balisage sur toutes les pages « Référence », piloté par public/js/reference.js.
+import { REF_UI, catalogUrl, fileUrl, hubPath, type RefMeta } from '../reference/refs';
+import type { Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+  /** Référence unique ; absent : recherche globale dans toutes les références. */
+  ref?: RefMeta;
+  /** Pastilles de filtre (catégories, ou références pour la recherche globale). */
+  cats: { id: string; label: string }[];
+}
+const { lang, ref, cats } = Astro.props;
+const ui = REF_UI[lang];
+const label = ref ? ui.searchLabel : ui.searchLabelAll;
+---
+
+<section
+  class="stack"
+  data-reference
+  data-index={ref ? fileUrl(ref) : 'all'}
+  data-catalog={ref ? undefined : catalogUrl()}
+  data-hub={hubPath(lang)}
+  data-docs-url={ref?.docs?.url}
+  data-docs-label={ref?.docs?.label}
+  aria-labelledby="ref-search-title"
+>
+  <h2 id="ref-search-title" class="visually-hidden">
+    {ui.results}
+  </h2>
+  <form role="search" class="ref-search" aria-label={label} novalidate>
+    <label for="ref-q">{label}</label>
+    <div class="ref-search-box">
+      <input
+        id="ref-q"
+        class="ref-input"
+        type="search"
+        data-ref-input
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder={ui.placeholder}
+        aria-describedby="ref-hint"
+        aria-controls="ref-results"
+      />
+    </div>
+    <p id="ref-hint" class="ref-hint">
+      {ui.hint}
+    </p>
+  </form>
+  <fieldset class="ref-cats" data-ref-cats>
+    <legend>{ui.categories}</legend>
+    <button type="button" class="ref-pill" data-cat="" aria-pressed="true">
+      {ui.all}
+    </button>
+    {cats.map((c) => (
+      <button type="button" class="ref-pill" data-cat={c.id} aria-pressed="false">
+        {c.label}
+      </button>
+    ))}
+  </fieldset>
+  <p class="ref-status" data-ref-status role="status" aria-live="polite" aria-atomic="true"></p>
+  <p class="visually-hidden" data-ref-toast role="status" aria-live="polite"></p>
+  <ol id="ref-results" class="ref-results" data-ref-results></ol>
+  <noscript>
+    <p>{ui.noscript}</p>
+  </noscript>
+</section>

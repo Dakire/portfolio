@@ -1,0 +1,37 @@
+# GAM (Google Workspace) : entrées GÉNÉRÉES par `pnpm reference:gam` à partir du wiki GAM-team/GAM (ne pas éditer entries ici).
+# Ce fichier ne porte que les métadonnées de la page.
+meta:
+  id: gam
+  order: 1
+  generated: true
+  title: 'GAM : aide-mémoire des commandes Google Workspace (Users, Groups, Drive, Gmail) | Guillaume Richard'
+  h1: GAM (Google Workspace)
+  description: "Index de recherche des commandes GAM7 pour administrer Google Workspace : utilisateurs, groupes, Drive, calendriers, Gmail, appareils Chrome, unités d'organisation, rapports. Extraits courts avec lien vers le wiki d'origine."
+  intro: "Cherchez une commande GAM7 dans le wiki officiel : chaque résultat donne la syntaxe (extrait), un exemple à copier et renvoie vers la page d'origine du wiki, seule source qui fait foi."
+  card: 'Commandes GAM7 pour administrer Google Workspace : utilisateurs, groupes, Drive, Gmail, calendriers, appareils.'
+  notice: "Index non officiel, généré depuis le wiki GAM. Les syntaxes sont abrégées : ouvrez toujours la page du wiki pour la définition complète et à jour. Testez d'abord sur un utilisateur ou une unité d'organisation de test."
+  docs:
+    label: Wiki GAM
+    url: https://github.com/GAM-team/GAM/wiki
+  source:
+    name: GAM-team/GAM (wiki)
+    url: https://github.com/GAM-team/GAM/wiki
+    license: Apache License 2.0
+    licenseUrl: https://github.com/GAM-team/GAM/blob/main/LICENSE
+    note: "Seuls des extraits courts sont repris, avec un lien vers la page d'origine ; le wiki n'est pas reproduit. Projet indépendant de Google."
+  fields: []
+  cats:
+    - { id: users, label: Utilisateurs }
+    - { id: groups, label: Groupes }
+    - { id: drive, label: Drive et fichiers }
+    - { id: calendar, label: Calendrier }
+    - { id: gmail, label: Gmail }
+    - { id: chrome, label: Chrome et appareils }
+    - { id: ou, label: Unités d'organisation }
+    - { id: reports, label: Rapports et audit }
+    - { id: licenses, label: Licences }
+    - { id: admin, label: Domaine et administration }
+    - { id: services, label: Autres services }
+    - { id: syntax, label: Syntaxe et traitement par lots }
+    - { id: install, label: Installation et configuration }
+entries: []

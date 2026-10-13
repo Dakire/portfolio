@@ -1,0 +1,68 @@
+---
+// Accueil « Référence » : cartes des références et recherche globale (tous les index, chargés à la demande).
+import Card from '@grichard/ui/components/Card.astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import ReferenceSearch from '../components/ReferenceSearch.astro';
+import '../styles/reference.css';
+import { ROUTES, SITE, type Lang } from '../lib/i18n';
+import { breadcrumbLd } from '../lib/seo';
+import { REF_UI, hubPath, refPath, refsFor } from '../reference/refs';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ui = REF_UI[lang];
+const refs = refsFor(lang);
+const ld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    breadcrumbLd([
+      { name: ui.home, path: ROUTES[lang].home },
+      { name: ui.crumb, path: hubPath(lang) },
+    ]),
+    {
+      '@type': 'ItemList',
+      name: ui.hubH1,
+      itemListElement: refs.map((r, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `${SITE}${refPath(r)}`,
+        name: r.h1,
+      })),
+    },
+  ],
+};
+---
+
+<Base
+  lang={lang}
+  title={ui.hubTitle}
+  description={ui.hubDescription}
+  path={hubPath(lang)}
+  ld={ld}
+  scripts={['/js/vendor/minisearch.js', '/js/reference.js']}
+>
+  <PageHero title={ui.hubH1} lead={ui.hubIntro} />
+  <div class="container section stack-lg">
+    <ReferenceSearch lang={lang} cats={refs.map((r) => ({ id: r.id, label: r.h1 }))} />
+    <section class="stack" aria-labelledby="ref-cards-title">
+      <h2 id="ref-cards-title">{ui.cards}</h2>
+      <ul class="cards" role="list">
+        {refs.map((r) => (
+          <li>
+            <Card href={refPath(r)}>
+              <h3>{r.h1}</h3>
+              <p>{r.card}</p>
+              <p class="meta ref-card-count">
+                {r.count} {ui.entries} · {ui.open} →
+              </p>
+            </Card>
+          </li>
+        ))}
+      </ul>
+    </section>
+    <p class="ref-source">{ui.privacy}</p>
+  </div>
+</Base>

@@ -1,0 +1,317 @@
+/* Section « Référence » : barre de recherche et résultats (un seul composant pour toutes les pages). Couleurs : tokens uniquement. */
+
+.ref-search {
+  display: grid;
+  gap: var(--space-2);
+}
+.ref-search label {
+  font-weight: 600;
+  color: var(--ink);
+}
+.ref-search-box {
+  position: relative;
+}
+.ref-input {
+  width: 100%;
+  min-height: var(--target);
+  padding: 0 var(--space-5) 0 var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+}
+.ref-input::placeholder {
+  color: var(--muted);
+}
+.ref-input:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.ref-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+.ref-hint kbd {
+  font-family: var(--font-mono);
+  padding: 0 var(--space-1);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--raised);
+  color: var(--ink);
+}
+
+.ref-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.ref-cats legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+.ref-pill {
+  min-height: var(--target);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--body);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.ref-pill:hover {
+  background: var(--raised);
+}
+.ref-pill[aria-pressed='true'] {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.ref-pill:focus-visible,
+.ref-suggest:focus-visible,
+.ref-item article:focus-visible,
+.ref-copy:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.ref-status {
+  margin: 0;
+  min-height: 1.5em;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.ref-results {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ref-item article {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: linear-gradient(160deg, var(--surface), var(--raised));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.ref-item-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.ref-item-head h3 {
+  margin: 0 var(--space-2) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  overflow-wrap: anywhere;
+}
+.ref-name {
+  font-family: var(--font-mono);
+  color: var(--ink);
+  background: none;
+  padding: 0;
+}
+.ref-item p {
+  margin: 0;
+}
+.ref-syn {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--body);
+  overflow-wrap: anywhere;
+}
+.ref-desc {
+  color: var(--body);
+  max-width: var(--measure);
+}
+.ref-badge {
+  padding: 0.125rem var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-size: var(--text-xs);
+  color: var(--body);
+}
+.ref-badge-ref {
+  border-color: var(--accent-alt);
+  color: var(--ink);
+}
+.ref-risk-read {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+.ref-risk-modify {
+  color: var(--warn);
+  border-color: var(--warn);
+}
+.ref-risk-admin {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.ref-example {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+.ref-example pre {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.ref-example code {
+  background: none;
+  padding: 0;
+  color: var(--ink);
+}
+.ref-copy {
+  flex: none;
+  min-width: 5.5rem;
+}
+.ref-more summary {
+  min-height: var(--target);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--link);
+}
+.ref-more .ref-example {
+  margin-bottom: var(--space-3);
+}
+
+.ref-meta {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-sm);
+}
+.ref-meta div {
+  display: grid;
+  gap: 0.125rem;
+}
+.ref-meta dt {
+  font-weight: 600;
+  color: var(--ink);
+}
+.ref-meta dd {
+  margin: 0;
+  color: var(--body);
+}
+@media (min-width: 40rem) {
+  .ref-meta div {
+    grid-template-columns: 11rem 1fr;
+    gap: var(--space-3);
+  }
+}
+.ref-tags {
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+.ref-links {
+  font-size: var(--text-sm);
+}
+.ref-doc-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  color: var(--link);
+}
+
+.ref-item mark {
+  background: var(--selection);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.ref-empty {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+}
+.ref-empty p {
+  margin: 0;
+}
+.ref-empty-title {
+  font-weight: 600;
+  color: var(--ink);
+}
+.ref-suggest {
+  min-height: var(--target);
+  padding: 0 var(--space-2);
+  border: 0;
+  background: none;
+  color: var(--link);
+  font: inherit;
+  font-family: var(--font-mono);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.ref-more-row {
+  display: flex;
+  justify-content: center;
+}
+
+/* Blocs statiques de la page (connexion, avertissements) */
+.ref-top {
+  display: grid;
+  gap: var(--space-4);
+}
+.ref-top > * {
+  margin: 0;
+}
+.ref-top-block {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.ref-notice {
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--warn);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+}
+.ref-source {
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+/* Cartes de l'accueil « Référence » */
+.ref-card-count {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ref-pill {
+    transition: none;
+  }
+}

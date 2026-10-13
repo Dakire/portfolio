@@ -1,0 +1,91 @@
+---
+// Page d'une référence : introduction, blocs statiques (« Connexion »…), recherche, source et licence.
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import ReferenceSearch from '../components/ReferenceSearch.astro';
+import '../styles/reference.css';
+import { ROUTES, SITE, type Lang } from '../lib/i18n';
+import { breadcrumbLd } from '../lib/seo';
+import { REF_UI, hubPath, refPath, type RefMeta } from '../reference/refs';
+
+interface Props {
+  lang: Lang;
+  reference: RefMeta;
+}
+const { lang, reference: ref } = Astro.props;
+const ui = REF_UI[lang];
+const path = refPath(ref);
+const ld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    breadcrumbLd([
+      { name: ui.home, path: ROUTES[lang].home },
+      { name: ui.crumb, path: hubPath(lang) },
+      { name: ref.h1, path: path },
+    ]),
+    {
+      '@type': 'TechArticle',
+      headline: ref.h1,
+      description: ref.description,
+      url: `${SITE}${path}`,
+      inLanguage: lang === 'fr' ? 'fr-FR' : 'en',
+    },
+  ],
+};
+---
+
+<Base
+  lang={lang}
+  title={ref.title}
+  description={ref.description}
+  path={path}
+  ld={ld}
+  scripts={['/js/vendor/minisearch.js', '/js/reference.js']}
+>
+  <PageHero title={ref.h1} lead={ref.intro} />
+  <div class="container section stack-lg">
+    {ref.notice && (
+      <p class="ref-notice" role="note">
+        {ref.notice}
+      </p>
+    )}
+    {ref.top && (
+      <section class="ref-top" aria-labelledby="ref-top-title">
+        <h2 id="ref-top-title">{ui.topTitle}</h2>
+        {ref.top.map((block) => (
+          <div class="ref-top-block">
+            <h3>{block.title}</h3>
+            {block.note && <p>{block.note}</p>}
+            {block.items.map((item) => (
+              <>
+                <div class="ref-example">
+                  <pre><code>{item.code}</code></pre>
+                  <button
+                    type="button"
+                    class="btn ref-copy"
+                    data-copy
+                    aria-label={`${lang === 'fr' ? 'Copier' : 'Copy'} : ${item.code.split('\n')[0]}`}
+                  >
+                    {lang === 'fr' ? 'Copier' : 'Copy'}
+                  </button>
+                </div>
+                {item.note && <p class="ref-source">{item.note}</p>}
+              </>
+            ))}
+          </div>
+        ))}
+      </section>
+    )}
+    <ReferenceSearch lang={lang} ref={ref} cats={ref.cats} />
+    {ref.source && (
+      <section class="stack" aria-labelledby="ref-source-title">
+        <h2 id="ref-source-title">{ui.sourceTitle}</h2>
+        <p class="ref-source">
+          {ui.sourceBy} <a href={ref.source.url}>{ref.source.name}</a>. {ui.license} :
+          <a href={ref.source.licenseUrl}>{ref.source.license}</a>.{ref.source.note}
+        </p>
+      </section>
+    )}
+    <p class="ref-source">{ui.privacy}</p>
+  </div>
+</Base>
