@@ -1,5 +1,7 @@
 {
-  "notFound": ["/page-inexistante-contrat/"],
+  "notFound": [
+    "/page-inexistante-contrat/"
+  ],
   "entries": [
     {
       "path": "/",
@@ -303,6 +305,57 @@
     {
       "path": "/og/windows-10-end-of-support-upgrade-to-windows-11.png",
       "type": "image/png"
+    },
+    {
+      "path": "/reference/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/reference/gam/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/reference/powershell-m365/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/reference/windows-11/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/reference/active-directory/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/reference/reseau/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/reference/linux-proxmox/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/reference/git-claude-code/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/reference/evenements-windows/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/data/reference/index.json",
+      "type": "application/json",
+      "kind": "json",
+      "since": "web"
     }
   ]
 }

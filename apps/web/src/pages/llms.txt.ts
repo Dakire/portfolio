@@ -32,6 +32,11 @@ export async function GET() {
       ROUTES.en.tools,
       'free online tools (DNS, ICS, network, JSON…), run in the browser',
     ),
+    link(
+      'Aide-mémoire et références',
+      '/reference/',
+      'recherche de commandes : GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux, Proxmox, Git',
+    ),
     link('Blog (français)', ROUTES.fr.blog, 'notes techniques'),
     link('Blog (English)', ROUTES.en.blog, 'technical notes'),
     link('Mentions légales', ROUTES.fr.legal, 'éditeur, hébergement'),
