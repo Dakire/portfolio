@@ -11,5 +11,5 @@ playwright-report
 apps/portal/var
 apps/portal/composer.lock
 *.twig
-apps/web/public/js/vendor
+apps/web/public/js/libs
 apps/web/public/data

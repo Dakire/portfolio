@@ -165,7 +165,7 @@ export function computeOutputs() {
   return outputs;
 }
 
-/** MiniSearch, versionné dans le dépôt (aucun CDN) : copie de node_modules vers public/js/vendor/. */
+/** MiniSearch, versionné dans le dépôt (aucun CDN) : copie de node_modules vers public/js/libs/. */
 export function vendorMiniSearch() {
   const pkgDir = join(ROOT, 'node_modules', 'minisearch');
   const { version } = JSON.parse(readFileSync(join(pkgDir, 'package.json'), 'utf-8'));
@@ -179,6 +179,6 @@ export function writeOutputs(outputs) {
   for (const [name, content] of Object.entries(outputs))
     writeFileSync(join(OUT_DIR, name), content);
   const vendor = vendorMiniSearch();
-  mkdirSync(join(ROOT, 'public', 'js', 'vendor'), { recursive: true });
-  writeFileSync(join(ROOT, 'public', 'js', 'vendor', vendor.name), vendor.content);
+  mkdirSync(join(ROOT, 'public', 'js', 'libs'), { recursive: true });
+  writeFileSync(join(ROOT, 'public', 'js', 'libs', vendor.name), vendor.content);
 }

@@ -15,7 +15,7 @@ describe('index de la référence', () => {
 
   it('MiniSearch local correspond à la version installée', () => {
     const vendor = vendorMiniSearch() as { name: string; content: string };
-    const file = join(process.cwd(), 'public', 'js', 'vendor', vendor.name);
+    const file = join(process.cwd(), 'public', 'js', 'libs', vendor.name);
     expect(readFileSync(file, 'utf-8')).toBe(vendor.content);
   });
 
