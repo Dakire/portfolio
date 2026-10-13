@@ -1,0 +1,270 @@
+# Codes d'événements Windows : source éditable. Après modification : `pnpm --filter @grichard/web reference:build`.
+meta:
+  id: evenements-windows
+  order: 8
+  title: "Codes d'événements Windows : 4624, 4625, 4740, 4672, 7045, 1102 | Guillaume Richard"
+  h1: Codes d'événements Windows
+  description: "Aide-mémoire des identifiants d'événements Windows utiles en sécurité et en dépannage : 4624, 4625, 4740, 4720, 4672, 7045, 1102, 41, avec journal, signification, requête PowerShell et pièges."
+  intro: 'Les événements à connaître pour auditer les connexions, les comptes, les services et les arrêts inattendus, avec le journal concerné et la requête Get-WinEvent pour les retrouver.'
+  card: '4624, 4625, 4740, 4672, 7045, 1102, 41 et autres : journal, signification, requête PowerShell.'
+  notice: "Le journal Security demande une invite élevée, et l'audit des événements doit être activé par stratégie (Configuration avancée de la stratégie d'audit)."
+  docs:
+    label: Encyclopédie des événements de sécurité (Microsoft Learn)
+    url: https://learn.microsoft.com/windows/security/threat-protection/auditing/security-auditing-overview
+  fields:
+    - { key: module, label: Journal }
+    - { key: perms, label: Requête PowerShell }
+    - { key: pitfall, label: À savoir }
+  cats:
+    - { id: logon, label: Connexions }
+    - { id: accounts, label: Comptes et groupes }
+    - { id: privileges, label: Privilèges et audit }
+    - { id: services, label: Services et processus }
+    - { id: system, label: Système et arrêts }
+    - { id: errors, label: Codes d'erreur courants }
+entries:
+  - name: '4624 : ouverture de session réussie'
+    cat: logon
+    syn: '4624 · journal Security · type de session (Logon Type)'
+    desc: "Un compte s'est connecté. Le type indique comment : 2 interactif, 3 réseau, 4 batch, 5 service, 7 déverrouillage, 10 bureau à distance (RDP), 11 identifiants en cache."
+    ex:
+      [
+        "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4624; StartTime=(Get-Date).AddHours(-24)} | Select -First 20 TimeCreated,@{n='Compte';e={$_.Properties[5].Value}},@{n='Type';e={$_.Properties[8].Value}}",
+      ]
+    module: Security
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4624}"
+    pitfall: "Très volumineux (comptes machine, services). Filtrez sur le type 10 pour le RDP, ou le type 3 pour l'accès réseau."
+    tags: [logon, rdp, authentification]
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4624
+  - name: "4625 : échec d'ouverture de session"
+    cat: logon
+    syn: '4625 · journal Security · sous-état (Sub Status)'
+    desc: 'Une tentative de connexion a échoué. Le sous-état précise la cause : 0xC000006A mot de passe erroné, 0xC0000064 compte inexistant, 0xC0000234 compte verrouillé, 0xC0000072 compte désactivé, 0xC000006F hors des heures autorisées.'
+    ex:
+      [
+        "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date).AddHours(-6)} | Select TimeCreated,@{n='Compte';e={$_.Properties[5].Value}},@{n='IP source';e={$_.Properties[19].Value}}",
+      ]
+    module: Security
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625}"
+    pitfall: "Beaucoup d'échecs depuis une même adresse IP sur 3389 ou 445 indiquent une attaque par force brute."
+    tags: [brute force, mot de passe, échec]
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4625
+  - name: '4634 / 4647 : fermeture de session'
+    cat: logon
+    syn: "4634 (fermeture) · 4647 (déconnexion initiée par l'utilisateur)"
+    desc: "Fin d'une session. Associez l'identifiant de session (Logon ID) à celui du 4624 pour calculer la durée."
+    module: Security
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4634,4647}"
+    pitfall: 'Un 4634 sans 4647 correspond à une fermeture automatique (délai ou arrêt).'
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4634
+  - name: '4648 : connexion avec des identifiants explicites'
+    cat: logon
+    syn: '4648 · journal Security'
+    desc: "Une session a utilisé d'autres identifiants que ceux de l'utilisateur (runas, tâche planifiée, mappage de lecteur)."
+    module: Security
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4648}"
+    pitfall: 'Utile pour détecter des déplacements latéraux, mais aussi très fréquent en usage normal.'
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4648
+  - name: '4768 / 4769 / 4771 : Kerberos'
+    cat: logon
+    syn: '4768 (demande de TGT) · 4769 (ticket de service) · 4771 (préauthentification échouée)'
+    desc: 'Événements Kerberos sur les contrôleurs de domaine. 4771 avec le code 0x18 signale un mot de passe erroné.'
+    module: Security (contrôleurs de domaine)
+    perms: "Get-WinEvent -ComputerName DC01 -FilterHashtable @{LogName='Security'; Id=4771}"
+    pitfall: 'Un afflux de 4769 avec chiffrement RC4 (0x17) peut révéler du Kerberoasting.'
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4768
+  - name: '4776 : validation NTLM'
+    cat: logon
+    syn: '4776 · journal Security (contrôleurs de domaine)'
+    desc: "Le contrôleur de domaine a validé des identifiants via NTLM. Le code d'erreur 0xC000006A signifie mot de passe erroné."
+    module: Security (contrôleurs de domaine)
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4776}"
+    pitfall: 'Beaucoup de 4776 signale des applications qui utilisent encore NTLM au lieu de Kerberos.'
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4776
+  - name: "4740 : verrouillage d'un compte"
+    cat: accounts
+    syn: '4740 · journal Security (contrôleur de domaine PDC)'
+    desc: "Un compte a été verrouillé. Le champ « Caller Computer Name » indique la machine à l'origine des mauvais mots de passe."
+    ex:
+      [
+        "Get-WinEvent -ComputerName (Get-ADDomain).PDCEmulator -FilterHashtable @{LogName='Security'; Id=4740} | Select TimeCreated,@{n='Compte';e={$_.Properties[0].Value}},@{n='Machine';e={$_.Properties[1].Value}}",
+      ]
+    module: Security (émulateur PDC)
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4740}"
+    pitfall: 'Interrogez le contrôleur qui détient le rôle PDC. La machine source garde souvent un ancien mot de passe (session, lecteur mappé, mobile).'
+    tags: [verrouillage, lockout]
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4740
+  - name: "4720 / 4722 / 4725 / 4726 : cycle de vie d'un compte"
+    cat: accounts
+    syn: '4720 créé · 4722 activé · 4725 désactivé · 4726 supprimé'
+    desc: "Création, activation, désactivation et suppression d'un compte utilisateur."
+    module: Security
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4720,4722,4725,4726}"
+    pitfall: 'Vérifiez qui a agi (champ « Subject ») et comparez avec les demandes officielles de création ou de départ.'
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4720
+  - name: '4723 / 4724 : changement ou réinitialisation de mot de passe'
+    cat: accounts
+    syn: "4723 (changement par l'utilisateur) · 4724 (réinitialisation par un administrateur)"
+    desc: 'Un mot de passe a été changé ou réinitialisé.'
+    module: Security
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4723,4724}"
+    pitfall: 'Une réinitialisation (4724) hors horaires ou par un compte inhabituel mérite une vérification.'
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4724
+  - name: '4728 / 4732 / 4756 : ajout à un groupe'
+    cat: accounts
+    syn: '4728 (groupe global de sécurité) · 4732 (groupe local) · 4756 (groupe universel)'
+    desc: "Un membre a été ajouté à un groupe de sécurité. Surveillez surtout Administrateurs, Admins du domaine et Admins de l'entreprise."
+    module: Security
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4728,4732,4756}"
+    pitfall: 'Les retraits correspondent aux événements 4729, 4733 et 4757.'
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4732
+  - name: '4672 : privilèges spéciaux attribués'
+    cat: privileges
+    syn: '4672 · journal Security'
+    desc: 'Une session a reçu des privilèges sensibles (par exemple SeDebugPrivilege). Normal pour les comptes administrateurs et SYSTEM.'
+    module: Security
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4672}"
+    pitfall: 'Un compte non administrateur dans ce journal est une alerte à examiner.'
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4672
+  - name: "4688 : création d'un processus"
+    cat: privileges
+    syn: '4688 · journal Security'
+    desc: "Un processus a démarré. Avec l'option « Inclure la ligne de commande », l'événement contient les arguments."
+    module: Security
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4688}"
+    pitfall: 'La ligne de commande doit être activée par GPO (Audit Process Creation + Include command line).'
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4688
+  - name: "1102 : journal d'audit effacé"
+    cat: privileges
+    syn: '1102 · journal Security (104 pour les autres journaux)'
+    desc: "Le journal de sécurité a été effacé. Cet événement est toujours enregistré, même si l'audit est désactivé."
+    ex:
+      ["Get-WinEvent -FilterHashtable @{LogName='Security'; Id=1102} | Select TimeCreated,Message"]
+    module: Security
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=1102}"
+    pitfall: 'Effacer les journaux est une technique classique pour masquer une intrusion : transmettez les journaux à un collecteur central.'
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-1102
+  - name: "4719 : modification de la stratégie d'audit"
+    cat: privileges
+    syn: '4719 · journal Security'
+    desc: "La stratégie d'audit système a changé."
+    module: Security
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4719}"
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4719
+  - name: "4697 / 7045 : installation d'un service"
+    cat: services
+    syn: '4697 (Security) · 7045 (System, Service Control Manager)'
+    desc: "Un nouveau service a été installé. Les logiciels malveillants et les outils d'exécution à distance (PsExec) en créent."
+    ex:
+      [
+        "Get-WinEvent -FilterHashtable @{LogName='System'; Id=7045} | Select TimeCreated,@{n='Service';e={$_.Properties[0].Value}},@{n='Chemin';e={$_.Properties[1].Value}}",
+      ]
+    module: System / Security
+    perms: "Get-WinEvent -FilterHashtable @{LogName='System'; Id=7045}"
+    pitfall: "Examinez le chemin de l'exécutable : un service dans un dossier temporaire ou profil utilisateur est suspect."
+    tags: [service, psexec]
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4697
+  - name: "7034 / 7036 / 7031 : état d'un service"
+    cat: services
+    syn: '7036 (démarré/arrêté) · 7034 (arrêt inattendu) · 7031 (arrêt inattendu avec action de récupération)'
+    desc: "Changements d'état et plantages de services."
+    ex:
+      [
+        "Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'; Id=7034,7031} -MaxEvents 20",
+      ]
+    module: System
+    perms: "Get-WinEvent -FilterHashtable @{LogName='System'; Id=7034,7036}"
+    pitfall: "Un 7034 répété indique un service qui plante en boucle : consultez aussi le journal Application (1000, erreur d'application)."
+    url: https://learn.microsoft.com/windows/win32/services/service-control-manager
+  - name: '4698 / 4702 : tâche planifiée créée ou modifiée'
+    cat: services
+    syn: '4698 (créée) · 4699 (supprimée) · 4702 (modifiée)'
+    desc: 'Création et modification de tâches planifiées, une technique courante de persistance.'
+    module: Security
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4698,4702}"
+    pitfall: "Nécessite l'audit « Other Object Access Events »."
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4698
+  - name: '41 (Kernel-Power) : redémarrage sans arrêt propre'
+    cat: system
+    syn: '41 · journal System · Kernel-Power'
+    desc: "Le système a redémarré sans s'être arrêté proprement (coupure, plantage, blocage)."
+    ex:
+      [
+        "Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Microsoft-Windows-Kernel-Power'; Id=41} -MaxEvents 10 | Select TimeCreated,Message",
+      ]
+    module: System
+    perms: "Get-WinEvent -FilterHashtable @{LogName='System'; Id=41}"
+    pitfall: "Si BugcheckCode vaut 0, la cause est une coupure d'alimentation ou un gel : cherchez du côté du matériel. Un code non nul correspond à un écran bleu."
+    url: https://learn.microsoft.com/windows-hardware/drivers/debugger/bug-check-code-reference2
+  - name: '6005 / 6006 / 6008 : démarrage et arrêt du journal'
+    cat: system
+    syn: '6005 (démarrage) · 6006 (arrêt propre) · 6008 (arrêt inattendu)'
+    desc: "Marqueurs de démarrage et d'arrêt du service Journal des événements, utiles pour reconstituer la disponibilité."
+    ex:
+      [
+        "Get-WinEvent -FilterHashtable @{LogName='System'; Id=6005,6006,6008} -MaxEvents 20 | Select TimeCreated,Id",
+      ]
+    module: System
+    perms: "Get-WinEvent -FilterHashtable @{LogName='System'; Id=6005,6006,6008}"
+    url: https://learn.microsoft.com/windows/win32/eventlog/event-logging
+  - name: '1074 : arrêt ou redémarrage initié'
+    cat: system
+    syn: '1074 · journal System · User32'
+    desc: "Indique quel processus ou utilisateur a demandé l'arrêt ou le redémarrage, et la raison."
+    ex:
+      [
+        "Get-WinEvent -FilterHashtable @{LogName='System'; Id=1074} -MaxEvents 10 | Select TimeCreated,Message",
+      ]
+    module: System
+    perms: "Get-WinEvent -FilterHashtable @{LogName='System'; Id=1074}"
+    pitfall: 'Répond à « qui a redémarré le serveur ? » : le message contient le compte et le motif.'
+    url: https://learn.microsoft.com/windows/win32/shutdown/system-shutdown-reason-codes
+  - name: "1000 / 1001 : plantage d'application"
+    cat: system
+    syn: '1000 (Application Error) · 1001 (Windows Error Reporting)'
+    desc: "Une application s'est arrêtée brutalement ; le module en faute est indiqué dans le message."
+    ex:
+      [
+        "Get-WinEvent -FilterHashtable @{LogName='Application'; Id=1000} -MaxEvents 10 | Select TimeCreated,Message",
+      ]
+    module: Application
+    perms: "Get-WinEvent -FilterHashtable @{LogName='Application'; Id=1000}"
+    pitfall: "Relevez le « Faulting module name » : s'il est toujours identique, mettez à jour ou réinstallez ce composant."
+    url: https://learn.microsoft.com/windows/win32/wer/windows-error-reporting
+  - name: '55 / 98 (Ntfs) · 7 (disk) : erreurs de disque'
+    cat: system
+    syn: '55 (Ntfs : structure corrompue) · 7 et 11 (disk : bloc défectueux, erreur contrôleur)'
+    desc: 'Erreurs de système de fichiers ou de disque. Les événements disk 7, 11 ou 51 annoncent souvent un disque en fin de vie.'
+    ex:
+      [
+        "Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='disk','Ntfs'} -MaxEvents 20 | Select TimeCreated,ProviderName,Id,Message",
+      ]
+    module: System
+    perms: "Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='disk'}"
+    pitfall: 'Sauvegardez avant de lancer chkdsk /r sur un disque qui présente ces erreurs.'
+    url: https://learn.microsoft.com/windows/win32/eventlog/event-logging
+  - name: "0xC000006D · 0xC000006A · 0xC0000064 : codes d'état de connexion"
+    cat: errors
+    syn: '0xC000006D (échec générique) · 0xC000006A (mot de passe erroné) · 0xC0000064 (utilisateur inconnu)'
+    desc: "Codes d'état et de sous-état d'un événement 4625. 0xC000006D donne l'état ; le sous-état précise la raison."
+    tags: [4625, status, substatus]
+    pitfall: "Le sous-état est plus précis que l'état : lisez-le en premier."
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4625
+  - name: '0xC0000234 · 0xC0000072 · 0xC0000193 : compte verrouillé, désactivé, expiré'
+    cat: errors
+    syn: '0xC0000234 (verrouillé) · 0xC0000072 (désactivé) · 0xC0000193 (expiré)'
+    desc: "Sous-états courants d'un échec de connexion qui expliquent pourquoi un utilisateur n'entre pas."
+    tags: [4625, lockout]
+    pitfall: "Pour un compte verrouillé, cherchez ensuite l'événement 4740 sur le PDC."
+    url: https://learn.microsoft.com/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4625
+  - name: "Codes d'écran bleu : 0x0000007E · 0x00000050 · 0x0000009F"
+    cat: errors
+    syn: 'SYSTEM_THREAD_EXCEPTION_NOT_HANDLED · PAGE_FAULT_IN_NONPAGED_AREA · DRIVER_POWER_STATE_FAILURE'
+    desc: "Arrêts fréquents : 0x7E pointe souvent un pilote, 0x50 la mémoire ou un pilote, 0x9F la gestion d'alimentation d'un pilote."
+    ex:
+      [
+        "Get-ChildItem C:\\Windows\\Minidump | Sort LastWriteTime -Descending | Select -First 3",
+        "Get-WinEvent -FilterHashtable @{LogName='System'; Id=1001} -MaxEvents 5 | Select Message",
+      ]
+    pitfall: 'Les fichiers minidump se lisent avec WinDbg ou BlueScreenView ; commencez par mettre à jour les pilotes récents.'
+    url: https://learn.microsoft.com/windows-hardware/drivers/debugger/bug-check-code-reference2

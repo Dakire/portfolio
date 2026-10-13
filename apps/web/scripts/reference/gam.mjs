@@ -106,7 +106,6 @@ function parsePage(file, text, ids) {
   let hAnchor = '';
   let firstPara = '';
   let fence = null; // { lines, heading, anchor }
-  let lastBlock = null;
   let pendingDesc = null; // bloc dont on attend le paragraphe de description
   let lastSyntax = null; // dernière entrée de syntaxe sous l'intertitre courant
 

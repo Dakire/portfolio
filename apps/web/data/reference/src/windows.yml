@@ -59,7 +59,7 @@ entries:
     perms: Invite élevée
     pitfall: "La barre peut rester à 20 % ou 62 % longtemps : c'est normal. Équivalent PowerShell : Repair-WindowsImage -Online -RestoreHealth."
     equiv: 'Linux : réinstallation du paquet (apt/dnf reinstall)'
-    doc: cmd/dism
+    url: https://learn.microsoft.com/windows-hardware/manufacture/desktop/dism-image-management-command-line-options-s14
   - name: chkdsk
     cat: disk
     syn: 'chkdsk <lecteur>: [/f] [/r] [/scan]'
@@ -763,4 +763,4 @@ entries:
     perms: Invite élevée pour /energy
     pitfall: '/energy dure 60 secondes pendant lesquelles le PC doit rester inactif. /a liste les états de veille disponibles.'
     equiv: 'Linux : upower -i, powertop'
-    doc: cmd/powercfg
+    url: https://learn.microsoft.com/windows-hardware/design/device-experiences/powercfg-command-line-options

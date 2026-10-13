@@ -27,7 +27,7 @@ export const REFS = index.refs as unknown as RefMeta[];
 /** Une référence est publiée dans la langue de ses sources ; les autres langues auront leur propre dossier de sources. */
 export const refsFor = (lang: Lang) => REFS.filter((r) => r.lang === lang);
 export const REF_HUB: Record<Lang, string> = { fr: '/reference/', en: '/en/reference/' };
-export const refPath = (ref: RefMeta) => `${REF_HUB[ref.lang]}${ref.id}/`;
+export const refPath = (ref: RefMeta) => withBase(`${REF_HUB[ref.lang]}${ref.id}/`);
 export const hubPath = (lang: Lang) => withBase(REF_HUB[lang]);
 export const catalogUrl = () => withBase('/data/reference/index.json');
 export const fileUrl = (ref: RefMeta) => withBase(ref.file);

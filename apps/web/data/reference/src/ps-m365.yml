@@ -458,20 +458,20 @@ entries:
     desc: Demande une synchronisation immédiate d'un appareil Intune.
     ex:
       - 'Sync-MgDeviceManagementManagedDevice -ManagedDeviceId $id'
-    module: Microsoft.Graph.DeviceManagement.Actions
+    module: Microsoft.Graph.DeviceManagement
     perms: 'DeviceManagementManagedDevices.PrivilegedOperations.All'
     pitfall: "La commande n'est qu'une demande : l'appareil doit être en ligne pour la traiter."
-    doc: microsoft.graph.devicemanagement.actions/sync-mgdevicemanagementmanageddevice
+    doc: microsoft.graph.devicemanagement/sync-mgdevicemanagementmanageddevice
   - name: Invoke-MgRetireDeviceManagementManagedDevice
     cat: intune
     syn: Invoke-MgRetireDeviceManagementManagedDevice -ManagedDeviceId <id>
     desc: Retire un appareil de la gestion (supprime les données d'entreprise, garde les données personnelles).
     ex:
       - 'Invoke-MgRetireDeviceManagementManagedDevice -ManagedDeviceId $id'
-    module: Microsoft.Graph.DeviceManagement.Actions
+    module: Microsoft.Graph.DeviceManagement
     perms: 'DeviceManagementManagedDevices.PrivilegedOperations.All'
     pitfall: 'Ne confondez pas avec Wipe (réinitialisation complète, destructive).'
-    doc: microsoft.graph.devicemanagement.actions/invoke-mgretiredevicemanagementmanageddevice
+    doc: microsoft.graph.devicemanagement/invoke-mgretiredevicemanagementmanageddevice
 
   # ---------------------------------------------------------------- Defender et Purview
   - name: Get-QuarantineMessage

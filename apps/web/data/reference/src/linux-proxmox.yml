@@ -1,0 +1,336 @@
+# Linux, Fedora et Proxmox : source éditable. Après modification : `pnpm --filter @grichard/web reference:build`.
+meta:
+  id: linux-proxmox
+  order: 6
+  title: 'Linux, Fedora et Proxmox : dnf, systemctl, journalctl, qm, pct, pvesh | Guillaume Richard'
+  h1: Linux, Fedora et Proxmox
+  description: 'Aide-mémoire Linux et Proxmox VE : dnf, systemctl, journalctl, firewalld, SELinux, LVM, rsync, et commandes Proxmox qm, pct, pvesh, vzdump et pvecm pour gérer machines virtuelles et conteneurs.'
+  intro: 'Gestion de paquets, services et journaux sous Fedora/RHEL (dnf, systemd), outils système courants, et ligne de commande Proxmox VE pour les VM, conteneurs, sauvegardes et le cluster.'
+  card: 'dnf, systemctl, journalctl, firewalld, LVM et Proxmox : qm, pct, pvesh, vzdump, pvecm.'
+  notice: "La plupart des commandes demandent root (sudo). Sur Proxmox, une mauvaise manipulation de qm, pct ou pvecm peut interrompre des machines virtuelles : testez d'abord sur un nœud ou une VM de test."
+  docs:
+    label: Documentation Proxmox VE
+    url: https://pve.proxmox.com/pve-docs/
+  fields:
+    - { key: perms, label: Droits }
+    - { key: equiv, label: Équivalent }
+    - { key: pitfall, label: Piège courant }
+  cats:
+    - { id: packages, label: Paquets (dnf) }
+    - { id: systemd, label: Services et journaux }
+    - { id: system, label: Système et disques }
+    - { id: security, label: Sécurité }
+    - { id: pve-vm, label: 'Proxmox : VM (qm)' }
+    - { id: pve-ct, label: 'Proxmox : conteneurs (pct)' }
+    - { id: pve-admin, label: 'Proxmox : cluster et sauvegardes' }
+entries:
+  - name: dnf install / remove / update
+    cat: packages
+    syn: 'dnf install <paquet> | dnf remove <paquet> | dnf upgrade --refresh'
+    desc: 'Installe, retire et met à jour des paquets (Fedora, RHEL 8+, AlmaLinux, Rocky).'
+    ex:
+      - 'sudo dnf install htop'
+      - 'sudo dnf upgrade --refresh'
+      - 'sudo dnf remove httpd'
+      - 'sudo dnf autoremove'
+    perms: root
+    equiv: 'apt install / apt upgrade (Debian)'
+    pitfall: 'dnf upgrade met à jour tous les paquets ; dnf system-upgrade gère le passage à la version suivante de Fedora.'
+    url: https://dnf.readthedocs.io/en/latest/command_ref.html
+  - name: dnf search · info · provides
+    cat: packages
+    syn: 'dnf search <mot> | dnf info <paquet> | dnf provides <fichier>'
+    desc: 'Retrouve un paquet, ses informations, ou le paquet qui fournit un fichier.'
+    ex:
+      - 'dnf search nginx'
+      - 'dnf info nginx'
+      - 'dnf provides */bin/dig'
+      - 'dnf repoquery --requires nginx'
+    equiv: 'apt search, apt-file search'
+    pitfall: "dnf provides '*/bin/dig' donne bind-utils : pratique quand une commande est introuvable."
+    url: https://dnf.readthedocs.io/en/latest/command_ref.html
+  - name: dnf history
+    cat: packages
+    syn: 'dnf history [list|info|undo|rollback] <id>'
+    desc: 'Journal des transactions dnf, avec annulation possible.'
+    ex:
+      - 'dnf history list'
+      - 'dnf history info 42'
+      - 'sudo dnf history undo 42'
+    perms: root pour annuler
+    pitfall: 'undo ne restaure pas les fichiers de configuration modifiés à la main.'
+    url: https://dnf.readthedocs.io/en/latest/command_ref.html
+  - name: rpm -qa · rpm -qf
+    cat: packages
+    syn: 'rpm -qa | rpm -qf <fichier> | rpm -V <paquet>'
+    desc: "Interroge la base RPM : paquets installés, propriétaire d'un fichier, vérification d'intégrité."
+    ex:
+      - 'rpm -qa | grep kernel'
+      - 'rpm -qf /usr/bin/dig'
+      - 'rpm -V openssh-server'
+    equiv: 'dpkg -l, dpkg -S'
+    url: https://rpm.org/documentation.html
+  - name: systemctl
+    cat: systemd
+    syn: 'systemctl [start|stop|restart|status|enable|disable] <service>'
+    desc: 'Pilote les services systemd.'
+    ex:
+      - 'systemctl status sshd'
+      - 'sudo systemctl enable --now nginx'
+      - 'sudo systemctl restart nginx'
+      - 'systemctl list-units --type=service --state=failed'
+      - 'systemctl list-unit-files --state=enabled'
+    perms: root pour agir
+    equiv: 'Get-Service, Restart-Service (PowerShell)'
+    pitfall: "enable ne démarre pas le service ; ajoutez --now. daemon-reload est nécessaire après modification d'un fichier unit."
+    url: https://www.freedesktop.org/software/systemd/man/latest/systemctl.html
+  - name: journalctl
+    cat: systemd
+    syn: 'journalctl [-u <service>] [-f] [-b] [--since <date>] [-p <niveau>]'
+    desc: 'Lit le journal systemd.'
+    ex:
+      - 'journalctl -u sshd -n 50 --no-pager'
+      - 'journalctl -f -u nginx'
+      - 'journalctl -b -p err'
+      - "journalctl --since '1 hour ago'"
+      - 'sudo journalctl --vacuum-size=500M'
+    equiv: 'Get-WinEvent (Windows)'
+    pitfall: 'Sans -b, le journal inclut les démarrages précédents si la persistance est activée ; -b -1 donne le démarrage précédent.'
+    url: https://www.freedesktop.org/software/systemd/man/latest/journalctl.html
+  - name: systemctl edit · systemd-analyze
+    cat: systemd
+    syn: 'systemctl edit <service> | systemd-analyze blame'
+    desc: "Surcharge un service sans toucher au fichier d'origine et analyse la durée de démarrage."
+    ex:
+      - 'sudo systemctl edit nginx'
+      - 'systemd-analyze blame | head'
+      - 'systemd-analyze critical-chain'
+    perms: root pour edit
+    pitfall: 'systemctl edit crée un fichier de surcharge dans /etc/systemd/system/<service>.d/ qui survit aux mises à jour.'
+    url: https://www.freedesktop.org/software/systemd/man/latest/systemd-analyze.html
+  - name: df · du · lsblk
+    cat: system
+    syn: 'df -h | du -sh <chemin> | lsblk -f'
+    desc: 'Espace disque, taille des dossiers et structure des disques.'
+    ex:
+      - 'df -hT'
+      - 'du -h --max-depth=1 /var | sort -h'
+      - 'lsblk -f'
+      - 'findmnt'
+    equiv: 'Get-Volume (PowerShell)'
+    pitfall: "Disque plein alors que df montre de l'espace : vérifiez les inodes avec df -i."
+    url: https://man7.org/linux/man-pages/man1/df.1.html
+  - name: 'LVM : pvs · vgs · lvs · lvextend'
+    cat: system
+    syn: 'lvextend -r -L +<taille> <vg>/<lv>'
+    desc: "Affiche l'état de LVM et agrandit un volume logique avec son système de fichiers."
+    ex:
+      - 'sudo pvs; sudo vgs; sudo lvs'
+      - 'sudo lvextend -r -L +10G /dev/fedora/root'
+      - 'sudo lvextend -r -l +100%FREE /dev/mapper/vg-data'
+    perms: root
+    pitfall: '-r redimensionne aussi le système de fichiers (ext4, XFS). XFS peut être agrandi mais pas réduit.'
+    url: https://man7.org/linux/man-pages/man8/lvextend.8.html
+  - name: ssh · scp · rsync
+    cat: system
+    syn: 'ssh <user>@<hôte> | scp <src> <dest> | rsync -avz <src> <dest>'
+    desc: 'Connexion distante et copies de fichiers.'
+    ex:
+      - 'ssh -p 2222 admin@serveur'
+      - 'ssh-copy-id admin@serveur'
+      - 'rsync -avz --progress --delete /donnees/ admin@serveur:/sauvegarde/'
+      - 'rsync -avzn /donnees/ serveur:/sauvegarde/'
+    equiv: 'robocopy (Windows)'
+    pitfall: 'Un / final change le sens de rsync : src/ copie le contenu, src copie le dossier. Testez avec -n (simulation), surtout avec --delete.'
+    url: https://man7.org/linux/man-pages/man1/rsync.1.html
+  - name: top · htop · ps · free
+    cat: system
+    syn: 'top | htop | ps aux --sort=-%mem | free -h'
+    desc: 'Charge, processus et mémoire.'
+    ex:
+      - 'ps aux --sort=-%cpu | head'
+      - 'free -h'
+      - 'uptime'
+      - 'vmstat 1 5'
+    equiv: 'Get-Process, Gestionnaire des tâches'
+    pitfall: 'La mémoire « disponible » (available) compte, pas « libre » (free) : le cache est récupérable.'
+    url: https://man7.org/linux/man-pages/man1/top.1.html
+  - name: firewall-cmd
+    cat: security
+    syn: 'firewall-cmd [--permanent] --add-service=<service> | --add-port=<port>/tcp'
+    desc: 'Gère firewalld (Fedora, RHEL).'
+    ex:
+      - 'sudo firewall-cmd --list-all'
+      - 'sudo firewall-cmd --permanent --add-service=https'
+      - 'sudo firewall-cmd --permanent --add-port=8080/tcp'
+      - 'sudo firewall-cmd --reload'
+    perms: root
+    equiv: 'ufw (Ubuntu), New-NetFirewallRule (Windows)'
+    pitfall: "Sans --permanent la règle disparaît au rechargement ; avec --permanent elle n'est active qu'après --reload."
+    url: https://firewalld.org/documentation/man-pages/firewall-cmd.html
+  - name: 'SELinux : getenforce · setsebool · restorecon · ausearch'
+    cat: security
+    syn: 'getenforce | setsebool -P <booléen> on | restorecon -Rv <chemin>'
+    desc: 'État de SELinux, booléens et rétablissement des contextes de fichiers.'
+    ex:
+      - 'getenforce'
+      - 'sudo ausearch -m avc -ts recent'
+      - 'sudo restorecon -Rv /var/www'
+      - 'sudo setsebool -P httpd_can_network_connect on'
+    perms: root
+    pitfall: 'Ne désactivez pas SELinux pour « réparer » : lisez les refus AVC (ausearch, journalctl) et corrigez le contexte ou le booléen.'
+    url: https://docs.fedoraproject.org/en-US/quick-docs/selinux-getting-started/
+  - name: qm list · qm status
+    cat: pve-vm
+    syn: 'qm list | qm status <vmid>'
+    desc: 'Liste les machines virtuelles du nœud et affiche leur état.'
+    ex:
+      - 'qm list'
+      - 'qm status 100 --verbose'
+      - 'qm config 100'
+    perms: root sur le nœud Proxmox
+    pitfall: "qm n'affiche que les VM du nœud local ; pour tout le cluster, utilisez pvesh get /cluster/resources --type vm."
+    url: https://pve.proxmox.com/pve-docs/qm.1.html
+  - name: qm start · shutdown · stop · reset
+    cat: pve-vm
+    syn: 'qm start|shutdown|stop|reset|suspend|resume <vmid>'
+    desc: 'Démarre, arrête proprement ou coupe brutalement une VM.'
+    ex:
+      - 'qm start 100'
+      - 'qm shutdown 100 --timeout 120'
+      - 'qm stop 100'
+      - 'qm reset 100'
+    perms: root sur le nœud Proxmox
+    pitfall: "stop équivaut à débrancher la prise (risque de corruption) ; shutdown demande l'agent invité ou l'ACPI."
+    url: https://pve.proxmox.com/pve-docs/qm.1.html
+  - name: qm unlock
+    cat: pve-vm
+    syn: 'qm unlock <vmid>'
+    desc: "Supprime le verrou d'une VM restée bloquée après une sauvegarde, un clonage ou une migration interrompus."
+    ex:
+      - 'qm unlock 100'
+      - 'qm config 100 | grep lock'
+    perms: root sur le nœud Proxmox
+    pitfall: "Vérifiez qu'aucune tâche n'est encore en cours (pvesh get /nodes/<noeud>/tasks) avant de déverrouiller."
+    url: https://pve.proxmox.com/pve-docs/qm.1.html
+  - name: qm clone · template · migrate
+    cat: pve-vm
+    syn: 'qm clone <vmid> <newid> --name <nom> --full | qm template <vmid> | qm migrate <vmid> <noeud>'
+    desc: 'Clone une VM ou un modèle, convertit en modèle, migre vers un autre nœud.'
+    ex:
+      - 'qm clone 9000 120 --name web01 --full'
+      - 'qm template 9000'
+      - 'qm migrate 100 pve2 --online'
+    perms: root sur le nœud Proxmox
+    pitfall: 'Un clone lié (sans --full) dépend du modèle : ne le supprimez pas. --online exige un stockage partagé ou --with-local-disks.'
+    url: https://pve.proxmox.com/pve-docs/qm.1.html
+  - name: qm set · qm resize
+    cat: pve-vm
+    syn: 'qm set <vmid> --<option> <valeur> | qm resize <vmid> <disque> +<taille>'
+    desc: "Modifie la configuration d'une VM ou agrandit un disque."
+    ex:
+      - 'qm set 100 --memory 4096 --cores 2'
+      - 'qm set 100 --agent enabled=1'
+      - 'qm resize 100 scsi0 +20G'
+    perms: root sur le nœud Proxmox
+    pitfall: "Un disque ne peut qu'être agrandi. Il faut ensuite étendre la partition et le système de fichiers dans l'invité."
+    url: https://pve.proxmox.com/pve-docs/qm.1.html
+  - name: qm snapshot · rollback
+    cat: pve-vm
+    syn: 'qm snapshot <vmid> <nom> | qm rollback <vmid> <nom> | qm delsnapshot <vmid> <nom>'
+    desc: 'Crée, restaure ou supprime un instantané de VM.'
+    ex:
+      - "qm snapshot 100 avant-maj --description 'Avant mise à jour'"
+      - 'qm listsnapshot 100'
+      - 'qm rollback 100 avant-maj'
+    perms: root sur le nœud Proxmox
+    pitfall: "Un instantané n'est pas une sauvegarde : il reste sur le même stockage. Ne les gardez pas longtemps."
+    url: https://pve.proxmox.com/pve-docs/qm.1.html
+  - name: pct list · status · start
+    cat: pve-ct
+    syn: 'pct list | pct status <ctid> | pct start|shutdown|stop <ctid>'
+    desc: 'Liste et pilote les conteneurs LXC de Proxmox.'
+    ex:
+      - 'pct list'
+      - 'pct start 200'
+      - 'pct shutdown 200'
+      - 'pct config 200'
+    perms: root sur le nœud Proxmox
+    url: https://pve.proxmox.com/pve-docs/pct.1.html
+  - name: pct enter · exec · push · pull
+    cat: pve-ct
+    syn: 'pct enter <ctid> | pct exec <ctid> -- <commande> | pct push <ctid> <src> <dest>'
+    desc: 'Ouvre un shell dans un conteneur, y exécute une commande ou y copie des fichiers.'
+    ex:
+      - 'pct enter 200'
+      - 'pct exec 200 -- apt update'
+      - 'pct push 200 /root/config.conf /etc/app/config.conf'
+      - 'pct pull 200 /var/log/syslog /tmp/syslog'
+    perms: root sur le nœud Proxmox
+    pitfall: 'pct enter donne un shell root dans le conteneur sans mot de passe : réservez-le aux administrateurs du nœud.'
+    url: https://pve.proxmox.com/pve-docs/pct.1.html
+  - name: pct create · resize · set
+    cat: pve-ct
+    syn: 'pct create <ctid> <modèle> --hostname <nom> ... | pct resize <ctid> rootfs +<taille>'
+    desc: "Crée un conteneur à partir d'un modèle, ou modifie ses ressources."
+    ex:
+      - 'pveam update && pveam available --section system | head'
+      - 'pct create 200 local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst --hostname web --memory 1024 --net0 name=eth0,bridge=vmbr0,ip=dhcp --storage local-lvm'
+      - 'pct set 200 --memory 2048 --cores 2'
+      - 'pct resize 200 rootfs +4G'
+    perms: root sur le nœud Proxmox
+    pitfall: 'Le nom exact du modèle change à chaque version : listez-le avec pveam available et téléchargez-le avec pveam download.'
+    url: https://pve.proxmox.com/pve-docs/pct.1.html
+  - name: pvesh get · create
+    cat: pve-admin
+    syn: 'pvesh get <chemin API> [--output-format json]'
+    desc: "Appelle l'API REST de Proxmox depuis la ligne de commande."
+    ex:
+      - 'pvesh get /cluster/resources --type vm'
+      - 'pvesh get /nodes/pve1/status'
+      - 'pvesh get /nodes/pve1/qemu/100/config --output-format json-pretty'
+      - 'pvesh ls /nodes'
+    perms: root ou jeton d'API
+    pitfall: "pvesh usage <chemin> affiche les paramètres acceptés par une route de l'API."
+    url: https://pve.proxmox.com/pve-docs/pvesh.1.html
+  - name: vzdump
+    cat: pve-admin
+    syn: 'vzdump <vmid> [--storage <stockage>] [--mode snapshot|suspend|stop] [--compress zstd]'
+    desc: 'Sauvegarde une VM ou un conteneur.'
+    ex:
+      - 'vzdump 100 --storage backup --mode snapshot --compress zstd'
+      - 'vzdump --all --storage backup --mailto admin@contoso.com'
+    perms: root sur le nœud Proxmox
+    pitfall: "Une sauvegarde n'est fiable que si vous avez testé la restauration (qmrestore, pct restore)."
+    url: https://pve.proxmox.com/pve-docs/vzdump.1.html
+  - name: qmrestore · pct restore
+    cat: pve-admin
+    syn: 'qmrestore <archive> <vmid> [--storage <stockage>] | pct restore <ctid> <archive>'
+    desc: 'Restaure une VM ou un conteneur depuis une sauvegarde vzdump.'
+    ex:
+      - 'qmrestore /mnt/backup/dump/vzdump-qemu-100-2026_10_13-02_00_01.vma.zst 100 --storage local-lvm'
+      - 'pct restore 200 /mnt/backup/dump/vzdump-lxc-200-2026_10_13-02_00_01.tar.zst --storage local-lvm'
+    perms: root sur le nœud Proxmox
+    pitfall: "Restaurer sur un identifiant existant l'écrase : ajoutez --unique pour régénérer les adresses MAC."
+    url: https://pve.proxmox.com/pve-docs/qmrestore.1.html
+  - name: pvecm status · nodes
+    cat: pve-admin
+    syn: 'pvecm status | pvecm nodes | pvecm expected <n>'
+    desc: 'État du cluster Proxmox et du quorum.'
+    ex:
+      - 'pvecm status'
+      - 'pvecm nodes'
+      - 'pvecm expected 1'
+    perms: root sur le nœud Proxmox
+    pitfall: "pvecm expected 1 force le quorum sur un cluster dégradé : à n'utiliser qu'en dépannage, jamais en routine."
+    url: https://pve.proxmox.com/pve-docs/pvecm.1.html
+  - name: pveversion · pveam · pvesm
+    cat: pve-admin
+    syn: 'pveversion -v | pveam update | pvesm status'
+    desc: 'Versions installées, modèles de conteneurs et stockages.'
+    ex:
+      - 'pveversion -v'
+      - 'pvesm status'
+      - 'pveam update && pveam available --section system'
+    perms: root sur le nœud Proxmox
+    url: https://pve.proxmox.com/pve-docs/pvesm.1.html

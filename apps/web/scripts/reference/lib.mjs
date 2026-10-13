@@ -100,7 +100,7 @@ export function buildReference(file, source) {
       : undefined;
     const url = e.url ? String(e.url) : (docUrl ?? meta.docs?.url);
     if (!url) fail(`${where} : aucune URL de documentation (url, doc + docBase, ou meta.docs)`);
-    if (!/^https:\/\//.test(url)) fail(`${where} : l'URL doit être en https`);
+    if (!url.startsWith('https://')) fail(`${where} : l'URL doit être en https`);
     let id = slug(e.name);
     const n = (seen.get(id) ?? 0) + 1;
     seen.set(id, n);
@@ -125,7 +125,15 @@ export function readSources() {
   return readdirSync(SRC_DIR)
     .filter((f) => f.endsWith('.yml'))
     .sort()
-    .map((f) => ({ file: f, source: parse(readFileSync(join(SRC_DIR, f), 'utf-8')) }));
+    .map((f) => {
+      try {
+        return { file: f, source: parse(readFileSync(join(SRC_DIR, f), 'utf-8')) };
+      } catch (error) {
+        throw new Error(
+          `${f} : YAML invalide (mettez entre guillemets toute valeur qui contient « : » ou « # »). ${error.message}`,
+        );
+      }
+    });
 }
 
 export const serialize = (data) => JSON.stringify(data) + '\n';
