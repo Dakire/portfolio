@@ -9,7 +9,7 @@ Production OVH mutualisé : **fichiers statiques + PHP 8.5**, accès FTP/SFTP un
 ## Structure
 
 ```
-apps/web        Site public (Astro statique, FR/EN) : pages, blog, outils (îlots Preact)
+apps/web        Site public (Astro statique, FR/EN) : pages, blog, outils (îlots Preact), aide-mémoire /reference/
 apps/api        PHP sans dépendance d'exécution : contact.php (formulaire) et tools.php (rapport SEO,
                 vérificateur de sitemap), couche Net/ protégée contre la SSRF
 apps/portal     Espace client de test (Symfony, SQLite)
@@ -36,6 +36,10 @@ cd apps/api && composer install && composer test && composer cs && composer stan
 ## Outils en ligne
 
 Dix outils s'exécutent entièrement dans le navigateur (DNS, ICS, réseau, JSON, encodage…). Deux passent par le serveur, car ils lisent un site tiers : le **rapport SEO** (`/outils/seo/`) et le **vérificateur de sitemap** (`/outils/sitemap/`). Leur conception et leurs protections (SSRF, CSRF, Turnstile, quotas, aucune donnée conservée) sont décrites dans l'[ADR 0007](docs/adr/0007-outils-serveur-php-safehttpclient.md).
+
+## Aide-mémoire (section « Référence »)
+
+Huit références (GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux/Proxmox, Git/Claude Code, événements Windows) avec une recherche instantanée 100 % navigateur (MiniSearch local, index JSON statique). Sources éditables dans `apps/web/data/reference/src/*.yml`, JSON générés et commités dans `apps/web/public/data/reference/`. Régénération : `pnpm --filter @grichard/web reference:build` (GAM : `reference:gam`). Ajouter une référence en 5 étapes : [docs/reference.md](docs/reference.md) ; décision : [ADR 0008](docs/adr/0008-references-recherche-cote-client.md).
 
 ## Déploiement
 

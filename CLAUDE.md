@@ -14,29 +14,30 @@ Ne jamais introduire de dépendance d'exécution Node, ni d'appel à un service 
 
 ## Commandes (racine)
 
-| Besoin                            | Commande                                                                                     |
-| --------------------------------- | -------------------------------------------------------------------------------------------- |
-| Installer                         | `pnpm install` (installe aussi les hooks)                                                    |
-| Formater / vérifier               | `pnpm format` / `pnpm format:check`                                                          |
-| **Tout vérifier avant un push**   | `pnpm verify` (mêmes contrôles que la CI, PHP compris ; `--no-e2e` pour aller plus vite)     |
-| Site actuel : build               | `pnpm legacy:build`                                                                          |
-| Site actuel : lint+tests+e2e      | `pnpm legacy:check`                                                                          |
-| Contrat des 70 URL publiques      | `pnpm test:contract` (après un build complet)                                                |
-| Contrat sur le site en ligne      | `CONTRACT_BASE_URL=https://grichard.eu pnpm test:contract`                                   |
-| Audit des dépendances             | `pnpm audit:prod`                                                                            |
-| Site (Astro) : dev                | `pnpm --filter @grichard/web dev` (page de style : `/design/`)                               |
-| Site : build / types / lint       | `pnpm --filter @grichard/web build` / `check` / `lint`                                       |
-| Site : e2e + axe                  | `pnpm --filter @grichard/web test:e2e`                                                       |
-| Design system : tests             | `pnpm --filter @grichard/ui test`                                                            |
-| API PHP : installer               | `cd apps/api && composer install`                                                            |
-| API PHP : tests / style / analyse | `composer test` / `composer cs` / `composer stan` (dans `apps/api`)                          |
-| Contrat sur le nouveau site       | `CONTRACT_DIST=apps/web/dist pnpm test:contract` (après `pnpm --filter @grichard/web build`) |
+| Besoin                            | Commande                                                                                          |
+| --------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Installer                         | `pnpm install` (installe aussi les hooks)                                                         |
+| Formater / vérifier               | `pnpm format` / `pnpm format:check`                                                               |
+| **Tout vérifier avant un push**   | `pnpm verify` (mêmes contrôles que la CI, PHP compris ; `--no-e2e` pour aller plus vite)          |
+| Site actuel : build               | `pnpm legacy:build`                                                                               |
+| Site actuel : lint+tests+e2e      | `pnpm legacy:check`                                                                               |
+| Contrat des 70 URL publiques      | `pnpm test:contract` (après un build complet)                                                     |
+| Contrat sur le site en ligne      | `CONTRACT_BASE_URL=https://grichard.eu pnpm test:contract`                                        |
+| Audit des dépendances             | `pnpm audit:prod`                                                                                 |
+| Site (Astro) : dev                | `pnpm --filter @grichard/web dev` (page de style : `/design/`)                                    |
+| Site : build / types / lint       | `pnpm --filter @grichard/web build` / `check` / `lint`                                            |
+| Site : e2e + axe                  | `pnpm --filter @grichard/web test:e2e`                                                            |
+| Design system : tests             | `pnpm --filter @grichard/ui test`                                                                 |
+| API PHP : installer               | `cd apps/api && composer install`                                                                 |
+| API PHP : tests / style / analyse | `composer test` / `composer cs` / `composer stan` (dans `apps/api`)                               |
+| Références : régénérer les index  | `pnpm --filter @grichard/web reference:build` (GAM : `reference:gam` ; liens : `reference:links`) |
+| Contrat sur le nouveau site       | `CONTRACT_DIST=apps/web/dist pnpm test:contract` (après `pnpm --filter @grichard/web build`)      |
 
 Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. Portail Symfony (`apps/portal`, voir [docs/portail.md](docs/portail.md)) : `composer install`, `composer test|cs|stan` dans `apps/portal`. Déploiement : [docs/deploiement.md](docs/deploiement.md) (production automatique après CI verte sur `main` ; à la main : retour arrière, portail).
 
 ## Architecture cible
 
-`apps/web` (Astro, statique, FR/EN) · `apps/api` (PHP : `contact.php` et `tools.php`, les outils serveur rapport SEO et vérificateur de sitemap, avec la couche `Net/` protégée contre la SSRF, voir ADR 0007) · `apps/portal` (Symfony, espace client) · `packages/ui` (tokens CSS, composants) · `packages/tools-core` (logique pure des outils, TS) · `packages/config` · `packages/content-schema`. Décisions : [docs/adr/](docs/adr/).
+`apps/web` (Astro, statique, FR/EN) · `apps/api` (PHP : `contact.php` et `tools.php`, les outils serveur rapport SEO et vérificateur de sitemap, avec la couche `Net/` protégée contre la SSRF, voir ADR 0007) · `apps/portal` (Symfony, espace client) · `apps/web/data/reference` + `public/data/reference` (aide-mémoire `/reference/` : sources YAML, JSON générés commités, recherche MiniSearch côté client, voir [docs/reference.md](docs/reference.md) et ADR 0008) · `packages/ui` (tokens CSS, composants) · `packages/tools-core` (logique pure des outils, TS) · `packages/config` · `packages/content-schema`. Décisions : [docs/adr/](docs/adr/).
 
 ## Conventions
 

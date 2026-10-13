@@ -10,11 +10,11 @@ Monorepo de grichard.eu. Production sur OVH mutualisé : **fichiers statiques + 
 
 **Avant tout push : `pnpm verify`** (mêmes contrôles que la CI, PHP compris ; code de retour non nul = ne pas pousser).
 
-`pnpm install` · `pnpm format:check` · `pnpm legacy:check` · `pnpm legacy:build` · `pnpm test:contract` · `pnpm audit:prod` · site : `pnpm --filter @grichard/web build|check|lint|test:e2e` · design system : `pnpm --filter @grichard/ui test` · outils : `pnpm --filter @grichard/tools-core check|test` · contrat du nouveau site : `CONTRACT_DIST=apps/web/dist pnpm test:contract` · API PHP (dans `apps/api`) : `composer install`, `composer test|cs|stan`. Portail Symfony (dans `apps/portal`) : `composer install`, `composer test|cs|stan` ; doc : docs/portail.md et docs/deploiement.md. Le `.htaccess` est généré par `apps/web/scripts/lib/htaccess.mjs` (ne pas l'éditer à la main).
+`pnpm install` · `pnpm format:check` · `pnpm legacy:check` · `pnpm legacy:build` · `pnpm test:contract` · `pnpm audit:prod` · site : `pnpm --filter @grichard/web build|check|lint|test:e2e` · design system : `pnpm --filter @grichard/ui test` · outils : `pnpm --filter @grichard/tools-core check|test` · contrat du nouveau site : `CONTRACT_DIST=apps/web/dist pnpm test:contract` · API PHP (dans `apps/api`) : `composer install`, `composer test|cs|stan`. Portail Symfony (dans `apps/portal`) : `composer install`, `composer test|cs|stan` ; doc : docs/portail.md et docs/deploiement.md. Aide-mémoire `/reference/` : après modification d'un `apps/web/data/reference/src/*.yml`, lancer `pnpm --filter @grichard/web reference:build` et commiter les JSON générés (voir docs/reference.md). Le `.htaccess` est généré par `apps/web/scripts/lib/htaccess.mjs` (ne pas l'éditer à la main).
 
 ## Structure cible
 
-`apps/web` (Astro statique FR/EN), `apps/api` (PHP : formulaire de contact et outils serveur SEO/sitemap via `tools.php`, couche `Net/` anti-SSRF, ADR 0007), `apps/portal` (Symfony, espace client de test, SQLite), `packages/ui|tools-core|config|content-schema`, `docs/adr/` (décisions).
+`apps/web` (Astro statique FR/EN), `apps/api` (PHP : formulaire de contact et outils serveur SEO/sitemap via `tools.php`, couche `Net/` anti-SSRF, ADR 0007), `apps/portal` (Symfony, espace client de test, SQLite), `apps/web/data/reference` (aide-mémoire, recherche côté client, ADR 0008), `packages/ui|tools-core|config|content-schema`, `docs/adr/` (décisions).
 
 ## Règles
 
