@@ -1,0 +1,89 @@
+---
+// Page « Ressources » : présente le blog, les outils et les cheatsheets comme le prolongement du métier.
+import Card from '@grichard/ui/components/Card.astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PostCard from '../components/PostCard.astro';
+import ToolCards from '../components/ToolCards.astro';
+import { PORTFOLIO_DATA, PROFILE } from '../data/content';
+import { SITE_TEXT } from '../data/site-text';
+import { getPosts } from '../lib/blog';
+import { crumbs } from '../lib/crumbs';
+import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
+import { resourceLinks } from '../lib/sections';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = PORTFOLIO_DATA[lang];
+const text = SITE_TEXT[lang].resources;
+const routes = ROUTES[lang];
+const trail = crumbs(lang, [], { label: text.title, path: routes.resources });
+const posts = (await getPosts(lang)).slice(0, 3);
+const links = resourceLinks(lang);
+const cards = [
+  { key: 'blog', title: t.nav.blog, text: text.blogText },
+  { key: 'tools', title: t.nav.tools, text: text.toolsText },
+  { key: 'cheatsheets', title: t.nav.cheatsheets, text: text.cheatsheetsText },
+].flatMap((card) => {
+  const link = links.find((l) => l.key === card.key);
+  return link ? [{ ...card, href: link.href }] : [];
+});
+---
+
+<Base
+  lang={lang}
+  title={`${text.title} | ${PROFILE.name}`}
+  description={text.description}
+  path={routes.resources}
+  alternates={routeAlternates('resources')}
+  ld={{ '@context': 'https://schema.org', '@graph': [trail.ld] }}
+>
+  <PageHero path={text.title} title={text.title} crumbs={trail}>
+    <p class="lead">{text.intro}</p>
+  </PageHero>
+  <div class="container stack-lg section">
+    <section aria-labelledby="sections">
+      <h2 id="sections" class="visually-hidden">
+        {text.title}
+      </h2>
+      <div class="cards cards-wide">
+        {cards.map((card) => (
+          <Card class="card-stretch">
+            <h3>
+              <a class="card-link" href={card.href}>
+                {card.title}
+              </a>
+            </h3>
+            <p>{card.text}</p>
+            <p class="meta">{text.open} →</p>
+          </Card>
+        ))}
+      </div>
+    </section>
+
+    {posts.length > 0 && (
+      <section class="stack" aria-labelledby="latest">
+        <h2 id="latest">{text.latest}</h2>
+        <div class="cards cards-wide">
+          {posts.map((post) => (
+            <PostCard post={post} minLabel={t.blog.min} />
+          ))}
+        </div>
+        <p>
+          <a href={routes.blog}>{t.blog.all} →</a>
+        </p>
+      </section>
+    )}
+
+    <section class="stack" aria-labelledby="tools">
+      <h2 id="tools">{t.tools.title}</h2>
+      <p class="prose">{t.tools.intro}</p>
+      <ToolCards lang={lang} headingLevel={3} limit={4} />
+      <p>
+        <a href={routes.tools}>{t.tools.all} →</a>
+      </p>
+    </section>
+  </div>
+</Base>

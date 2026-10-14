@@ -1,15 +1,20 @@
 ---
+import Breadcrumb from '@grichard/ui/components/Breadcrumb.astro';
+
 interface Props {
   /** Conservé pour les appelants ; plus affiché (le fil d'Ariane et le titre suffisent). */
   path?: string;
   title: string;
   lead?: string;
+  /** Fil d'Ariane (voir lib/crumbs.ts) ; absent : pas de fil. */
+  crumbs?: { label: string; items: { label: string; href?: string }[] };
 }
-const { title, lead } = Astro.props;
+const { title, lead, crumbs } = Astro.props;
 ---
 
 <header class="page-hero grid-bg">
   <div class="container">
+    {crumbs && <Breadcrumb label={crumbs.label} items={crumbs.items} />}
     <h1>{title}</h1>
     {lead && <p class="lead">{lead}</p>}
     <slot />

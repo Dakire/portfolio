@@ -1,21 +1,11 @@
 // Contenu du site (calqué sur le CV). Toute modification de texte se fait ici.
 // Les textes des pages « confidentialité » et « accessibilité » sont dans pages.ts.
 import type { Lang } from '../lib/i18n';
+import { PROFILE_TEXT, type ProfileText } from './profile';
 
-export interface Project {
-  title: string;
-  desc: string;
-  tags: string[];
-  href?: string;
-}
-export interface Experience {
-  role: string;
-  company: string;
-  location: string;
-  date: string;
-  desc: string;
-}
-export interface Portfolio {
+export type { Experience, Project, Skill, SkillId } from './profile';
+
+export interface Portfolio extends ProfileText {
   meta: { title: string; description: string };
   ui: Record<string, string>;
   blog: Record<
@@ -41,34 +31,18 @@ export interface Portfolio {
   >;
   tools: { title: string; intro: string; all: string };
   nav: Record<
-    'about' | 'skills' | 'experience' | 'projects' | 'contact' | 'blog' | 'tools',
+    | 'about'
+    | 'career'
+    | 'skills'
+    | 'experience'
+    | 'projects'
+    | 'resources'
+    | 'contact'
+    | 'blog'
+    | 'tools'
+    | 'cheatsheets',
     string
   >;
-  hero: {
-    greeting: string;
-    role: string;
-    /** Phrase d'accroche sous le titre. */
-    pitch: string;
-    cvBtn: string;
-    contactBtn: string;
-    projectsBtn: string;
-    cvLink: string;
-    /** Liens vers les deux CV (section contact de l'accueil). */
-    cvLinks: { href: string; label: string; lang: Lang }[];
-    terminal: { cmd: string; out: string }[];
-  };
-  aboutTitle: string;
-  about: string;
-  skillsTitle: string;
-  skills: { category: string; items: string }[];
-  experienceTitle: string;
-  experiences: Experience[];
-  projectsTitle: string;
-  projectsAll: string;
-  projects: Project[];
-  educationTitle: string;
-  education: string[];
-  languagesInfo: string;
   contactTitle: string;
   form: Record<
     | 'name'
@@ -107,7 +81,7 @@ export const PROFILE = {
   github: 'https://github.com/Dakire',
 };
 
-export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
+const BASE_DATA: Record<Lang, Omit<Portfolio, keyof ProfileText>> = {
   fr: {
     meta: {
       title: 'Guillaume Richard | Technicien IT, réseau et sécurité',
@@ -142,7 +116,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
       all: 'Tous les articles',
       min: 'min de lecture',
       pageIntro:
-        "Notes techniques sur la messagerie, le DNS, l'administration Microsoft 365 / Google Workspace et le poste de travail.",
+        'Des notes techniques écrites au fil de mon travail : messagerie, DNS, administration Microsoft 365 / Google Workspace et poste de travail.',
       pageDescription:
         'Notes techniques sur la messagerie (SPF, DKIM, DMARC), le DNS, les migrations Microsoft 365 / Google Workspace et le poste de travail.',
       siteName: 'Blog de Guillaume Richard',
@@ -161,155 +135,21 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
     tools: {
       title: 'Outils',
       intro:
-        "Des outils gratuits pour techniciens et administrateurs, nés de problèmes rencontrés en support : diagnostic DNS et e-mail, audit SEO et sitemap, calendriers ICS, réseau, encodage, JSON, mots de passe, conversions. Ceux qui traitent des fichiers ou du texte s'exécutent dans votre navigateur ; les outils DNS interrogent des résolveurs publics et les outils SEO passent par le site, sans rien conserver.",
+        "Des outils gratuits, nés de problèmes que j'ai rencontrés en support : diagnostic DNS et e-mail, audit SEO et sitemap, calendriers ICS, réseau, encodage, JSON, mots de passe, conversions. Ils sont à vous, sans inscription.",
       all: 'Tous les outils',
     },
     nav: {
       about: 'À propos',
+      career: 'Parcours',
       skills: 'Compétences',
-      experience: 'Expériences',
-      projects: 'Projets',
+      experience: 'Parcours',
+      projects: 'Réalisations',
+      resources: 'Ressources',
       contact: 'Contact',
       blog: 'Blog',
       tools: 'Outils',
+      cheatsheets: 'Cheatsheets',
     },
-    hero: {
-      greeting: 'Bonjour, je suis',
-      role: 'Technicien Informatique & Systèmes Numériques',
-      pitch:
-        "Technicien informatique : réseau, systèmes, sécurité et messagerie (Microsoft 365, Google Workspace). Je déploie, je dépanne, j'accompagne les utilisateurs et je les forme à l'IA, à Microsoft 365 et au RGPD.",
-      cvBtn: 'Télécharger mon CV',
-      contactBtn: 'Me contacter',
-      projectsBtn: 'Voir mes projets',
-      cvLink: '/CV_Guillaume_Richard_FR.pdf',
-      cvLinks: [
-        { href: '/CV_Guillaume_Richard_FR.pdf', label: 'CV en français (PDF)', lang: 'fr' },
-        { href: '/Resume_Guillaume_Richard_EN.pdf', label: 'Resume in English (PDF)', lang: 'en' },
-      ],
-      terminal: [
-        { cmd: 'whoami', out: 'guillaume · technicien informatique & systèmes numériques' },
-        { cmd: 'cat stack.txt', out: 'Microsoft 365 · Google Workspace · DNS · Windows Server' },
-        { cmd: 'ls ~/blog', out: 'spf-dkim-dmarc  delivrabilite  dns  migration  windows-11' },
-      ],
-    },
-    aboutTitle: 'À propos de moi',
-    about:
-      "Passionné par l'informatique depuis toujours et d'un naturel curieux, j'aime explorer et tester les nouvelles technologies. Technicien informatique, je travaille au quotidien sur les systèmes et le réseau, la messagerie Cloud (M365/Workspace), le DNS et le support IT de bout en bout, et je développe des outils d'automatisation sur mesure.",
-    skillsTitle: "Domaines d'Expertise",
-    skills: [
-      {
-        category: 'Réseau & Systèmes',
-        items:
-          'Windows Server (AD, MDT, WDS, DNS, DHCP, RDP), Linux. Réseaux LAN/WLAN, VPN, FTP/SFTP. Homelab pour tester configurations et services avant de les déployer.',
-      },
-      {
-        category: 'Sécurité IT',
-        items:
-          'Pare-feu Stormshield SNS, VPN, sécurité des identités Microsoft 365 et Google Workspace, authentification des e-mails (SPF, DKIM, DMARC).',
-      },
-      {
-        category: 'Messagerie & Cloud',
-        items:
-          'Expertise M365 & Google Workspace. Analyse SMTP, Délivrabilité, gestion des Zones DNS (MX, SPF, DKIM, DMARC), Maintien en Conditions Opérationnelles (MCO).',
-      },
-      {
-        category: 'Formation IA, M365 & RGPD',
-        items:
-          "Formation et accompagnement des utilisateurs à l'intelligence artificielle, à Microsoft 365 et aux bonnes pratiques du RGPD.",
-      },
-      {
-        category: 'Développement & Automatisation',
-        items:
-          'Création et gestion de sites (WordPress, Wix, Shopify, React). Scripts et outils : C#, Java, Python, PowerShell, Bash, SQL, PHP.',
-      },
-      {
-        category: 'Support & Projets IT',
-        items:
-          'Support utilisateur de bout en bout (N1 à N3), escalade éditeurs (N4), déploiement de logiciels métiers et accompagnement technique.',
-      },
-    ],
-    experienceTitle: 'Expériences Professionnelles',
-    experiences: [
-      {
-        role: 'Technicien informatique et systèmes numériques',
-        company: 'TIXIA Services numériques',
-        location: 'Laval, France',
-        date: 'Depuis Août 2023',
-        desc: 'Administration avancée de Microsoft 365 et Google Workspace (identités, sécurité, MCO). Migrations complexes : IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail, Outlook vers le Cloud. Gestion zones DNS, analyse headers SMTP et délivrabilité (SPF, DKIM, DMARC). Administration Windows Server (MDT, WDS, AD, DHCP, DNS, RDP). Support IT N1 à N3 (escalade N4 éditeurs) et masterisation de PC.',
-      },
-      {
-        role: 'Intervenant Dépannage Informatique',
-        company: 'AlloVoisin / Particuliers',
-        location: 'Laval & Le Mans',
-        date: 'Depuis 2021',
-        desc: 'Assistance informatique de proximité et diagnostic (matériel/logiciel). Réparation de PC, conseil technologique et optimisation de systèmes.',
-      },
-      {
-        role: 'Webmaster',
-        company: 'Les papiers de Lucas',
-        location: 'Changé, France',
-        date: 'Avril 2022 - Juin 2022',
-        desc: "Maintenance technique et administration d'un site e-commerce PrestaShop. Audits SEO détaillés, gestion DNS et correction UX/UI.",
-      },
-      {
-        role: 'Technicien de Maintenance IT',
-        company: 'Tibco (Groupe Lactalis)',
-        location: 'Laval, France',
-        date: 'Janvier 2019',
-        desc: 'Préparation et masterisation de postes informatiques industriels. Diagnostic de pannes matérielles et télé-assistance.',
-      },
-    ],
-    projectsTitle: 'Projets & réalisations',
-    projectsAll: 'Tous les projets',
-    projects: [
-      {
-        title: 'Homelab Proxmox, OPNsense et WireGuard',
-        desc: 'Laboratoire personnel sous Proxmox pour tester configurations et services avant de les déployer : pare-feu OPNsense, VPN WireGuard, segmentation du réseau et machines virtuelles de test.',
-        tags: ['Proxmox', 'OPNsense', 'WireGuard', 'Virtualisation'],
-      },
-      {
-        title: 'Déploiement Windows Server (MDT, WDS)',
-        desc: 'Configuration de serveurs Windows pour déployer des postes en série : images maîtres avec MDT, démarrage réseau avec WDS, annuaire Active Directory, DHCP et DNS.',
-        tags: ['Windows Server', 'MDT', 'WDS', 'Active Directory'],
-      },
-      {
-        title: 'Migrations de comptes de messagerie',
-        desc: 'Migration de boîtes Gmail, Outlook et IMAP (OVH, Gandi, IONOS, Orange…) vers Microsoft 365 ou Google Workspace, avec reprise des zones DNS et contrôle de la délivrabilité.',
-        tags: ['Microsoft 365', 'Google Workspace', 'IMAP', 'DNS'],
-      },
-      {
-        title: 'Support utilisateur N1 à N3',
-        desc: 'Assistance de bout en bout auprès des utilisateurs : diagnostic, résolution, escalade vers les éditeurs (N4) et accompagnement technique.',
-        tags: ['Support', 'Diagnostic', 'Microsoft 365'],
-      },
-      {
-        title: 'PC sur mesure, personnels et professionnels',
-        desc: "Choix des composants selon l'usage et le budget, montage, configuration et mise en service de PC pour les particuliers et les professionnels.",
-        tags: ['Matériel', 'Montage', 'Configuration'],
-      },
-      {
-        title: 'Outil de Conversion Email (C#)',
-        desc: "Outil métier développé en C# permettant l'extraction et la conversion d'archives mails complètes (MSG/EML) vers PDF avec gestion automatique des pièces jointes.",
-        tags: ['C#', 'Outil Métier', 'Email'],
-      },
-      {
-        title: 'Automatisation (Python, Scripts)',
-        desc: "Création de scripts Python, PowerShell et Google Apps Script pour l'automatisation de tâches récurrentes et l'optimisation des flux de travail.",
-        tags: ['Python', 'PowerShell', 'Automation'],
-      },
-      {
-        title: 'Création Web (JS, React, CMS)',
-        href: 'https://github.com/Dakire/portfolio',
-        desc: "Développement d'extensions navigateur sur mesure et déploiement de sites web modernes (WordPress, Wix, React).",
-        tags: ['JavaScript', 'React', 'Web'],
-      },
-    ],
-    educationTitle: 'Formation & Profil',
-    education: [
-      'Licence Informatique (Développement et Programmation) - Le Mans Université (2023)',
-      "Baccalauréat Scientifique (Sciences de l'Ingénieur) - Lycée Immaculée Conception, Laval (2020)",
-    ],
-    languagesInfo: 'Français (langue maternelle), Anglais (langue maternelle).',
     contactTitle: 'Me contacter',
     form: {
       name: 'Votre nom complet',
@@ -398,7 +238,7 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
       all: 'All articles',
       min: 'min read',
       pageIntro:
-        'Technical notes on email, DNS, Microsoft 365 / Google Workspace administration and the workstation.',
+        'Technical notes written along the way: email, DNS, Microsoft 365 / Google Workspace administration and the workstation.',
       pageDescription:
         'Technical notes on email (SPF, DKIM, DMARC), DNS, Microsoft 365 / Google Workspace migrations and the workstation.',
       siteName: "Guillaume Richard's blog",
@@ -417,155 +257,21 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
     tools: {
       title: 'Tools',
       intro:
-        'Free tools for technicians and administrators, born from problems met in support: DNS and email diagnosis, SEO and sitemap audit, ICS calendars, networking, encoding, JSON, passwords, conversions. Those that process files or text run in your browser; the DNS tools query public resolvers and the SEO tools go through the site, keeping nothing.',
+        'Free tools, born from problems I ran into while doing support: DNS and email diagnosis, SEO and sitemap audit, ICS calendars, networking, encoding, JSON, passwords, conversions. They are yours to use, no sign-up.',
       all: 'All tools',
     },
     nav: {
       about: 'About',
+      career: 'Career',
       skills: 'Skills',
-      experience: 'Experience',
+      experience: 'Career',
       projects: 'Projects',
+      resources: 'Resources',
       contact: 'Contact',
       blog: 'Blog',
       tools: 'Tools',
+      cheatsheets: 'Cheatsheets',
     },
-    hero: {
-      greeting: 'Hello, I am',
-      role: 'IT & Digital Systems Technician',
-      pitch:
-        'IT technician: networks, systems, security and messaging (Microsoft 365, Google Workspace). I deploy, troubleshoot, support users and train them in AI, Microsoft 365 and GDPR.',
-      cvBtn: 'Download Resume',
-      contactBtn: 'Contact Me',
-      projectsBtn: 'See my projects',
-      cvLink: '/Resume_Guillaume_Richard_EN.pdf',
-      cvLinks: [
-        { href: '/Resume_Guillaume_Richard_EN.pdf', label: 'Resume in English (PDF)', lang: 'en' },
-        { href: '/CV_Guillaume_Richard_FR.pdf', label: 'CV en français (PDF)', lang: 'fr' },
-      ],
-      terminal: [
-        { cmd: 'whoami', out: 'guillaume · it & digital systems technician' },
-        { cmd: 'cat stack.txt', out: 'Microsoft 365 · Google Workspace · DNS · Windows Server' },
-        { cmd: 'ls ~/blog', out: 'spf-dkim-dmarc  deliverability  dns  migration  windows-11' },
-      ],
-    },
-    aboutTitle: 'About Me',
-    about:
-      'Passionate about IT from an early age and naturally curious, I love exploring and testing new technologies. As an IT technician, I work every day on systems and networks, Cloud messaging (M365/Workspace), DNS and end-to-end IT support, and I build custom automation tools.',
-    skillsTitle: 'Core Expertise',
-    skills: [
-      {
-        category: 'Networks & Systems',
-        items:
-          'Windows Server (AD, MDT, WDS, DNS, DHCP, RDP), Linux. LAN/WLAN networks, VPN, FTP/SFTP. Homelab to test configurations and services before deploying them.',
-      },
-      {
-        category: 'IT Security',
-        items:
-          'Stormshield SNS firewalls, VPN, Microsoft 365 and Google Workspace identity security, email authentication (SPF, DKIM, DMARC).',
-      },
-      {
-        category: 'Messaging & Cloud',
-        items:
-          'M365 & Google Workspace expertise. SMTP header analysis, deliverability troubleshooting, DNS zone management (MX, SPF, DKIM, DMARC).',
-      },
-      {
-        category: 'AI, M365 & GDPR Training',
-        items:
-          'Training and supporting users on artificial intelligence, Microsoft 365 and GDPR best practices.',
-      },
-      {
-        category: 'Development & Automation',
-        items:
-          'Website creation and management (WordPress, Wix, Shopify, React). Scripts and tools: C#, Java, Python, PowerShell, Bash, SQL, PHP.',
-      },
-      {
-        category: 'IT Support & Projects',
-        items:
-          'End-to-end user support (L1 to L3), software publisher escalation (L4), business application deployment, and technical consulting.',
-      },
-    ],
-    experienceTitle: 'Professional Experience',
-    experiences: [
-      {
-        role: 'IT and Digital Systems Technician',
-        company: 'TIXIA Services numériques',
-        location: 'Laval, France',
-        date: 'Since August 2023',
-        desc: 'Advanced administration of Microsoft 365 and Google Workspace (identities, security). Complex migrations: IMAP (OVH, Gandi, IONOS, Orange), Gmail, Outlook to the Cloud. DNS zone management, SMTP headers analysis, and deliverability (SPF, DKIM, DMARC). Windows Server administration (MDT, WDS, AD, DHCP, DNS, RDP). L1-L3 IT Support (L4 escalation) and PC imaging.',
-      },
-      {
-        role: 'IT Support Technician',
-        company: 'Private Individuals',
-        location: 'Laval & Le Mans',
-        date: 'Since 2021',
-        desc: 'Local IT assistance and diagnostics (hardware/software). PC repair, technological consulting, and system optimization.',
-      },
-      {
-        role: 'Webmaster',
-        company: 'Les papiers de Lucas',
-        location: 'Changé, France',
-        date: 'April 2022 - June 2022',
-        desc: 'Technical maintenance and administration of a PrestaShop e-commerce website. Detailed SEO audits, DNS management, and UX/UI fixes.',
-      },
-      {
-        role: 'IT Maintenance Technician',
-        company: 'Tibco (Lactalis Group)',
-        location: 'Laval, France',
-        date: 'January 2019',
-        desc: 'Preparation and system imaging of industrial computers. On-site hardware diagnostics and remote technical assistance.',
-      },
-    ],
-    projectsTitle: 'Projects & work',
-    projectsAll: 'All projects',
-    projects: [
-      {
-        title: 'Proxmox, OPNsense and WireGuard homelab',
-        desc: 'Personal lab on Proxmox to test configurations and services before deploying them: OPNsense firewall, WireGuard VPN, network segmentation and test virtual machines.',
-        tags: ['Proxmox', 'OPNsense', 'WireGuard', 'Virtualization'],
-      },
-      {
-        title: 'Windows Server deployment (MDT, WDS)',
-        desc: 'Windows server setup to deploy workstations at scale: master images with MDT, network boot with WDS, Active Directory, DHCP and DNS.',
-        tags: ['Windows Server', 'MDT', 'WDS', 'Active Directory'],
-      },
-      {
-        title: 'Mailbox account migrations',
-        desc: 'Migration of Gmail, Outlook and IMAP mailboxes (OVH, Gandi, IONOS, Orange…) to Microsoft 365 or Google Workspace, including DNS zones and deliverability checks.',
-        tags: ['Microsoft 365', 'Google Workspace', 'IMAP', 'DNS'],
-      },
-      {
-        title: 'User support L1 to L3',
-        desc: 'End-to-end user assistance: diagnosis, resolution, escalation to software publishers (L4) and technical guidance.',
-        tags: ['Support', 'Troubleshooting', 'Microsoft 365'],
-      },
-      {
-        title: 'Custom-built PCs, personal and professional',
-        desc: 'Choosing components for the use case and budget, building, configuring and commissioning PCs for individuals and businesses.',
-        tags: ['Hardware', 'Build', 'Configuration'],
-      },
-      {
-        title: 'MSG/EML to PDF Converter',
-        desc: 'Business tool developed in C# allowing the extraction and conversion of complete email archives (MSG/EML) into PDFs with automated attachment handling.',
-        tags: ['C#', 'Business Tool', 'Email'],
-      },
-      {
-        title: 'Automation (Python, Scripts)',
-        desc: 'Creation of Python, PowerShell, and Google Apps Script scripts to automate recurring tasks and optimize workflows.',
-        tags: ['Python', 'PowerShell', 'Automation'],
-      },
-      {
-        title: 'Web Creation (JS, React, CMS)',
-        href: 'https://github.com/Dakire/portfolio',
-        desc: 'Development of custom browser extensions and deployment of modern websites (WordPress, Wix, React).',
-        tags: ['JavaScript', 'React', 'Web'],
-      },
-    ],
-    educationTitle: 'Education & Profile',
-    education: [
-      'Bachelor of Science in Computer Science (Development & Programming) - Le Mans University (2023)',
-      'French Scientific Baccalauréat (Engineering Sciences) - Lycée Immaculée Conception, Laval (2020)',
-    ],
-    languagesInfo: 'French (Native), English (Native).',
     contactTitle: 'Get in touch',
     form: {
       name: 'Full Name',
@@ -619,4 +325,9 @@ export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
       ],
     },
   },
+};
+
+export const PORTFOLIO_DATA: Record<Lang, Portfolio> = {
+  fr: { ...BASE_DATA.fr, ...PROFILE_TEXT.fr },
+  en: { ...BASE_DATA.en, ...PROFILE_TEXT.en },
 };

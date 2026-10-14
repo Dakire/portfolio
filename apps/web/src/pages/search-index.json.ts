@@ -13,7 +13,18 @@ export async function GET() {
     index[lang] = {
       items: [
         { group: 'pages', title: UI[lang].crumbHome, url: ROUTES[lang].home },
-        ...(['about', 'skills', 'projects', 'blog', 'tools', 'contact'] as const).map((key) => ({
+        ...(
+          [
+            'about',
+            'career',
+            'skills',
+            'projects',
+            'resources',
+            'blog',
+            'tools',
+            'contact',
+          ] as const
+        ).map((key) => ({
           group: 'pages',
           title: nav[key],
           url: ROUTES[lang][key],

@@ -1,16 +1,18 @@
 ---
-// Pages « À propos », « Compétences », « Projets » et « Contact » : un même gabarit, le contenu change selon `page`.
+// Pages « À propos », « Compétences », « Réalisations » et « Contact » : un même gabarit, le contenu change selon `page`.
 import Button from '@grichard/ui/components/Button.astro';
+import CtaBand from '@grichard/ui/components/CtaBand.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import SkillCards from '../components/SkillCards.astro';
 import ProjectCards from '../components/ProjectCards.astro';
-import ExperienceList from '../components/ExperienceList.astro';
 import ContactIsland from '../contact/ContactForm';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
+import { SKILL_RELATED, hasRelated, resolveRelated } from '../data/related';
+import { SITE_TEXT } from '../data/site-text';
 import '../styles/tools.css';
 import { withBase } from '../lib/base';
-import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
+import { crumbs } from '../lib/crumbs';
+import { ROUTES, projectPath, routeAlternates, type Lang } from '../lib/i18n';
 
 interface Props {
   lang: Lang;
@@ -18,39 +20,59 @@ interface Props {
 }
 const { lang, page } = Astro.props;
 const t = PORTFOLIO_DATA[lang];
+const text = SITE_TEXT[lang];
 const routes = ROUTES[lang];
+const fr = lang === 'fr';
 
 const heads = {
   about: {
-    path: '~/about',
     title: t.aboutTitle,
-    description: t.about.slice(0, 160).replace(/\s+\S*$/, '…'),
+    description: fr
+      ? "Qui est Guillaume Richard : technicien informatique à Laval, passionné de réseaux, de messagerie cloud et d'automatisation. Profil, approche et CV."
+      : 'Who Guillaume Richard is: an IT technician in Laval, France, keen on networks, cloud email and automation. Profile, approach and resume.',
   },
   skills: {
-    path: '~/skills',
     title: t.skillsTitle,
-    description: t.skills.map((s) => s.category).join(', ') + '.',
+    description: fr
+      ? 'Les six domaines de compétences de Guillaume Richard : réseau, sécurité, messagerie cloud, formation, développement et support, avec leurs preuves.'
+      : "Guillaume Richard's six areas of expertise: networking, security, cloud email, training, development and support, with the work behind each.",
   },
   projects: {
-    path: '~/projects',
     title: t.projectsTitle,
-    description: t.projects.map((p) => p.title).join(', ') + '.',
+    description: fr
+      ? 'Les réalisations de Guillaume Richard : homelab Proxmox, déploiement Windows Server, migrations de messagerie, support, outils C# et automatisation.'
+      : "Guillaume Richard's projects: Proxmox homelab, Windows Server deployment, mailbox migrations, support, C# tools and automation.",
   },
   contact: {
-    path: '~/contact',
     title: t.contactTitle,
-    description:
-      lang === 'fr'
-        ? 'Contacter Guillaume Richard : e-mail et formulaire.'
-        : 'Contact Guillaume Richard: email and form.',
+    description: fr
+      ? 'Contacter Guillaume Richard : e-mail et formulaire.'
+      : 'Contact Guillaume Richard: email and form.',
   },
 } as const;
 const head = heads[page];
 const pageTitle = `${head.title} | ${PROFILE.name}`;
-const labels =
-  lang === 'fr'
-    ? { cv: 'Télécharger mon CV (PDF)', spoken: 'Langues' }
-    : { cv: 'Download my resume (PDF)', spoken: 'Languages' };
+const trail = crumbs(lang, [], { label: head.title, path: routes[page] });
+const labels = fr
+  ? { cv: 'Télécharger mon CV (PDF)', career: 'Voir mon parcours', jump: 'Aller à un domaine' }
+  : { cv: 'Download my resume (PDF)', career: 'See my career', jump: 'Jump to an area' };
+
+// Compétences : chaque domaine et ses preuves (réalisations, articles, outils, cheatsheets).
+const skillBlocks =
+  page === 'skills'
+    ? await Promise.all(
+        t.skills.map(async (skill) => ({
+          skill,
+          projects: t.projects.filter((p) => p.skill === skill.id),
+          related: await resolveRelated(lang, SKILL_RELATED[skill.id]),
+        })),
+      )
+    : [];
+const domains = [...new Set(t.projects.map((p) => p.skill))].map((id) => ({
+  id,
+  label: t.skills.find((s) => s.id === id)?.category ?? id,
+  items: t.projects.filter((p) => p.skill === id),
+}));
 ---
 
 <Base
@@ -59,8 +81,12 @@ const labels =
   description={head.description}
   path={routes[page]}
   alternates={routeAlternates(page)}
+  ld={{ '@context': 'https://schema.org', '@graph': [trail.ld] }}
 >
-  <PageHero path={head.path} title={head.title} />
+  <PageHero path={head.title} title={head.title} crumbs={trail}>
+    {page === 'skills' && <p class="lead">{t.skillsIntro}</p>}
+    {page === 'projects' && <p class="lead">{t.projectsIntro}</p>}
+  </PageHero>
   <div class="container stack-lg section">
     {page === 'about' && (
       <>
@@ -69,42 +95,107 @@ const labels =
             {t.aboutTitle}
           </h2>
           <p class="prose lead">{t.about}</p>
-          <p>
+          {t.aboutMore.map((p) => (
+            <p class="prose">{p}</p>
+          ))}
+          <p class="row">
+            <Button variant="primary" href={routes.career}>
+              {labels.career}
+            </Button>
             <Button href={withBase(t.hero.cvLink)}>{labels.cv}</Button>
           </p>
         </section>
-        <section class="stack" aria-labelledby="exp">
-          <h2 id="exp">{t.experienceTitle}</h2>
-          <ExperienceList items={t.experiences} />
-        </section>
-        <section class="stack" aria-labelledby="edu">
-          <h2 id="edu">{t.educationTitle}</h2>
-          <ul class="prose">
-            {t.education.map((line) => (
-              <li>{line}</li>
+        <section class="stack" aria-labelledby="about-skills">
+          <h2 id="about-skills">{t.skillsTitle}</h2>
+          <ul class="link-list">
+            {t.skills.map((skill) => (
+              <li>
+                <a href={`${routes.skills}#${skill.id}`}>{skill.category}</a>
+                <span class="meta"> · {skill.short}</span>
+              </li>
             ))}
           </ul>
-          <p class="prose">
-            <strong>{labels.spoken} :</strong> {t.languagesInfo}
-          </p>
         </section>
       </>
     )}
-    {page === 'skills' && (
-      <section class="stack" aria-labelledby="skills-list">
-        <h2 id="skills-list" class="visually-hidden">
-          {t.skillsTitle}
-        </h2>
-        <SkillCards skills={t.skills} />
-      </section>
-    )}
+    {page === 'skills' &&
+      skillBlocks.map(({ skill, projects, related }) => (
+        <section class="stack" id={skill.id} aria-labelledby={`${skill.id}-title`}>
+          <h2 id={`${skill.id}-title`}>{skill.category}</h2>
+          <p class="prose">{skill.items}</p>
+          {(projects.length > 0 || hasRelated(related)) && (
+            <div class="proofs">
+              <p class="meta">{text.skills.proofs}</p>
+              {projects.length > 0 && (
+                <div>
+                  <h3>{text.skills.projects}</h3>
+                  <ul class="link-list">
+                    {projects.map((p) => (
+                      <li>
+                        <a href={projectPath(lang, p.slug)}>{p.title}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {related.posts.length > 0 && (
+                <div>
+                  <h3>{text.skills.posts}</h3>
+                  <ul class="link-list">
+                    {related.posts.map((l) => (
+                      <li>
+                        <a href={l.href}>{l.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {related.tools.length > 0 && (
+                <div>
+                  <h3>{text.skills.tools}</h3>
+                  <ul class="link-list">
+                    {related.tools.map((l) => (
+                      <li>
+                        <a href={l.href}>{l.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {related.refs.length > 0 && (
+                <div>
+                  <h3>{text.skills.cheatsheets}</h3>
+                  <ul class="link-list">
+                    {related.refs.map((l) => (
+                      <li>
+                        <a href={l.href}>{l.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+        </section>
+      ))}
     {page === 'projects' && (
-      <section class="stack" aria-labelledby="projects-list">
-        <h2 id="projects-list" class="visually-hidden">
-          {t.projectsTitle}
-        </h2>
-        <ProjectCards items={t.projects} lang={lang} />
-      </section>
+      <>
+        <nav aria-label={labels.jump} class="section-nav">
+          <ul>
+            {domains.map((d) => (
+              <li>
+                <a href={`#${d.id}`}>{d.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        {domains.map((d) => (
+          <section class="stack" id={d.id} aria-labelledby={`${d.id}-title`}>
+            <h2 id={`${d.id}-title`}>{d.label}</h2>
+            <ProjectCards items={d.items} lang={lang} level={3} />
+          </section>
+        ))}
+      </>
     )}
     {page === 'contact' && (
       <section class="stack" aria-labelledby="contact-direct">
@@ -114,6 +205,16 @@ const labels =
         </p>
         <ContactIsland client:visible lang={lang} />
       </section>
+    )}
+    {page !== 'contact' && (
+      <CtaBand title={text.contactBand.title}>
+        <p>{text.contactBand.text}</p>
+        <Fragment slot="actions">
+          <Button variant="primary" href={routes.contact}>
+            {t.hero.contactBtn}
+          </Button>
+        </Fragment>
+      </CtaBand>
     )}
   </div>
 </Base>

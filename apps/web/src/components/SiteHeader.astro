@@ -1,7 +1,8 @@
 ---
+import Button from '@grichard/ui/components/Button.astro';
 import ThemeSwitch from '@grichard/ui/components/ThemeSwitch.astro';
-import { ROUTES, UI, type Lang, type RouteKey } from '../lib/i18n';
-import { hubPath, refsFor } from '../reference/refs';
+import { ROUTES, UI, type Lang } from '../lib/i18n';
+import { inResources } from '../lib/sections';
 
 interface Props {
   lang: Lang;
@@ -13,11 +14,12 @@ interface Props {
 const { lang, path, otherHref } = Astro.props;
 const ui = UI[lang];
 const other = lang === 'fr' ? 'en' : 'fr';
-const items: RouteKey[] = ['about', 'skills', 'projects', 'blog', 'tools', 'contact'];
-// La section « Référence » n'existe que dans les langues où des références sont publiées (français pour l'instant).
-const reference =
-  refsFor(lang).length > 0 ? { href: hubPath(lang), label: 'Cheatsheets' } : undefined;
-const isCurrent = (href: string) => path === href || path.startsWith(href);
+const items = ['about', 'career', 'skills', 'projects', 'resources'] as const;
+// « Ressources » reste actif sur le blog, les outils et les cheatsheets : ce sont ses sous-pages.
+const isCurrent = (key: (typeof items)[number]) => {
+  const href = ROUTES[lang][key];
+  return key === 'resources' ? inResources(lang, path) : path === href || path.startsWith(href);
+};
 ---
 
 <header class="site-header">
@@ -28,6 +30,14 @@ const isCurrent = (href: string) => path === href || path.startsWith(href);
         .eu
       </span>
     </a>
+    <Button
+      variant="primary"
+      href={ROUTES[lang].contact}
+      class="site-cta"
+      aria-current={path === ROUTES[lang].contact ? 'page' : undefined}
+    >
+      {ui.nav.contact}
+    </Button>
     <button
       type="button"
       class="nav-toggle"
@@ -45,22 +55,14 @@ const isCurrent = (href: string) => path === href || path.startsWith(href);
             <li>
               <a
                 href={ROUTES[lang][key]}
-                aria-current={isCurrent(ROUTES[lang][key]) ? 'page' : undefined}
+                aria-current={
+                  isCurrent(key) ? (path === ROUTES[lang][key] ? 'page' : 'true') : undefined
+                }
               >
-                {ui.nav[key as keyof typeof ui.nav]}
+                {ui.nav[key]}
               </a>
             </li>
           ))}
-          {reference && (
-            <li>
-              <a
-                href={reference.href}
-                aria-current={isCurrent(reference.href) ? 'page' : undefined}
-              >
-                {reference.label}
-              </a>
-            </li>
-          )}
         </ul>
       </nav>
       <div class="site-tools">

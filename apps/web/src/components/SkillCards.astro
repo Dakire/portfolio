@@ -4,15 +4,17 @@ import type { Portfolio } from '../data/content';
 
 interface Props {
   skills: Portfolio['skills'];
+  /** Accueil : une ligne par domaine et un lien vers la page Compétences. */
+  compact?: { href: string };
 }
-const { skills } = Astro.props;
+const { skills, compact } = Astro.props;
 ---
 
-<div class="cards">
+<div class="cards cards-skills">
   {skills.map((skill) => (
-    <Card>
+    <Card href={compact ? `${compact.href}#${skill.id}` : undefined}>
       <h3>{skill.category}</h3>
-      <p>{skill.items}</p>
+      <p>{compact ? skill.short : skill.items}</p>
     </Card>
   ))}
 </div>

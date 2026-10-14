@@ -3,18 +3,25 @@ import type { Experience } from '../data/content';
 
 interface Props {
   items: Experience[];
+  /** Niveau des titres de poste, selon le titre de section qui précède. */
+  level?: 2 | 3;
 }
-const { items } = Astro.props;
+const { items, level = 3 } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
 ---
 
 <ol class="timeline">
   {items.map((job) => (
     <li class="stack">
-      <h3>{job.role}</h3>
+      <Heading>{job.role}</Heading>
       <p class="meta">
         {job.company} · {job.location} · {job.date}
       </p>
-      <p class="prose">{job.desc}</p>
+      <ul class="points">
+        {job.points.map((point) => (
+          <li>{point}</li>
+        ))}
+      </ul>
     </li>
   ))}
 </ol>

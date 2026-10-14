@@ -415,7 +415,7 @@
   background: var(--raised);
   border-color: var(--line-strong);
 }
-.section-nav a[aria-current='page'] {
+.section-nav a[aria-current] {
   border-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 12%, transparent);
   color: var(--ink);

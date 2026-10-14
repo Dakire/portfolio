@@ -2,7 +2,8 @@
 interface Item {
   label: string;
   href: string;
-  current?: boolean;
+  /** « page » : la page affichée ; « true » : la section dont la page affichée fait partie. */
+  current?: 'page' | 'true';
 }
 interface Props {
   items: Item[];
@@ -16,7 +17,7 @@ const { items, label } = Astro.props;
   <ul>
     {items.map((item) => (
       <li>
-        <a href={item.href} aria-current={item.current ? 'page' : undefined}>
+        <a href={item.href} aria-current={item.current}>
           {item.label}
         </a>
       </li>

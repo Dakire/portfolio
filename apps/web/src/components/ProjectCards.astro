@@ -2,22 +2,29 @@
 import Card from '@grichard/ui/components/Card.astro';
 import Tag from '@grichard/ui/components/Tag.astro';
 import type { Project } from '../data/content';
-import { UI, type Lang } from '../lib/i18n';
+import { UI, projectPath, type Lang } from '../lib/i18n';
 
 interface Props {
   items: Project[];
   lang: Lang;
-  /** Nombre maximal de cartes (aperçu de l'accueil) ; toutes par défaut. */
+  /** Nombre maximal de cartes ; toutes par défaut. */
   limit?: number;
+  /** Niveau des titres de carte, selon le titre de section qui précède. */
+  level?: 2 | 3;
 }
-const { items, lang, limit } = Astro.props;
+const { items, lang, limit, level = 3 } = Astro.props;
 const ui = UI[lang];
+const Heading = `h${level}` as 'h2' | 'h3';
 ---
 
 <div class="cards cards-wide">
   {items.slice(0, limit).map((project) => (
-    <Card>
-      <h3>{project.title}</h3>
+    <Card class="card-stretch">
+      <Heading>
+        <a class="card-link" href={projectPath(lang, project.slug)}>
+          {project.title}
+        </a>
+      </Heading>
       <p>{project.desc}</p>
       <p class="row">
         {project.tags.map((tag) => (
@@ -26,7 +33,7 @@ const ui = UI[lang];
       </p>
       {project.href && (
         <p>
-          <a href={project.href} rel="noopener">
+          <a class="card-extra" href={project.href} rel="noopener">
             GitHub<span class="visually-hidden"> {ui.external}</span>
           </a>
         </p>

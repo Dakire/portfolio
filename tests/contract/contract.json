@@ -394,6 +394,106 @@
       "type": "application/json",
       "kind": "json",
       "since": "web"
+    },
+    {
+      "path": "/parcours/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/career/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/ressources/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/resources/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/projets/homelab-proxmox/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/projets/deploiement-windows-server/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/projets/migrations-messagerie/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/projets/support-n1-n3/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/projets/pc-sur-mesure/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/projets/convertisseur-msg-eml/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/projets/automatisation-scripts/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/projets/creation-web/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/projects/homelab-proxmox/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/projects/deploiement-windows-server/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/projects/migrations-messagerie/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/projects/support-n1-n3/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/projects/pc-sur-mesure/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/projects/convertisseur-msg-eml/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/projects/automatisation-scripts/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/projects/creation-web/",
+      "type": "text/html",
+      "since": "web"
     }
   ]
 }

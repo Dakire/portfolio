@@ -1,0 +1,71 @@
+---
+// Page « Parcours » : le CV en ligne (expériences, formation, langues) et les deux CV en PDF.
+import Button from '@grichard/ui/components/Button.astro';
+import CtaBand from '@grichard/ui/components/CtaBand.astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import ExperienceList from '../components/ExperienceList.astro';
+import { PORTFOLIO_DATA, PROFILE } from '../data/content';
+import { SITE_TEXT } from '../data/site-text';
+import { withBase } from '../lib/base';
+import { crumbs } from '../lib/crumbs';
+import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = PORTFOLIO_DATA[lang];
+const text = SITE_TEXT[lang];
+const routes = ROUTES[lang];
+const trail = crumbs(lang, [], { label: text.career.title, path: routes.career });
+---
+
+<Base
+  lang={lang}
+  title={`${text.career.title} | ${PROFILE.name}`}
+  description={text.career.description}
+  path={routes.career}
+  alternates={routeAlternates('career')}
+  ld={{ '@context': 'https://schema.org', '@graph': [trail.ld] }}
+>
+  <PageHero path={text.career.title} title={text.career.title} crumbs={trail}>
+    <p class="lead">{t.experienceIntro}</p>
+  </PageHero>
+  <div class="container stack-lg section">
+    <section class="stack" aria-labelledby="experiences">
+      <h2 id="experiences">{t.experienceTitle}</h2>
+      <ExperienceList items={t.experiences} level={3} />
+    </section>
+    <section class="stack" aria-labelledby="education">
+      <h2 id="education">{t.educationTitle}</h2>
+      <ul class="points">
+        {t.education.map((line) => (
+          <li>{line}</li>
+        ))}
+        <li>{t.languagesInfo}</li>
+      </ul>
+    </section>
+    <section class="stack" aria-labelledby="cv">
+      <h2 id="cv">{text.career.cvTitle}</h2>
+      <p class="prose">{text.career.cvText}</p>
+      <ul class="row" role="list">
+        {t.hero.cvLinks.map((cv) => (
+          <li>
+            <Button href={withBase(cv.href)} hreflang={cv.lang} lang={cv.lang}>
+              {cv.label}
+            </Button>
+          </li>
+        ))}
+      </ul>
+    </section>
+    <CtaBand title={text.contactBand.title}>
+      <p>{text.contactBand.text}</p>
+      <Fragment slot="actions">
+        <Button variant="primary" href={routes.contact}>
+          {t.hero.contactBtn}
+        </Button>
+      </Fragment>
+    </CtaBand>
+  </div>
+</Base>

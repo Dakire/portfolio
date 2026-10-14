@@ -1,58 +1,119 @@
 ---
 import { PROFILE } from '../data/content';
+import { SITE_TEXT } from '../data/site-text';
+import { withBase } from '../lib/base';
 import { ROUTES, UI, type Lang } from '../lib/i18n';
+import { resourceLinks } from '../lib/sections';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const ui = UI[lang];
+const text = SITE_TEXT[lang].footer;
+const prefix = lang === 'fr' ? 'Pied de page' : 'Footer';
 const year = new Date().getFullYear();
+const profile = (['about', 'career', 'skills', 'projects'] as const).map((key) => ({
+  href: ROUTES[lang][key],
+  label: ui.nav[key],
+}));
+const resources = resourceLinks(lang).filter((link) => link.key !== 'resources');
 ---
 
 <footer class="site-footer">
-  <div class="container site-footer-inner">
-    <p>{`© ${year} ${PROFILE.name}. ${ui.rights}`}</p>
-    <ul class="footer-links">
-      <li>
-        <a href={ROUTES[lang].legal}>{ui.footerLinks.legal}</a>
-      </li>
-      <li>
-        <a href={ROUTES[lang].privacy}>{ui.footerLinks.privacy}</a>
-      </li>
-      <li>
-        <a href={ROUTES[lang].accessibility}>{ui.footerLinks.accessibility}</a>
-      </li>
-      <li>
-        <a href={ROUTES[lang].rss}>{ui.footerLinks.rss}</a>
-      </li>
-      <li>
-        <a href={PROFILE.github} rel="noopener">
-          GitHub<span class="visually-hidden"> {ui.external}</span>
-        </a>
-      </li>
-      <li>
-        <a href={PROFILE.linkedin} rel="noopener">
-          LinkedIn<span class="visually-hidden"> {ui.external}</span>
-        </a>
-      </li>
-      <li>
-        <button
-          type="button"
-          class="link-button switch-button"
-          role="switch"
-          aria-checked="true"
-          hidden
-          data-cursor-toggle
-        >
-          {ui.cursor}
-        </button>
-      </li>
-      <li>
-        <button type="button" class="link-button" data-consent-open>
-          {ui.cookies}
-        </button>
-      </li>
-    </ul>
+  <div class="container">
+    <div class="footer-cols">
+      <div class="footer-brand stack">
+        <p class="footer-name">{PROFILE.name}</p>
+        <p>{text.tagline}</p>
+      </div>
+      <nav aria-label={`${prefix} : ${text.profile}`}>
+        <h2 class="footer-title">{text.profile}</h2>
+        <ul class="footer-list">
+          {profile.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <nav aria-label={`${prefix} : ${text.resources}`}>
+        <h2 class="footer-title">
+          <a href={ROUTES[lang].resources}>{text.resources}</a>
+        </h2>
+        <ul class="footer-list">
+          {resources.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+          <li>
+            <a href={ROUTES[lang].rss}>{ui.footerLinks.rss}</a>
+          </li>
+        </ul>
+      </nav>
+      <nav aria-label={`${prefix} : ${text.contact}`}>
+        <h2 class="footer-title">{text.contact}</h2>
+        <ul class="footer-list">
+          <li>
+            <a href={ROUTES[lang].contact}>{text.form}</a>
+          </li>
+          <li>
+            <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
+          </li>
+          <li>
+            <a href={PROFILE.linkedin} rel="noopener">
+              LinkedIn<span class="visually-hidden"> {ui.external}</span>
+            </a>
+          </li>
+          <li>
+            <a href={PROFILE.github} rel="noopener">
+              GitHub<span class="visually-hidden"> {ui.external}</span>
+            </a>
+          </li>
+          <li>
+            <a href={withBase('/CV_Guillaume_Richard_FR.pdf')} hreflang="fr" lang="fr">
+              {SITE_TEXT[lang].footer.cvFr}
+            </a>
+          </li>
+          <li>
+            <a href={withBase('/Resume_Guillaume_Richard_EN.pdf')} hreflang="en" lang="en">
+              {SITE_TEXT[lang].footer.cvEn}
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <p>{`© ${year} ${PROFILE.name}. ${ui.rights}`}</p>
+      <ul class="footer-links">
+        <li>
+          <a href={ROUTES[lang].legal}>{ui.footerLinks.legal}</a>
+        </li>
+        <li>
+          <a href={ROUTES[lang].privacy}>{ui.footerLinks.privacy}</a>
+        </li>
+        <li>
+          <a href={ROUTES[lang].accessibility}>{ui.footerLinks.accessibility}</a>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="link-button switch-button"
+            role="switch"
+            aria-checked="true"
+            hidden
+            data-cursor-toggle
+          >
+            {ui.cursor}
+          </button>
+        </li>
+        <li>
+          <button type="button" class="link-button" data-consent-open>
+            {ui.cookies}
+          </button>
+        </li>
+      </ul>
+    </div>
   </div>
 </footer>

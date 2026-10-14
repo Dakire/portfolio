@@ -1,26 +1,38 @@
 ---
 import Button from '@grichard/ui/components/Button.astro';
+import Card from '@grichard/ui/components/Card.astro';
+import CtaBand from '@grichard/ui/components/CtaBand.astro';
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
-import SkillCards from '../components/SkillCards.astro';
-import ExperienceList from '../components/ExperienceList.astro';
 import ProjectCards from '../components/ProjectCards.astro';
+import SkillCards from '../components/SkillCards.astro';
 import Terminal from '../components/Terminal.astro';
-import ToolCards from '../components/ToolCards.astro';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
+import { SITE_TEXT } from '../data/site-text';
 import { getPosts } from '../lib/blog';
 import { withBase } from '../lib/base';
 import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
 import { homeLd } from '../lib/seo';
+import { resourceLinks } from '../lib/sections';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = PORTFOLIO_DATA[lang];
+const text = SITE_TEXT[lang];
 const routes = ROUTES[lang];
-const posts = (await getPosts(lang)).slice(0, 3);
-const more = lang === 'fr' ? 'Voir le détail' : 'See details';
+const [latest] = await getPosts(lang);
+const featured = t.projects.filter((p) => p.featured);
+const links = resourceLinks(lang);
+const resourceCards = [
+  { key: 'blog', title: t.nav.blog, text: text.resources.blogText },
+  { key: 'tools', title: t.nav.tools, text: text.resources.toolsText },
+  { key: 'cheatsheets', title: t.nav.cheatsheets, text: text.resources.cheatsheetsText },
+].flatMap((card) => {
+  const link = links.find((l) => l.key === card.key);
+  return link ? [{ ...card, href: link.href }] : [];
+});
 ---
 
 <Base
@@ -34,19 +46,20 @@ const more = lang === 'fr' ? 'Voir le détail' : 'See details';
   <header class="page-hero grid-bg">
     <div class="container hero-grid">
       <div class="stack">
-        <p class="hero-badge">
-          {PROFILE.location} · {t.hero.role}
-        </p>
+        <p class="hero-badge">{PROFILE.location}</p>
         <h1 class="hero-title">
           {t.hero.greeting} <span>{PROFILE.name}</span>
         </h1>
         <p class="lead">{t.hero.role}</p>
         <p class="prose">{t.hero.pitch}</p>
         <p class="row">
-          <Button variant="primary" href="#projects">
+          <Button variant="primary" href={routes.projects}>
             {t.hero.projectsBtn}
           </Button>
           <Button href={routes.contact}>{t.hero.contactBtn}</Button>
+          <Button variant="ghost" href={withBase(t.hero.cvLink)}>
+            {t.hero.cvBtn}
+          </Button>
         </p>
       </div>
       <Terminal lang={lang} />
@@ -54,69 +67,81 @@ const more = lang === 'fr' ? 'Voir le détail' : 'See details';
   </header>
 
   <div class="container sections">
+    <section id="skills" aria-labelledby="skills-title" class="stack">
+      <h2 id="skills-title">{t.skillsTitle}</h2>
+      <SkillCards skills={t.skills} compact={{ href: routes.skills }} />
+      <p>
+        <a href={routes.skills}>{text.home.skillsMore} →</a>
+      </p>
+    </section>
+
     <section id="projects" aria-labelledby="projects-title" class="stack">
-      <h2 id="projects-title">{t.projectsTitle}</h2>
-      <ProjectCards items={t.projects} lang={lang} limit={6} />
+      <h2 id="projects-title">{text.home.featuredTitle}</h2>
+      <ProjectCards items={featured} lang={lang} level={3} />
       <p>
         <a href={routes.projects}>{t.projectsAll} →</a>
       </p>
     </section>
 
-    <section id="skills" aria-labelledby="skills-title" class="stack">
-      <h2 id="skills-title">{t.skillsTitle}</h2>
-      <SkillCards skills={t.skills} />
-      <p>
-        <a href={routes.about}>{more} →</a>
-      </p>
-    </section>
-
-    <section id="experience" aria-labelledby="experience-title" class="stack">
-      <h2 id="experience-title">{t.experienceTitle}</h2>
-      <ExperienceList items={t.experiences} />
-      <ul class="row" role="list">
-        {t.hero.cvLinks.map((cv) => (
+    <section id="career" aria-labelledby="career-title" class="stack">
+      <h2 id="career-title">{text.home.careerTitle}</h2>
+      <p class="prose">{text.home.careerIntro}</p>
+      <ol class="career-glance">
+        {t.experiences.map((job) => (
           <li>
-            <Button href={withBase(cv.href)} hreflang={cv.lang} lang={cv.lang}>
-              {cv.label}
-            </Button>
+            <span class="career-role">{job.role}</span>
+            <span class="meta">
+              {job.company} · {job.date}
+            </span>
           </li>
         ))}
-      </ul>
-    </section>
-
-    <section id="tools" aria-labelledby="tools-title" class="stack">
-      <h2 id="tools-title">{t.tools.title}</h2>
-      <p class="prose">{t.tools.intro}</p>
-      <ToolCards lang={lang} headingLevel={3} limit={4} />
+      </ol>
       <p>
-        <a href={routes.tools}>{t.tools.all} →</a>
+        <a href={routes.career}>{text.home.careerMore} →</a>
       </p>
     </section>
 
-    {posts.length > 0 && (
-      <section id="blog" aria-labelledby="blog-title" class="stack">
-        <h2 id="blog-title">{t.blog.title}</h2>
-        <div class="cards cards-wide">
-          {posts.map((post) => (
-            <PostCard post={post} minLabel={t.blog.min} />
-          ))}
+    <section id="resources" aria-labelledby="resources-title" class="stack">
+      <h2 id="resources-title">{text.home.resourcesTitle}</h2>
+      <p class="prose">{text.home.resourcesIntro}</p>
+      <div class="cards cards-wide">
+        {resourceCards.map((card) => (
+          <Card class="card-stretch">
+            <h3>
+              <a class="card-link" href={card.href}>
+                {card.title}
+              </a>
+            </h3>
+            <p>{card.text}</p>
+          </Card>
+        ))}
+      </div>
+      {latest && (
+        <div class="stack">
+          <h3>{t.blog.title}</h3>
+          <div class="cards cards-wide">
+            <PostCard post={latest} minLabel={t.blog.min} />
+          </div>
         </div>
-        <p>
-          <a href={routes.blog}>{t.blog.all} →</a>
-        </p>
-      </section>
-    )}
-
-    <section id="contact" aria-labelledby="contact-title" class="stack">
-      <h2 id="contact-title">{t.contactTitle}</h2>
-      <p class="prose">
-        <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
-      </p>
+      )}
       <p>
-        <Button variant="primary" href={routes.contact}>
-          {t.hero.contactBtn}
-        </Button>
+        <a href={routes.resources}>{text.resources.title} →</a>
       </p>
+    </section>
+
+    <section id="contact" aria-labelledby="contact-title">
+      <CtaBand title={text.home.contactTitle}>
+        <p>{text.home.contactText}</p>
+        <p>
+          <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
+        </p>
+        <Fragment slot="actions">
+          <Button variant="primary" href={routes.contact}>
+            {t.hero.contactBtn}
+          </Button>
+          <Button href={withBase(t.hero.cvLink)}>{t.hero.cvBtn}</Button>
+        </Fragment>
+      </CtaBand>
     </section>
   </div>
 </Base>

@@ -173,3 +173,31 @@ export const blogLd = (
     datePublished: p.date.toISOString(),
   })),
 });
+
+/** Description de page : la phrase d'origine, coupée proprement à 157 caractères au plus. */
+export const shortDescription = (text: string, max = 157) =>
+  text.length <= max ? text : `${text.slice(0, max).replace(/\s+\S*$/, '')}…`;
+
+export interface ProjectLdInput {
+  title: string;
+  description: string;
+  path: string;
+  tags: string[];
+  crumbs: object;
+}
+
+export const projectLd = (lang: Lang, p: ProjectLdInput) => ({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CreativeWork',
+      name: p.title,
+      description: p.description,
+      url: `${SITE}${p.path}`,
+      inLanguage: lang === 'fr' ? 'fr-FR' : 'en',
+      keywords: p.tags.join(', '),
+      author: person,
+    },
+    p.crumbs,
+  ],
+});

@@ -9,7 +9,18 @@ const PAGES = [
   '/en/about/',
   '/competences/',
   '/projets/',
+  '/projets/homelab-proxmox/',
+  '/projets/migrations-messagerie/',
+  '/parcours/',
+  '/ressources/',
+  '/cheatsheets/',
   '/contact/',
+  '/en/skills/',
+  '/en/projects/',
+  '/en/projects/homelab-proxmox/',
+  '/en/career/',
+  '/en/resources/',
+  '/en/contact/',
   '/blog/',
   '/en/blog/',
   '/blog/spf-dkim-dmarc-expliques/',
@@ -164,6 +175,14 @@ test("le lien d'évitement est le premier élément atteint au clavier et mène 
 test.describe('menu de navigation sur petit écran', () => {
   test.use({ viewport: { width: 375, height: 812 } });
 
+  test('le bouton Contact reste visible sans ouvrir le menu', async ({ page }) => {
+    await page.goto('/projets/');
+    const contact = page.getByRole('banner').getByRole('link', { name: 'Contact' });
+    await expect(contact).toBeVisible();
+    await contact.click();
+    await expect(page).toHaveURL(/\/contact\/$/);
+  });
+
   test('le bouton Menu déplie la navigation ; Échap la replie et rend le focus', async ({
     page,
   }) => {
@@ -175,7 +194,7 @@ test.describe('menu de navigation sur petit écran', () => {
     await toggle.click();
     await expect(toggle).toHaveAttribute('aria-expanded', 'true');
     await expect(nav).toBeVisible();
-    await nav.getByRole('link', { name: 'Projets' }).focus();
+    await nav.getByRole('link', { name: 'Réalisations' }).focus();
     await page.keyboard.press('Escape');
     await expect(toggle).toHaveAttribute('aria-expanded', 'false');
     await expect(toggle).toBeFocused();
@@ -218,4 +237,60 @@ test('le bandeau de consentement ne décale pas la page (CLS) et ne masque pas l
   await page.reload();
   await expect(page.locator('.consent')).toHaveCount(0);
   expect(await mainTop()).toBe(withBanner);
+});
+
+test('la navigation principale : cinq entrées, Contact en bouton, page courante signalée', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/competences/');
+  const nav = page.getByRole('navigation', { name: 'Navigation principale' });
+  await expect(nav.getByRole('link')).toHaveText([
+    'À propos',
+    'Parcours',
+    'Compétences',
+    'Réalisations',
+    'Ressources',
+  ]);
+  await expect(nav.getByRole('link', { name: 'Compétences' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await expect(page.getByRole('banner').getByRole('link', { name: 'Contact' })).toBeVisible();
+});
+
+test('la section Ressources a sa sous-navigation et allume « Ressources » dans le menu', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/blog/spf-dkim-dmarc-expliques/');
+  const sub = page.getByRole('navigation', { name: 'Ressources', exact: true });
+  await expect(sub.getByRole('link')).toHaveText(['Ressources', 'Blog', 'Outils', 'Cheatsheets']);
+  await expect(sub.getByRole('link', { name: 'Blog' })).toHaveAttribute('aria-current', 'true');
+  await expect(
+    page
+      .getByRole('navigation', { name: 'Navigation principale' })
+      .getByRole('link', { name: 'Ressources' }),
+  ).toHaveAttribute('aria-current', 'true');
+});
+
+test("chaque page a un fil d'Ariane et le détail d'une réalisation renvoie vers sa liste", async ({
+  page,
+}) => {
+  await page.goto('/projets/homelab-proxmox/');
+  const crumbs = page.getByRole('navigation', { name: "Fil d'Ariane" });
+  await expect(crumbs.getByRole('link')).toHaveText(['Accueil', 'Réalisations']);
+  await expect(crumbs.locator('[aria-current="page"]')).toContainText('Homelab');
+  const ld = await page.locator('script[type="application/ld+json"]').first().textContent();
+  expect(ld).toContain('BreadcrumbList');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
+});
+
+test('le pied de page est structuré et donne accès aux deux CV', async ({ page }) => {
+  await page.goto('/');
+  const footer = page.getByRole('contentinfo');
+  for (const name of ['Profil', 'Ressources', 'Contact'])
+    await expect(footer.getByRole('heading', { name })).toBeVisible();
+  await expect(footer.getByRole('link', { name: 'CV en français (PDF)' })).toBeVisible();
+  await expect(footer.getByRole('link', { name: 'Resume in English (PDF)' })).toBeVisible();
 });

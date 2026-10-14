@@ -10,6 +10,8 @@ export const SITE = 'https://grichard.eu';
 export type RouteKey =
   | 'home'
   | 'about'
+  | 'career'
+  | 'resources'
   | 'skills'
   | 'projects'
   | 'contact'
@@ -30,6 +32,8 @@ const RAW_ROUTES: Record<Lang, Record<RouteKey, string>> = {
   fr: {
     home: '/',
     about: '/a-propos/',
+    career: '/parcours/',
+    resources: '/ressources/',
     skills: '/competences/',
     projects: '/projets/',
     contact: '/contact/',
@@ -43,6 +47,8 @@ const RAW_ROUTES: Record<Lang, Record<RouteKey, string>> = {
   en: {
     home: '/en/',
     about: '/en/about/',
+    career: '/en/career/',
+    resources: '/en/resources/',
     skills: '/en/skills/',
     projects: '/en/projects/',
     contact: '/en/contact/',
@@ -60,6 +66,9 @@ export const ROUTES: Record<Lang, Record<RouteKey, string>> = {
   fr: mapRoutes(RAW_ROUTES.fr),
   en: mapRoutes(RAW_ROUTES.en),
 };
+
+/** Page de détail d'une réalisation ; le slug est le même dans les deux langues. */
+export const projectPath = (lang: Lang, slug: string) => `${ROUTES[lang].projects}${slug}/`;
 
 export const otherLang = (lang: Lang): Lang => (lang === 'fr' ? 'en' : 'fr');
 
@@ -79,10 +88,13 @@ export const UI = {
     themeLabels: { auto: 'auto', light: 'clair', dark: 'sombre' },
     nav: {
       about: 'À propos',
+      career: 'Parcours',
       skills: 'Compétences',
-      projects: 'Projets',
+      projects: 'Réalisations',
+      resources: 'Ressources',
       blog: 'Blog',
       tools: 'Outils',
+      cheatsheets: 'Cheatsheets',
       contact: 'Contact',
     },
     footerLinks: {
@@ -111,10 +123,13 @@ export const UI = {
     themeLabels: { auto: 'auto', light: 'light', dark: 'dark' },
     nav: {
       about: 'About',
+      career: 'Career',
       skills: 'Skills',
       projects: 'Projects',
+      resources: 'Resources',
       blog: 'Blog',
       tools: 'Tools',
+      cheatsheets: 'Cheatsheets',
       contact: 'Contact',
     },
     footerLinks: {
