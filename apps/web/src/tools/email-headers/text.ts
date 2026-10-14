@@ -164,10 +164,6 @@ const fr = {
           'Pourquoi SPF réussit-il alors que le message est un hameçonnage ?',
           "SPF valide le domaine technique de l'enveloppe (Return-Path), que l'expéditeur choisit. Seul l'alignement avec l'adresse « De » affichée (DMARC) montre que le message vient bien du domaine qu'il prétend.",
         ],
-        [
-          'Mes en-têtes sont-ils envoyés quelque part ?',
-          "Non. L'analyse se fait dans votre navigateur ; rien ne quitte votre ordinateur.",
-        ],
       ],
     },
     related: 'Voir aussi',
@@ -487,10 +483,6 @@ const en = {
         [
           'Why does SPF pass when the message is phishing?',
           'SPF validates the technical envelope domain (Return-Path), which the sender chooses. Only alignment with the displayed "From" address (DMARC) shows the message really comes from the domain it claims.',
-        ],
-        [
-          'Are my headers sent anywhere?',
-          'No. The analysis happens in your browser; nothing leaves your computer.',
         ],
       ],
     },

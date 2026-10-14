@@ -61,10 +61,12 @@ describe('registre des outils', () => {
           expect(String(field).trim(), `${tool.id} ${lang}`).not.toBe('');
         }
         expect(ui.seo.what.length, `${tool.id} ${lang} what`).toBeGreaterThanOrEqual(3);
-        expect(ui.seo.faq.length, `${tool.id} ${lang} faq`).toBeGreaterThanOrEqual(3);
-        expect(String(ui.seo.privacy ?? ui.privacy).trim(), `${tool.id} ${lang} privacy`).not.toBe(
-          '',
-        );
+        expect(ui.seo.faq.length, `${tool.id} ${lang} faq`).toBeGreaterThanOrEqual(2);
+        // La mention de confidentialité est facultative : absente des outils sans donnée sensible (unités, réseau).
+        expect(
+          String(ui.seo.privacy ?? ui.privacy ?? 'ok').trim(),
+          `${tool.id} ${lang} privacy`,
+        ).not.toBe('');
         expect(ui.meta.title.length, `${tool.id} ${lang} title`).toBeLessThanOrEqual(80);
         expect(ui.meta.description.length, `${tool.id} ${lang} description`).toBeLessThanOrEqual(
           260,

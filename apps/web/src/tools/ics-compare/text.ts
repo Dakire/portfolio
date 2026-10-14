@@ -5,7 +5,7 @@ export const ICS_COMPARE = {
       meta: {
         title: 'Comparer deux fichiers ICS : source moins destination | Guillaume Richard',
         description:
-          'Comparez deux calendriers .ics et obtenez les événements de la source absents de la destination, prêts à importer. Détecte les doublons et les événements modifiés. Gratuit, dans votre navigateur.',
+          'Comparez deux calendriers .ics et obtenez les événements de la source absents de la destination, prêts à importer. Détecte les doublons et les événements modifiés. Gratuit.',
         appDescription:
           'Outil gratuit pour comparer deux fichiers iCalendar (.ics) et extraire les événements manquants, sans envoi de données.',
       },
@@ -135,10 +135,6 @@ export const ICS_COMPARE = {
             'Quelle différence entre « identifiant » et « contenu » ?',
             "L'identifiant (UID) est propre à chaque événement et suit l'agenda d'origine. Après un passage par un autre service, il peut avoir changé : le contenu (titre, horaires) permet alors de reconnaître le même événement.",
           ],
-          [
-            'Mes fichiers sont-ils envoyés quelque part ?',
-            'Non. Tout se passe dans votre navigateur ; aucune donnée ne quitte votre ordinateur.',
-          ],
         ],
       },
       related: 'Voir aussi',
@@ -150,7 +146,7 @@ export const ICS_COMPARE = {
       meta: {
         title: 'Compare two ICS files: source minus destination | Guillaume Richard',
         description:
-          'Compare two .ics calendars and get the source events missing from the destination, ready to import. Detects duplicates and modified events. Free, in your browser.',
+          'Compare two .ics calendars and get the source events missing from the destination, ready to import. Detects duplicates and modified events. Free.',
         appDescription:
           'Free tool to compare two iCalendar (.ics) files and extract the missing events, with no data upload.',
       },
@@ -272,10 +268,6 @@ export const ICS_COMPARE = {
           [
             'What is the difference between "identifier" and "content"?',
             'The identifier (UID) belongs to each event and follows the original calendar. After going through another service it may have changed: content (title, times) then lets you recognise the same event.',
-          ],
-          [
-            'Are my files sent anywhere?',
-            'No. Everything happens in your browser; no data leaves your computer.',
           ],
         ],
       },

@@ -419,7 +419,6 @@ export default function SubnetCalculator({ lang }: { lang: Lang }) {
               </p>
             )}
           </div>
-          <p class="note">{ui.privacy}</p>
         </>
       )}
     </div>

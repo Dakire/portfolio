@@ -5,7 +5,7 @@ export const ICS_SPLIT = {
       meta: {
         title: 'Découper un fichier ICS (calendrier) en plusieurs fichiers | Guillaume Richard',
         description:
-          "Découpez un gros fichier .ics en plusieurs : par nombre d'événements, par taille, par année, par mois ou un par fichier. Les séries récurrentes restent entières. Gratuit, dans votre navigateur.",
+          "Découpez un gros fichier .ics en plusieurs : par nombre d'événements, par taille, par année, par mois ou un par fichier. Les séries récurrentes restent entières. Gratuit.",
         appDescription:
           'Outil gratuit pour découper un fichier iCalendar (.ics) en plusieurs fichiers, sans envoi de données.',
       },
@@ -15,7 +15,7 @@ export const ICS_SPLIT = {
         'ics ical icalendar calendrier agenda decouper diviser split fichier google outlook import',
       h1: 'Découper un fichier ICS',
       intro:
-        'Un export de calendrier trop gros pour être importé ? Déposez votre fichier .ics : il est découpé dans votre navigateur, en plusieurs fichiers prêts à importer. Les séries récurrentes et leurs exceptions ne sont jamais séparées, et chaque fichier ne garde que les fuseaux horaires dont il a besoin.',
+        'Un export de calendrier trop gros pour être importé ? Déposez votre fichier .ics : il est découpé en plusieurs fichiers prêts à importer. Les séries récurrentes et leurs exceptions ne sont jamais séparées, et chaque fichier ne garde que les fuseaux horaires dont il a besoin.',
       form: {
         drop: 'Déposez un fichier .ics ici ou',
         choose: 'choisissez un fichier',
@@ -115,10 +115,6 @@ export const ICS_SPLIT = {
             "Mes événements récurrents risquent-ils d'être cassés ?",
             "Non : les événements qui partagent un même identifiant (UID), c'est-à-dire une série et ses exceptions, sont toujours placés dans le même fichier.",
           ],
-          [
-            'Mon fichier est-il envoyé quelque part ?',
-            'Non. Tout se passe dans votre navigateur ; aucune donnée ne quitte votre ordinateur.',
-          ],
         ],
       },
       related: 'Voir aussi',
@@ -130,7 +126,7 @@ export const ICS_SPLIT = {
       meta: {
         title: 'Split an ICS (calendar) file into several files | Guillaume Richard',
         description:
-          'Split a large .ics file into several: by number of events, by size, by year, by month or one per file. Recurring series stay whole. Free, in your browser.',
+          'Split a large .ics file into several: by number of events, by size, by year, by month or one per file. Recurring series stay whole. Free.',
         appDescription:
           'Free tool to split an iCalendar (.ics) file into several files, with no data upload.',
       },
@@ -139,7 +135,7 @@ export const ICS_SPLIT = {
       keywords: 'ics ical icalendar calendar split divide file google outlook import',
       h1: 'Split an ICS file',
       intro:
-        'A calendar export too big to import? Drop your .ics file: it is split in your browser into several files ready to import. Recurring series and their exceptions are never separated, and each file keeps only the time zones it needs.',
+        'A calendar export too big to import? Drop your .ics file: it is split into several files ready to import. Recurring series and their exceptions are never separated, and each file keeps only the time zones it needs.',
       form: {
         drop: 'Drop an .ics file here or',
         choose: 'choose a file',
@@ -225,10 +221,6 @@ export const ICS_SPLIT = {
           [
             'Could my recurring events be broken?',
             'No: events sharing the same identifier (UID), i.e. a series and its exceptions, are always placed in the same file.',
-          ],
-          [
-            'Is my file sent anywhere?',
-            'No. Everything happens in your browser; no data leaves your computer.',
           ],
         ],
       },

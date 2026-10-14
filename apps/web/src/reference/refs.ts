@@ -37,10 +37,10 @@ export const REF_UI = {
     hubTitle:
       'Cheatsheets IT : commandes GAM, PowerShell, Windows, Active Directory | Guillaume Richard',
     hubDescription:
-      'Aide-mémoire de commandes pour techniciens et administrateurs : GAM (Google Workspace), PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux, Proxmox, Git. Recherche instantanée dans le navigateur.',
+      'Aide-mémoire de commandes pour techniciens et administrateurs : GAM (Google Workspace), PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux, Proxmox, Git. Recherche instantanée.',
     hubH1: 'Cheatsheets : aide-mémoire de commandes',
     hubIntro:
-      'Des aide-mémoire de commandes, avec recherche instantanée (fautes de frappe tolérées), exemples à copier et lien vers la documentation officielle. Tout se passe dans votre navigateur.',
+      'Des aide-mémoire de commandes, avec recherche instantanée (fautes de frappe tolérées), exemples à copier et lien vers la documentation officielle.',
     crumb: 'Cheatsheets',
     home: 'Accueil',
     searchLabel: 'Rechercher une commande',
@@ -65,10 +65,10 @@ export const REF_UI = {
   en: {
     hubTitle: 'IT cheatsheets: GAM, PowerShell, Windows, Active Directory | Guillaume Richard',
     hubDescription:
-      'Command cheat sheets for technicians and administrators: GAM (Google Workspace), Microsoft 365 PowerShell, Windows 11, Active Directory, networking, Linux, Proxmox, Git. Instant search in your browser.',
+      'Command cheat sheets for technicians and administrators: GAM (Google Workspace), Microsoft 365 PowerShell, Windows 11, Active Directory, networking, Linux, Proxmox, Git. Instant search.',
     hubH1: 'Cheatsheets: command reference',
     hubIntro:
-      'Command cheat sheets with instant search (typos tolerated), copyable examples and a link to the official documentation. Everything runs in your browser.',
+      'Command cheat sheets with instant search (typos tolerated), copyable examples and a link to the official documentation.',
     crumb: 'Cheatsheets',
     home: 'Home',
     searchLabel: 'Search a command',

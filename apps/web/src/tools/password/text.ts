@@ -5,7 +5,7 @@ export const PASSWORD = {
       meta: {
         title: 'Générateur de mot de passe : aléatoire, prononçable, PIN | Guillaume Richard',
         description:
-          "Générez des mots de passe forts avec l'aléa cryptographique de votre navigateur : longueur, jeux de caractères, sans caractères ambigus, prononçables, codes PIN, entropie estimée. Rien n'est envoyé.",
+          "Générez des mots de passe forts avec l'aléa cryptographique de votre navigateur : longueur, jeux de caractères, sans caractères ambigus, prononçables, codes PIN, entropie estimée.",
         appDescription:
           "Générateur gratuit de mots de passe, phrases prononçables et codes PIN, avec estimation de l'entropie. Aucune donnée n'est envoyée.",
       },
@@ -79,10 +79,6 @@ export const PASSWORD = {
             'Entropie et robustesse',
             "Estimation de l'entropie en bits, niveau de robustesse et durée moyenne d'une attaque par force brute, pour comparer vos choix.",
           ],
-          [
-            'Confidentialité',
-            "Tout se passe dans votre navigateur : aucun mot de passe n'est envoyé, journalisé ou enregistré.",
-          ],
         ],
         howTitle: 'Comment bien choisir',
         how: "Pour un compte protégé par un gestionnaire de mots de passe, visez 16 caractères aléatoires ou plus. Pour un mot de passe à retenir ou à dicter, préférez le type prononçable. Au-delà de 80 bits d'entropie, une attaque par force brute n'est plus réaliste ; l'essentiel est de ne jamais réutiliser un mot de passe.",
@@ -110,7 +106,7 @@ export const PASSWORD = {
       meta: {
         title: 'Secure password generator: random, pronounceable, PIN | Guillaume Richard',
         description:
-          "Generate strong passwords with your browser's cryptographic randomness: length, character sets, no ambiguous characters, pronounceable, PIN codes, estimated entropy. Nothing is sent.",
+          "Generate strong passwords with your browser's cryptographic randomness: length, character sets, no ambiguous characters, pronounceable, PIN codes, estimated entropy.",
         appDescription:
           'Free generator of passwords, pronounceable passphrases and PIN codes, with entropy estimates. No data is sent.',
       },
@@ -183,7 +179,6 @@ export const PASSWORD = {
             'Entropy and strength',
             'Entropy estimate in bits, strength level and average brute-force time, to compare your choices.',
           ],
-          ['Privacy', 'Everything happens in your browser: no password is sent, logged or stored.'],
         ],
         howTitle: 'How to choose well',
         how: 'For an account protected by a password manager, aim for 16 or more random characters. For a password you must remember or dictate, prefer the pronounceable type. Beyond 80 bits of entropy a brute-force attack is no longer realistic; what matters most is never reusing a password.',

@@ -384,7 +384,6 @@ export default function UnitConverter({ lang }: { lang: Lang }) {
         {tab === 'transfer' && <TransferTab lang={lang} ui={ui} />}
         {tab === 'base' && <BaseTab ui={ui} />}
       </div>
-      <p class="note">{ui.privacy}</p>
     </div>
   );
 }

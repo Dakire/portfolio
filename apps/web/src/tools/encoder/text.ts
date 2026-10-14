@@ -15,7 +15,7 @@ export const ENCODER = {
         'base64 url encode decode jwt hash md5 sha256 sha1 timestamp epoch uuid hex html entites checksum empreinte',
       h1: 'Encodeur / décodeur',
       intro:
-        "Huit outils de développeur et d'administrateur dans une page : encodage et décodage Base64, URL, hexadécimal et HTML, lecture d'un JWT, empreintes MD5 et SHA de textes ou de fichiers, conversion de timestamps et génération d'UUID. Tout est calculé dans votre navigateur.",
+        "Huit outils de développeur et d'administrateur dans une page : encodage et décodage Base64, URL, hexadécimal et HTML, lecture d'un JWT, empreintes MD5 et SHA de textes ou de fichiers, conversion de timestamps et génération d'UUID.",
       tabs: {
         base64: 'Base64',
         url: 'URL',

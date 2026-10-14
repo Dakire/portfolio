@@ -138,10 +138,12 @@ const ld = {
       </div>
     </section>
 
-    <section aria-labelledby="privacy-title" class="tool-section">
-      <h2 id="privacy-title">{hub.privacyTitle}</h2>
-      <p>{ui.seo.privacy ?? ui.privacy}</p>
-    </section>
+    {(ui.seo.privacy ?? ui.privacy) && (
+      <section aria-labelledby="privacy-title" class="tool-section">
+        <h2 id="privacy-title">{hub.privacyTitle}</h2>
+        <p>{ui.seo.privacy ?? ui.privacy}</p>
+      </section>
+    )}
 
     {related.length > 0 && (
       <aside aria-labelledby="related-title" class="tool-section">

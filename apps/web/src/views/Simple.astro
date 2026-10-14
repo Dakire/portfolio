@@ -54,8 +54,20 @@ const head = heads[page];
 const pageTitle = `${head.title} | ${PROFILE.name}`;
 const trail = crumbs(lang, [], { label: head.title, path: routes[page] });
 const labels = fr
-  ? { cv: 'Télécharger mon CV (PDF)', career: 'Voir mon parcours', jump: 'Aller à un domaine' }
-  : { cv: 'Download my resume (PDF)', career: 'See my career', jump: 'Jump to an area' };
+  ? {
+      cv: 'Télécharger mon CV (PDF)',
+      career: 'Voir mon parcours',
+      jump: 'Aller à un domaine',
+      contactLead:
+        'Un projet, une question, un souci à régler ? Écrivez-moi par e-mail ou avec le formulaire : je réponds personnellement.',
+    }
+  : {
+      cv: 'Download my resume (PDF)',
+      career: 'See my career',
+      jump: 'Jump to an area',
+      contactLead:
+        'A project, a question, something to fix? Email me or use the form: I answer personally.',
+    };
 
 // Compétences : chaque domaine et ses preuves (réalisations, articles, outils, cheatsheets).
 const skillBlocks =
@@ -86,6 +98,7 @@ const domains = [...new Set(t.projects.map((p) => p.skill))].map((id) => ({
   <PageHero path={head.title} title={head.title} crumbs={trail}>
     {page === 'skills' && <p class="lead">{t.skillsIntro}</p>}
     {page === 'projects' && <p class="lead">{t.projectsIntro}</p>}
+    {page === 'contact' && <p class="lead">{labels.contactLead}</p>}
   </PageHero>
   <div class="container stack-lg section">
     {page === 'about' && (

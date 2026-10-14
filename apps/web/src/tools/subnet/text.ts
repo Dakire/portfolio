@@ -5,7 +5,7 @@ export const SUBNET = {
       meta: {
         title: 'Calculatrice réseau IPv4 / IPv6 : CIDR, masque, VLSM | Guillaume Richard',
         description:
-          "Calculez réseau, broadcast, masque, plage d'hôtes et nombre d'adresses d'un CIDR IPv4 ou IPv6. Découpez en sous-réseaux, planifiez un VLSM, vérifiez l'appartenance d'une IP. Gratuit, dans votre navigateur.",
+          "Calculez réseau, broadcast, masque, plage d'hôtes et nombre d'adresses d'un CIDR IPv4 ou IPv6. Découpez en sous-réseaux, planifiez un VLSM, vérifiez l'appartenance d'une IP. Gratuit.",
         appDescription:
           'Outil gratuit de calcul réseau IPv4 et IPv6 : CIDR, masque, plage, découpage en sous-réseaux et VLSM.',
       },
@@ -129,7 +129,6 @@ export const SUBNET = {
         invalid: 'Adresse invalide.',
         family: 'Une adresse IPv4 ne peut pas être comparée à un réseau IPv6.',
       },
-      privacy: "Les calculs se font dans votre navigateur ; rien n'est envoyé.",
       seo: {
         whatTitle: "Ce que fait l'outil",
         what: [
@@ -176,7 +175,7 @@ export const SUBNET = {
       meta: {
         title: 'IPv4 / IPv6 subnet calculator: CIDR, mask, subnets, VLSM | Guillaume Richard',
         description:
-          'Calculate network, broadcast, mask, host range and address count for an IPv4 or IPv6 CIDR. Split into subnets, plan a VLSM, check whether an IP is inside. Free, in your browser.',
+          'Calculate network, broadcast, mask, host range and address count for an IPv4 or IPv6 CIDR. Split into subnets, plan a VLSM, check whether an IP is inside. Free.',
         appDescription:
           'Free IPv4 and IPv6 subnet calculator: CIDR, mask, range, subnet splitting and VLSM.',
       },
@@ -300,7 +299,6 @@ export const SUBNET = {
         invalid: 'Invalid address.',
         family: 'An IPv4 address cannot be compared with an IPv6 network.',
       },
-      privacy: 'Calculations happen in your browser; nothing is sent.',
       seo: {
         whatTitle: 'What the tool does',
         what: [

@@ -5,9 +5,9 @@ export const JSON_TOOL = {
       meta: {
         title: 'Formateur et validateur JSON en ligne | Guillaume Richard',
         description:
-          "Validez, indentez, minifiez et triez du JSON dans votre navigateur. Chaque erreur est localisée (ligne, colonne) avec une explication. Les nombres et les chaînes ne sont jamais modifiés. Rien n'est envoyé.",
+          'Validez, indentez, minifiez et triez du JSON. Chaque erreur est localisée (ligne, colonne) avec une explication. Les nombres et les chaînes ne sont jamais modifiés.',
         appDescription:
-          'Outil gratuit pour valider, formater, minifier et trier du JSON (RFC 8259), avec erreurs localisées à la ligne et à la colonne. Traitement local dans le navigateur.',
+          'Outil gratuit pour valider, formater, minifier et trier du JSON (RFC 8259), avec erreurs localisées à la ligne et à la colonne.',
       },
       name: 'Formateur et validateur JSON',
       card: 'Valide, indente, minifie et trie du JSON ; localise chaque erreur à la ligne et à la colonne.',
@@ -111,10 +111,6 @@ export const JSON_TOOL = {
             'Mes grands nombres sont-ils modifiés ?',
             "Non. L'outil ne convertit jamais les valeurs : un identifiant à 20 chiffres reste identique. Attention toutefois à JavaScript, qui l'arrondirait en le lisant avec JSON.parse (au-delà de 9 007 199 254 740 991).",
           ],
-          [
-            'Mes données sont-elles envoyées quelque part ?',
-            "Non. L'analyse tourne dans votre navigateur, sans requête réseau : vous pouvez l'utiliser avec des données internes.",
-          ],
         ],
       },
       related: 'Voir aussi',
@@ -126,9 +122,9 @@ export const JSON_TOOL = {
       meta: {
         title: 'Online JSON formatter and validator | Guillaume Richard',
         description:
-          'Validate, indent, minify and sort JSON in your browser. Every error is located (line, column) and explained. Numbers and strings are never altered. Nothing is uploaded.',
+          'Validate, indent, minify and sort JSON. Every error is located (line, column) and explained. Numbers and strings are never altered.',
         appDescription:
-          'Free tool to validate, format, minify and sort JSON (RFC 8259), with errors located to the line and column. Runs locally in the browser.',
+          'Free tool to validate, format, minify and sort JSON (RFC 8259), with errors located to the line and column.',
       },
       name: 'JSON formatter and validator',
       card: 'Validates, indents, minifies and sorts JSON; locates each error to the line and column.',
@@ -227,10 +223,6 @@ export const JSON_TOOL = {
           [
             'Are my large numbers modified?',
             'No. The tool never converts values: a 20-digit identifier stays identical. Beware of JavaScript though, which would round it when reading it with JSON.parse (beyond 9,007,199,254,740,991).',
-          ],
-          [
-            'Is my data sent anywhere?',
-            'No. The analysis runs in your browser with no network request, so you can use it with internal data.',
           ],
         ],
       },

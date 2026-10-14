@@ -109,8 +109,6 @@ export const UNITS_TOOL = {
         bits: (n: number) => `${n} bit${n > 1 ? 's' : ''}`,
         note: 'Les entiers sont calculés sans limite de précision. Un nombre négatif est affiché avec son signe, pas en complément à deux.',
       },
-      privacy:
-        'Les valeurs saisies sont converties dans votre navigateur ; rien n’est envoyé ni enregistré.',
       seo: {
         whatTitle: "Ce que fait l'outil",
         what: [
@@ -261,7 +259,6 @@ export const UNITS_TOOL = {
         bits: (n: number) => `${n} bit${n > 1 ? 's' : ''}`,
         note: 'Integers are computed with no precision limit. A negative number is shown with its sign, not in two’s complement.',
       },
-      privacy: 'The values you enter are converted in your browser; nothing is sent or stored.',
       seo: {
         whatTitle: 'What the tool does',
         what: [
