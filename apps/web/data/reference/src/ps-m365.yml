@@ -3,9 +3,9 @@
 meta:
   id: powershell-m365
   order: 2
-  title: 'PowerShell Microsoft 365 : Exchange Online, Graph, Entra, Teams, SharePoint | Guillaume Richard'
+  title: 'PowerShell Microsoft 365 : cheatsheet | Guillaume Richard'
   h1: PowerShell Microsoft 365
-  description: 'Aide-mémoire PowerShell pour Microsoft 365 : cmdlets Exchange Online, Microsoft Graph, Entra ID, Teams, SharePoint Online, Intune et Defender/Purview, avec module, permissions, exemple et piège courant.'
+  description: 'Cheatsheet PowerShell pour Microsoft 365 : Exchange Online, Graph, Entra ID, Teams, SharePoint, avec module, permissions, exemple et piège courant.'
   intro: 'Cmdlets des modules actuels (Exchange Online, Microsoft Graph PowerShell, Teams, SharePoint Online). MSOnline et AzureAD sont dépréciés : utilisez Microsoft Graph PowerShell.'
   card: 'Exchange Online, Microsoft Graph, Entra ID, Teams, SharePoint, Intune, Defender/Purview : cmdlet, module, permissions, exemple, piège.'
   notice: "MSOnline et AzureAD (cmdlets Msol* et *-AzureAD*) sont dépréciés et ne reçoivent plus de correctifs : migrez vers Microsoft Graph PowerShell (Mg*). Testez d'abord avec -WhatIf quand il existe."

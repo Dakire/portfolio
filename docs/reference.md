@@ -47,3 +47,10 @@ Clés facultatives du bloc `meta` d'une source (exemple : `bios-uefi.yml`) :
 - `searchLabel` et `placeholder` : libellé et exemple du champ de recherche quand « commande » ne convient pas.
 - Une cheatsheet existe en français (`/cheatsheets/<id>/`) et en anglais (`/en/cheatsheets/<id>/`) avec deux identifiants distincts (ex. `bios-uefi` et `bios-uefi-keys`) ; la correspondance (liens `hreflang`, sélecteur de langue) est déclarée dans `TRANSLATIONS` de `src/reference/refs.ts`.
 - Une cheatsheet issue d'un ancien article du blog : l'article est supprimé, ses URL (page, étiquettes, image de partage) sont redirigées en 301 via `REDIRECTS` (`scripts/lib/htaccess.mjs`) et le contrat.
+
+## Référencement (SEO)
+
+- Titre de page ≤ 62 caractères et description de 110 à 158 caractères (`meta.title`, `meta.description`) : c'est ce que Google affiche.
+- La recherche se construit côté client, mais chaque cheatsheet de 150 entrées ou moins contient aussi sa **liste complète en HTML** (bloc replié « Afficher les N entrées »), indexable et lisible sans JavaScript. GAM (plus de 1 700 entrées) n'a que la recherche.
+- Données structurées : `TechArticle` (signé, avec catégories comme sujets, source citée), `BreadcrumbList`, et `CollectionPage` + `ItemList` pour l'accueil. Liens associés (articles, outils, autres cheatsheets, réalisations) : `REF_RELATED` et `REF_PROJECTS` dans `src/data/related.ts`.
+- Image de partage propre à chaque cheatsheet (`/og/cheatsheet-<id>.png`), générée au build avec les polices et couleurs du site (liste : `src/pages/og-cards.json.ts`, rendu : `scripts/postbuild.mjs`).

@@ -8,9 +8,9 @@ meta:
   placeholder: e.g. thinkpad, dell, msi
   topTitle: Good to know
   lang: en
-  title: 'BIOS/UEFI and boot menu keys by PC brand: Dell, HP, Lenovo, ASUS | Guillaume Richard'
+  title: 'BIOS/UEFI and boot menu keys by PC brand | Guillaume Richard'
   h1: BIOS/UEFI and boot menu keys
-  description: 'Searchable table of the keys to enter the BIOS/UEFI and open the boot menu: Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac and other manufacturers.'
+  description: 'The keys to enter the BIOS/UEFI and open the boot menu: Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac. Search by brand or model.'
   intro: 'The key to enter the BIOS/UEFI or open the boot menu varies by manufacturer, and sometimes by product line. Type a brand or a model: for example thinkpad, dell or rog.'
   card: 'The keys to enter the BIOS/UEFI or open the boot menu, by manufacturer: Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac.'
   notice: "These keys were cross-checked against online sources (including the support pages of ASUS and Samsung, Dell, Lenovo, Acer, Microsoft, Apple, LG, Huawei, Framework and Intel). They can vary with the exact model and year: if it fails, check the manual or the model's support page. A wrong change in the BIOS can prevent the PC from booting: write down the original settings. On a company-managed PC, access may be password-protected: don't bypass it without authorization, ask your IT department."

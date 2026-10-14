@@ -2,9 +2,9 @@
 meta:
   id: evenements-windows
   order: 8
-  title: "Codes d'événements Windows : 4624, 4625, 4740, 4672, 7045, 1102 | Guillaume Richard"
+  title: "Codes d'événements Windows : cheatsheet | Guillaume Richard"
   h1: Codes d'événements Windows
-  description: "Aide-mémoire des identifiants d'événements Windows utiles en sécurité et en dépannage : 4624, 4625, 4740, 4720, 4672, 7045, 1102, 41, avec journal, signification, requête PowerShell et pièges."
+  description: 'Cheatsheet des événements Windows utiles en sécurité et dépannage : 4624, 4625, 4740, 4672, 7045, 1102, avec journal, sens et requête PowerShell.'
   intro: 'Les événements à connaître pour auditer les connexions, les comptes, les services et les arrêts inattendus, avec le journal concerné et la requête Get-WinEvent pour les retrouver.'
   card: '4624, 4625, 4740, 4672, 7045, 1102, 41 et autres : journal, signification, requête PowerShell.'
   notice: "Le journal Security demande une invite élevée, et l'audit des événements doit être activé par stratégie (Configuration avancée de la stratégie d'audit)."

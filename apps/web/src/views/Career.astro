@@ -9,6 +9,7 @@ import { PORTFOLIO_DATA, PROFILE } from '../data/content';
 import { SITE_TEXT } from '../data/site-text';
 import { withBase } from '../lib/base';
 import { crumbs } from '../lib/crumbs';
+import { careerLd, ogImage } from '../lib/seo-pages';
 import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
 
 interface Props {
@@ -18,16 +19,32 @@ const { lang } = Astro.props;
 const t = PORTFOLIO_DATA[lang];
 const text = SITE_TEXT[lang];
 const routes = ROUTES[lang];
+const title =
+  lang === 'fr'
+    ? 'Parcours professionnel | Guillaume Richard, technicien IT'
+    : 'Career | Guillaume Richard, IT technician';
 const trail = crumbs(lang, [], { label: text.career.title, path: routes.career });
 ---
 
 <Base
   lang={lang}
-  title={`${text.career.title} | ${PROFILE.name}`}
+  title={title}
   description={text.career.description}
   path={routes.career}
   alternates={routeAlternates('career')}
-  ld={{ '@context': 'https://schema.org', '@graph': [trail.ld] }}
+  image={ogImage(`page-career-${lang}`, text.career.title)}
+  ld={careerLd(
+    {
+      lang,
+      path: routes.career,
+      name: title,
+      description: text.career.description,
+      crumbs: trail.ld,
+    },
+    t.hero.role,
+    t.experiences,
+    t.education,
+  )}
 >
   <PageHero path={text.career.title} title={text.career.title} crumbs={trail}>
     <p class="lead">{t.experienceIntro}</p>

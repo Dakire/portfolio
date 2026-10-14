@@ -1,4 +1,6 @@
 // Section « Cheatsheets » : métadonnées lues dans public/data/reference/index.json (généré par `pnpm reference:build`).
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import index from '../../public/data/reference/index.json';
 import { withBase } from '../lib/base';
 import type { Lang } from '../lib/i18n';
@@ -39,10 +41,9 @@ export const fileUrl = (ref: RefMeta) => withBase(ref.file);
 
 export const REF_UI = {
   fr: {
-    hubTitle:
-      'Cheatsheets IT : commandes GAM, PowerShell, Windows, Active Directory | Guillaume Richard',
+    hubTitle: 'Cheatsheets IT : GAM, PowerShell, Windows | Guillaume Richard',
     hubDescription:
-      'Aide-mémoire de commandes pour techniciens et administrateurs : GAM (Google Workspace), PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux, Proxmox, Git. Recherche instantanée.',
+      'Cheatsheets de commandes pour techniciens : GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux, Proxmox, Git. Recherche instantanée.',
     hubH1: 'Cheatsheets : aide-mémoire de commandes',
     hubIntro:
       'Des aide-mémoire de commandes, avec recherche instantanée (fautes de frappe tolérées), exemples à copier et lien vers la documentation officielle.',
@@ -66,11 +67,18 @@ export const REF_UI = {
     privacy:
       'La recherche s’exécute dans votre navigateur : aucune saisie n’est envoyée au serveur.',
     topTitle: 'Pour commencer',
+    allTitle: 'Liste complète',
+    allSummary: (n: number) => `Afficher les ${n} entrées`,
+    related: 'Pour aller plus loin',
+    relatedPosts: 'Articles',
+    relatedTools: 'Outils',
+    relatedRefs: 'Autres cheatsheets',
+    relatedProjects: 'Réalisations liées',
   },
   en: {
-    hubTitle: 'IT cheatsheets: GAM, PowerShell, Windows, Active Directory | Guillaume Richard',
+    hubTitle: 'IT cheatsheets: BIOS/UEFI keys | Guillaume Richard',
     hubDescription:
-      'Command cheat sheets for technicians and administrators: GAM (Google Workspace), Microsoft 365 PowerShell, Windows 11, Active Directory, networking, Linux, Proxmox, Git. Instant search.',
+      'Cheatsheets for technicians, with instant search: BIOS/UEFI and boot menu keys by PC brand (Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac).',
     hubH1: 'Cheatsheets: command reference',
     hubIntro:
       'Command cheat sheets with instant search (typos tolerated), copyable examples and a link to the official documentation.',
@@ -93,11 +101,35 @@ export const REF_UI = {
     license: 'Licence',
     privacy: 'Search runs in your browser: nothing you type is sent to the server.',
     topTitle: 'Getting started',
+    allTitle: 'Full list',
+    allSummary: (n: number) => `Show all ${n} entries`,
+    related: 'Going further',
+    relatedPosts: 'Articles',
+    relatedTools: 'Tools',
+    relatedRefs: 'More cheatsheets',
+    relatedProjects: 'Related projects',
   },
 } as const;
 
 /** Références publiées dans les deux langues sous deux identifiants : sert aux liens hreflang et au sélecteur de langue. */
 const TRANSLATIONS: [fr: string, en: string][] = [['bios-uefi', 'bios-uefi-keys']];
+export interface RefEntry {
+  id: string;
+  name: string;
+  cat: string;
+  syn?: string;
+  desc?: string;
+  ex?: string[];
+}
+
+/** Entrées d'une cheatsheet, lues au build (public/data/reference/<id>.json) pour la liste complète en HTML. */
+export const loadEntries = (ref: RefMeta): RefEntry[] =>
+  JSON.parse(readFileSync(resolve(process.cwd(), 'public', ref.file.slice(1)), 'utf-8')).entries;
+
+/** Identifiant français d'une cheatsheet (les clés de related.ts) : l'anglais en a un autre (bios-uefi-keys -> bios-uefi). */
+export const refFrId = (ref: RefMeta) =>
+  TRANSLATIONS.find(([, en]) => en === ref.id)?.[0] ?? ref.id;
+
 /** Identifiant (français) d'une référence -> identifiant dans la langue demandée. */
 export const refIdFor = (lang: Lang, frId: string) =>
   lang === 'fr' ? frId : (TRANSLATIONS.find(([fr]) => fr === frId)?.[1] ?? frId);

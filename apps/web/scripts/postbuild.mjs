@@ -3,7 +3,8 @@
 //  2. empreintes SHA-256 des scripts en ligne (hydratation des îlots Astro) : écrites dans .cache/csp-hashes.json, lues par le générateur
 //     de .htaccess pour les autoriser dans la CSP sans 'unsafe-inline' ;
 //  3. dist/.htaccess (en-têtes de sécurité, CSP, cache, redirections), généré avec ces empreintes ;
-//  4. images de partage OpenGraph (1200 x 630) : une par article, dans dist/og/<slug>.png, rendue par Chromium (Playwright).
+//  4. images de partage OpenGraph (1200 x 630) : une par article, page du portfolio, réalisation et cheatsheet (liste : pages/og-cards.json.ts),
+//     dans dist/og/<slug>.png, rendue par Chromium (Playwright) avec les polices et couleurs du site.
 //     Sans Chromium, l'image générique /og-image.png est copiée à la place : l'URL existe toujours, le build ne casse jamais pour une image.
 import { createHash } from 'node:crypto';
 import { copyFile, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
@@ -66,25 +67,32 @@ async function articles() {
 
 const titleSize = (title) => (title.length <= 42 ? 76 : title.length <= 72 ? 64 : 52);
 
-const html = ({ title, kicker, lang }, fontUrl) => `<!doctype html>
+const html = ({ title, kicker, lang }, fonts) => `<!doctype html>
 <html lang="${lang}"><head><meta charset="utf-8"><style>
-  @font-face { font-family: 'Inter Variable'; font-weight: 100 900; src: url(${fontUrl}) format('woff2-variations'); }
+  @font-face { font-family: 'Inter Variable'; font-weight: 100 900; src: url(${fonts.inter}) format('woff2-variations'); }
+  @font-face { font-family: 'Fraunces Variable'; font-weight: 100 900; src: url(${fonts.fraunces}) format('woff2-variations'); }
+  @font-face { font-family: 'JetBrains Mono Variable'; font-weight: 100 800; src: url(${fonts.mono}) format('woff2-variations'); }
   * { box-sizing: border-box; margin: 0; }
-  body { width: ${SIZE.width}px; height: ${SIZE.height}px; overflow: hidden; background: #0a0c0f; color: #eef1f6; position: relative;
+  /* Couleurs du thème sombre de packages/ui/src/tokens.css */
+  body { width: ${SIZE.width}px; height: ${SIZE.height}px; overflow: hidden; background: #130f16; color: #fcf5f0; position: relative;
     font-family: 'Inter Variable', system-ui, sans-serif; }
-  .grid { position: absolute; inset: 0; background-image: linear-gradient(#262c38 1px, transparent 1px), linear-gradient(90deg, #262c38 1px, transparent 1px);
-    background-size: 56px 56px; -webkit-mask-image: linear-gradient(to bottom, #000, transparent 80%); opacity: .7; }
+  .glow { position: absolute; inset: 0; background:
+    radial-gradient(60% 70% at 8% 0%, rgb(255 146 112 / .22), transparent 70%),
+    radial-gradient(50% 60% at 100% 100%, rgb(196 161 255 / .18), transparent 70%); }
+  .grid { position: absolute; inset: 0; background-image: linear-gradient(#3a2d42 1px, transparent 1px), linear-gradient(90deg, #3a2d42 1px, transparent 1px);
+    background-size: 56px 56px; -webkit-mask-image: linear-gradient(to bottom, #000, transparent 80%); opacity: .55; }
   .frame { position: absolute; inset: 0; padding: 64px 76px; display: flex; flex-direction: column; justify-content: space-between; }
-  .brand { font: 600 30px ui-monospace, 'Cascadia Mono', Menlo, monospace; }
-  .brand b { color: #3ddc97; font-weight: 600; }
-  .kicker { color: #3ddc97; font: 600 28px ui-monospace, 'Cascadia Mono', Menlo, monospace; margin-bottom: 22px; }
-  h1 { font-size: ${titleSize(title)}px; line-height: 1.1; font-weight: 700; letter-spacing: -.025em; max-width: 1020px;
+  .brand { font: 700 40px 'Fraunces Variable', Georgia, serif; letter-spacing: -.01em; }
+  .brand b { color: #ff9270; font-weight: 700; }
+  .kicker { color: #ff9270; font: 600 26px 'JetBrains Mono Variable', ui-monospace, monospace; margin-bottom: 22px; text-transform: lowercase; }
+  h1 { font: 650 ${titleSize(title)}px/1.08 'Fraunces Variable', Georgia, serif; letter-spacing: -.02em; max-width: 1020px;
     display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-  .bar { height: 6px; width: 160px; border-radius: 6px; background: #3ddc97; }
+  .bar { height: 6px; width: 160px; border-radius: 6px; background: linear-gradient(90deg, #ff9270, #c4a1ff); }
 </style></head><body>
+  <div class="glow"></div>
   <div class="grid"></div>
   <div class="frame">
-    <div class="brand"><b>~/</b>grichard<b>.eu</b></div>
+    <div class="brand">grichard<b>.eu</b></div>
     <div><p class="kicker">${esc(kicker)}</p><h1>${esc(title)}</h1></div>
     <div class="bar"></div>
   </div>
@@ -94,15 +102,30 @@ async function sitemap() {
   await copyFile(join(DIST, 'sitemap-index.xml'), join(DIST, 'sitemap.xml'));
 }
 
+/** Images des pages hors blog : liste produite par pages/og-cards.json.ts, retirée de dist/ après lecture. */
+async function pageCards() {
+  const file = join(DIST, 'og-cards.json');
+  try {
+    const cards = JSON.parse(await readFile(file, 'utf-8'));
+    return cards.map((c) => ({ slug: c.slug, lang: c.lang, title: c.title, kicker: c.kicker }));
+  } catch {
+    return [];
+  } finally {
+    await rm(file, { force: true });
+  }
+}
+
 async function ogImages() {
-  const items = await articles();
+  const items = [...(await articles()), ...(await pageCards())];
   await mkdir(join(DIST, 'og'), { recursive: true });
   await mkdir(CACHE, { recursive: true });
 
-  const fonts = (await readdir(join(DIST, '_astro'))).filter((f) =>
-    /^inter-latin-wght-normal\..*\.woff2$/.test(f),
-  );
-  const fontUrl = fonts[0] ? `./_astro/${fonts[0]}` : '';
+  const files = await readdir(join(DIST, '_astro'));
+  const font = (name) => {
+    const file = files.find((f) => new RegExp(`^${name}-latin-wght-normal\\..*\\.woff2$`).test(f));
+    return file ? `./_astro/${file}` : '';
+  };
+  const fonts = { inter: font('inter'), fraunces: font('fraunces'), mono: font('jetbrains-mono') };
   const tmp = join(DIST, '.og-render.html');
   let browser;
   let generated = 0;
@@ -110,7 +133,7 @@ async function ogImages() {
   try {
     for (const item of items) {
       const target = join(DIST, 'og', `${item.slug}.png`);
-      const page = html(item, fontUrl);
+      const page = html(item, fonts);
       const cached = join(
         CACHE,
         `${createHash('sha1').update(page).digest('hex').slice(0, 16)}.png`,

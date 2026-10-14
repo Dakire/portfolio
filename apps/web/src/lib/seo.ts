@@ -55,6 +55,44 @@ const PERSON_DESCRIPTION: Record<Lang, string> = {
   en: 'IT and Digital Systems Technician based in Laval, France. Systems, networks, Cloud migrations (Google Workspace, M365) and automation.',
 };
 
+/** Nœud Person complet (identité, lieu, employeur, formation, domaines) : repris tel quel par les pages qui parlent de moi. */
+export function personNode(lang: Lang, role: string) {
+  return {
+    ...person,
+    givenName: 'Guillaume',
+    familyName: 'Richard',
+    jobTitle: role,
+    description: PERSON_DESCRIPTION[lang],
+    email: PROFILE.email,
+    homeLocation: {
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Laval',
+        postalCode: '53000',
+        addressRegion: 'Pays de la Loire',
+        addressCountry: 'FR',
+      },
+    },
+    knowsLanguage: ['fr', 'en'],
+    sameAs: [PROFILE.linkedin, PROFILE.github],
+    worksFor: {
+      '@type': 'Organization',
+      name: 'TIXIA Services numériques',
+      address: { '@type': 'PostalAddress', addressLocality: 'Laval', addressCountry: 'FR' },
+    },
+    alumniOf: {
+      '@type': 'CollegeOrUniversity',
+      name: 'Le Mans Université',
+      address: { '@type': 'PostalAddress', addressLocality: 'Le Mans', addressCountry: 'FR' },
+    },
+    knowsAbout: KNOWS_ABOUT,
+  };
+}
+
+export const SITE_PERSON_REF = { '@id': `${SITE}/#person` };
+export const SITE_WEBSITE_REF = { '@id': `${SITE}/#website` };
+
 export function homeLd(lang: Lang, title: string, role: string) {
   const path = ROUTES[lang].home;
   return {
@@ -77,36 +115,7 @@ export function homeLd(lang: Lang, title: string, role: string) {
         isPartOf: { '@id': `${SITE}/#website` },
         mainEntity: { '@id': `${SITE}/#person` },
       },
-      {
-        ...person,
-        givenName: 'Guillaume',
-        familyName: 'Richard',
-        jobTitle: role,
-        description: PERSON_DESCRIPTION[lang],
-        homeLocation: {
-          '@type': 'Place',
-          address: {
-            '@type': 'PostalAddress',
-            addressLocality: 'Laval',
-            postalCode: '53000',
-            addressRegion: 'Pays de la Loire',
-            addressCountry: 'FR',
-          },
-        },
-        knowsLanguage: ['fr', 'en'],
-        sameAs: [PROFILE.linkedin, PROFILE.github],
-        worksFor: {
-          '@type': 'Organization',
-          name: 'TIXIA Services numériques',
-          address: { '@type': 'PostalAddress', addressLocality: 'Laval', addressCountry: 'FR' },
-        },
-        alumniOf: {
-          '@type': 'CollegeOrUniversity',
-          name: 'Le Mans Université',
-          address: { '@type': 'PostalAddress', addressLocality: 'Le Mans', addressCountry: 'FR' },
-        },
-        knowsAbout: KNOWS_ABOUT,
-      },
+      personNode(lang, role),
     ],
   };
 }
@@ -177,27 +186,3 @@ export const blogLd = (
 /** Description de page : la phrase d'origine, coupée proprement à 157 caractères au plus. */
 export const shortDescription = (text: string, max = 157) =>
   text.length <= max ? text : `${text.slice(0, max).replace(/\s+\S*$/, '')}…`;
-
-export interface ProjectLdInput {
-  title: string;
-  description: string;
-  path: string;
-  tags: string[];
-  crumbs: object;
-}
-
-export const projectLd = (lang: Lang, p: ProjectLdInput) => ({
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'CreativeWork',
-      name: p.title,
-      description: p.description,
-      url: `${SITE}${p.path}`,
-      inLanguage: lang === 'fr' ? 'fr-FR' : 'en',
-      keywords: p.tags.join(', '),
-      author: person,
-    },
-    p.crumbs,
-  ],
-});

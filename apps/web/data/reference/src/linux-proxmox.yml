@@ -2,9 +2,9 @@
 meta:
   id: linux-proxmox
   order: 6
-  title: 'Linux, Fedora et Proxmox : dnf, systemctl, journalctl, qm, pct, pvesh | Guillaume Richard'
+  title: 'Linux et Proxmox : cheatsheet commandes | Guillaume Richard'
   h1: Linux, Fedora et Proxmox
-  description: 'Aide-mémoire Linux et Proxmox VE : dnf, systemctl, journalctl, firewalld, SELinux, LVM, rsync, et commandes Proxmox qm, pct, pvesh, vzdump et pvecm pour gérer machines virtuelles et conteneurs.'
+  description: 'Cheatsheet Linux et Proxmox VE : dnf, systemctl, journalctl, firewalld, LVM, rsync, et qm, pct, pvesh, vzdump pour les VM et conteneurs.'
   intro: 'Gestion de paquets, services et journaux sous Fedora/RHEL (dnf, systemd), outils système courants, et ligne de commande Proxmox VE pour les VM, conteneurs, sauvegardes et le cluster.'
   card: 'dnf, systemctl, journalctl, firewalld, LVM et Proxmox : qm, pct, pvesh, vzdump, pvecm.'
   notice: "La plupart des commandes demandent root (sudo). Sur Proxmox, une mauvaise manipulation de qm, pct ou pvecm peut interrompre des machines virtuelles : testez d'abord sur un nœud ou une VM de test."

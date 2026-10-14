@@ -18,6 +18,9 @@ export interface Experience {
   company: string;
   location: string;
   date: string;
+  /** Début et fin au format ISO (AAAA-MM), pour les données structurées ; pas de fin = poste en cours. */
+  start: string;
+  end?: string;
   /** Ce que recouvre le poste, un point par ligne. */
   points: string[];
 }
@@ -153,6 +156,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         company: 'TIXIA Services numériques',
         location: 'Laval, France',
         date: 'Depuis août 2023',
+        start: '2023-08',
         points: [
           'Administration avancée de Microsoft 365 et Google Workspace : identités, sécurité, maintien en conditions opérationnelles.',
           'Migrations complexes de messagerie : IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail et Outlook vers le cloud.',
@@ -166,6 +170,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         company: 'AlloVoisin / Particuliers',
         location: 'Laval & Le Mans',
         date: 'Depuis 2021',
+        start: '2021',
         points: [
           'Assistance informatique de proximité et diagnostic, matériel et logiciel.',
           'Réparation de PC, conseil technologique et optimisation de systèmes.',
@@ -176,6 +181,8 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         company: 'Les papiers de Lucas',
         location: 'Changé, France',
         date: 'Avril 2022 - juin 2022',
+        start: '2022-04',
+        end: '2022-06',
         points: [
           "Maintenance technique et administration d'un site e-commerce PrestaShop.",
           'Audits SEO détaillés, gestion DNS et corrections UX/UI.',
@@ -186,6 +193,8 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         company: 'Tibco (groupe Lactalis)',
         location: 'Laval, France',
         date: 'Janvier 2019',
+        start: '2019-01',
+        end: '2019-01',
         points: [
           'Préparation et masterisation de postes informatiques industriels.',
           'Diagnostic de pannes matérielles et télé-assistance.',
@@ -347,6 +356,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         company: 'TIXIA Services numériques',
         location: 'Laval, France',
         date: 'Since August 2023',
+        start: '2023-08',
         points: [
           'Advanced administration of Microsoft 365 and Google Workspace: identities, security, operational maintenance.',
           'Complex email migrations: IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail and Outlook to the cloud.',
@@ -360,6 +370,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         company: 'AlloVoisin / Private individuals',
         location: 'Laval & Le Mans',
         date: 'Since 2021',
+        start: '2021',
         points: [
           'Local IT assistance and diagnostics, hardware and software.',
           'PC repair, technology advice and system optimisation.',
@@ -370,6 +381,8 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         company: 'Les papiers de Lucas',
         location: 'Changé, France',
         date: 'April 2022 - June 2022',
+        start: '2022-04',
+        end: '2022-06',
         points: [
           'Technical maintenance and administration of a PrestaShop e-commerce site.',
           'Detailed SEO audits, DNS management and UX/UI fixes.',
@@ -380,6 +393,8 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         company: 'Tibco (Lactalis Group)',
         location: 'Laval, France',
         date: 'January 2019',
+        start: '2019-01',
+        end: '2019-01',
         points: [
           'Preparation and imaging of industrial computers.',
           'Hardware fault diagnosis and remote assistance.',

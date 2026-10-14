@@ -4,9 +4,9 @@ meta:
   id: gam
   order: 1
   generated: true
-  title: 'GAM : aide-mémoire des commandes Google Workspace (Users, Groups, Drive, Gmail) | Guillaume Richard'
+  title: 'GAM : cheatsheet Google Workspace | Guillaume Richard'
   h1: GAM (Google Workspace)
-  description: "Index de recherche des commandes GAM7 pour administrer Google Workspace : utilisateurs, groupes, Drive, calendriers, Gmail, appareils Chrome, unités d'organisation, rapports. Extraits courts avec lien vers le wiki d'origine."
+  description: 'Cheatsheet GAM7 pour administrer Google Workspace : utilisateurs, groupes, Drive, Gmail, calendriers. Recherche instantanée et lien vers le wiki.'
   intro: "Cherchez une commande GAM7 dans le wiki officiel : chaque résultat donne la syntaxe (extrait), un exemple à copier et renvoie vers la page d'origine du wiki, seule source qui fait foi."
   card: 'Commandes GAM7 pour administrer Google Workspace : utilisateurs, groupes, Drive, Gmail, calendriers, appareils.'
   notice: "Index non officiel, généré depuis le wiki GAM. Les syntaxes sont abrégées : ouvrez toujours la page du wiki pour la définition complète et à jour. Testez d'abord sur un utilisateur ou une unité d'organisation de test."

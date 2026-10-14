@@ -2,9 +2,9 @@
 meta:
   id: reseau
   order: 5
-  title: 'Réseau et diagnostic : nslookup, dig, tracert, ss, tcpdump, ports courants | Guillaume Richard'
+  title: 'Réseau : cheatsheet nslookup, dig, tcpdump | Guillaume Richard'
   h1: Réseau et diagnostic
-  description: 'Aide-mémoire réseau pour techniciens : nslookup, dig, ping, tracert, traceroute, ss, tcpdump, curl, nmap, ports TCP/UDP courants et dépannage DNS, DHCP et connectivité, sous Windows et Linux.'
+  description: 'Cheatsheet réseau pour techniciens : nslookup, dig, ping, tracert, ss, tcpdump, curl, nmap et ports courants, sous Windows et Linux.'
   intro: 'Les commandes de diagnostic réseau (DNS, routage, ports, captures) sous Windows et Linux, plus les ports TCP/UDP les plus courants.'
   card: 'nslookup, dig, tracert, ss, tcpdump, curl, nmap et les ports TCP/UDP courants, côté Windows et Linux.'
   notice: "Ne scannez ou ne capturez que des réseaux dont vous avez l'autorisation. Une capture peut contenir des mots de passe et des données personnelles."

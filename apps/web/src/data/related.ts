@@ -1,7 +1,8 @@
 // Liens entre compétences, réalisations et le reste du site (articles, outils, cheatsheets).
 // Les articles sont désignés par le slug français ; la version anglaise est retrouvée par `translationOf`.
 import { getPosts, postPath, type Post } from '../lib/blog';
-import type { Lang } from '../lib/i18n';
+import { projectPath, type Lang } from '../lib/i18n';
+import { PORTFOLIO_DATA } from './content';
 import { refIdFor, refPath, refsFor } from '../reference/refs';
 import { TOOLS, toolPath, toolUi } from '../tools/registry';
 import type { SkillId } from './profile';
@@ -10,6 +11,8 @@ export interface Related {
   posts?: string[];
   tools?: string[];
   refs?: string[];
+  /** Slugs de réalisations. */
+  projects?: string[];
 }
 
 export const SKILL_RELATED: Record<SkillId, Related> = {
@@ -62,6 +65,52 @@ export const PROJECT_RELATED: Record<string, Related> = {
   'automatisation-scripts': { refs: ['powershell-m365', 'gam', 'git-claude-code'] },
 };
 
+/** Liens depuis une cheatsheet (identifiants français) vers les articles, outils et autres cheatsheets qui la complètent. */
+export const REF_RELATED: Record<string, Related> = {
+  gam: {
+    posts: [
+      'migration-messagerie-google-workspace-microsoft-365',
+      'securiser-microsoft-365-google-workspace-reglages-de-base',
+    ],
+    tools: ['email-headers', 'dns'],
+    refs: ['powershell-m365'],
+  },
+  'powershell-m365': {
+    posts: [
+      'securiser-microsoft-365-google-workspace-reglages-de-base',
+      'migration-messagerie-google-workspace-microsoft-365',
+    ],
+    tools: ['email-headers'],
+    refs: ['gam'],
+  },
+  'windows-11': {
+    posts: ['fin-support-windows-10-passer-a-windows-11'],
+    refs: ['evenements-windows', 'bios-uefi', 'active-directory'],
+  },
+  'active-directory': { refs: ['evenements-windows', 'reseau', 'windows-11'] },
+  reseau: { tools: ['dns', 'propagation', 'subnet'], refs: ['linux-proxmox', 'windows-11'] },
+  'linux-proxmox': { tools: ['subnet'], refs: ['reseau'] },
+  'git-claude-code': { tools: ['json'] },
+  'bios-uefi': {
+    posts: ['fin-support-windows-10-passer-a-windows-11'],
+    refs: ['windows-11'],
+  },
+  'evenements-windows': { refs: ['active-directory', 'windows-11'] },
+};
+
+/** Cheatsheet -> réalisations où ces commandes servent. */
+export const REF_PROJECTS: Record<string, string[]> = {
+  gam: ['migrations-messagerie', 'automatisation-scripts'],
+  'powershell-m365': ['migrations-messagerie', 'automatisation-scripts'],
+  'windows-11': ['support-n1-n3', 'deploiement-windows-server'],
+  'active-directory': ['deploiement-windows-server'],
+  reseau: ['homelab-proxmox'],
+  'linux-proxmox': ['homelab-proxmox'],
+  'git-claude-code': ['creation-web', 'automatisation-scripts'],
+  'bios-uefi': ['pc-sur-mesure', 'support-n1-n3'],
+  'evenements-windows': ['support-n1-n3'],
+};
+
 export interface ResolvedLink {
   label: string;
   href: string;
@@ -70,6 +119,7 @@ export interface ResolvedRelated {
   posts: ResolvedLink[];
   tools: ResolvedLink[];
   refs: ResolvedLink[];
+  projects: ResolvedLink[];
 }
 
 /** Transforme des identifiants en liens dans la langue demandée ; ce qui n'existe pas dans cette langue est omis. */
@@ -89,6 +139,10 @@ export async function resolveRelated(lang: Lang, related: Related = {}): Promise
       const tool = TOOLS.find((t) => t.id === id);
       return tool ? [{ label: toolUi(tool, lang).name, href: toolPath(tool, lang) }] : [];
     }),
+    projects: (related.projects ?? []).flatMap((slug) => {
+      const project = PORTFOLIO_DATA[lang].projects.find((p) => p.slug === slug);
+      return project ? [{ label: project.title, href: projectPath(lang, project.slug) }] : [];
+    }),
     refs: (related.refs ?? []).flatMap((id) => {
       const ref = refs.find((r) => r.id === refIdFor(lang, id));
       return ref ? [{ label: ref.h1, href: refPath(ref) }] : [];
@@ -97,4 +151,4 @@ export async function resolveRelated(lang: Lang, related: Related = {}): Promise
 }
 
 export const hasRelated = (r: ResolvedRelated) =>
-  r.posts.length + r.tools.length + r.refs.length > 0;
+  r.posts.length + r.tools.length + r.refs.length + r.projects.length > 0;

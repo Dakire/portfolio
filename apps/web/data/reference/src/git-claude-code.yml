@@ -2,9 +2,9 @@
 meta:
   id: git-claude-code
   order: 7
-  title: 'Git, GitHub et Claude Code : commandes, gh, commandes slash et raccourcis | Guillaume Richard'
+  title: 'Git, GitHub, Claude Code : cheatsheet | Guillaume Richard'
   h1: Git, GitHub et Claude Code
-  description: 'Aide-mémoire Git (commit, branch, rebase, reset, stash), GitHub CLI (gh pr, gh run) et Claude Code (commandes slash, raccourcis clavier, mémoire CLAUDE.md), avec exemples à copier et pièges.'
+  description: 'Cheatsheet Git, GitHub CLI et Claude Code : commit, rebase, reset, gh pr, commandes slash et raccourcis, avec des exemples à copier.'
   intro: 'Les commandes Git du quotidien, la CLI GitHub (gh) et les commandes slash et raccourcis de Claude Code.'
   card: 'Git, GitHub CLI (gh) et Claude Code : commandes, annulations sûres, commandes slash, raccourcis.'
   notice: "Les commandes qui réécrivent l'historique (reset --hard, rebase, push --force) peuvent faire perdre du travail : préférez revert et --force-with-lease. Les commandes slash de Claude Code évoluent : /help liste celles de votre version."

@@ -12,6 +12,7 @@ import { SITE_TEXT } from '../data/site-text';
 import '../styles/tools.css';
 import { withBase } from '../lib/base';
 import { crumbs } from '../lib/crumbs';
+import { aboutLd, collectionLd, ogImage, skillsLd } from '../lib/seo-pages';
 import { ROUTES, projectPath, routeAlternates, type Lang } from '../lib/i18n';
 
 interface Props {
@@ -46,13 +47,45 @@ const heads = {
   contact: {
     title: t.contactTitle,
     description: fr
-      ? 'Contacter Guillaume Richard : e-mail et formulaire.'
-      : 'Contact Guillaume Richard: email and form.',
+      ? 'Contactez Guillaume Richard, technicien informatique à Laval : un message ou un e-mail suffit pour parler de votre besoin (réseau, Microsoft 365, Google Workspace).'
+      : 'Contact Guillaume Richard, IT technician in Laval, France: one message or email is enough to talk about your needs (networks, Microsoft 365, Google Workspace).',
   },
 } as const;
 const head = heads[page];
-const pageTitle = `${head.title} | ${PROFILE.name}`;
+const seoTitles = {
+  about: fr
+    ? 'À propos | Guillaume Richard, technicien IT à Laval'
+    : 'About | Guillaume Richard, IT technician in Laval',
+  skills: fr
+    ? 'Compétences : réseau, M365, sécurité | Guillaume Richard'
+    : 'Skills: networks, M365, security | Guillaume Richard',
+  projects: fr
+    ? 'Réalisations | Guillaume Richard, technicien IT'
+    : 'Projects | Guillaume Richard, IT technician',
+  contact: fr
+    ? 'Contact | Guillaume Richard, technicien IT à Laval'
+    : 'Contact | Guillaume Richard, IT technician',
+} as const;
+const pageTitle = seoTitles[page];
 const trail = crumbs(lang, [], { label: head.title, path: routes[page] });
+const pageInput = {
+  lang,
+  path: routes[page],
+  name: pageTitle,
+  description: head.description,
+  crumbs: trail.ld,
+};
+const structured =
+  page === 'about'
+    ? aboutLd(pageInput, t.hero.role)
+    : page === 'skills'
+      ? skillsLd(pageInput, t.skills)
+      : page === 'projects'
+        ? collectionLd(
+            pageInput,
+            t.projects.map((p) => ({ title: p.title, path: projectPath(lang, p.slug) })),
+          )
+        : { '@context': 'https://schema.org', '@graph': [trail.ld] };
 const labels = fr
   ? {
       cv: 'Télécharger mon CV (PDF)',
@@ -93,7 +126,8 @@ const domains = [...new Set(t.projects.map((p) => p.skill))].map((id) => ({
   description={head.description}
   path={routes[page]}
   alternates={routeAlternates(page)}
-  ld={{ '@context': 'https://schema.org', '@graph': [trail.ld] }}
+  image={ogImage(`page-${page}-${lang}`, head.title)}
+  ld={structured}
 >
   <PageHero path={head.title} title={head.title} crumbs={trail}>
     {page === 'skills' && <p class="lead">{t.skillsIntro}</p>}

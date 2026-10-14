@@ -1,13 +1,23 @@
 ---
-// Page d'une référence : introduction, blocs statiques (« Connexion »…), recherche, source et licence.
+// Page d'une cheatsheet : introduction, blocs statiques (« Connexion »…), recherche, liste complète en HTML, liens associés, source et licence.
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
+import RefTop from '../components/RefTop.astro';
 import ReferenceSearch from '../components/ReferenceSearch.astro';
 import '../styles/reference.css';
-import { ROUTES, SITE, type Lang } from '../lib/i18n';
+import { REF_PROJECTS, REF_RELATED, hasRelated, resolveRelated } from '../data/related';
 import { crumbs } from '../lib/crumbs';
-import { REF_UI, hubPath, refAlternates, refPath, type RefMeta } from '../reference/refs';
-import { UI } from '../lib/i18n';
+import { ROUTES, UI, type Lang } from '../lib/i18n';
+import { cheatsheetLd, ogImage } from '../lib/seo-pages';
+import {
+  REF_UI,
+  hubPath,
+  loadEntries,
+  refAlternates,
+  refFrId,
+  refPath,
+  type RefMeta,
+} from '../reference/refs';
 
 interface Props {
   lang: Lang;
@@ -16,6 +26,7 @@ interface Props {
 const { lang, reference: ref } = Astro.props;
 const ui = REF_UI[lang];
 const path = refPath(ref);
+const frId = refFrId(ref);
 const trail = crumbs(
   lang,
   [
@@ -24,19 +35,17 @@ const trail = crumbs(
   ],
   { label: ref.h1, path },
 );
-const ld = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    trail.ld,
-    {
-      '@type': 'TechArticle',
-      headline: ref.h1,
-      description: ref.description,
-      url: `${SITE}${path}`,
-      inLanguage: lang === 'fr' ? 'fr-FR' : 'en',
-    },
-  ],
-};
+
+// Liste complète rendue en HTML (la recherche, elle, se construit côté client) : le contenu existe pour les moteurs et sans JavaScript.
+// Au-delà de 150 entrées (GAM), la page resterait trop lourde : seule la recherche les présente.
+const entries = ref.count <= 150 ? loadEntries(ref) : [];
+const related = await resolveRelated(lang, { ...REF_RELATED[frId], projects: REF_PROJECTS[frId] });
+const links = [
+  { title: ui.relatedPosts, items: related.posts },
+  { title: ui.relatedTools, items: related.tools },
+  { title: ui.relatedRefs, items: related.refs.filter((l) => l.href !== path) },
+  { title: ui.relatedProjects, items: related.projects },
+].filter((group) => group.items.length > 0);
 ---
 
 <Base
@@ -45,7 +54,18 @@ const ld = {
   description={ref.description}
   path={path}
   alternates={refAlternates(ref)}
-  ld={ld}
+  image={ogImage(`cheatsheet-${ref.id}`, ref.h1)}
+  ld={cheatsheetLd({
+    lang,
+    path,
+    title: ref.h1,
+    description: ref.description,
+    topics: ref.cats.map((cat) => cat.label),
+    count: ref.count,
+    hubPath: hubPath(lang),
+    source: ref.source,
+    crumbs: trail.ld,
+  })}
   scripts={['/js/libs/minisearch.js', '/js/reference.js']}
 >
   <PageHero title={ref.h1} lead={ref.intro} crumbs={trail} />
@@ -55,59 +75,50 @@ const ld = {
         {ref.notice}
       </p>
     )}
-    {ref.top && !ref.topAfter && (
-      <section class="ref-top" aria-labelledby="ref-top-title">
-        <h2 id="ref-top-title">{ref.topTitle ?? ui.topTitle}</h2>
-        {ref.top.map((block) => (
-          <div class="ref-top-block">
-            <h3>{block.title}</h3>
-            {block.note && <p>{block.note}</p>}
-            {block.items.map((item) => (
-              <>
-                <div class="ref-example">
-                  <pre><code>{item.code}</code></pre>
-                  <button
-                    type="button"
-                    class="btn ref-copy"
-                    data-copy
-                    aria-label={`${lang === 'fr' ? 'Copier' : 'Copy'} : ${item.code.split('\n')[0]}`}
-                  >
-                    {lang === 'fr' ? 'Copier' : 'Copy'}
-                  </button>
-                </div>
-                {item.note && <p class="ref-source">{item.note}</p>}
-              </>
+    {!ref.topAfter && <RefTop lang={lang} reference={ref} id="ref-top-title" />}
+    <ReferenceSearch lang={lang} ref={ref} cats={ref.cats} />
+    {ref.topAfter && <RefTop lang={lang} reference={ref} id="ref-top-title-after" />}
+    {entries.length > 0 && (
+      <section class="stack" aria-labelledby="ref-all-title">
+        <h2 id="ref-all-title">{ui.allTitle}</h2>
+        <details class="ref-all">
+          <summary>{ui.allSummary(entries.length)}</summary>
+          <ul class="ref-all-list" role="list">
+            {entries.map((entry) => (
+              <li>
+                <h3>
+                  <code>{entry.name}</code>
+                </h3>
+                {entry.syn && (
+                  <p>
+                    <code>{entry.syn}</code>
+                  </p>
+                )}
+                {entry.desc && <p>{entry.desc}</p>}
+                {entry.ex && entry.ex.length > 0 && <pre><code>{entry.ex.join('\n')}</code></pre>}
+              </li>
             ))}
-          </div>
-        ))}
+          </ul>
+        </details>
       </section>
     )}
-    <ReferenceSearch lang={lang} ref={ref} cats={ref.cats} />
-    {ref.top && ref.topAfter && (
-      <section class="ref-top" aria-labelledby="ref-top-title-after">
-        <h2 id="ref-top-title-after">{ref.topTitle ?? ui.topTitle}</h2>
-        {ref.top.map((block) => (
-          <div class="ref-top-block">
-            <h3>{block.title}</h3>
-            {block.note && <p>{block.note}</p>}
-            {block.items.map((item) => (
-              <>
-                <div class="ref-example">
-                  <pre><code>{item.code}</code></pre>
-                  <button
-                    type="button"
-                    class="btn ref-copy"
-                    data-copy
-                    aria-label={`${lang === 'fr' ? 'Copier' : 'Copy'} : ${item.code.split('\n')[0]}`}
-                  >
-                    {lang === 'fr' ? 'Copier' : 'Copy'}
-                  </button>
-                </div>
-                {item.note && <p class="ref-source">{item.note}</p>}
-              </>
-            ))}
-          </div>
-        ))}
+    {hasRelated(related) && (
+      <section class="stack" aria-labelledby="ref-related-title">
+        <h2 id="ref-related-title">{ui.related}</h2>
+        <div class="proofs">
+          {links.map((group) => (
+            <div>
+              <h3>{group.title}</h3>
+              <ul class="link-list">
+                {group.items.map((item) => (
+                  <li>
+                    <a href={item.href}>{item.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </section>
     )}
     {ref.source && (

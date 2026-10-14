@@ -2,9 +2,9 @@
 meta:
   id: active-directory
   order: 4
-  title: 'Active Directory : cmdlets RSAT PowerShell, réplication, GPO, utilisateurs | Guillaume Richard'
+  title: 'Active Directory : cheatsheet PowerShell | Guillaume Richard'
   h1: Active Directory (RSAT PowerShell)
-  description: 'Aide-mémoire Active Directory : Get-ADUser, Search-ADAccount, Get-ADGroupMember, réplication (repadmin), stratégies de groupe, dcdiag et FSMO, avec modules, droits requis, exemples et pièges courants.'
+  description: 'Cheatsheet Active Directory : Get-ADUser, Search-ADAccount, réplication, GPO, dcdiag et FSMO, avec droits requis, exemples et pièges courants.'
   intro: 'Cmdlets du module ActiveDirectory (RSAT) et outils en ligne de commande pour administrer et dépanner un domaine : comptes, groupes, réplication, GPO, contrôleurs de domaine.'
   card: 'Get-ADUser, Search-ADAccount, groupes, réplication, GPO, dcdiag, FSMO : exemples prêts à copier et pièges courants.'
   notice: "Testez d'abord avec -WhatIf quand il existe. Les modifications d'AD sont répliquées à tous les contrôleurs de domaine : préférez une unité d'organisation de test."

@@ -155,7 +155,11 @@ export function computeOutputs() {
     if (built.meta.generated) {
       const existing = join(OUT_DIR, `${built.meta.id}.json`);
       if (!existsSync(existing)) continue; // pas encore généré : la référence n'est pas publiée
-      metas.push({ ...JSON.parse(readFileSync(existing, 'utf-8')).meta, order });
+      // Les entrées viennent du dernier « reference:gam » ; les textes de la page (titre, description…) de la source YAML.
+      const generated = JSON.parse(readFileSync(existing, 'utf-8'));
+      const merged = { ...generated.meta, ...built.meta, count: generated.meta.count };
+      outputs[`${built.meta.id}.json`] = serialize({ meta: merged, entries: generated.entries });
+      metas.push({ ...merged, order });
       continue;
     }
     outputs[`${built.meta.id}.json`] = serialize(built);

@@ -3,9 +3,9 @@
 meta:
   id: windows-11
   order: 3
-  title: 'PowerShell et commandes Windows 11 : sfc, DISM, réseau, services, BitLocker | Guillaume Richard'
+  title: 'Windows 11 : cheatsheet PowerShell et CMD | Guillaume Richard'
   h1: PowerShell et commandes Windows 11
-  description: "Aide-mémoire des commandes Windows 11 (PowerShell et CMD) : sfc, DISM, chkdsk, réseau, services, journaux d'événements, winget, BitLocker, stratégies de groupe, avec alias, équivalent CMD/Linux et niveau de risque."
+  description: 'Cheatsheet des commandes Windows 11 : sfc, DISM, chkdsk, réseau, services, BitLocker, winget, avec équivalent CMD ou Linux et niveau de risque.'
   intro: "Commandes de dépannage et d'administration Windows 11, en PowerShell et en CMD. Chaque entrée indique son niveau de risque : lecture seule, modifie le système, ou nécessite une invite élevée (administrateur)."
   card: 'sfc, DISM, chkdsk, Get-Process, Get-WinEvent, Test-NetConnection, winget, BitLocker, gpupdate, robocopy : alias, équivalent CMD/Linux, niveau de risque.'
   notice: "Les commandes marquées « Nécessite admin » doivent être lancées dans un terminal ouvert « en tant qu'administrateur ». Lisez la description avant d'exécuter une commande qui modifie le système."

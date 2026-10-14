@@ -1,8 +1,9 @@
 // llms.txt : présentation du site pour les assistants IA (https://llmstxt.org). Généré : aucune URL à maintenir à la main.
-import { PROFILE } from '../data/content';
+import { PORTFOLIO_DATA, PROFILE } from '../data/content';
 import { getPosts, postPath } from '../lib/blog';
 import { withBase } from '../lib/base';
-import { ROUTES, SITE } from '../lib/i18n';
+import { ROUTES, SITE, projectPath } from '../lib/i18n';
+import { REFS, refPath } from '../reference/refs';
 
 const link = (label: string, path: string, note: string) =>
   `- [${label}](${SITE}${path}) : ${note}`;
@@ -54,6 +55,15 @@ export async function GET() {
     link('Accessibilité', ROUTES.fr.accessibility, 'déclaration d’accessibilité'),
     link('Flux RSS (français)', ROUTES.fr.rss, 'articles') +
       ` et [RSS feed (English)](${SITE}${ROUTES.en.rss})`,
+    '',
+    '## Réalisations (français)',
+    ...PORTFOLIO_DATA.fr.projects.map((p) => link(p.title, projectPath('fr', p.slug), p.desc)),
+    '',
+    '## Projects (English)',
+    ...PORTFOLIO_DATA.en.projects.map((p) => link(p.title, projectPath('en', p.slug), p.desc)),
+    '',
+    '## Cheatsheets',
+    ...REFS.map((r) => link(r.h1, refPath(r), r.description)),
     '',
     '## Articles (français)',
     ...fr.map((p) => link(p.data.title, postPath('fr', p.slug), p.data.description)),

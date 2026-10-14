@@ -10,6 +10,7 @@ import { resolveRelated } from '../data/related';
 import { SITE_TEXT } from '../data/site-text';
 import { getPosts } from '../lib/blog';
 import { crumbs } from '../lib/crumbs';
+import { collectionLd, ogImage } from '../lib/seo-pages';
 import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
 import { resourceLinks } from '../lib/sections';
 
@@ -20,6 +21,10 @@ const { lang } = Astro.props;
 const t = PORTFOLIO_DATA[lang];
 const text = SITE_TEXT[lang].resources;
 const routes = ROUTES[lang];
+const title =
+  lang === 'fr'
+    ? 'Blog, outils et cheatsheets IT | Guillaume Richard'
+    : 'IT blog, tools and cheatsheets | Guillaume Richard';
 const trail = crumbs(lang, [], { label: text.title, path: routes.resources });
 const posts = (await getPosts(lang)).slice(0, 3);
 const links = resourceLinks(lang);
@@ -50,11 +55,21 @@ const examples = (
 
 <Base
   lang={lang}
-  title={`${text.title} | ${PROFILE.name}`}
+  title={title}
   description={text.description}
   path={routes.resources}
   alternates={routeAlternates('resources')}
-  ld={{ '@context': 'https://schema.org', '@graph': [trail.ld] }}
+  image={ogImage(`page-resources-${lang}`, text.title)}
+  ld={collectionLd(
+    {
+      lang,
+      path: routes.resources,
+      name: title,
+      description: text.description,
+      crumbs: trail.ld,
+    },
+    cards.map((card) => ({ title: card.title, path: card.href })),
+  )}
 >
   <PageHero path={text.title} title={text.title} crumbs={trail}>
     <p class="lead">{text.intro}</p>

@@ -317,3 +317,49 @@ test('le menu « Ressources » s’ouvre aussi au clavier', async ({ page }) => 
   await nav.getByRole('link', { name: 'Ressources', exact: true }).focus();
   await expect(nav.getByRole('link', { name: 'DNS Lookup' })).toBeVisible();
 });
+
+test('SEO : les cheatsheets ont leur liste en HTML, des liens associés et des données structurées', async ({
+  page,
+}) => {
+  await page.goto('/cheatsheets/reseau/');
+  const list = page.locator('details.ref-all');
+  await expect(list.locator('summary')).toContainText('entrées');
+  await expect(list.locator('li').first()).toContainText('nslookup');
+  await expect(page.getByRole('heading', { name: 'Pour aller plus loin' })).toBeVisible();
+  const ld = JSON.parse(
+    (await page.locator('script[type="application/ld+json"]').first().textContent()) ?? '{}',
+  );
+  const types = ld['@graph'].map((n: { '@type': string }) => n['@type']);
+  expect(types).toEqual(expect.arrayContaining(['TechArticle', 'BreadcrumbList']));
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    'content',
+    /\/og\/cheatsheet-reseau\.png$/,
+  );
+});
+
+test('SEO : les pages du portfolio déclarent leur type et une image de partage propre', async ({
+  page,
+}) => {
+  const expected: Record<string, string> = {
+    '/a-propos/': 'AboutPage',
+    '/parcours/': 'ProfilePage',
+    '/competences/': 'CollectionPage',
+    '/projets/': 'CollectionPage',
+    '/projets/migrations-messagerie/': 'CreativeWork',
+    '/ressources/': 'CollectionPage',
+  };
+  for (const [path, type] of Object.entries(expected)) {
+    await page.goto(path);
+    const ld = JSON.parse(
+      (await page.locator('script[type="application/ld+json"]').first().textContent()) ?? '{}',
+    );
+    expect(
+      ld['@graph'].map((n: { '@type': string | string[] }) => [n['@type']].flat()).flat(),
+      path,
+    ).toContain(type);
+    await expect(page.locator('meta[property="og:image"]'), path).not.toHaveAttribute(
+      'content',
+      /\/og-image\.png$/,
+    );
+  }
+});

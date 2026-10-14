@@ -315,3 +315,33 @@
     transition: none;
   }
 }
+
+/* Liste complète en HTML (repliée) : le contenu existe pour les moteurs et sans JavaScript */
+.ref-all > summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--target);
+  color: var(--link);
+  font-weight: 600;
+  cursor: pointer;
+}
+.ref-all-list {
+  display: grid;
+  gap: var(--space-5);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ref-all-list h3 {
+  font-size: var(--text-base);
+}
+.ref-all-list pre {
+  margin: var(--space-2) 0 0;
+  padding: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--canvas);
+  font-size: var(--text-sm);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

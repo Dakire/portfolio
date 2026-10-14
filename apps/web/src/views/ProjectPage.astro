@@ -12,7 +12,8 @@ import { PROJECT_RELATED, hasRelated, resolveRelated } from '../data/related';
 import { SITE_TEXT } from '../data/site-text';
 import { crumbs } from '../lib/crumbs';
 import { UI, ROUTES, projectPath, type Lang } from '../lib/i18n';
-import { projectLd, shortDescription } from '../lib/seo';
+import { shortDescription } from '../lib/seo';
+import { ogImage, projectLd } from '../lib/seo-pages';
 
 interface Props {
   lang: Lang;
@@ -42,11 +43,16 @@ const hasBlocks = Boolean(
   description={description}
   path={path}
   alternates={{ fr: projectPath('fr', project.slug), en: projectPath('en', project.slug) }}
-  ld={projectLd(lang, {
+  image={ogImage(`project-${project.slug}-${lang}`, project.title)}
+  ld={projectLd({
+    lang,
+    path,
     title: project.title,
     description,
-    path,
     tags: project.tags,
+    domain: domain?.category,
+    listPath: routes.projects,
+    repository: project.href,
     crumbs: trail.ld,
   })}
 >

@@ -1,0 +1,43 @@
+---
+// Blocs « Pour commencer » (ou « À savoir ») d'une cheatsheet : explications et commandes à copier.
+import type { Lang } from '../lib/i18n';
+import { REF_UI, type RefMeta } from '../reference/refs';
+
+interface Props {
+  lang: Lang;
+  reference: RefMeta;
+  /** Identifiant du titre, unique dans la page. */
+  id: string;
+}
+const { lang, reference: ref, id } = Astro.props;
+const ui = REF_UI[lang];
+const copy = lang === 'fr' ? 'Copier' : 'Copy';
+---
+
+{ref.top && (
+  <section class="ref-top" aria-labelledby={id}>
+    <h2 id={id}>{ref.topTitle ?? ui.topTitle}</h2>
+    {ref.top.map((block) => (
+      <div class="ref-top-block">
+        <h3>{block.title}</h3>
+        {block.note && <p>{block.note}</p>}
+        {block.items.map((item) => (
+          <>
+            <div class="ref-example">
+              <pre><code>{item.code}</code></pre>
+              <button
+                type="button"
+                class="btn ref-copy"
+                data-copy
+                aria-label={`${copy} : ${item.code.split('\n')[0]}`}
+              >
+                {copy}
+              </button>
+            </div>
+            {item.note && <p class="ref-source">{item.note}</p>}
+          </>
+        ))}
+      </div>
+    ))}
+  </section>
+)}

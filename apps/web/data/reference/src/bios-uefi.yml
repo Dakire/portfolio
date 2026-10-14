@@ -8,9 +8,9 @@ meta:
   placeholder: ex. thinkpad, dell, msi
   topTitle: À savoir
   lang: fr
-  title: 'Touches BIOS/UEFI et boot menu par marque de PC : Dell, HP, Lenovo, ASUS | Guillaume Richard'
+  title: 'Touches BIOS/UEFI et boot menu par marque | Guillaume Richard'
   h1: Touches BIOS/UEFI et boot menu
-  description: 'Tableau de recherche des touches pour entrer dans le BIOS/UEFI et ouvrir le menu de démarrage : Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac et autres constructeurs.'
+  description: 'Les touches pour entrer dans le BIOS/UEFI et ouvrir le menu de démarrage : Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac. Recherche par marque.'
   intro: 'La touche pour entrer dans le BIOS/UEFI ou ouvrir le menu de démarrage change selon le constructeur, et parfois selon la série. Tapez une marque ou un modèle : par exemple thinkpad, dell ou rog.'
   card: 'Les touches pour entrer dans le BIOS/UEFI ou ouvrir le menu de démarrage, par constructeur : Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac.'
   notice: "Ces touches ont été recoupées avec des sources en ligne (dont les pages d'assistance d'ASUS et de Samsung, Dell, Lenovo, Acer, Microsoft, Apple, LG, Huawei, Framework et Intel). Elles peuvent varier selon le modèle exact et l'année : en cas d'échec, consultez le manuel ou la page de support du modèle. Une mauvaise modification dans le BIOS peut empêcher le PC de démarrer : notez les réglages d'origine. Sur un PC géré par une entreprise, l'accès peut être protégé par un mot de passe : ne le contournez pas sans autorisation et adressez-vous à votre service informatique."

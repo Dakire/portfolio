@@ -5,7 +5,8 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import ReferenceSearch from '../components/ReferenceSearch.astro';
 import '../styles/reference.css';
-import { ROUTES, SITE, type Lang } from '../lib/i18n';
+import { ROUTES, type Lang } from '../lib/i18n';
+import { cheatsheetsHubLd, ogImage } from '../lib/seo-pages';
 import { crumbs } from '../lib/crumbs';
 import { UI } from '../lib/i18n';
 import { REF_UI, hubAlternates, hubPath, refPath, refsFor } from '../reference/refs';
@@ -20,22 +21,16 @@ const trail = crumbs(lang, [{ label: UI[lang].nav.resources, path: ROUTES[lang].
   label: ui.crumb,
   path: hubPath(lang),
 });
-const ld = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    trail.ld,
-    {
-      '@type': 'ItemList',
-      name: ui.hubH1,
-      itemListElement: refs.map((r, i) => ({
-        '@type': 'ListItem',
-        position: i + 1,
-        url: `${SITE}${refPath(r)}`,
-        name: r.h1,
-      })),
-    },
-  ],
-};
+const ld = cheatsheetsHubLd(
+  {
+    lang,
+    path: hubPath(lang),
+    name: ui.hubTitle,
+    description: ui.hubDescription,
+    crumbs: trail.ld,
+  },
+  refs.map((r) => ({ title: r.h1, path: refPath(r), description: r.description })),
+);
 ---
 
 <Base
@@ -44,6 +39,7 @@ const ld = {
   description={ui.hubDescription}
   path={hubPath(lang)}
   alternates={hubAlternates()}
+  image={ogImage(`page-cheatsheets-${lang}`, ui.hubH1)}
   ld={ld}
   scripts={['/js/libs/minisearch.js', '/js/reference.js']}
 >
