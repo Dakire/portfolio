@@ -2,6 +2,44 @@
   "notFound": [
     "/page-inexistante-contrat/"
   ],
+  "redirects": [
+    {
+      "from": "/reference/",
+      "to": "/cheatsheets/"
+    },
+    {
+      "from": "/reference/gam/",
+      "to": "/cheatsheets/gam/"
+    },
+    {
+      "from": "/reference/powershell-m365/",
+      "to": "/cheatsheets/powershell-m365/"
+    },
+    {
+      "from": "/reference/windows-11/",
+      "to": "/cheatsheets/windows-11/"
+    },
+    {
+      "from": "/reference/active-directory/",
+      "to": "/cheatsheets/active-directory/"
+    },
+    {
+      "from": "/reference/reseau/",
+      "to": "/cheatsheets/reseau/"
+    },
+    {
+      "from": "/reference/linux-proxmox/",
+      "to": "/cheatsheets/linux-proxmox/"
+    },
+    {
+      "from": "/reference/git-claude-code/",
+      "to": "/cheatsheets/git-claude-code/"
+    },
+    {
+      "from": "/reference/evenements-windows/",
+      "to": "/cheatsheets/evenements-windows/"
+    }
+  ],
   "entries": [
     {
       "path": "/",
@@ -307,47 +345,47 @@
       "type": "image/png"
     },
     {
-      "path": "/reference/",
+      "path": "/cheatsheets/",
       "type": "text/html",
       "since": "web"
     },
     {
-      "path": "/reference/gam/",
+      "path": "/cheatsheets/gam/",
       "type": "text/html",
       "since": "web"
     },
     {
-      "path": "/reference/powershell-m365/",
+      "path": "/cheatsheets/powershell-m365/",
       "type": "text/html",
       "since": "web"
     },
     {
-      "path": "/reference/windows-11/",
+      "path": "/cheatsheets/windows-11/",
       "type": "text/html",
       "since": "web"
     },
     {
-      "path": "/reference/active-directory/",
+      "path": "/cheatsheets/active-directory/",
       "type": "text/html",
       "since": "web"
     },
     {
-      "path": "/reference/reseau/",
+      "path": "/cheatsheets/reseau/",
       "type": "text/html",
       "since": "web"
     },
     {
-      "path": "/reference/linux-proxmox/",
+      "path": "/cheatsheets/linux-proxmox/",
       "type": "text/html",
       "since": "web"
     },
     {
-      "path": "/reference/git-claude-code/",
+      "path": "/cheatsheets/git-claude-code/",
       "type": "text/html",
       "since": "web"
     },
     {
-      "path": "/reference/evenements-windows/",
+      "path": "/cheatsheets/evenements-windows/",
       "type": "text/html",
       "since": "web"
     },

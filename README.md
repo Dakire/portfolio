@@ -9,7 +9,7 @@ Production OVH mutualisé : **fichiers statiques + PHP 8.5**, accès FTP/SFTP un
 ## Structure
 
 ```
-apps/web        Site public (Astro statique, FR/EN) : pages, blog, outils (îlots Preact), aide-mémoire /reference/
+apps/web        Site public (Astro statique, FR/EN) : pages, blog, outils (îlots Preact), aide-mémoire /cheatsheets/
 apps/api        PHP sans dépendance d'exécution : contact.php (formulaire) et tools.php (rapport SEO,
                 vérificateur de sitemap), couche Net/ protégée contre la SSRF
 apps/portal     Espace client de test (Symfony, SQLite)
@@ -39,7 +39,7 @@ Dix outils s'exécutent entièrement dans le navigateur (DNS, ICS, réseau, JSON
 
 ## Aide-mémoire (section « Référence »)
 
-Huit références (GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux/Proxmox, Git/Claude Code, événements Windows) avec une recherche instantanée 100 % navigateur (MiniSearch local, index JSON statique). Sources éditables dans `apps/web/data/reference/src/*.yml`, JSON générés et commités dans `apps/web/public/data/reference/`. Régénération : `pnpm --filter @grichard/web reference:build` (GAM : `reference:gam`). Ajouter une référence en 5 étapes : [docs/reference.md](docs/reference.md) ; décision : [ADR 0008](docs/adr/0008-references-recherche-cote-client.md).
+Huit références (GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux/Proxmox, Git/Claude Code, événements Windows) avec une recherche instantanée 100 % navigateur (MiniSearch local, index JSON statique). Sources éditables dans `apps/web/data/cheatsheets/src/*.yml`, JSON générés et commités dans `apps/web/public/data/cheatsheets/`. Régénération : `pnpm --filter @grichard/web reference:build` (GAM : `reference:gam`). Ajouter une référence en 5 étapes : [docs/reference.md](docs/reference.md) ; décision : [ADR 0008](docs/adr/0008-references-recherche-cote-client.md).
 
 ## Déploiement
 

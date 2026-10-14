@@ -1,6 +1,6 @@
 # ADR 0008 : section « Référence » (aide-mémoire) avec recherche 100 % côté client
 
-**Statut** : accepté (2026-10-13)
+**Statut** : accepté (2026-10-13). **2026-10-14** : la section s’appelle désormais « Cheatsheets » et vit sous `/cheatsheets/` (301 depuis `/reference/`) ; les chemins de données `/data/reference/` et les noms de fichiers sont inchangés.
 
 **Contexte.** Le site accueille des aide-mémoire de commandes (GAM, PowerShell Microsoft 365, Windows, Active Directory…), chacun avec une recherche rapide et tolérante aux fautes de frappe. La production est statique + PHP (ADR 0002) : pas de serveur de recherche, pas de base de données, pas de CDN.
 

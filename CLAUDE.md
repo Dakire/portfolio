@@ -37,7 +37,7 @@ Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` 
 
 ## Architecture cible
 
-`apps/web` (Astro, statique, FR/EN) · `apps/api` (PHP : `contact.php` et `tools.php`, les outils serveur rapport SEO et vérificateur de sitemap, avec la couche `Net/` protégée contre la SSRF, voir ADR 0007) · `apps/portal` (Symfony, espace client) · `apps/web/data/reference` + `public/data/reference` (aide-mémoire `/reference/` : sources YAML, JSON générés commités, recherche MiniSearch côté client, voir [docs/reference.md](docs/reference.md) et ADR 0008) · `packages/ui` (tokens CSS, composants) · `packages/tools-core` (logique pure des outils, TS) · `packages/config` · `packages/content-schema`. Décisions : [docs/adr/](docs/adr/).
+`apps/web` (Astro, statique, FR/EN) · `apps/api` (PHP : `contact.php` et `tools.php`, les outils serveur rapport SEO et vérificateur de sitemap, avec la couche `Net/` protégée contre la SSRF, voir ADR 0007) · `apps/portal` (Symfony, espace client) · `apps/web/data/reference` + `public/data/reference` (aide-mémoire `/cheatsheets/` : sources YAML, JSON générés commités, recherche MiniSearch côté client, voir [docs/reference.md](docs/reference.md) et ADR 0008) · `packages/ui` (tokens CSS, composants) · `packages/tools-core` (logique pure des outils, TS) · `packages/config` · `packages/content-schema`. Décisions : [docs/adr/](docs/adr/).
 
 ## Conventions
 

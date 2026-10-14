@@ -12,7 +12,7 @@ test.describe('Référence : recherche', () => {
   test.beforeEach(async ({ page }) => noConsent(page));
 
   test('préfixe, casse et tiret : « get-mail » trouve Get-Mailbox', async ({ page }) => {
-    await page.goto('/reference/powershell-m365/');
+    await page.goto('/cheatsheets/powershell-m365/');
     await page.getByRole('searchbox').fill('get-mail');
     await expect(results(page).first().locator('h3')).toContainText('Get-Mailbox');
     await expect(page.locator('[data-ref-status]')).toContainText('résultat');
@@ -20,7 +20,7 @@ test.describe('Référence : recherche', () => {
   });
 
   test('tolère une faute de frappe et ignore les accents', async ({ page }) => {
-    await page.goto('/reference/powershell-m365/');
+    await page.goto('/cheatsheets/powershell-m365/');
     const box = page.getByRole('searchbox');
     await box.fill('mailbx');
     await expect(results(page).first().locator('h3')).toContainText('Mailbox');
@@ -29,7 +29,7 @@ test.describe('Référence : recherche', () => {
   });
 
   test('plusieurs mots : tous doivent correspondre (ET)', async ({ page }) => {
-    await page.goto('/reference/windows-11/');
+    await page.goto('/cheatsheets/windows-11/');
     const box = page.getByRole('searchbox');
     await box.fill('bitlocker status');
     await expect(results(page).first()).toBeVisible();
@@ -40,13 +40,13 @@ test.describe('Référence : recherche', () => {
   });
 
   test('la correspondance exacte du nom passe en premier', async ({ page }) => {
-    await page.goto('/reference/windows-11/');
+    await page.goto('/cheatsheets/windows-11/');
     await page.getByRole('searchbox').fill('sfc /scannow');
     await expect(results(page).first().locator('h3')).toContainText('sfc /scannow');
   });
 
   test('filtre par catégorie et paramètres d’URL ?q=&cat=', async ({ page }) => {
-    await page.goto('/reference/windows-11/?q=get&cat=network');
+    await page.goto('/cheatsheets/windows-11/?q=get&cat=network');
     await expect(page.getByRole('button', { name: 'Réseau' })).toHaveAttribute(
       'aria-pressed',
       'true',
@@ -59,7 +59,7 @@ test.describe('Référence : recherche', () => {
   });
 
   test('clavier : / focus, flèches, Entrée ouvre la doc, Échap vide', async ({ page, context }) => {
-    await page.goto('/reference/windows-11/');
+    await page.goto('/cheatsheets/windows-11/');
     await page.keyboard.press('/');
     await expect(page.getByRole('searchbox')).toBeFocused();
     await page.keyboard.type('get-process');
@@ -86,7 +86,7 @@ test.describe('Référence : recherche', () => {
 
   test('bouton Copier', async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-    await page.goto('/reference/windows-11/');
+    await page.goto('/cheatsheets/windows-11/');
     await page.getByRole('searchbox').fill('systeminfo');
     await results(page)
       .first()
@@ -98,7 +98,7 @@ test.describe('Référence : recherche', () => {
   });
 
   test('aucun résultat : suggestions et liens utiles', async ({ page }) => {
-    await page.goto('/reference/windows-11/');
+    await page.goto('/cheatsheets/windows-11/');
     await page.getByRole('searchbox').fill('qqqqwwww');
     const empty = page.locator('.ref-empty');
     await expect(empty).toContainText('Aucun résultat');
@@ -107,7 +107,7 @@ test.describe('Référence : recherche', () => {
   });
 
   test('GAM : trouve une commande et renvoie vers le wiki d’origine', async ({ page }) => {
-    await page.goto('/reference/gam/');
+    await page.goto('/cheatsheets/gam/');
     await page.getByRole('searchbox').fill('create user');
     const first = results(page).first();
     await expect(first.locator('h3')).toContainText(/gam create.*user/);
@@ -118,21 +118,21 @@ test.describe('Référence : recherche', () => {
     await expect(page.getByText('Apache License 2.0')).toBeVisible();
   });
 
-  test('recherche globale sur /reference/', async ({ page }) => {
-    await page.goto('/reference/?q=bitlocker');
+  test('recherche globale sur /cheatsheets/', async ({ page }) => {
+    await page.goto('/cheatsheets/?q=bitlocker');
     await expect(results(page).first()).toBeVisible();
     await expect(results(page).first().locator('.ref-badge-ref')).toBeVisible();
   });
 
   test('bloc Connexion de PowerShell M365', async ({ page }) => {
-    await page.goto('/reference/powershell-m365/');
+    await page.goto('/cheatsheets/powershell-m365/');
     await expect(page.getByRole('heading', { name: 'Connexion' })).toBeVisible();
     await expect(page.getByText('Connect-ExchangeOnline').first()).toBeVisible();
   });
 
   test('mobile : pas de défilement horizontal', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 800 });
-    await page.goto('/reference/windows-11/?q=robocopy');
+    await page.goto('/cheatsheets/windows-11/?q=robocopy');
     await expect(results(page).first()).toBeVisible();
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -142,10 +142,10 @@ test.describe('Référence : recherche', () => {
 });
 
 const PAGES = [
-  '/reference/',
-  '/reference/gam/',
-  '/reference/powershell-m365/',
-  '/reference/windows-11/',
+  '/cheatsheets/',
+  '/cheatsheets/gam/',
+  '/cheatsheets/powershell-m365/',
+  '/cheatsheets/windows-11/',
 ];
 for (const theme of ['dark', 'light'] as const) {
   for (const path of PAGES) {

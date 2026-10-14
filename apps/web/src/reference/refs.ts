@@ -1,4 +1,4 @@
-// Section « Référence » : métadonnées lues dans public/data/reference/index.json (généré par `pnpm reference:build`).
+// Section « Cheatsheets » : métadonnées lues dans public/data/reference/index.json (généré par `pnpm reference:build`).
 import index from '../../public/data/reference/index.json';
 import { withBase } from '../lib/base';
 import type { Lang } from '../lib/i18n';
@@ -26,7 +26,7 @@ export const REFS = index.refs as unknown as RefMeta[];
 
 /** Une référence est publiée dans la langue de ses sources ; les autres langues auront leur propre dossier de sources. */
 export const refsFor = (lang: Lang) => REFS.filter((r) => r.lang === lang);
-export const REF_HUB: Record<Lang, string> = { fr: '/reference/', en: '/en/reference/' };
+export const REF_HUB: Record<Lang, string> = { fr: '/cheatsheets/', en: '/en/cheatsheets/' };
 export const refPath = (ref: RefMeta) => withBase(`${REF_HUB[ref.lang]}${ref.id}/`);
 export const hubPath = (lang: Lang) => withBase(REF_HUB[lang]);
 export const catalogUrl = () => withBase('/data/reference/index.json');
@@ -35,13 +35,13 @@ export const fileUrl = (ref: RefMeta) => withBase(ref.file);
 export const REF_UI = {
   fr: {
     hubTitle:
-      'Aide-mémoire IT : commandes GAM, PowerShell, Windows, Active Directory | Guillaume Richard',
+      'Cheatsheets IT : commandes GAM, PowerShell, Windows, Active Directory | Guillaume Richard',
     hubDescription:
       'Aide-mémoire de commandes pour techniciens et administrateurs : GAM (Google Workspace), PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux, Proxmox, Git. Recherche instantanée dans le navigateur.',
-    hubH1: 'Aide-mémoire et références',
+    hubH1: 'Cheatsheets : aide-mémoire de commandes',
     hubIntro:
       'Des aide-mémoire de commandes, avec recherche instantanée (fautes de frappe tolérées), exemples à copier et lien vers la documentation officielle. Tout se passe dans votre navigateur.',
-    crumb: 'Référence',
+    crumb: 'Cheatsheets',
     home: 'Accueil',
     searchLabel: 'Rechercher une commande',
     searchLabelAll: 'Rechercher dans toutes les références',
@@ -63,13 +63,13 @@ export const REF_UI = {
     topTitle: 'Pour commencer',
   },
   en: {
-    hubTitle: 'IT cheat sheets: GAM, PowerShell, Windows, Active Directory | Guillaume Richard',
+    hubTitle: 'IT cheatsheets: GAM, PowerShell, Windows, Active Directory | Guillaume Richard',
     hubDescription:
       'Command cheat sheets for technicians and administrators: GAM (Google Workspace), Microsoft 365 PowerShell, Windows 11, Active Directory, networking, Linux, Proxmox, Git. Instant search in your browser.',
-    hubH1: 'Cheat sheets and references',
+    hubH1: 'Cheatsheets: command reference',
     hubIntro:
       'Command cheat sheets with instant search (typos tolerated), copyable examples and a link to the official documentation. Everything runs in your browser.',
-    crumb: 'Reference',
+    crumb: 'Cheatsheets',
     home: 'Home',
     searchLabel: 'Search a command',
     searchLabelAll: 'Search all references',

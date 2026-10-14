@@ -33,8 +33,8 @@ export async function GET() {
       'free online tools (DNS, ICS, network, JSON…), run in the browser',
     ),
     link(
-      'Aide-mémoire et références',
-      '/reference/',
+      'Cheatsheets (aide-mémoire de commandes)',
+      '/cheatsheets/',
       'recherche de commandes : GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux, Proxmox, Git',
     ),
     link('Blog (français)', ROUTES.fr.blog, 'notes techniques'),

@@ -15,6 +15,13 @@ export const DOH_ORIGINS = [
   'https://dns.alidns.com',
 ];
 
+/**
+ * Redirections permanentes (301) d'anciennes URL publiques : { de, vers } en chemins sans le préfixe de base, avec « / » final.
+ * « de » désigne un dossier et tout ce qu'il contient (« /reference/gam/ » -> « /cheatsheets/gam/ »). Toute URL publique renommée s'ajoute ici,
+ * et dans la clé « redirects » de tests/contract/contract.json.
+ */
+export const REDIRECTS = [{ de: '/reference/', vers: '/cheatsheets/' }];
+
 const GA_CONNECT = [
   'https://*.google-analytics.com',
   'https://*.analytics.google.com',
@@ -194,6 +201,11 @@ export function buildHtaccess({ hashes, base = '', authFile } = {}) {
     '    RewriteCond %{HTTP_HOST} ^www\\. [NC]',
     '    RewriteRule ^ https://grichard.eu%{REQUEST_URI} [L,R=301]',
     '',
+    ...REDIRECTS.flatMap(({ de, vers }) => [
+      `    # ${de} -> ${vers} (URL renommée : 301 permanente, le reste du chemin et la requête sont conservés)`,
+      `    RewriteRule ^${de.replace(/^\/|\/$/g, '')}(?:/(.*))?$ ${prefix}${vers}$1 [L,R=301]`,
+      '',
+    ]),
     "    # /dossier/index.html -> /dossier/ (évite les doublons d'URL)",
     '    RewriteCond %{THE_REQUEST} \\s/+(?:.*/)?index\\.html[\\s?]',
     `    RewriteRule ^(.*/)?index\\.html$ ${prefix}/$1 [L,R=301]`,

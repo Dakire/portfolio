@@ -22,6 +22,8 @@ function distFile(path) {
 // vérifiées que sur le nouveau build (CONTRACT_DIST) et en ligne.
 const legacyDist = !base && !process.env.CONTRACT_DIST;
 const entries = contract.entries.filter((entry) => !(legacyDist && entry.since === 'web'));
+// Anciennes URL renommées : 301 vers la nouvelle (le site d'avant la refonte n'a pas ces URL).
+const redirects = legacyDist ? [] : (contract.redirects ?? []);
 
 describe(base ? `contrat public en ligne (${base})` : 'contrat public (dist/)', () => {
   it.each(entries)('$path', async ({ path, type, kind }) => {
@@ -35,6 +37,22 @@ describe(base ? `contrat public en ligne (${base})` : 'contrat public (dist/)', 
     expect(res.status).toBe(200);
     expect(res.headers.get('content-type') ?? '').toContain(type);
     if (kind === 'json') JSON.parse(await res.text());
+  });
+
+  describe('anciennes URL renommées : 301 vers la nouvelle', () => {
+    it.each(redirects)('$from -> $to', async ({ from, to }) => {
+      if (base) {
+        const res = await fetch(base + from, { redirect: 'manual', headers });
+        expect(res.status).toBe(301);
+        expect(new URL(res.headers.get('location') ?? '', base).pathname).toBe(to);
+        return;
+      }
+      // Sur le build : une règle du .htaccess couvre l'ancienne URL et la nouvelle existe.
+      const rules = readFileSync(process.env.CONTRACT_DIST + '/.htaccess', 'utf-8');
+      const dir = from.split('/')[1];
+      expect(rules).toContain('RewriteRule ^' + dir + '(?:/(.*))?$');
+      expect(existsSync(distFile(to))).toBe(true);
+    });
   });
 
   if (base) {

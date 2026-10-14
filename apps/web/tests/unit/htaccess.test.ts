@@ -1,8 +1,9 @@
+import { readFileSync } from 'node:fs';
 import { PROPAGATION_RESOLVERS } from '@grichard/tools-core/dns/propagation';
 import { ENDPOINTS } from '@grichard/tools-core/dns/resolver';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error module JavaScript sans déclaration de types (script de build)
-import { buildCsp, buildHtaccess } from '../../scripts/lib/htaccess.mjs';
+import { REDIRECTS, buildCsp, buildHtaccess } from '../../scripts/lib/htaccess.mjs';
 
 const hashes = { script: ['sha256-AAA='], style: ['sha256-BBB='] };
 const directive = (csp: string, name: string): string[] =>
@@ -36,6 +37,19 @@ describe('Content-Security-Policy', () => {
 });
 
 describe('.htaccess de production', () => {
+  it('redirige en 301 chaque URL renommée du contrat (ancienne URL -> nouvelle, requête conservée)', () => {
+    const { redirects } = JSON.parse(readFileSync('../../tests/contract/contract.json', 'utf-8'));
+    const prod: string = buildHtaccess({ hashes });
+    expect(prod).toContain('RewriteRule ^reference(?:/(.*))?$ /cheatsheets/$1 [L,R=301]');
+    for (const { from, to } of redirects) {
+      const dir = from.split('/')[1];
+      const target = REDIRECTS.find((r: { de: string }) => r.de === `/${dir}/`);
+      expect(target, from).toBeDefined();
+      expect(to.startsWith(target.vers), to).toBe(true);
+    }
+    expect(buildHtaccess({ hashes, base: '/preprod' })).toContain('/preprod/cheatsheets/$1');
+  });
+
   const file: string = buildHtaccess({ hashes });
 
   it('pose les en-têtes de sécurité', () => {
