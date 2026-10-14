@@ -48,10 +48,14 @@ describe(base ? `contrat public en ligne (${base})` : 'contrat public (dist/)', 
         expect(new URL(res.headers.get('location') ?? '', base).pathname).toBe(to);
         return;
       }
-      // Sur le build : une règle du .htaccess couvre l'ancienne URL et la nouvelle existe.
-      const rules = readFileSync(process.env.CONTRACT_DIST + '/.htaccess', 'utf-8');
-      const dir = from.split('/')[1];
-      expect(rules).toContain('RewriteRule ^' + dir + '(?:/(.*))?$');
+      // Sur le build : une règle du .htaccess mène de l'ancienne URL à la nouvelle, et la nouvelle existe.
+      const text = readFileSync(process.env.CONTRACT_DIST + '/.htaccess', 'utf-8');
+      const rules = [
+        ...text.matchAll(/RewriteRule \^(\S+?)\(\?:\/\(\.\*\)\)\?\$ (\S+)\$1 \[L,R=301\]/g),
+      ].map((m) => ({ dir: '/' + m[1], target: m[2] }));
+      const rule = rules.find((r) => from === r.dir || from.startsWith(r.dir + '/'));
+      expect(rule, from).toBeDefined();
+      expect(rule.target + from.slice(rule.dir.length).replace(/^\//, '')).toBe(to);
       expect(existsSync(distFile(to))).toBe(true);
     });
   });

@@ -1,0 +1,149 @@
+# Touches BIOS/UEFI et boot menu : source éditable (issue des anciens articles du blog). Après modification : `pnpm --filter @grichard/web reference:build`.
+meta:
+  id: bios-uefi
+  order: 8
+  optionalUrl: true
+  topAfter: true
+  searchLabel: Rechercher une marque ou un modèle
+  placeholder: ex. thinkpad, dell, msi
+  topTitle: À savoir
+  lang: fr
+  title: 'Touches BIOS/UEFI et boot menu par marque de PC : Dell, HP, Lenovo, ASUS | Guillaume Richard'
+  h1: Touches BIOS/UEFI et boot menu
+  description: 'Tableau de recherche des touches pour entrer dans le BIOS/UEFI et ouvrir le menu de démarrage : Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac et autres constructeurs.'
+  intro: 'La touche pour entrer dans le BIOS/UEFI ou ouvrir le menu de démarrage change selon le constructeur, et parfois selon la série. Tapez une marque ou un modèle : par exemple thinkpad, dell ou rog.'
+  card: 'Les touches pour entrer dans le BIOS/UEFI ou ouvrir le menu de démarrage, par constructeur : Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac.'
+  notice: "Ces touches ont été recoupées avec des sources en ligne (dont les pages d'assistance d'ASUS et de Samsung, Dell, Lenovo, Acer, Microsoft, Apple, LG, Huawei, Framework et Intel). Elles peuvent varier selon le modèle exact et l'année : en cas d'échec, consultez le manuel ou la page de support du modèle. Une mauvaise modification dans le BIOS peut empêcher le PC de démarrer : notez les réglages d'origine. Sur un PC géré par une entreprise, l'accès peut être protégé par un mot de passe : ne le contournez pas sans autorisation et adressez-vous à votre service informatique."
+  top:
+    - title: 'Menu de démarrage ou BIOS : lequel choisir ?'
+      note: "Le menu de démarrage (boot menu) sert à choisir une seule fois le périphérique de démarrage : une clé USB d'installation, un outil de diagnostic. C'est le plus simple pour réinstaller un système. Le BIOS/UEFI donne accès aux réglages permanents : ordre de démarrage, Secure Boot, TPM, virtualisation, mode SATA. C'est là qu'on active par exemple le TPM 2.0 requis par Windows 11."
+      items: []
+    - title: Entrer dans l'UEFI depuis le système
+      note: "Sur un PC qui démarre en UEFI, on peut demander au système de redémarrer directement dans le firmware, sans deviner la touche. Windows 11 : Paramètres > Système > Récupération > Démarrage avancé > Redémarrer maintenant, puis Dépannage > Options avancées > Paramètres du micrologiciel UEFI. Windows 10 : Paramètres > Mise à jour et sécurité > Récupération > Démarrage avancé, puis la même suite d'options. En ligne de commande :"
+      items:
+        - code: shutdown /r /fw /t 0
+          note: Windows, dans une invite de commandes en administrateur.
+        - code: systemctl reboot --firmware-setup
+          note: Linux (systemd).
+    - title: Si la touche ne répond pas
+      note: "Les PC récents démarrent si vite que la fenêtre pour presser la touche est très courte. Tapez la touche en rafale dès l'allumage au lieu de la maintenir. Éteignez complètement le PC plutôt que de le redémarrer (avec le démarrage rapide de Windows, un arrêt n'est pas complet : Maj + clic sur Arrêter force un arrêt complet). Sur un portable, essayez avec Fn (Fn + F2). Utilisez un clavier filaire branché directement sur le PC."
+      items: []
+  cats:
+    - id: laptops
+      label: Portables et PC de marque
+    - id: desktops
+      label: Cartes mères et PC fixes
+    - id: apple
+      label: Apple
+  fields:
+    - key: pitfall
+      label: Remarque
+entries:
+  - name: Acer
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 (Suppr sur certains PC fixes) | Menu de démarrage : F12'
+    desc: Aspire, Swift, Nitro, Predator, TravelMate, Extensa
+    pitfall: Sur certains modèles, il faut d'abord activer « F12 Boot Menu » dans le BIOS
+  - name: 'ASUS : VivoBook'
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 (maintenue tout en appuyant sur Alimentation) | Menu de démarrage : Échap maintenue tout en appuyant sur Alimentation, relâchée quand le menu apparaît'
+    desc: VivoBook, ZenBook, ExpertBook, portables en général
+    pitfall: Procédure indiquée par ASUS pour les portables
+    url: https://www.asus.com/support/faq/1008829
+  - name: 'ASUS : ROG'
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Menu de démarrage : Échap maintenue au démarrage'
+    desc: ROG, TUF Gaming (portables)
+    pitfall: Voir la ligne portables ASUS
+    url: https://www.asus.com/support/faq/1008829
+  - name: 'ASUS : Cartes mères et PC fixes'
+    cat: desktops
+    syn: 'BIOS/UEFI : Suppr (ou F2) | Menu de démarrage : F8'
+    desc: Cartes mères et PC fixes
+    pitfall: F8 ouvre le menu de démarrage pendant le démarrage
+    url: https://www.asus.com/support/faq/1008829
+  - name: Dell
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Menu de démarrage : F12'
+    desc: Latitude, XPS, Inspiron, Vostro, Precision, OptiPlex
+    pitfall: Taper la touche à plusieurs reprises dès l'apparition du logo
+  - name: HP
+    cat: laptops
+    syn: 'BIOS/UEFI : Échap puis F10 | Menu de démarrage : Échap puis F9'
+    desc: Pavilion, EliteBook, ProBook, ZBook, Omen, Envy, Spectre
+    pitfall: Échap ouvre le menu de démarrage HP (« Startup Menu ») ; F2 ouvre les diagnostics UEFI
+  - name: 'Lenovo : ThinkPad'
+    cat: laptops
+    syn: 'BIOS/UEFI : Entrée puis F1 (ou F1 direct) | Menu de démarrage : Entrée puis F12 (ou F12 direct)'
+    desc: ThinkPad
+    pitfall: Entrée ouvre le menu d'interruption de démarrage
+  - name: 'Lenovo : ThinkCentre'
+    cat: desktops
+    syn: 'BIOS/UEFI : F1 | Menu de démarrage : F12'
+    desc: ThinkCentre, ThinkStation
+  - name: 'Lenovo : IdeaPad'
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 (ou Fn + F2) | Menu de démarrage : F12 (ou Fn + F12)'
+    desc: IdeaPad, Yoga, Legion (portables)
+    pitfall: "Bouton « Novo » (petit trou près de l'alimentation) sur beaucoup de modèles : ouvre un menu avec BIOS et boot menu"
+  - name: MSI
+    cat: desktops
+    syn: 'BIOS/UEFI : Suppr | Menu de démarrage : F11'
+    desc: Cartes mères, PC fixes, portables
+  - name: 'Gigabyte, Aorus : Cartes mères et PC fixes'
+    cat: desktops
+    syn: 'BIOS/UEFI : Suppr | Menu de démarrage : F12'
+    desc: Cartes mères et PC fixes
+  - name: 'Gigabyte, Aorus : Portables'
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Menu de démarrage : F12'
+    desc: Portables
+  - name: ASRock
+    cat: desktops
+    syn: 'BIOS/UEFI : F2 ou Suppr | Menu de démarrage : F11'
+    desc: Cartes mères
+  - name: Microsoft
+    cat: laptops
+    syn: 'BIOS/UEFI : Maintenir Volume + puis appuyer sur Alimentation | Menu de démarrage : Maintenir Volume − puis appuyer sur Alimentation'
+    desc: Surface Pro 6 et suivants, Laptop 2 et suivants, Go 2 et suivants, Book 2 et 3
+    pitfall: Éteindre complètement la Surface avant. Pour l'UEFI, relâcher quand le logo disparaît ; pour l'USB, relâcher quand les points tournent sous le logo. Les modèles plus anciens diffèrent
+  - name: 'Apple : Mac Intel'
+    cat: apple
+    syn: 'BIOS/UEFI : Pas de BIOS | Menu de démarrage : Maintenir Option (⌥) au démarrage'
+    desc: Mac Intel
+    pitfall: Cmd + R pour la récupération macOS
+  - name: 'Apple : Mac Apple Silicon (M1 et suivants)'
+    cat: apple
+    syn: "BIOS/UEFI : Pas de BIOS | Menu de démarrage : Maintenir le bouton d'alimentation jusqu'aux options de démarrage"
+    desc: Mac Apple Silicon (M1 et suivants)
+  - name: Samsung
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Menu de démarrage : F10 (ou Échap selon les modèles)'
+    desc: Galaxy Book, portables
+    pitfall: Indiqué par le support Samsung
+    url: https://www.samsung.com/us/support/answer/ANS10002820/
+  - name: Toshiba, Dynabook
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 (ou F1) | Menu de démarrage : F12'
+    desc: Satellite, Tecra, Portégé
+  - name: Fujitsu
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Menu de démarrage : F12'
+    desc: Lifebook, Esprimo
+  - name: LG
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Menu de démarrage : F10'
+    desc: gram
+  - name: Huawei
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Menu de démarrage : F12'
+    desc: MateBook
+    pitfall: 'MateBook E et certains MateBook (HZ) : éteint, appuyer sur Alimentation + Volume +'
+  - name: Framework
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Menu de démarrage : F12'
+    desc: Framework Laptop
+  - name: Intel
+    cat: desktops
+    syn: 'BIOS/UEFI : F2 | Menu de démarrage : F10'
+    desc: NUC

@@ -38,6 +38,38 @@
     {
       "from": "/reference/evenements-windows/",
       "to": "/cheatsheets/evenements-windows/"
+    },
+    {
+      "from": "/blog/touches-bios-uefi-boot-menu-par-marque/",
+      "to": "/cheatsheets/bios-uefi/"
+    },
+    {
+      "from": "/blog/tag/bios/",
+      "to": "/cheatsheets/bios-uefi/"
+    },
+    {
+      "from": "/blog/tag/uefi/",
+      "to": "/cheatsheets/bios-uefi/"
+    },
+    {
+      "from": "/en/blog/bios-uefi-boot-menu-keys-by-brand/",
+      "to": "/en/cheatsheets/bios-uefi-keys/"
+    },
+    {
+      "from": "/en/blog/tag/bios/",
+      "to": "/en/cheatsheets/bios-uefi-keys/"
+    },
+    {
+      "from": "/en/blog/tag/uefi/",
+      "to": "/en/cheatsheets/bios-uefi-keys/"
+    },
+    {
+      "from": "/og/touches-bios-uefi-boot-menu-par-marque.png",
+      "to": "/og-image.png"
+    },
+    {
+      "from": "/og/bios-uefi-boot-menu-keys-by-brand.png",
+      "to": "/og-image.png"
     }
   ],
   "entries": [
@@ -79,14 +111,6 @@
     },
     {
       "path": "/blog/spf-dkim-dmarc-expliques/",
-      "type": "text/html"
-    },
-    {
-      "path": "/blog/touches-bios-uefi-boot-menu-par-marque/",
-      "type": "text/html"
-    },
-    {
-      "path": "/en/blog/bios-uefi-boot-menu-keys-by-brand/",
       "type": "text/html"
     },
     {
@@ -289,10 +313,6 @@
       "type": "image/png"
     },
     {
-      "path": "/og/bios-uefi-boot-menu-keys-by-brand.png",
-      "type": "image/png"
-    },
-    {
       "path": "/og/delivrabilite-diagnostiquer-mails-spam-rejetes.png",
       "type": "image/png"
     },
@@ -334,10 +354,6 @@
     },
     {
       "path": "/og/spf-dkim-dmarc-expliques.png",
-      "type": "image/png"
-    },
-    {
-      "path": "/og/touches-bios-uefi-boot-menu-par-marque.png",
       "type": "image/png"
     },
     {
@@ -492,6 +508,21 @@
     },
     {
       "path": "/en/projects/creation-web/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/cheatsheets/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/cheatsheets/bios-uefi/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/cheatsheets/bios-uefi-keys/",
       "type": "text/html",
       "since": "web"
     }

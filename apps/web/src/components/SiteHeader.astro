@@ -2,7 +2,8 @@
 import Button from '@grichard/ui/components/Button.astro';
 import ThemeSwitch from '@grichard/ui/components/ThemeSwitch.astro';
 import { ROUTES, UI, type Lang } from '../lib/i18n';
-import { inResources } from '../lib/sections';
+import { inResources, resourceLinks } from '../lib/sections';
+import { TOOLS, toolPath, toolUi } from '../tools/registry';
 
 interface Props {
   lang: Lang;
@@ -19,6 +20,12 @@ const items = ['about', 'career', 'skills', 'projects', 'resources'] as const;
 const isCurrent = (key: (typeof items)[number]) => {
   const href = ROUTES[lang][key];
   return key === 'resources' ? inResources(lang, path) : path === href || path.startsWith(href);
+};
+// Menu « Ressources » au survol et au focus : accès direct aux outils (le lien du menu reste la page Ressources).
+const flyout = {
+  title: lang === 'fr' ? 'Aller directement à un outil' : 'Jump straight to a tool',
+  sections: resourceLinks(lang).filter((link) => link.key !== 'resources'),
+  tools: TOOLS.map((tool) => ({ label: toolUi(tool, lang).name, href: toolPath(tool, lang) })),
 };
 ---
 
@@ -52,7 +59,7 @@ const isCurrent = (key: (typeof items)[number]) => {
       <nav aria-label={ui.mainNav} class="site-nav">
         <ul>
           {items.map((key) => (
-            <li>
+            <li class={key === 'resources' ? 'has-sub' : undefined}>
               <a
                 href={ROUTES[lang][key]}
                 aria-current={
@@ -61,6 +68,25 @@ const isCurrent = (key: (typeof items)[number]) => {
               >
                 {ui.nav[key]}
               </a>
+              {key === 'resources' && (
+                <div class="subnav">
+                  <ul class="subnav-sections">
+                    {flyout.sections.map((link) => (
+                      <li>
+                        <a href={link.href}>{link.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                  <p class="subnav-title">{flyout.title}</p>
+                  <ul class="subnav-tools">
+                    {flyout.tools.map((tool) => (
+                      <li>
+                        <a href={tool.href}>{tool.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </li>
           ))}
         </ul>

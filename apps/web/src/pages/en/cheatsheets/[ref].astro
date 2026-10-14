@@ -1,0 +1,14 @@
+---
+import ReferencePage from '../../../views/ReferencePage.astro';
+import { refsFor } from '../../../reference/refs';
+
+export function getStaticPaths() {
+  return refsFor('en').map((reference) => ({
+    params: { ref: reference.id },
+    props: { reference },
+  }));
+}
+const { reference } = Astro.props;
+---
+
+<ReferencePage lang="en" reference={reference} />

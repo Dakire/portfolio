@@ -40,7 +40,12 @@ export async function GET() {
     link(
       'Cheatsheets (aide-mémoire de commandes)',
       '/cheatsheets/',
-      'recherche de commandes : GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux, Proxmox, Git',
+      'recherche de commandes : GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux, Proxmox, Git, touches BIOS/UEFI',
+    ),
+    link(
+      'Cheatsheets (command reference)',
+      '/en/cheatsheets/',
+      'BIOS/UEFI and boot menu keys by PC brand, with instant search',
     ),
     link('Blog (français)', ROUTES.fr.blog, 'notes techniques'),
     link('Blog (English)', ROUTES.en.blog, 'technical notes'),

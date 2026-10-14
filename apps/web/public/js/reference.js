@@ -230,7 +230,7 @@
     const li = el('li', 'ref-item');
     const art = el('article');
     art.tabIndex = -1;
-    art.dataset.url = doc.url;
+    if (doc.url) art.dataset.url = doc.url;
     const hid = `ref-r-${n}`;
     art.setAttribute('aria-labelledby', hid);
 
@@ -269,9 +269,11 @@
     if (dl.children.length) art.append(dl);
     if (doc.tags?.length) art.append(el('p', 'ref-tags', doc.tags.map((t) => `#${t}`).join(' ')));
 
-    const foot = el('p', 'ref-links');
-    foot.append(link(doc.url, T.official));
-    art.append(foot);
+    if (doc.url) {
+      const foot = el('p', 'ref-links');
+      foot.append(link(doc.url, T.official));
+      art.append(foot);
+    }
     li.append(art);
     return li;
   }
@@ -422,7 +424,7 @@
         (all[i - 1] ?? input).focus();
       } else if (e.key === 'Enter') {
         e.preventDefault();
-        window.open(t.dataset.url, '_blank', 'noopener,noreferrer');
+        if (t.dataset.url) window.open(t.dataset.url, '_blank', 'noopener,noreferrer');
       } else if (e.key === 'Escape') {
         input.focus();
       }

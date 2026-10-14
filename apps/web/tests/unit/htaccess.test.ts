@@ -41,11 +41,15 @@ describe('.htaccess de production', () => {
     const { redirects } = JSON.parse(readFileSync('../../tests/contract/contract.json', 'utf-8'));
     const prod: string = buildHtaccess({ hashes });
     expect(prod).toContain('RewriteRule ^reference(?:/(.*))?$ /cheatsheets/$1 [L,R=301]');
-    for (const { from, to } of redirects) {
-      const dir = from.split('/')[1];
-      const target = REDIRECTS.find((r: { de: string }) => r.de === `/${dir}/`);
-      expect(target, from).toBeDefined();
-      expect(to.startsWith(target.vers), to).toBe(true);
+    for (const { from, to } of redirects as { from: string; to: string }[]) {
+      const dirOf = (de: string) => (de.endsWith('/') ? de.slice(0, -1) : de);
+      const rule = (REDIRECTS as { de: string; vers: string }[]).find((r) => {
+        const dir = dirOf(r.de);
+        return from === dir || from.startsWith(dir + '/');
+      });
+      expect(rule, from).toBeDefined();
+      const rest = from.slice(dirOf(rule!.de).length).replace(/^\//, '');
+      expect(rule!.vers + rest, from).toBe(to);
     }
     expect(buildHtaccess({ hashes, base: '/preprod' })).toContain('/preprod/cheatsheets/$1');
   });

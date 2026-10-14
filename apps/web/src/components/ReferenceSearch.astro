@@ -12,7 +12,7 @@ interface Props {
 }
 const { lang, ref, cats } = Astro.props;
 const ui = REF_UI[lang];
-const label = ref ? ui.searchLabel : ui.searchLabelAll;
+const label = ref ? (ref.searchLabel ?? ui.searchLabel) : ui.searchLabelAll;
 ---
 
 <section
@@ -39,7 +39,7 @@ const label = ref ? ui.searchLabel : ui.searchLabelAll;
         autocomplete="off"
         autocapitalize="off"
         spellcheck="false"
-        placeholder={ui.placeholder}
+        placeholder={ref?.placeholder ?? ui.placeholder}
         aria-describedby="ref-hint"
         aria-controls="ref-results"
       />

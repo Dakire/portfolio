@@ -1065,3 +1065,115 @@ html[data-terminal-max] {
   display: inline-flex !important;
   visibility: hidden;
 }
+
+/* ---------- Champ de recherche d'un tableau (public/js/table-filter.js) ---------- */
+input[data-filter-table] {
+  width: 100%;
+  max-width: 36rem;
+  min-height: var(--target);
+  margin-block: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--text-sm);
+}
+input[data-filter-table]::placeholder {
+  color: var(--muted);
+}
+input[data-filter-table]:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ---------- Menu « Ressources » : accès direct aux outils (grand écran seulement) ----------
+   Ouvert au survol et au focus clavier, fermé par Échap (WCAG 1.4.13) ; sur petit écran, la sous-navigation de la page suffit. */
+.subnav {
+  display: none;
+}
+@media (min-width: 60rem) {
+  .has-sub {
+    position: relative;
+  }
+  .has-sub:hover > .subnav,
+  .has-sub:focus-within > .subnav {
+    display: block;
+  }
+  .has-sub[data-closed] > .subnav {
+    display: none;
+  }
+  .subnav {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: var(--z-overlay);
+    width: min(34rem, 92vw);
+    padding: var(--space-4);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: var(--shadow-lg);
+  }
+  .subnav ul {
+    display: grid;
+    gap: 0 var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .subnav a {
+    display: flex;
+    align-items: center;
+    min-height: var(--target);
+    padding: 0 var(--space-3);
+    border-radius: var(--radius-sm);
+    color: var(--body);
+    font-size: var(--text-sm);
+    text-decoration: none;
+  }
+  .subnav a:hover {
+    background: var(--raised);
+    color: var(--ink);
+  }
+  .subnav-sections {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--line);
+  }
+  .subnav-sections a {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .subnav-title {
+    margin: var(--space-3) 0 var(--space-1);
+    padding-inline: var(--space-3);
+    color: var(--muted);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .subnav-tools {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Exemples de la page Ressources : situation, ce qu'on y trouve, et la saisie d'exemple en police à chasse fixe */
+.cards > li {
+  display: flex;
+}
+.cards > li > .card {
+  flex: 1;
+}
+.example-code {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--canvas);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}

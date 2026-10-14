@@ -52,7 +52,8 @@ describe('index de la référence', () => {
       expect(ids.has(e.id), `identifiant en double : ${e.id}`).toBe(false);
       ids.add(e.id);
       expect(cats.has(e.cat), `${e.name} : catégorie ${e.cat}`).toBe(true);
-      expect(e.url, e.name).toMatch(/^https:\/\//);
+      // Certaines références (touches BIOS) n'ont pas de page de documentation par entrée.
+      if (e.url) expect(e.url, e.name).toMatch(/^https:\/\//);
       expect(Boolean(e.syn || e.desc), e.name).toBe(true);
     }
   });

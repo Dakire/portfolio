@@ -37,3 +37,13 @@ Les JSON sont **commités** : après une modification d'un `.yml`, relancez `ref
 ## Tests manuels de la recherche
 
 Faute de frappe (`mailbx`), accents (`etiquette` pour « Étiquette »), multi-mots (`bitlocker status`), préfixe (`get-mail`), clavier seul (`/`, `Ctrl+K`, `↓`, `↑`, `Entrée`, `Échap`), URL partagée (`?q=…&cat=…`), mobile (375 px), thème sombre, annonce `aria-live` du nombre de résultats. Les cas automatisables sont dans `tests/e2e/reference.spec.ts`.
+
+## Options de présentation d'une cheatsheet
+
+Clés facultatives du bloc `meta` d'une source (exemple : `bios-uefi.yml`) :
+
+- `optionalUrl: true` : les entrées n'ont pas toutes de page de documentation (aucun lien « documentation officielle » n'est affiché pour celles sans `url`).
+- `topAfter: true` et `topTitle` : les blocs `top` passent après la recherche, sous le titre voulu (quand la recherche est l'essentiel).
+- `searchLabel` et `placeholder` : libellé et exemple du champ de recherche quand « commande » ne convient pas.
+- Une cheatsheet existe en français (`/cheatsheets/<id>/`) et en anglais (`/en/cheatsheets/<id>/`) avec deux identifiants distincts (ex. `bios-uefi` et `bios-uefi-keys`) ; la correspondance (liens `hreflang`, sélecteur de langue) est déclarée dans `TRANSLATIONS` de `src/reference/refs.ts`.
+- Une cheatsheet issue d'un ancien article du blog : l'article est supprimé, ses URL (page, étiquettes, image de partage) sont redirigées en 301 via `REDIRECTS` (`scripts/lib/htaccess.mjs`) et le contrat.

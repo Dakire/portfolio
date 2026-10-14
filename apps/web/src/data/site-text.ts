@@ -2,6 +2,19 @@
 // Les textes du profil (accroche, compétences, expériences, réalisations) sont dans profile.ts.
 import type { Lang } from '../lib/i18n';
 
+export interface ResourceExample {
+  /** La situation, formulée comme le visiteur la vivrait. */
+  situation: string;
+  /** Ce que la ressource apporte. */
+  text: string;
+  /** Commande ou saisie d'exemple (adresses fictives : toto@domain.com, domain.com). */
+  code?: string;
+  kind: 'tool' | 'ref' | 'post';
+  /** Identifiant de l'outil, de la cheatsheet (en français) ou slug français de l'article. */
+  id: string;
+  linkLabel: string;
+}
+
 export interface SiteText {
   footer: {
     profile: string;
@@ -34,6 +47,9 @@ export interface SiteText {
     cheatsheetsText: string;
     latest: string;
     open: string;
+    examplesTitle: string;
+    examplesIntro: string;
+    examples: ResourceExample[];
   };
   project: {
     summary: string;
@@ -99,6 +115,64 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
         'Des aide-mémoire de commandes (GAM, PowerShell, Windows, Git…) avec une recherche instantanée.',
       latest: 'Derniers articles',
       open: 'Ouvrir',
+      examplesTitle: 'Un problème, la bonne ressource',
+      examplesIntro:
+        'Quelques situations courantes, avec ce qu’il faut saisir. Les adresses sont fictives (toto@domain.com, domain.com) : remplacez-les par les vôtres.',
+      examples: [
+        {
+          situation: 'Un mail de toto@domain.com arrive en spam',
+          text: 'Collez ses en-têtes : l’outil montre le chemin suivi par le message, puis les résultats SPF, DKIM et DMARC.',
+          kind: 'tool',
+          id: 'email-headers',
+          linkLabel: 'Analyser des en-têtes',
+        },
+        {
+          situation: 'Le DNS de domain.com vient de changer',
+          text: 'Interrogez plusieurs résolveurs publics et comparez leurs réponses pour savoir où en est la propagation.',
+          code: 'domain.com',
+          kind: 'tool',
+          id: 'propagation',
+          linkLabel: 'Vérifier la propagation',
+        },
+        {
+          situation: 'Afficher un utilisateur Google Workspace',
+          text: 'La commande GAM à copier, avec un lien vers le wiki d’origine.',
+          code: 'gam info user toto@domain.com',
+          kind: 'ref',
+          id: 'gam',
+          linkLabel: 'Ouvrir la cheatsheet GAM',
+        },
+        {
+          situation: 'Voir la boîte aux lettres Microsoft 365 de toto@domain.com',
+          text: 'Les commandes PowerShell Exchange Online, avec leurs pièges courants.',
+          code: 'Get-Mailbox -Identity toto@domain.com | Format-List',
+          kind: 'ref',
+          id: 'powershell-m365',
+          linkLabel: 'Ouvrir la cheatsheet PowerShell',
+        },
+        {
+          situation: 'Entrer dans le BIOS d’un PC Dell',
+          text: 'F2 pour le BIOS/UEFI, F12 pour le menu de démarrage. Les autres marques sont dans la cheatsheet.',
+          kind: 'ref',
+          id: 'bios-uefi',
+          linkLabel: 'Voir les touches par marque',
+        },
+        {
+          situation: 'Découper le réseau 192.168.10.0/24',
+          text: 'Adresse du réseau, broadcast, plage d’hôtes et sous-réseaux, en IPv4 comme en IPv6.',
+          code: '192.168.10.0/24',
+          kind: 'tool',
+          id: 'subnet',
+          linkLabel: 'Calculer un réseau',
+        },
+        {
+          situation: 'Comprendre SPF, DKIM et DMARC',
+          text: 'Un article pour savoir à quoi sert chaque enregistrement et comment les vérifier.',
+          kind: 'post',
+          id: 'spf-dkim-dmarc-expliques',
+          linkLabel: 'Lire l’article',
+        },
+      ],
     },
     project: {
       summary: 'En bref',
@@ -169,6 +243,48 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
       cheatsheetsText: 'Command cheatsheets (GAM, PowerShell, Windows, Git…) with instant search.',
       latest: 'Latest articles',
       open: 'Open',
+      examplesTitle: 'A problem, the right resource',
+      examplesIntro:
+        'A few common situations, with what to type. The addresses are made up (toto@domain.com, domain.com): swap in your own.',
+      examples: [
+        {
+          situation: 'A mail from toto@domain.com lands in spam',
+          text: 'Paste its headers: the tool shows the path the message took, then the SPF, DKIM and DMARC results.',
+          kind: 'tool',
+          id: 'email-headers',
+          linkLabel: 'Analyze headers',
+        },
+        {
+          situation: 'The DNS of domain.com has just changed',
+          text: 'Query several public resolvers and compare their answers to see how far propagation has gone.',
+          code: 'domain.com',
+          kind: 'tool',
+          id: 'propagation',
+          linkLabel: 'Check propagation',
+        },
+        {
+          situation: 'Get into the BIOS of a Dell PC',
+          text: 'F2 for the BIOS/UEFI, F12 for the boot menu. Other brands are in the cheatsheet.',
+          kind: 'ref',
+          id: 'bios-uefi',
+          linkLabel: 'See the keys by brand',
+        },
+        {
+          situation: 'Split the 192.168.10.0/24 network',
+          text: 'Network address, broadcast, host range and subnets, in IPv4 or IPv6.',
+          code: '192.168.10.0/24',
+          kind: 'tool',
+          id: 'subnet',
+          linkLabel: 'Calculate a network',
+        },
+        {
+          situation: 'Understand SPF, DKIM and DMARC',
+          text: 'An article on what each record is for and how to check them.',
+          kind: 'post',
+          id: 'spf-dkim-dmarc-expliques',
+          linkLabel: 'Read the article',
+        },
+      ],
     },
     project: {
       summary: 'In brief',

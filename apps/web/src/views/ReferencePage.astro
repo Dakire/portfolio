@@ -5,8 +5,9 @@ import PageHero from '../components/PageHero.astro';
 import ReferenceSearch from '../components/ReferenceSearch.astro';
 import '../styles/reference.css';
 import { ROUTES, SITE, type Lang } from '../lib/i18n';
-import { breadcrumbLd } from '../lib/seo';
-import { REF_UI, hubPath, refPath, type RefMeta } from '../reference/refs';
+import { crumbs } from '../lib/crumbs';
+import { REF_UI, hubPath, refAlternates, refPath, type RefMeta } from '../reference/refs';
+import { UI } from '../lib/i18n';
 
 interface Props {
   lang: Lang;
@@ -15,14 +16,18 @@ interface Props {
 const { lang, reference: ref } = Astro.props;
 const ui = REF_UI[lang];
 const path = refPath(ref);
+const trail = crumbs(
+  lang,
+  [
+    { label: UI[lang].nav.resources, path: ROUTES[lang].resources },
+    { label: ui.crumb, path: hubPath(lang) },
+  ],
+  { label: ref.h1, path },
+);
 const ld = {
   '@context': 'https://schema.org',
   '@graph': [
-    breadcrumbLd([
-      { name: ui.home, path: ROUTES[lang].home },
-      { name: ui.crumb, path: hubPath(lang) },
-      { name: ref.h1, path: path },
-    ]),
+    trail.ld,
     {
       '@type': 'TechArticle',
       headline: ref.h1,
@@ -39,19 +44,20 @@ const ld = {
   title={ref.title}
   description={ref.description}
   path={path}
+  alternates={refAlternates(ref)}
   ld={ld}
   scripts={['/js/libs/minisearch.js', '/js/reference.js']}
 >
-  <PageHero title={ref.h1} lead={ref.intro} />
+  <PageHero title={ref.h1} lead={ref.intro} crumbs={trail} />
   <div class="container section stack-lg">
     {ref.notice && (
       <p class="ref-notice" role="note">
         {ref.notice}
       </p>
     )}
-    {ref.top && (
+    {ref.top && !ref.topAfter && (
       <section class="ref-top" aria-labelledby="ref-top-title">
-        <h2 id="ref-top-title">{ui.topTitle}</h2>
+        <h2 id="ref-top-title">{ref.topTitle ?? ui.topTitle}</h2>
         {ref.top.map((block) => (
           <div class="ref-top-block">
             <h3>{block.title}</h3>
@@ -77,6 +83,33 @@ const ld = {
       </section>
     )}
     <ReferenceSearch lang={lang} ref={ref} cats={ref.cats} />
+    {ref.top && ref.topAfter && (
+      <section class="ref-top" aria-labelledby="ref-top-title-after">
+        <h2 id="ref-top-title-after">{ref.topTitle ?? ui.topTitle}</h2>
+        {ref.top.map((block) => (
+          <div class="ref-top-block">
+            <h3>{block.title}</h3>
+            {block.note && <p>{block.note}</p>}
+            {block.items.map((item) => (
+              <>
+                <div class="ref-example">
+                  <pre><code>{item.code}</code></pre>
+                  <button
+                    type="button"
+                    class="btn ref-copy"
+                    data-copy
+                    aria-label={`${lang === 'fr' ? 'Copier' : 'Copy'} : ${item.code.split('\n')[0]}`}
+                  >
+                    {lang === 'fr' ? 'Copier' : 'Copy'}
+                  </button>
+                </div>
+                {item.note && <p class="ref-source">{item.note}</p>}
+              </>
+            ))}
+          </div>
+        ))}
+      </section>
+    )}
     {ref.source && (
       <section class="stack" aria-labelledby="ref-source-title">
         <h2 id="ref-source-title">{ui.sourceTitle}</h2>

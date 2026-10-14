@@ -24,7 +24,9 @@ const PAGES = [
   '/blog/',
   '/en/blog/',
   '/blog/spf-dkim-dmarc-expliques/',
-  '/blog/touches-bios-uefi-boot-menu-par-marque/',
+  '/cheatsheets/bios-uefi/',
+  '/en/cheatsheets/',
+  '/en/cheatsheets/bios-uefi-keys/',
   '/en/blog/spf-dkim-dmarc-explained/',
   '/blog/categorie/dns/',
   '/outils/',
@@ -123,12 +125,14 @@ test('le sélecteur de thème change et mémorise le choix', async ({ page }) =>
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark'); // le système simulé est sombre
 });
 
-test("le filtre de tableau de l'article BIOS fonctionne", async ({ page }) => {
-  await page.goto('/blog/touches-bios-uefi-boot-menu-par-marque/');
-  const search = page.getByRole('searchbox');
-  await expect(search).toBeVisible();
-  await search.fill('thinkpad');
-  await expect(page.getByRole('status')).toContainText('résultat');
+test('les touches BIOS/UEFI : la recherche trouve un constructeur sans entrée vide', async ({
+  page,
+}) => {
+  await page.goto('/cheatsheets/bios-uefi/');
+  await page.getByRole('searchbox').fill('thinkpad');
+  const first = page.locator('[data-ref-results] > li > article').first();
+  await expect(first).toContainText('Lenovo');
+  await expect(first).toContainText('Menu de démarrage');
 });
 
 test('sans JavaScript, le contenu reste lisible', async ({ browser }) => {
@@ -141,11 +145,7 @@ test('sans JavaScript, le contenu reste lisible', async ({ browser }) => {
 });
 
 test('aucun défilement horizontal de 320 à 1440 px', async ({ page }) => {
-  for (const path of [
-    '/',
-    '/blog/touches-bios-uefi-boot-menu-par-marque/',
-    '/blog/spf-dkim-dmarc-expliques/',
-  ]) {
+  for (const path of ['/', '/cheatsheets/bios-uefi/', '/blog/spf-dkim-dmarc-expliques/']) {
     for (const width of [320, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 });
       await page.goto(path);
@@ -293,4 +293,27 @@ test('le pied de page est structuré et donne accès aux deux CV', async ({ page
     await expect(footer.getByRole('heading', { name })).toBeVisible();
   await expect(footer.getByRole('link', { name: 'CV en français (PDF)' })).toBeVisible();
   await expect(footer.getByRole('link', { name: 'Resume in English (PDF)' })).toBeVisible();
+});
+
+test('au survol de « Ressources », le menu mène directement aux outils ; Échap le ferme', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const nav = page.getByRole('navigation', { name: 'Navigation principale' });
+  const dns = nav.getByRole('link', { name: 'DNS Lookup' });
+  await expect(dns).toBeHidden();
+  await nav.getByRole('link', { name: 'Ressources', exact: true }).hover();
+  await expect(dns).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Calculatrice réseau' })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(dns).toBeHidden();
+});
+
+test('le menu « Ressources » s’ouvre aussi au clavier', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const nav = page.getByRole('navigation', { name: 'Navigation principale' });
+  await nav.getByRole('link', { name: 'Ressources', exact: true }).focus();
+  await expect(nav.getByRole('link', { name: 'DNS Lookup' })).toBeVisible();
 });

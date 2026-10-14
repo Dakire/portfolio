@@ -6,8 +6,9 @@ import PageHero from '../components/PageHero.astro';
 import ReferenceSearch from '../components/ReferenceSearch.astro';
 import '../styles/reference.css';
 import { ROUTES, SITE, type Lang } from '../lib/i18n';
-import { breadcrumbLd } from '../lib/seo';
-import { REF_UI, hubPath, refPath, refsFor } from '../reference/refs';
+import { crumbs } from '../lib/crumbs';
+import { UI } from '../lib/i18n';
+import { REF_UI, hubAlternates, hubPath, refPath, refsFor } from '../reference/refs';
 
 interface Props {
   lang: Lang;
@@ -15,13 +16,14 @@ interface Props {
 const { lang } = Astro.props;
 const ui = REF_UI[lang];
 const refs = refsFor(lang);
+const trail = crumbs(lang, [{ label: UI[lang].nav.resources, path: ROUTES[lang].resources }], {
+  label: ui.crumb,
+  path: hubPath(lang),
+});
 const ld = {
   '@context': 'https://schema.org',
   '@graph': [
-    breadcrumbLd([
-      { name: ui.home, path: ROUTES[lang].home },
-      { name: ui.crumb, path: hubPath(lang) },
-    ]),
+    trail.ld,
     {
       '@type': 'ItemList',
       name: ui.hubH1,
@@ -41,10 +43,11 @@ const ld = {
   title={ui.hubTitle}
   description={ui.hubDescription}
   path={hubPath(lang)}
+  alternates={hubAlternates()}
   ld={ld}
   scripts={['/js/libs/minisearch.js', '/js/reference.js']}
 >
-  <PageHero title={ui.hubH1} lead={ui.hubIntro} />
+  <PageHero title={ui.hubH1} lead={ui.hubIntro} crumbs={trail} />
   <div class="container section stack-lg">
     <ReferenceSearch lang={lang} cats={refs.map((r) => ({ id: r.id, label: r.h1 }))} />
     <section class="stack" aria-labelledby="ref-cards-title">

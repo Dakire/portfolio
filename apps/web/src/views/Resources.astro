@@ -1,11 +1,12 @@
 ---
-// Page « Ressources » : présente le blog, les outils et les cheatsheets comme le prolongement du métier.
+// Page « Ressources » : présente le blog, les outils et les cheatsheets comme le prolongement du métier,
+// avec des situations concrètes (et des exemples à saisir) pour savoir laquelle ouvrir.
 import Card from '@grichard/ui/components/Card.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import PostCard from '../components/PostCard.astro';
-import ToolCards from '../components/ToolCards.astro';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
+import { resolveRelated } from '../data/related';
 import { SITE_TEXT } from '../data/site-text';
 import { getPosts } from '../lib/blog';
 import { crumbs } from '../lib/crumbs';
@@ -30,6 +31,21 @@ const cards = [
   const link = links.find((l) => l.key === card.key);
   return link ? [{ ...card, href: link.href }] : [];
 });
+
+// Exemples : chaque situation pointe vers sa ressource ; celles qui n'existent pas dans cette langue sont omises.
+const examples = (
+  await Promise.all(
+    text.examples.map(async (example) => {
+      const resolved = await resolveRelated(lang, {
+        tools: example.kind === 'tool' ? [example.id] : [],
+        refs: example.kind === 'ref' ? [example.id] : [],
+        posts: example.kind === 'post' ? [example.id] : [],
+      });
+      const link = resolved.tools[0] ?? resolved.refs[0] ?? resolved.posts[0];
+      return link ? [{ ...example, href: link.href }] : [];
+    }),
+  )
+).flat();
 ---
 
 <Base
@@ -63,6 +79,31 @@ const cards = [
       </div>
     </section>
 
+    <section class="stack" aria-labelledby="examples">
+      <h2 id="examples">{text.examplesTitle}</h2>
+      <p class="prose">{text.examplesIntro}</p>
+      <ul class="cards cards-wide" role="list">
+        {examples.map((example) => (
+          <li>
+            <Card class="card-stretch example-card">
+              <h3>
+                <a class="card-link" href={example.href}>
+                  {example.situation}
+                </a>
+              </h3>
+              <p>{example.text}</p>
+              {example.code && (
+                <p class="example-code">
+                  <code>{example.code}</code>
+                </p>
+              )}
+              <p class="meta">{example.linkLabel} →</p>
+            </Card>
+          </li>
+        ))}
+      </ul>
+    </section>
+
     {posts.length > 0 && (
       <section class="stack" aria-labelledby="latest">
         <h2 id="latest">{text.latest}</h2>
@@ -76,14 +117,5 @@ const cards = [
         </p>
       </section>
     )}
-
-    <section class="stack" aria-labelledby="tools">
-      <h2 id="tools">{t.tools.title}</h2>
-      <p class="prose">{t.tools.intro}</p>
-      <ToolCards lang={lang} headingLevel={3} limit={4} />
-      <p>
-        <a href={routes.tools}>{t.tools.all} →</a>
-      </p>
-    </section>
   </div>
 </Base>

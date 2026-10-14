@@ -19,6 +19,11 @@ export interface RefMeta {
   notice?: string;
   generated?: string;
   source?: { name: string; url: string; license: string; licenseUrl: string; note?: string };
+  /** Libellé et exemple du champ de recherche, quand « commande » ne convient pas. */
+  searchLabel?: string;
+  placeholder?: string;
+  topAfter?: boolean;
+  topTitle?: string;
   top?: { title: string; note?: string; items: { code: string; note?: string }[] }[];
 }
 
@@ -90,3 +95,19 @@ export const REF_UI = {
     topTitle: 'Getting started',
   },
 } as const;
+
+/** Références publiées dans les deux langues sous deux identifiants : sert aux liens hreflang et au sélecteur de langue. */
+const TRANSLATIONS: [fr: string, en: string][] = [['bios-uefi', 'bios-uefi-keys']];
+/** Identifiant (français) d'une référence -> identifiant dans la langue demandée. */
+export const refIdFor = (lang: Lang, frId: string) =>
+  lang === 'fr' ? frId : (TRANSLATIONS.find(([fr]) => fr === frId)?.[1] ?? frId);
+export const refAlternates = (ref: RefMeta) => {
+  const pair = TRANSLATIONS.find(([fr, en]) => (ref.lang === 'fr' ? fr : en) === ref.id);
+  return pair
+    ? {
+        fr: withBase(`${REF_HUB.fr}${pair[0]}/`),
+        en: withBase(`${REF_HUB.en}${pair[1]}/`),
+      }
+    : undefined;
+};
+export const hubAlternates = () => ({ fr: withBase(REF_HUB.fr), en: withBase(REF_HUB.en) });

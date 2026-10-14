@@ -20,6 +20,23 @@
       set(false, { focusButton: menu.contains(document.activeElement) });
   });
 
+  // Menu au survol : Échap le ferme sans bouger le pointeur (WCAG 1.4.13) ; il se rouvre au prochain survol ou focus.
+  document.querySelectorAll('.has-sub').forEach((item) => {
+    const reopen = () => item.removeAttribute('data-closed');
+    item.addEventListener('mouseleave', reopen);
+    item.addEventListener('focusout', (event) => {
+      if (!item.contains(event.relatedTarget)) reopen();
+    });
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !wide.matches) return;
+    document.querySelectorAll('.has-sub').forEach((item) => {
+      if (!item.matches(':hover, :focus-within')) return;
+      item.setAttribute('data-closed', '');
+      if (item.contains(document.activeElement)) item.querySelector(':scope > a').focus();
+    });
+  });
+
   // Passage en grand écran : la navigation est toujours visible, l'état replié n'a plus de sens.
   wide.addEventListener('change', () => set(false));
 })();

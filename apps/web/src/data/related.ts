@@ -2,7 +2,7 @@
 // Les articles sont désignés par le slug français ; la version anglaise est retrouvée par `translationOf`.
 import { getPosts, postPath, type Post } from '../lib/blog';
 import type { Lang } from '../lib/i18n';
-import { refPath, refsFor } from '../reference/refs';
+import { refIdFor, refPath, refsFor } from '../reference/refs';
 import { TOOLS, toolPath, toolUi } from '../tools/registry';
 import type { SkillId } from './profile';
 
@@ -14,9 +14,8 @@ export interface Related {
 
 export const SKILL_RELATED: Record<SkillId, Related> = {
   network: {
-    posts: ['touches-bios-uefi-boot-menu-par-marque'],
     tools: ['subnet'],
-    refs: ['active-directory', 'reseau', 'linux-proxmox', 'evenements-windows'],
+    refs: ['active-directory', 'reseau', 'linux-proxmox', 'evenements-windows', 'bios-uefi'],
   },
   security: {
     posts: [
@@ -38,8 +37,8 @@ export const SKILL_RELATED: Record<SkillId, Related> = {
   training: {},
   dev: { tools: ['json', 'encoder', 'seo', 'sitemap'], refs: ['git-claude-code'] },
   support: {
-    posts: ['fin-support-windows-10-passer-a-windows-11', 'touches-bios-uefi-boot-menu-par-marque'],
-    refs: ['windows-11', 'evenements-windows'],
+    posts: ['fin-support-windows-10-passer-a-windows-11'],
+    refs: ['windows-11', 'evenements-windows', 'bios-uefi'],
   },
 };
 
@@ -59,7 +58,7 @@ export const PROJECT_RELATED: Record<string, Related> = {
     posts: ['fin-support-windows-10-passer-a-windows-11'],
     refs: ['windows-11', 'evenements-windows'],
   },
-  'pc-sur-mesure': { posts: ['touches-bios-uefi-boot-menu-par-marque'] },
+  'pc-sur-mesure': { refs: ['bios-uefi'] },
   'automatisation-scripts': { refs: ['powershell-m365', 'gam', 'git-claude-code'] },
 };
 
@@ -91,7 +90,7 @@ export async function resolveRelated(lang: Lang, related: Related = {}): Promise
       return tool ? [{ label: toolUi(tool, lang).name, href: toolPath(tool, lang) }] : [];
     }),
     refs: (related.refs ?? []).flatMap((id) => {
-      const ref = refs.find((r) => r.id === id);
+      const ref = refs.find((r) => r.id === refIdFor(lang, id));
       return ref ? [{ label: ref.h1, href: refPath(ref) }] : [];
     }),
   };

@@ -20,7 +20,18 @@ export const DOH_ORIGINS = [
  * « de » désigne un dossier et tout ce qu'il contient (« /reference/gam/ » -> « /cheatsheets/gam/ »). Toute URL publique renommée s'ajoute ici,
  * et dans la clé « redirects » de tests/contract/contract.json.
  */
-export const REDIRECTS = [{ de: '/reference/', vers: '/cheatsheets/' }];
+export const REDIRECTS = [
+  { de: '/reference/', vers: '/cheatsheets/' },
+  // Les articles « touches BIOS/UEFI » sont devenus des cheatsheets (avec recherche) ; leurs étiquettes et images de partage suivent.
+  { de: '/blog/touches-bios-uefi-boot-menu-par-marque/', vers: '/cheatsheets/bios-uefi/' },
+  { de: '/blog/tag/bios/', vers: '/cheatsheets/bios-uefi/' },
+  { de: '/blog/tag/uefi/', vers: '/cheatsheets/bios-uefi/' },
+  { de: '/en/blog/bios-uefi-boot-menu-keys-by-brand/', vers: '/en/cheatsheets/bios-uefi-keys/' },
+  { de: '/en/blog/tag/bios/', vers: '/en/cheatsheets/bios-uefi-keys/' },
+  { de: '/en/blog/tag/uefi/', vers: '/en/cheatsheets/bios-uefi-keys/' },
+  { de: '/og/touches-bios-uefi-boot-menu-par-marque.png', vers: '/og-image.png' },
+  { de: '/og/bios-uefi-boot-menu-keys-by-brand.png', vers: '/og-image.png' },
+];
 
 const GA_CONNECT = [
   'https://*.google-analytics.com',

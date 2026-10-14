@@ -1,0 +1,149 @@
+# BIOS/UEFI and boot menu keys : source éditable (issue des anciens articles du blog). Après modification : `pnpm --filter @grichard/web reference:build`.
+meta:
+  id: bios-uefi-keys
+  order: 8
+  optionalUrl: true
+  topAfter: true
+  searchLabel: Search for a brand or model
+  placeholder: e.g. thinkpad, dell, msi
+  topTitle: Good to know
+  lang: en
+  title: 'BIOS/UEFI and boot menu keys by PC brand: Dell, HP, Lenovo, ASUS | Guillaume Richard'
+  h1: BIOS/UEFI and boot menu keys
+  description: 'Searchable table of the keys to enter the BIOS/UEFI and open the boot menu: Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac and other manufacturers.'
+  intro: 'The key to enter the BIOS/UEFI or open the boot menu varies by manufacturer, and sometimes by product line. Type a brand or a model: for example thinkpad, dell or rog.'
+  card: 'The keys to enter the BIOS/UEFI or open the boot menu, by manufacturer: Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac.'
+  notice: "These keys were cross-checked against online sources (including the support pages of ASUS and Samsung, Dell, Lenovo, Acer, Microsoft, Apple, LG, Huawei, Framework and Intel). They can vary with the exact model and year: if it fails, check the manual or the model's support page. A wrong change in the BIOS can prevent the PC from booting: write down the original settings. On a company-managed PC, access may be password-protected: don't bypass it without authorization, ask your IT department."
+  top:
+    - title: Boot menu or BIOS, which one?
+      note: 'The boot menu picks the boot device just once: an installation USB drive, a diagnostic tool. It is the simplest way to reinstall a system. The BIOS/UEFI gives access to permanent settings: boot order, Secure Boot, TPM, virtualization, SATA mode. This is where you enable, for example, the TPM 2.0 required by Windows 11.'
+      items: []
+    - title: Enter UEFI from the operating system
+      note: 'On a PC that boots in UEFI mode, you can ask the system to restart directly into the firmware, without guessing the key. Windows 11: Settings > System > Recovery > Advanced startup > Restart now, then Troubleshoot > Advanced options > UEFI Firmware Settings. Windows 10: Settings > Update & Security > Recovery > Advanced startup, then the same sequence of options. From the command line:'
+      items:
+        - code: shutdown /r /fw /t 0
+          note: Windows, in an elevated command prompt.
+        - code: systemctl reboot --firmware-setup
+          note: Linux (systemd).
+    - title: If the key doesn't respond
+      note: 'Recent PCs boot so fast that the window to press the key is very short. Tap the key repeatedly as soon as you power on instead of holding it. Shut down completely rather than restarting (with Windows Fast Startup a shutdown is not a full one: Shift + click on Shut down forces a full shutdown). On a laptop, try Fn (Fn + F2). Use a wired keyboard plugged directly into the PC.'
+      items: []
+  cats:
+    - id: laptops
+      label: Laptops and branded PCs
+    - id: desktops
+      label: Motherboards and desktop PCs
+    - id: apple
+      label: Apple
+  fields:
+    - key: pitfall
+      label: Notes
+entries:
+  - name: Acer
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 (Del on some desktops) | Boot menu : F12'
+    desc: Aspire, Swift, Nitro, Predator, TravelMate, Extensa
+    pitfall: On some models, you must first enable "F12 Boot Menu" in the BIOS
+  - name: 'ASUS : VivoBook'
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 (held down while pressing Power) | Boot menu : Esc held down while pressing Power, released when the menu appears'
+    desc: VivoBook, ZenBook, ExpertBook, laptops in general
+    pitfall: Procedure given by ASUS for laptops
+    url: https://www.asus.com/support/faq/1008829
+  - name: 'ASUS : ROG'
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Boot menu : Esc held down at startup'
+    desc: ROG, TUF Gaming (laptops)
+    pitfall: See the ASUS laptops row
+    url: https://www.asus.com/support/faq/1008829
+  - name: 'ASUS : Motherboards and desktops'
+    cat: desktops
+    syn: 'BIOS/UEFI : Del (or F2) | Boot menu : F8'
+    desc: Motherboards and desktops
+    pitfall: F8 opens the boot menu during startup
+    url: https://www.asus.com/support/faq/1008829
+  - name: Dell
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Boot menu : F12'
+    desc: Latitude, XPS, Inspiron, Vostro, Precision, OptiPlex
+    pitfall: Tap the key repeatedly as soon as the logo appears
+  - name: HP
+    cat: laptops
+    syn: 'BIOS/UEFI : Esc then F10 | Boot menu : Esc then F9'
+    desc: Pavilion, EliteBook, ProBook, ZBook, Omen, Envy, Spectre
+    pitfall: Esc opens the HP Startup Menu; F2 opens the UEFI diagnostics
+  - name: 'Lenovo : ThinkPad'
+    cat: laptops
+    syn: 'BIOS/UEFI : Enter then F1 (or F1 directly) | Boot menu : Enter then F12 (or F12 directly)'
+    desc: ThinkPad
+    pitfall: Enter opens the Startup Interrupt Menu
+  - name: 'Lenovo : ThinkCentre'
+    cat: desktops
+    syn: 'BIOS/UEFI : F1 | Boot menu : F12'
+    desc: ThinkCentre, ThinkStation
+  - name: 'Lenovo : IdeaPad'
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 (or Fn + F2) | Boot menu : F12 (or Fn + F12)'
+    desc: IdeaPad, Yoga, Legion (laptops)
+    pitfall: '"Novo" button (small hole near the power button) on many models: opens a menu with BIOS and boot menu'
+  - name: MSI
+    cat: desktops
+    syn: 'BIOS/UEFI : Del | Boot menu : F11'
+    desc: Motherboards, desktops, laptops
+  - name: 'Gigabyte, Aorus : Motherboards and desktops'
+    cat: desktops
+    syn: 'BIOS/UEFI : Del | Boot menu : F12'
+    desc: Motherboards and desktops
+  - name: 'Gigabyte, Aorus : Laptops'
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Boot menu : F12'
+    desc: Laptops
+  - name: ASRock
+    cat: desktops
+    syn: 'BIOS/UEFI : F2 or Del | Boot menu : F11'
+    desc: Motherboards
+  - name: Microsoft
+    cat: laptops
+    syn: 'BIOS/UEFI : Hold Volume + then press Power | Boot menu : Hold Volume − then press Power'
+    desc: Surface Pro 6 and later, Laptop 2 and later, Go 2 and later, Book 2 and 3
+    pitfall: Fully shut down the Surface first. For UEFI, release when the logo disappears; for USB, release when the dots spin under the logo. Older models differ
+  - name: 'Apple : Intel Mac'
+    cat: apple
+    syn: 'BIOS/UEFI : No BIOS | Boot menu : Hold Option (⌥) at startup'
+    desc: Intel Mac
+    pitfall: Cmd + R for macOS Recovery
+  - name: 'Apple : Apple Silicon Mac (M1 and later)'
+    cat: apple
+    syn: 'BIOS/UEFI : No BIOS | Boot menu : Hold the power button until the startup options appear'
+    desc: Apple Silicon Mac (M1 and later)
+  - name: Samsung
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Boot menu : F10 (or Esc depending on the model)'
+    desc: Galaxy Book, laptops
+    pitfall: As indicated by Samsung support
+    url: https://www.samsung.com/us/support/answer/ANS10002820/
+  - name: Toshiba, Dynabook
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 (or F1) | Boot menu : F12'
+    desc: Satellite, Tecra, Portégé
+  - name: Fujitsu
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Boot menu : F12'
+    desc: Lifebook, Esprimo
+  - name: LG
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Boot menu : F10'
+    desc: gram
+  - name: Huawei
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Boot menu : F12'
+    desc: MateBook
+    pitfall: 'MateBook E and some MateBook (HZ): powered off, press Power + Volume +'
+  - name: Framework
+    cat: laptops
+    syn: 'BIOS/UEFI : F2 | Boot menu : F12'
+    desc: Framework Laptop
+  - name: Intel
+    cat: desktops
+    syn: 'BIOS/UEFI : F2 | Boot menu : F10'
+    desc: NUC

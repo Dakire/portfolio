@@ -78,6 +78,11 @@ export function buildReference(file, source) {
     ...(m.docs && { docs: { label: String(m.docs.label), url: String(m.docs.url) } }),
     ...(m.source && { source: m.source }),
     ...(m.top && { top: m.top }),
+    // topAfter : les blocs « top » s'affichent après la recherche (quand la recherche est l'essentiel) ; topTitle : leur titre.
+    ...(m.topAfter && { topAfter: true }),
+    ...(m.searchLabel && { searchLabel: text(m.searchLabel) }),
+    ...(m.placeholder && { placeholder: text(m.placeholder) }),
+    ...(m.topTitle && { topTitle: text(m.topTitle) }),
     ...(m.notice && { notice: text(m.notice) }),
     ...(m.generated && { generated: String(m.generated) }),
   };
@@ -99,8 +104,10 @@ export function buildReference(file, source) {
         : m.docBase + e.doc
       : undefined;
     const url = e.url ? String(e.url) : (docUrl ?? meta.docs?.url);
-    if (!url) fail(`${where} : aucune URL de documentation (url, doc + docBase, ou meta.docs)`);
-    if (!url.startsWith('https://')) fail(`${where} : l'URL doit être en https`);
+    // meta.optionalUrl : des entrées sans page de documentation propre (ex. touches BIOS par constructeur).
+    if (!url && !m.optionalUrl)
+      fail(`${where} : aucune URL de documentation (url, doc + docBase, ou meta.docs)`);
+    if (url && !url.startsWith('https://')) fail(`${where} : l'URL doit être en https`);
     let id = slug(e.name);
     const n = (seen.get(id) ?? 0) + 1;
     seen.set(id, n);
@@ -113,7 +120,7 @@ export function buildReference(file, source) {
     if (asList(e.tags).length) out.tags = asList(e.tags);
     for (const f of ['module', 'perms', 'pitfall', 'equiv', 'risk'])
       if (text(e[f])) out[f] = text(e[f]);
-    out.url = url;
+    if (url) out.url = url;
     return out;
   });
   if (!entries.length && !meta.generated) fail('aucune entrée');
