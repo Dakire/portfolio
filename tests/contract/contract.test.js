@@ -39,7 +39,8 @@ describe(base ? `contrat public en ligne (${base})` : 'contrat public (dist/)', 
     if (kind === 'json') JSON.parse(await res.text());
   });
 
-  describe('anciennes URL renommées : 301 vers la nouvelle', () => {
+  // (Une suite sans test fait échouer vitest : sur le site d'avant la refonte, la liste est vide.)
+  describe.runIf(redirects.length > 0)('anciennes URL renommées : 301 vers la nouvelle', () => {
     it.each(redirects)('$from -> $to', async ({ from, to }) => {
       if (base) {
         const res = await fetch(base + from, { redirect: 'manual', headers });
