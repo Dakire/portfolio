@@ -1,6 +1,6 @@
 # ADR 0005 : identité visuelle « pro / geek / IT » et CSS à tokens (sans Tailwind)
 
-**Statut** : accepté (2026-10-08). Choix faits par l'assistant sans maquette préalable : à réviser par le propriétaire (voir « Comment changer »).
+**Statut** : accepté (2026-10-08). **Mise à jour 2026-10-14** : la palette décrite ci-dessous (vert signal, fond bleuté, Inter seul) a été remplacée depuis par une palette chaude (fond `#130f16` / `#fbf6f0`, accent corail `#ff9270` / `#b23a0a`, secondaire violet) et Fraunces pour les titres ; **`packages/ui/src/tokens.css` fait foi**. Le principe (CSS à tokens, sans Tailwind, contrastes testés) est inchangé. Choix faits par l'assistant sans maquette préalable : à réviser par le propriétaire (voir « Comment changer »).
 
 **Direction.** Sobre et technique, aux codes de 2026-2027 : neutres froids, un seul accent, typographie Inter (texte) et JetBrains Mono (métadonnées, code, invites `~/section`), grille visible et discrète, cartes à bordure fine, aucun effet décoratif (ni verre dépoli, ni halo qui suit la souris, ni animation en continu).
 
