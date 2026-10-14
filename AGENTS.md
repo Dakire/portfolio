@@ -16,6 +16,10 @@ Monorepo de grichard.eu. Production sur OVH mutualisé : **fichiers statiques + 
 
 `apps/web` (Astro statique FR/EN), `apps/api` (PHP : formulaire de contact et outils serveur SEO/sitemap via `tools.php`, couche `Net/` anti-SSRF, ADR 0007), `apps/portal` (Symfony, espace client de test, SQLite), `apps/web/data/reference` (aide-mémoire, recherche côté client, ADR 0008), `packages/ui|tools-core|config|content-schema`, `docs/adr/` (décisions).
 
+## Architecture du site
+
+Menu À propos · Parcours · Compétences · Réalisations · Ressources (+ Contact) ; Ressources = Blog, Outils, Cheatsheets (ADR 0009, docs/refonte-portfolio.md). Contenu du profil : `apps/web/src/data/profile.ts` ; liens vers articles/outils/cheatsheets : `data/related.ts`. Une URL renommée = entrée dans `REDIRECTS` (`scripts/lib/htaccess.mjs`) et `redirects` du contrat. Lancer aussi `pnpm test:contract` (ancien site) avant de pousser : la CI le fait.
+
 ## Règles
 
 - **Push direct sur `main`, pas de PR, pas de préproduction** : chaque push sur `main` est livré en production automatiquement après une CI verte. Commits Conventional Commits en français, atomiques, chacun laissant le site fonctionnel (fonctionnalité inachevée masquée).

@@ -1059,3 +1059,9 @@ html[data-terminal-max] {
 .cards-skills {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
 }
+
+/* Le bouton « Désactiver le terminal » n'apparaît qu'avec le script : sa place est réservée dès le départ (aucun décalage de la page, CLS). */
+.js .terminal-toggle[hidden] {
+  display: inline-flex !important;
+  visibility: hidden;
+}

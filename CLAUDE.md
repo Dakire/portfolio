@@ -37,6 +37,8 @@ Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` 
 
 ## Architecture cible
 
+Site portfolio (ADR 0009, [docs/refonte-portfolio.md](docs/refonte-portfolio.md)) : menu À propos · Parcours · Compétences · Réalisations · Ressources (+ bouton Contact) ; Ressources regroupe Blog, Outils et Cheatsheets. Contenu du profil dans `apps/web/src/data/profile.ts` (FR et EN, parité vérifiée), liens compétences/réalisations vers articles, outils et cheatsheets dans `data/related.ts`, textes de structure dans `data/site-text.ts`. Une page par réalisation (`/projets/<slug>/`) ; blocs `context`, `role`, `steps`, `result` facultatifs et masqués s'ils sont vides (ne rien inventer). Toute URL renommée : entrée dans `REDIRECTS` (`scripts/lib/htaccess.mjs`) et dans `redirects` de `tests/contract/contract.json`. Le contrat de l'ancien site (`pnpm test:contract` sans `CONTRACT_DIST`) tourne aussi en CI : le lancer avant de pousser.
+
 `apps/web` (Astro, statique, FR/EN) · `apps/api` (PHP : `contact.php` et `tools.php`, les outils serveur rapport SEO et vérificateur de sitemap, avec la couche `Net/` protégée contre la SSRF, voir ADR 0007) · `apps/portal` (Symfony, espace client) · `apps/web/data/reference` + `public/data/reference` (aide-mémoire `/cheatsheets/` : sources YAML, JSON générés commités, recherche MiniSearch côté client, voir [docs/reference.md](docs/reference.md) et ADR 0008) · `packages/ui` (tokens CSS, composants) · `packages/tools-core` (logique pure des outils, TS) · `packages/config` · `packages/content-schema`. Décisions : [docs/adr/](docs/adr/).
 
 ## Conventions

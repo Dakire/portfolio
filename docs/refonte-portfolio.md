@@ -1,6 +1,6 @@
 # Refonte « portfolio » de grichard.eu : audit et proposition
 
-**Statut : proposition validée (choix délégués à l'assistant), phase 2 en cours.**
+**Statut : proposition validée (choix délégués à l'assistant) ; phase 2 livrée le 14 octobre 2026.** Résultats mesurés : [audit après](audit/2026-10-refonte-apres.md). Réserve : l'effet attendu sur la hauteur de l'accueil était de −40 % ; le gain réel est de −24 % (desktop) et −26 % (mobile).
 Ce document couvre la phase 0 (audit) et la phase 1 (proposition). La phase 2 ne démarre qu'après validation, et après réponse aux [questions ouvertes](#7-questions-ouvertes-à-trancher-avant-la-phase-2).
 
 ## 1. Audit de l'existant
@@ -314,3 +314,23 @@ Chaque étape et l'ensemble :
 ## 10. Actions qui vous reviendront
 
 Aucune pour l'instant. Les actions DNS, secrets et réglages GitHub ne sont pas concernées par ce plan ; si une apparaît, elle vous sera proposée en étapes manuelles.
+
+## Livraison (14 octobre 2026)
+
+| Étape | Résultat                                                                                                                                                                                            |
+| ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0     | Audit, ADR 0009, ADR 0005 corrigé                                                                                                                                                                   |
+| 1     | Composants `Breadcrumb`, `SectionNav`, `CtaBand` dans `packages/ui` (page `/design/`)                                                                                                               |
+| 2     | Modèle de données : `profile.ts` (slugs, domaines, points), `related.ts`, `site-text.ts` ; parité FR/EN corrigée (AlloVoisin)                                                                       |
+| 3 à 8 | Pages Parcours, Compétences enrichies (preuves liées), Réalisations (liste par domaine + 8 pages de détail), Ressources, À propos recentrée, nouvel accueil                                         |
+| 5b    | Cheatsheets : `/reference/` → `/cheatsheets/` (9 URL, 301 générées par `htaccess.mjs`, contrôlées par le contrat)                                                                                   |
+| 9     | Navigation : 5 entrées + bouton Contact toujours visible, sous-navigation Ressources, fil d'Ariane partout, pied de page en 4 colonnes                                                              |
+| 10    | JSON-LD `BreadcrumbList` et `CreativeWork`, `llms.txt` et index de recherche à jour, sitemap automatique                                                                                            |
+| 10b   | Textes : ton plus naturel ; « dans le navigateur » dit une fois par outil sensible (ICS, en-têtes, JSON, encodeur, mot de passe), jamais dans les descriptions, absent pour les unités et le réseau |
+
+### Reste à faire (côté Guillaume)
+
+1. **Compléter les pages de réalisation** : contexte, rôle, déroulé et résultat (champs `context`, `role`, `steps`, `result` dans `apps/web/src/data/profile.ts`). Les blocs vides sont masqués.
+2. **Relire les textes réécrits** (accroche, À propos, compétences, descriptions de réalisations, introductions) : le ton est de moi, les faits viennent du CV.
+3. Le corps des articles de blog et des textes légaux n'a pas été réécrit ; les pages d'outils ne l'ont été que pour la mention « navigateur ».
+4. Vérifier en ligne le Lighthouse de `/contact/` et passer un coup d'œil clavier/lecteur d'écran sur le menu et la sous-navigation.

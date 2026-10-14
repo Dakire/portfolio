@@ -36,6 +36,8 @@ fi
 step 'Site : intégrité du build et contrat des URL'
 pnpm -s --filter @grichard/web test
 CONTRACT_DIST=apps/web/dist pnpm -s test:contract
+# Le contrat de l'ancien site (legacy/dist) tourne aussi en CI : le vérifier ici évite un échec après le push.
+[ -d legacy/dist ] && pnpm -s test:contract
 
 step 'Scripts de déploiement'
 node --test "scripts/deploy/*.test.mjs"
