@@ -1,0 +1,27 @@
+---
+interface Crumb {
+  label: string;
+  /** Absent sur la page courante (dernier niveau). */
+  href?: string;
+}
+interface Props {
+  items: Crumb[];
+  /** Nom du repère de navigation (« Fil d'Ariane »). */
+  label: string;
+}
+const { items, label } = Astro.props;
+---
+
+<nav aria-label={label} class="crumbs">
+  <ol>
+    {items.map((item, i) => (
+      <li>
+        {item.href && i < items.length - 1 ? (
+          <a href={item.href}>{item.label}</a>
+        ) : (
+          <span aria-current="page">{item.label}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>

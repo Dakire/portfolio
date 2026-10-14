@@ -356,3 +356,81 @@
   background: var(--accent-strong);
   color: var(--accent-ink);
 }
+
+/* Fil d'Ariane : séparateur décoratif, cibles de 44 px */
+.crumbs {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.crumbs li {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+}
+.crumbs li:not(:last-child)::after {
+  content: '/';
+  margin-left: var(--space-2);
+  color: var(--muted);
+}
+.crumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  color: var(--link);
+}
+
+/* Sous-navigation d'une section (ex. Ressources : Blog, Outils, Cheatsheets) : visible, sans menu déroulant */
+.section-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.section-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease);
+}
+.section-nav a:hover {
+  background: var(--raised);
+  border-color: var(--line-strong);
+}
+.section-nav a[aria-current='page'] {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--ink);
+}
+
+/* Bandeau d'appel à l'action : un titre, une phrase, deux boutons au plus */
+.cta-band {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(160deg, var(--surface), var(--raised));
+  box-shadow: var(--shadow-sm);
+}

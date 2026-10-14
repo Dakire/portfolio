@@ -5,6 +5,9 @@ import Card from '@grichard/ui/components/Card.astro';
 import Tag from '@grichard/ui/components/Tag.astro';
 import Kbd from '@grichard/ui/components/Kbd.astro';
 import Eyebrow from '@grichard/ui/components/Eyebrow.astro';
+import Breadcrumb from '@grichard/ui/components/Breadcrumb.astro';
+import SectionNav from '@grichard/ui/components/SectionNav.astro';
+import CtaBand from '@grichard/ui/components/CtaBand.astro';
 
 const colors = [
   'canvas',
@@ -97,6 +100,34 @@ const sizes = ['display', '2xl', 'xl', 'lg', 'base', 'sm', 'xs'];
           <p>Surface, bordure, rayon : jamais d'ombre décorative.</p>
         </Card>
       </div>
+    </section>
+
+    <section class="stack" aria-labelledby="navigation">
+      <h2 id="navigation">Navigation et appel à l'action</h2>
+      <Breadcrumb
+        label="Fil d'Ariane (exemple)"
+        items={[
+          { label: 'Accueil', href: '#navigation' },
+          { label: 'Réalisations', href: '#navigation' },
+          { label: 'Migrations de comptes' },
+        ]}
+      />
+      <SectionNav
+        label="Ressources (exemple)"
+        items={[
+          { label: 'Blog', href: '#navigation' },
+          { label: 'Outils', href: '#navigation', current: true },
+          { label: 'Cheatsheets', href: '#navigation' },
+        ]}
+      />
+      <CtaBand title="Un projet, une question ?" level={3}>
+        <p>Écrivez-moi, un message suffit pour démarrer.</p>
+        <Fragment slot="actions">
+          <Button variant="primary" href="#navigation">
+            Me contacter
+          </Button>
+        </Fragment>
+      </CtaBand>
     </section>
 
     <section class="stack" aria-labelledby="alertes">

@@ -1,0 +1,21 @@
+---
+interface Props {
+  /** Niveau du titre, selon la place dans la page (2 par défaut). */
+  level?: 2 | 3;
+  title: string;
+}
+const { level = 2, title } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
+---
+
+<section class="cta-band" aria-label={title}>
+  <div class="stack">
+    <Heading>{title}</Heading>
+    <div class="prose">
+      <slot />
+    </div>
+  </div>
+  <div class="row">
+    <slot name="actions" />
+  </div>
+</section>
