@@ -31,7 +31,7 @@
     "@axe-core/playwright": "^4.13.0",
     "@grichard/config": "workspace:*",
     "@playwright/test": "^1.63.0",
-    "@types/node": "^22.0.0",
+    "@types/node": "^26.6.5",
     "minisearch": "^7.2.0",
     "oxlint": "^1.86.0",
     "typescript": "^5.9.3",
