@@ -1,5 +1,6 @@
 ---
 import '@grichard/ui/fonts.css';
+import { FONT_PRELOAD } from '@grichard/ui/font-preload';
 import '@grichard/ui/tokens.css';
 import '@grichard/ui/base.css';
 import '@grichard/ui/components.css';
@@ -25,6 +26,8 @@ interface Props {
   noindex?: boolean;
   /** Scripts autonomes de public/js/ à charger en plus des scripts communs. */
   scripts?: string[];
+  /** Précharge aussi l'italique de Fraunces (accueil : nom et titres de section). */
+  preloadItalic?: boolean;
 }
 const {
   lang,
@@ -37,6 +40,7 @@ const {
   ld,
   noindex: noindexProp = false,
   scripts = [],
+  preloadItalic = false,
 } = Astro.props;
 
 // Préproduction (PUBLIC_NOINDEX=1) : aucune page n'est indexable, quoi que demande la page.
@@ -60,6 +64,16 @@ const allScripts = [...scripts, '/js/nav.js', '/js/cursor.js', '/js/consent.js']
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0f1113" />
     <meta name="color-scheme" content="dark light" />
+    <link rel="preload" href={FONT_PRELOAD.fraunces} as="font" type="font/woff2" crossorigin />
+    {preloadItalic && (
+      <link
+        rel="preload"
+        href={FONT_PRELOAD.frauncesItalic}
+        as="font"
+        type="font/woff2"
+        crossorigin
+      />
+    )}
     <script is:inline src={versioned('/js/theme.js')}></script>
     <link rel="icon" href={withBase('/favicon.ico')} sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />

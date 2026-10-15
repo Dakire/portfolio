@@ -1623,19 +1623,16 @@ h2 i {
   stroke-width: 1.5;
   opacity: 1;
 }
+/* Apparition : fondu et léger glissement de toute l'illustration (opacité et transformation seules : animation composée par le GPU) */
 @media (prefers-reduced-motion: no-preference) {
-  .art-line {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    animation: trace 1.6s var(--ease) 0.15s forwards;
-  }
-  .art-signal .art-line {
-    animation-duration: 2.4s;
+  .hero-art {
+    animation: art-in 1.2s var(--ease) 0.1s both;
   }
 }
-@keyframes trace {
-  to {
-    stroke-dashoffset: 0;
+@keyframes art-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
   }
 }
 @media (max-width: 47.99rem) {

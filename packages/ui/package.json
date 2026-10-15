@@ -9,6 +9,7 @@
     "./base.css": "./src/base.css",
     "./components.css": "./src/components.css",
     "./fonts.css": "./src/fonts.css",
+    "./font-preload": "./src/font-preload.ts",
     "./components/*": "./src/components/*"
   },
   "scripts": {

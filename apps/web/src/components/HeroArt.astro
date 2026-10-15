@@ -1,7 +1,7 @@
 ---
 // Illustration du hero : un relevé de signal en lignes de crête (une trace par ligne, comme un oscilloscope empilé).
 // Calculée au build, de façon déterministe (même dessin à chaque build) : aucun JavaScript, aucune image à télécharger.
-// Décorative (aria-hidden) ; le tracé s'anime une seule fois à l'arrivée, sauf si l'utilisateur réduit les animations.
+// Décorative (aria-hidden) ; apparaît en fondu à l'arrivée (opacité et transformation seules), immobile si l'utilisateur réduit les animations.
 const W = 1440;
 const H = 560;
 const LINES = 22;
@@ -47,7 +47,7 @@ const lines = Array.from({ length: LINES }, (_, k) => {
   {lines.map((line) => (
     <g class={line.signal ? 'art-signal' : undefined}>
       <path class="art-fill" d={line.fill} />
-      <path class="art-line" d={line.stroke} pathLength="1" />
+      <path class="art-line" d={line.stroke} />
     </g>
   ))}
 </svg>
