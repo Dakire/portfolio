@@ -2,8 +2,9 @@
 import Button from '@grichard/ui/components/Button.astro';
 import ThemeSwitch from '@grichard/ui/components/ThemeSwitch.astro';
 import { ROUTES, UI, type Lang } from '../lib/i18n';
-import { inResources, resourceLinks } from '../lib/sections';
-import { TOOLS, toolPath, toolUi } from '../tools/registry';
+import { resourceLinks } from '../lib/sections';
+import { TOOL_GROUPS } from '../tools/hub';
+import { findTool, toolPath, toolUi } from '../tools/registry';
 
 interface Props {
   lang: Lang;
@@ -15,18 +16,28 @@ interface Props {
 const { lang, path, otherHref } = Astro.props;
 const ui = UI[lang];
 const other = lang === 'fr' ? 'en' : 'fr';
-const items = ['about', 'career', 'skills', 'projects', 'resources'] as const;
-// « Ressources » reste actif sur le blog, les outils et les cheatsheets : ce sont ses sous-pages.
-const isCurrent = (key: (typeof items)[number]) => {
-  const href = ROUTES[lang][key];
-  return key === 'resources' ? inResources(lang, path) : path === href || path.startsWith(href);
-};
-// Menu « Ressources » au survol et au focus : accès direct aux outils (le lien du menu reste la page Ressources).
-const flyout = {
-  title: lang === 'fr' ? 'Aller directement à un outil' : 'Jump straight to a tool',
-  sections: resourceLinks(lang).filter((link) => link.key !== 'resources'),
-  tools: TOOLS.map((tool) => ({ label: toolUi(tool, lang).name, href: toolPath(tool, lang) })),
-};
+// Menu à plat : le profil d'abord, puis ce qu'on vient consulter (blog, outils, cheatsheets). Les cheatsheets n'existent qu'en
+// français pour l'instant : sans référence dans la langue, l'entrée disparaît.
+const cheatsheets = resourceLinks(lang).find((link) => link.key === 'cheatsheets');
+const items: { key: keyof (typeof ui)['nav']; href: string }[] = [
+  { key: 'about', href: ROUTES[lang].about },
+  { key: 'career', href: ROUTES[lang].career },
+  { key: 'skills', href: ROUTES[lang].skills },
+  { key: 'projects', href: ROUTES[lang].projects },
+  { key: 'blog', href: ROUTES[lang].blog },
+  { key: 'tools', href: ROUTES[lang].tools },
+  ...(cheatsheets ? [{ key: 'cheatsheets' as const, href: cheatsheets.href }] : []),
+];
+const current = (href: string) =>
+  path === href ? ('page' as const) : path.startsWith(href) ? ('true' as const) : undefined;
+// Menu « Outils » au survol et au focus : accès direct à chaque outil, rangé par catégorie (le lien du menu reste la page Outils).
+const groups = TOOL_GROUPS.map((group) => ({
+  title: group[lang].title,
+  tools: group.tools.flatMap((id) => {
+    const tool = findTool(id);
+    return tool ? [{ label: toolUi(tool, lang).name, href: toolPath(tool, lang) }] : [];
+  }),
+}));
 ---
 
 <header class="site-header">
@@ -58,33 +69,27 @@ const flyout = {
     <div id="site-menu" class="site-menu">
       <nav aria-label={ui.mainNav} class="site-nav">
         <ul>
-          {items.map((key) => (
-            <li class={key === 'resources' ? 'has-sub' : undefined}>
-              <a
-                href={ROUTES[lang][key]}
-                aria-current={
-                  isCurrent(key) ? (path === ROUTES[lang][key] ? 'page' : 'true') : undefined
-                }
-              >
-                {ui.nav[key]}
+          {items.map((item) => (
+            <li class={item.key === 'tools' ? 'has-sub' : undefined}>
+              <a href={item.href} aria-current={current(item.href)}>
+                {ui.nav[item.key]}
               </a>
-              {key === 'resources' && (
+              {item.key === 'tools' && (
                 <div class="subnav">
-                  <ul class="subnav-sections">
-                    {flyout.sections.map((link) => (
-                      <li>
-                        <a href={link.href}>{link.label}</a>
-                      </li>
+                  <div class="subnav-groups">
+                    {groups.map((group) => (
+                      <div>
+                        <p class="subnav-title">{group.title}</p>
+                        <ul>
+                          {group.tools.map((tool) => (
+                            <li>
+                              <a href={tool.href}>{tool.label}</a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     ))}
-                  </ul>
-                  <p class="subnav-title">{flyout.title}</p>
-                  <ul class="subnav-tools">
-                    {flyout.tools.map((tool) => (
-                      <li>
-                        <a href={tool.href}>{tool.label}</a>
-                      </li>
-                    ))}
-                  </ul>
+                  </div>
                 </div>
               )}
             </li>

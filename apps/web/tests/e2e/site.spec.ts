@@ -239,7 +239,7 @@ test('le bandeau de consentement ne décale pas la page (CLS) et ne masque pas l
   expect(await mainTop()).toBe(withBanner);
 });
 
-test('la navigation principale : cinq entrées, Contact en bouton, page courante signalée', async ({
+test('la navigation principale : sept entrées à plat, Contact en bouton, page courante signalée', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -250,7 +250,9 @@ test('la navigation principale : cinq entrées, Contact en bouton, page courante
     'Parcours',
     'Compétences',
     'Réalisations',
-    'Ressources',
+    'Blog',
+    'Outils',
+    'Cheatsheets',
   ]);
   await expect(nav.getByRole('link', { name: 'Compétences' })).toHaveAttribute(
     'aria-current',
@@ -259,19 +261,12 @@ test('la navigation principale : cinq entrées, Contact en bouton, page courante
   await expect(page.getByRole('banner').getByRole('link', { name: 'Contact' })).toBeVisible();
 });
 
-test('la section Ressources a sa sous-navigation et allume « Ressources » dans le menu', async ({
-  page,
-}) => {
+test('sur un article, « Blog » est allumé dans le menu, sans sous-navigation', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/blog/spf-dkim-dmarc-expliques/');
-  const sub = page.getByRole('navigation', { name: 'Ressources', exact: true });
-  await expect(sub.getByRole('link')).toHaveText(['Ressources', 'Blog', 'Outils', 'Cheatsheets']);
-  await expect(sub.getByRole('link', { name: 'Blog' })).toHaveAttribute('aria-current', 'true');
-  await expect(
-    page
-      .getByRole('navigation', { name: 'Navigation principale' })
-      .getByRole('link', { name: 'Ressources' }),
-  ).toHaveAttribute('aria-current', 'true');
+  const nav = page.getByRole('navigation', { name: 'Navigation principale' });
+  await expect(nav.getByRole('link', { name: 'Blog' })).toHaveAttribute('aria-current', 'true');
+  await expect(page.getByRole('navigation', { name: 'Ressources', exact: true })).toHaveCount(0);
 });
 
 test("chaque page a un fil d'Ariane et le détail d'une réalisation renvoie vers sa liste", async ({
@@ -295,7 +290,7 @@ test('le pied de page est structuré et donne accès aux deux CV', async ({ page
   await expect(footer.getByRole('link', { name: 'Resume in English (PDF)' })).toBeVisible();
 });
 
-test('au survol de « Ressources », le menu mène directement aux outils ; Échap le ferme', async ({
+test('au survol de « Outils », le menu mène directement à chaque outil ; Échap le ferme', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -303,18 +298,18 @@ test('au survol de « Ressources », le menu mène directement aux outils ; Éch
   const nav = page.getByRole('navigation', { name: 'Navigation principale' });
   const dns = nav.getByRole('link', { name: 'DNS Lookup' });
   await expect(dns).toBeHidden();
-  await nav.getByRole('link', { name: 'Ressources', exact: true }).hover();
+  await nav.getByRole('link', { name: 'Outils', exact: true }).hover();
   await expect(dns).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Calculatrice réseau' })).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(dns).toBeHidden();
 });
 
-test('le menu « Ressources » s’ouvre aussi au clavier', async ({ page }) => {
+test('le menu « Outils » s’ouvre aussi au clavier', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
   const nav = page.getByRole('navigation', { name: 'Navigation principale' });
-  await nav.getByRole('link', { name: 'Ressources', exact: true }).focus();
+  await nav.getByRole('link', { name: 'Outils', exact: true }).focus();
   await expect(nav.getByRole('link', { name: 'DNS Lookup' })).toBeVisible();
 });
 

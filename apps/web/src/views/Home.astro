@@ -5,6 +5,7 @@ import Tag from '@grichard/ui/components/Tag.astro';
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import SectionHead from '../components/SectionHead.astro';
+import HeroArt from '../components/HeroArt.astro';
 import Terminal from '../components/Terminal.astro';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
 import { SITE_TEXT } from '../data/site-text';
@@ -70,16 +71,10 @@ const homeTools = ['dns', 'email-headers', 'propagation', 'seo', 'sitemap', 'sub
   ld={homeLd(lang, t.meta.title, t.hero.role)}
 >
   <header class="hero grid-bg">
+    <HeroArt />
     <div class="container hero-grid">
       <div class="hero-copy">
-        <p class="label led hero-kicker">
-          {PROFILE.location}
-          <span class="sep" aria-hidden="true">
-            {' '}
-            /{' '}
-          </span>
-          {t.hero.role}
-        </p>
+        <p class="label led hero-kicker">{t.hero.role}</p>
         <h1 class="hero-title">
           {t.hero.greeting} <span class="hero-name">{PROFILE.name}</span>
         </h1>
@@ -122,7 +117,7 @@ const homeTools = ['dns', 'email-headers', 'propagation', 'seo', 'sitemap', 'sub
       <SectionHead
         id="skills-title"
         index={1}
-        title={t.skillsTitle}
+        title={text.home.skillsTitle}
         more={{ href: routes.skills, label: text.home.skillsMore }}
       />
       <ol class="ports" role="list">

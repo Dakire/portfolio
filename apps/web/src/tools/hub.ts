@@ -13,8 +13,8 @@ export const HUB = {
     open: "Ouvrir l'outil",
     breadcrumb: { home: 'Accueil', tools: 'Outils' },
     privacyTitle: 'Confidentialité',
-    privacy:
-      'Ce que vous déposez ou saisissez dans les outils de fichiers et de texte reste dans votre navigateur : rien n’est envoyé au site. Les outils DNS interrogent des résolveurs publics (Cloudflare, Google) pour lire les enregistrements du domaine demandé. Le rapport SEO et le vérificateur de sitemap passent par grichard.eu, qui interroge le site indiqué sans rien conserver.',
+    privacy: 'Rien de ce que vous saisissez n’est conservé.',
+    privacyLink: 'Le détail, outil par outil',
     schemaName: 'Outils pour techniciens IT',
     groupsLabel: 'Catégories d’outils',
   },
@@ -31,8 +31,8 @@ export const HUB = {
     open: 'Open the tool',
     breadcrumb: { home: 'Home', tools: 'Tools' },
     privacyTitle: 'Privacy',
-    privacy:
-      'What you drop or type into the file and text tools stays in your browser: nothing is sent to the site. The DNS tools query public resolvers (Cloudflare, Google) to read the records of the domain you ask about. The SEO report and the sitemap checker go through grichard.eu, which queries the given site without keeping anything.',
+    privacy: 'Nothing you type is kept.',
+    privacyLink: 'The details, tool by tool',
     schemaName: 'Tools for IT technicians',
     groupsLabel: 'Tool categories',
   },

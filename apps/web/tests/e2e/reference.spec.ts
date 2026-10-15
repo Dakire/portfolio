@@ -118,10 +118,10 @@ test.describe('Référence : recherche', () => {
     await expect(page.getByText('Apache License 2.0')).toBeVisible();
   });
 
-  test('recherche globale sur /cheatsheets/', async ({ page }) => {
-    await page.goto('/cheatsheets/?q=bitlocker');
-    await expect(results(page).first()).toBeVisible();
-    await expect(results(page).first().locator('.ref-badge-ref')).toBeVisible();
+  test('/cheatsheets/ liste les cheatsheets, sans recherche globale', async ({ page }) => {
+    await page.goto('/cheatsheets/');
+    await expect(page.getByRole('search')).toHaveCount(0);
+    await expect(page.getByRole('link', { name: /Active Directory/ })).toBeVisible();
   });
 
   test('bloc Connexion de PowerShell M365', async ({ page }) => {
@@ -141,12 +141,18 @@ test.describe('Référence : recherche', () => {
   });
 });
 
-const PAGES = [
-  '/cheatsheets/',
-  '/cheatsheets/gam/',
-  '/cheatsheets/powershell-m365/',
-  '/cheatsheets/windows-11/',
-];
+const PAGES = ['/cheatsheets/gam/', '/cheatsheets/powershell-m365/', '/cheatsheets/windows-11/'];
+for (const theme of ['dark', 'light'] as const) {
+  test(`WCAG 2.2 AA : /cheatsheets/ (thème ${theme})`, async ({ page }) => {
+    await noConsent(page);
+    await page.emulateMedia({ colorScheme: theme });
+    await page.goto('/cheatsheets/');
+    const axe = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    expect(axe.violations).toEqual([]);
+  });
+}
 for (const theme of ['dark', 'light'] as const) {
   for (const path of PAGES) {
     test(`WCAG 2.2 AA : ${path}?q=get (thème ${theme})`, async ({ page }) => {

@@ -5,7 +5,7 @@
   const button = document.querySelector('[data-nav-toggle]');
   const menu = button && document.getElementById(button.getAttribute('aria-controls'));
   if (!button || !menu) return;
-  const wide = matchMedia('(min-width: 60rem)');
+  const wide = matchMedia('(min-width: 76rem)');
 
   const set = (open, { focusButton = false } = {}) => {
     button.setAttribute('aria-expanded', String(open));

@@ -71,7 +71,9 @@ const ld = {
 
     <section class="tool-section" aria-labelledby="privacy-title">
       <h2 id="privacy-title">{hub.privacyTitle}</h2>
-      <p>{hub.privacy}</p>
+      <p>
+        {hub.privacy} <a href={ROUTES[lang].privacy}>{hub.privacyLink}</a>.
+      </p>
     </section>
   </div>
 </Base>

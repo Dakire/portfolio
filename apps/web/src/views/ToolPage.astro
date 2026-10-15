@@ -30,6 +30,18 @@ const { lang, toolId } = Astro.props;
 const tool = findTool(toolId);
 if (!tool) throw new Error(`Outil inconnu : ${toolId}`);
 const ui = toolUi(tool, lang);
+// Encadré « Confidentialité » : seulement là où la question se pose vraiment (données personnelles, secrets, fichiers, requêtes
+// envoyées par le serveur). Ailleurs, une phrase sur chaque page serait du bruit ; la politique de confidentialité détaille tout.
+const PRIVACY_NOTE = [
+  'email-headers',
+  'password',
+  'encoder',
+  'ics-split',
+  'ics-compare',
+  'seo',
+  'sitemap',
+];
+const privacy = PRIVACY_NOTE.includes(tool.id) ? (ui.seo.privacy ?? ui.privacy) : undefined;
 const hub = HUB[lang];
 const path = toolPath(tool, lang);
 const alternates: Alternates = { fr: toolPath(tool, 'fr'), en: toolPath(tool, 'en') };
@@ -138,10 +150,10 @@ const ld = {
       </div>
     </section>
 
-    {(ui.seo.privacy ?? ui.privacy) && (
+    {privacy && (
       <section aria-labelledby="privacy-title" class="tool-section">
         <h2 id="privacy-title">{hub.privacyTitle}</h2>
-        <p>{ui.seo.privacy ?? ui.privacy}</p>
+        <p>{privacy}</p>
       </section>
     )}
 

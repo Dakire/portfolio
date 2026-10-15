@@ -5,17 +5,20 @@ interface Props {
   id: string;
   /** Numéro de section, affiché sur deux chiffres. */
   index: number;
+  /** Titre ; un *mot* entre astérisques est mis en italique (accent typographique, pas d'emphase sémantique). */
   title: string;
   more?: { href: string; label: string };
 }
 const { id, index, title, more } = Astro.props;
+// « Ce que je sais *faire* » -> ['Ce que je sais ', 'faire', ''] : les morceaux impairs sont en italique.
+const parts = title.split('*');
 ---
 
 <div class="section-head">
   <span class="section-index label" aria-hidden="true">
     {String(index).padStart(2, '0')}
   </span>
-  <h2 id={id}>{title}</h2>
+  <h2 id={id}>{parts.map((part, i) => (i % 2 ? <i>{part}</i> : part))}</h2>
   <span class="section-rule" aria-hidden="true"></span>
   {more && (
     <a class="more-link" href={more.href}>

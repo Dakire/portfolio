@@ -15,7 +15,7 @@ export const UNITS_TOOL = {
         'convertisseur octet go gio mo mio mbit debit temps de transfert telechargement hexadecimal binaire octal decimal base bit byte',
       h1: 'Convertisseur d’unités informatiques',
       intro:
-        "Trois conversions courantes en administration et en support : une taille dans toutes les unités (en distinguant le Go, puissance de 1000, du Gio, puissance de 1024), le temps qu'il faut pour transférer des données à un débit donné, et un nombre entier d'une base à l'autre (décimal, hexadécimal, binaire, octal). Les calculs se font dans votre navigateur.",
+        "Trois conversions courantes en administration et en support : une taille dans toutes les unités (en distinguant le Go, puissance de 1000, du Gio, puissance de 1024), le temps qu'il faut pour transférer des données à un débit donné, et un nombre entier d'une base à l'autre (décimal, hexadécimal, binaire, octal).",
       tabs: {
         label: 'Type de conversion',
         data: 'Tailles',
@@ -165,7 +165,7 @@ export const UNITS_TOOL = {
         'converter byte gb gib mb mib mbit rate transfer time download hexadecimal binary octal decimal base bit',
       h1: 'IT unit converter',
       intro:
-        'Three conversions common in administration and support: a size in every unit (telling the GB, a power of 1000, from the GiB, a power of 1024), the time needed to transfer data at a given rate, and an integer from one base to another (decimal, hexadecimal, binary, octal). Calculations run in your browser.',
+        'Three conversions common in administration and support: a size in every unit (telling the GB, a power of 1000, from the GiB, a power of 1024), the time needed to transfer data at a given rate, and an integer from one base to another (decimal, hexadecimal, binary, octal).',
       tabs: {
         label: 'Conversion type',
         data: 'Sizes',

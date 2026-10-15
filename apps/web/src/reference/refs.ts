@@ -43,10 +43,10 @@ export const REF_UI = {
   fr: {
     hubTitle: 'Cheatsheets IT : GAM, PowerShell, Windows | Guillaume Richard',
     hubDescription:
-      'Cheatsheets de commandes pour techniciens : GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux, Proxmox, Git. Recherche instantanée.',
+      'Cheatsheets de commandes pour techniciens : GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux, Proxmox, Git, touches BIOS. Exemples à copier.',
     hubH1: 'Cheatsheets : aide-mémoire de commandes',
     hubIntro:
-      'Des aide-mémoire de commandes, avec recherche instantanée (fautes de frappe tolérées), exemples à copier et lien vers la documentation officielle.',
+      'Les commandes qu’on finit toujours par rechercher, rangées par outil. Chacune a sa page, avec sa propre recherche, des exemples à copier et le lien vers la documentation officielle.',
     crumb: 'Cheatsheets',
     home: 'Accueil',
     searchLabel: 'Rechercher une commande',
@@ -58,14 +58,12 @@ export const REF_UI = {
     results: 'Résultats',
     entries: 'entrées',
     open: 'Ouvrir la référence',
-    cards: 'Les références',
+    cards: 'Toutes les cheatsheets',
     noscript:
       'La recherche demande JavaScript. La documentation officielle reste accessible depuis les liens de cette page.',
     sourceTitle: 'Source et licence',
     sourceBy: 'Contenu issu de',
     license: 'Licence',
-    privacy:
-      'La recherche s’exécute dans votre navigateur : aucune saisie n’est envoyée au serveur.',
     topTitle: 'Pour commencer',
     allTitle: 'Liste complète',
     allSummary: (n: number) => `Afficher les ${n} entrées`,
@@ -78,10 +76,10 @@ export const REF_UI = {
   en: {
     hubTitle: 'IT cheatsheets: BIOS/UEFI keys | Guillaume Richard',
     hubDescription:
-      'Cheatsheets for technicians, with instant search: BIOS/UEFI and boot menu keys by PC brand (Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac).',
+      'Cheatsheets for technicians: BIOS/UEFI and boot menu keys by PC brand (Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac).',
     hubH1: 'Cheatsheets: command reference',
     hubIntro:
-      'Command cheat sheets with instant search (typos tolerated), copyable examples and a link to the official documentation.',
+      'The commands you always end up looking up, sorted by tool. Each one has its own page and search, examples to copy and a link to the official documentation.',
     crumb: 'Cheatsheets',
     home: 'Home',
     searchLabel: 'Search a command',
@@ -93,13 +91,12 @@ export const REF_UI = {
     results: 'Results',
     entries: 'entries',
     open: 'Open the reference',
-    cards: 'References',
+    cards: 'All cheatsheets',
     noscript:
       'Search requires JavaScript. The official documentation stays reachable from the links on this page.',
     sourceTitle: 'Source and licence',
     sourceBy: 'Content from',
     license: 'Licence',
-    privacy: 'Search runs in your browser: nothing you type is sent to the server.',
     topTitle: 'Getting started',
     allTitle: 'Full list',
     allSummary: (n: number) => `Show all ${n} entries`,

@@ -51,8 +51,8 @@ const KNOWS_ABOUT = [
 ];
 
 const PERSON_DESCRIPTION: Record<Lang, string> = {
-  fr: 'Technicien Informatique et Systèmes Numériques basé à Laval. Systèmes, réseau, migrations Cloud (Google Workspace, M365) et automatisation.',
-  en: 'IT and Digital Systems Technician based in Laval, France. Systems, networks, Cloud migrations (Google Workspace, M365) and automation.',
+  fr: 'Technicien Informatique et Systèmes Numériques. Systèmes, réseau, migrations Cloud (Google Workspace, M365) et automatisation.',
+  en: 'IT and Digital Systems Technician based in France. Systems, networks, Cloud migrations (Google Workspace, M365) and automation.',
 };
 
 /** Nœud Person complet (identité, lieu, employeur, formation, domaines) : repris tel quel par les pages qui parlent de moi. */
@@ -66,20 +66,14 @@ export function personNode(lang: Lang, role: string) {
     email: PROFILE.email,
     homeLocation: {
       '@type': 'Place',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Laval',
-        postalCode: '53000',
-        addressRegion: 'Pays de la Loire',
-        addressCountry: 'FR',
-      },
+      address: { '@type': 'PostalAddress', addressCountry: 'FR' },
     },
     knowsLanguage: ['fr', 'en'],
     sameAs: [PROFILE.linkedin, PROFILE.github],
     worksFor: {
       '@type': 'Organization',
       name: 'TIXIA Services numériques',
-      address: { '@type': 'PostalAddress', addressLocality: 'Laval', addressCountry: 'FR' },
+      address: { '@type': 'PostalAddress', addressCountry: 'FR' },
     },
     alumniOf: {
       '@type': 'CollegeOrUniversity',

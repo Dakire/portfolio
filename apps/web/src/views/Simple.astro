@@ -29,8 +29,8 @@ const heads = {
   about: {
     title: t.aboutTitle,
     description: fr
-      ? "Qui est Guillaume Richard : technicien informatique à Laval, passionné de réseaux, de messagerie cloud et d'automatisation. Profil, approche et CV."
-      : 'Who Guillaume Richard is: an IT technician in Laval, France, keen on networks, cloud email and automation. Profile, approach and resume.',
+      ? "Qui est Guillaume Richard : technicien informatique passionné de réseaux, de messagerie cloud et d'automatisation. Profil, approche et CV."
+      : 'Who Guillaume Richard is: an IT technician keen on networks, cloud email and automation. Profile, approach and resume.',
   },
   skills: {
     title: t.skillsTitle,
@@ -47,15 +47,15 @@ const heads = {
   contact: {
     title: t.contactTitle,
     description: fr
-      ? 'Contactez Guillaume Richard, technicien informatique à Laval : un message ou un e-mail suffit pour parler de votre besoin (réseau, Microsoft 365, Google Workspace).'
-      : 'Contact Guillaume Richard, IT technician in Laval, France: one message or email is enough to talk about your needs (networks, Microsoft 365, Google Workspace).',
+      ? 'Contactez Guillaume Richard, technicien informatique : un message ou un e-mail suffit pour parler de votre besoin (réseau, Microsoft 365, Google Workspace).'
+      : 'Contact Guillaume Richard, IT technician: one message or email is enough to talk about your needs (networks, Microsoft 365, Google Workspace).',
   },
 } as const;
 const head = heads[page];
 const seoTitles = {
   about: fr
-    ? 'À propos | Guillaume Richard, technicien IT à Laval'
-    : 'About | Guillaume Richard, IT technician in Laval',
+    ? 'À propos | Guillaume Richard, technicien informatique'
+    : 'About | Guillaume Richard, IT technician',
   skills: fr
     ? 'Compétences : réseau, M365, sécurité | Guillaume Richard'
     : 'Skills: networks, M365, security | Guillaume Richard',
@@ -63,7 +63,7 @@ const seoTitles = {
     ? 'Réalisations | Guillaume Richard, technicien IT'
     : 'Projects | Guillaume Richard, IT technician',
   contact: fr
-    ? 'Contact | Guillaume Richard, technicien IT à Laval'
+    ? 'Contact | Guillaume Richard, technicien informatique'
     : 'Contact | Guillaume Richard, IT technician',
 } as const;
 const pageTitle = seoTitles[page];

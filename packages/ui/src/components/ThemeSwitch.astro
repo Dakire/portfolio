@@ -1,5 +1,5 @@
 ---
-/** Choix du thème : auto (système), clair, sombre. Piloté par /js/theme.js ; sans JavaScript le groupe reste masqué (le thème suit le système). */
+/** Choix du thème : auto (système), clair, sombre, en icônes (libellé pour les lecteurs d'écran et en infobulle). Piloté par /js/theme.js ; sans JavaScript le groupe reste masqué (le thème suit le système). */
 interface Props {
   label: string;
   labels: { auto: string; light: string; dark: string };
@@ -8,13 +8,29 @@ const { label, labels } = Astro.props;
 ---
 
 <div class="theme-switch" role="group" aria-label={label} data-theme-switch hidden>
-  <button type="button" data-theme-set="auto" aria-pressed="false">
-    {labels.auto}
+  <button type="button" data-theme-set="auto" aria-pressed="false" title={labels.auto}>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"></circle>
+      <path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"></path>
+    </svg>
+    <span class="visually-hidden">{labels.auto}</span>
   </button>
-  <button type="button" data-theme-set="light" aria-pressed="false">
-    {labels.light}
+  <button type="button" data-theme-set="light" aria-pressed="false" title={labels.light}>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="4" fill="currentColor"></circle>
+      <path
+        d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      ></path>
+    </svg>
+    <span class="visually-hidden">{labels.light}</span>
   </button>
-  <button type="button" data-theme-set="dark" aria-pressed="false">
-    {labels.dark}
+  <button type="button" data-theme-set="dark" aria-pressed="false" title={labels.dark}>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="currentColor"></path>
+    </svg>
+    <span class="visually-hidden">{labels.dark}</span>
   </button>
 </div>

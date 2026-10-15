@@ -13,7 +13,7 @@ export async function GET() {
   const lines = [
     '# Guillaume Richard',
     '',
-    '> Portfolio et blog technique de Guillaume Richard, Technicien Informatique et Systèmes Numériques basé à Laval (France). Domaines : administration Microsoft 365 et Google Workspace, DNS, délivrabilité des e-mails (SPF, DKIM, DMARC), migrations de messagerie, Windows Server, support IT.',
+    '> Portfolio et blog technique de Guillaume Richard, Technicien Informatique et Systèmes Numériques, en France. Domaines : administration Microsoft 365 et Google Workspace, DNS, délivrabilité des e-mails (SPF, DKIM, DMARC), migrations de messagerie, Windows Server, support IT.',
     '',
     'Le portfolio, le blog et les outils sont disponibles en français et en anglais.',
     '',
@@ -31,13 +31,9 @@ export async function GET() {
     link(
       'Outils',
       ROUTES.fr.tools,
-      'outils en ligne gratuits (DNS, ICS, réseau, JSON…), exécutés dans le navigateur',
+      'outils en ligne gratuits (DNS, e-mail, ICS, réseau, SEO, JSON…)',
     ),
-    link(
-      'Tools',
-      ROUTES.en.tools,
-      'free online tools (DNS, ICS, network, JSON…), run in the browser',
-    ),
+    link('Tools', ROUTES.en.tools, 'free online tools (DNS, email, ICS, network, SEO, JSON…)'),
     link(
       'Cheatsheets (aide-mémoire de commandes)',
       '/cheatsheets/',

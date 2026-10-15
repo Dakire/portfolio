@@ -4,14 +4,12 @@ import '@grichard/ui/tokens.css';
 import '@grichard/ui/base.css';
 import '@grichard/ui/components.css';
 import '../styles/site.css';
-import SectionNav from '@grichard/ui/components/SectionNav.astro';
 import SkipLink from '@grichard/ui/components/SkipLink.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { ROUTES, SITE, UI, otherLang, type Alternates, type Lang } from '../lib/i18n';
 import { BASE, withBase } from '../lib/base';
 import { OG_DEFAULT, jsonForScript, versioned } from '../lib/seo';
-import { inResources, resourceLinks } from '../lib/sections';
 
 interface Props {
   lang: Lang;
@@ -52,19 +50,6 @@ const feed = {
   title: lang === 'fr' ? 'Blog de Guillaume Richard' : "Guillaume Richard's blog",
   href: `${SITE}${ROUTES[lang].rss}`,
 };
-// Section « Ressources » (blog, outils, cheatsheets) : sous-navigation visible sous l'en-tête, sans menu déroulant.
-const sectionItems = inResources(lang, path)
-  ? resourceLinks(lang).map((link) => ({
-      label: link.label,
-      href: link.href,
-      current:
-        path === link.href
-          ? ('page' as const)
-          : link.key !== 'resources' && path.startsWith(link.href)
-            ? ('true' as const)
-            : undefined,
-    }))
-  : [];
 const allScripts = [...scripts, '/js/nav.js', '/js/cursor.js', '/js/consent.js'];
 ---
 
@@ -116,13 +101,6 @@ const allScripts = [...scripts, '/js/nav.js', '/js/cursor.js', '/js/consent.js']
   <body>
     <SkipLink label={ui.skip} />
     <SiteHeader lang={lang} path={path} otherHref={otherHref} />
-    {sectionItems.length > 0 && (
-      <div class="section-bar">
-        <div class="container">
-          <SectionNav items={sectionItems} label={UI[lang].nav.resources} />
-        </div>
-      </div>
-    )}
     <main id="contenu" tabindex="-1">
       <slot />
     </main>

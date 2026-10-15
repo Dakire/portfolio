@@ -30,9 +30,7 @@ export const PRIVACY: Record<Lang, InfoPage> = {
       {
         id: 'responsable',
         h: 'Responsable du traitement',
-        p: [
-          'Guillaume Richard, particulier, Laval (53000), France. Contact : contact@grichard.eu.',
-        ],
+        p: ['Guillaume Richard, particulier, résidant en France. Contact : contact@grichard.eu.'],
       },
       {
         id: 'formulaire',
@@ -93,7 +91,7 @@ export const PRIVACY: Record<Lang, InfoPage> = {
         id: 'controller',
         h: 'Data controller',
         p: [
-          'Guillaume Richard, private individual, Laval (53000), France. Contact: contact@grichard.eu.',
+          'Guillaume Richard, private individual, living in France. Contact: contact@grichard.eu.',
         ],
       },
       {

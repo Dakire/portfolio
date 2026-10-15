@@ -62,8 +62,7 @@ export const PASSWORD = {
         },
         strengthLabel: 'Robustesse',
       },
-      privacy:
-        'Les mots de passe sont générés dans votre navigateur et ne sont ni envoyés ni enregistrés.',
+      privacy: 'Les mots de passe ne sont ni envoyés ni enregistrés.',
       seo: {
         whatTitle: "Ce que fait l'outil",
         what: [
@@ -163,7 +162,7 @@ export const PASSWORD = {
         },
         strengthLabel: 'Strength',
       },
-      privacy: 'Passwords are generated in your browser and are neither sent nor stored.',
+      privacy: 'Passwords are neither sent nor stored.',
       seo: {
         whatTitle: 'What the tool does',
         what: [

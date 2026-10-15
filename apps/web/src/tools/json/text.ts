@@ -15,7 +15,7 @@ export const JSON_TOOL = {
         'json formateur validateur formatter beautify minify indenter minifier trier cles erreur syntaxe lint',
       h1: 'Formateur et validateur JSON',
       intro:
-        "Collez du JSON : l'outil le valide, l'indente ou le minifie, et indique l'endroit exact d'une erreur (ligne et colonne) avec une explication claire. Les nombres et les chaînes sont recopiés tels quels : un identifiant à 20 chiffres ne sera pas arrondi. Tout se passe dans votre navigateur.",
+        "Collez du JSON : l'outil le valide, l'indente ou le minifie, et indique l'endroit exact d'une erreur (ligne et colonne) avec une explication claire. Les nombres et les chaînes sont recopiés tels quels : un identifiant à 20 chiffres ne sera pas arrondi.",
       form: {
         input: 'JSON à analyser',
         placeholder: '{"nom": "exemple", "valeurs": [1, 2, 3]}',
@@ -131,7 +131,7 @@ export const JSON_TOOL = {
       keywords: 'json formatter validator beautify minify indent sort keys error syntax lint',
       h1: 'JSON formatter and validator',
       intro:
-        'Paste some JSON: the tool validates it, indents or minifies it, and shows the exact place of an error (line and column) with a clear explanation. Numbers and strings are copied as written: a 20-digit identifier will not be rounded. Everything happens in your browser.',
+        'Paste some JSON: the tool validates it, indents or minifies it, and shows the exact place of an error (line and column) with a clear explanation. Numbers and strings are copied as written: a 20-digit identifier will not be rounded.',
       form: {
         input: 'JSON to analyze',
         placeholder: '{"name": "example", "values": [1, 2, 3]}',

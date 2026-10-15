@@ -84,7 +84,7 @@ export const ENCODER = {
           noExpiry: "Aucune date d'expiration (exp)",
         },
         notice:
-          "Le jeton est seulement décodé : sa signature n'est PAS vérifiée (il faudrait la clé). Ne collez jamais ici un jeton de production encore valide si vous n'êtes pas à l'aise : tout reste dans votre navigateur, mais mieux vaut s'en passer.",
+          "Le jeton est seulement décodé : sa signature n'est PAS vérifiée (il faudrait la clé). Ne collez jamais ici un jeton de production encore valide si vous n'êtes pas à l'aise : rien n'est envoyé, mais mieux vaut s'en passer.",
         unsigned:
           "Ce jeton n'est pas signé (alg « none » ou signature vide) : n'importe qui peut en forger un.",
         errors: {
@@ -153,8 +153,7 @@ export const ENCODER = {
         },
         invalid: "Ce n'est pas un UUID valide.",
       },
-      privacy:
-        'Tout est calculé dans votre navigateur : textes, fichiers et jetons ne sont jamais envoyés.',
+      privacy: 'Textes, fichiers et jetons ne sont jamais envoyés.',
       seo: {
         whatTitle: "Ce que fait l'outil",
         what: [
@@ -201,7 +200,7 @@ export const ENCODER = {
       meta: {
         title: 'Encoder / decoder: Base64, URL, JWT, hash, UUID | Guillaume Richard',
         description:
-          'Encode and decode Base64, URLs, hexadecimal and HTML entities; read a JWT; compute MD5, SHA-1, SHA-256, SHA-512 of text or a file; convert a timestamp; generate UUIDs. In your browser.',
+          'Encode and decode Base64, URLs, hexadecimal and HTML entities; read a JWT; compute MD5, SHA-1, SHA-256, SHA-512 of text or a file; convert a timestamp; generate UUIDs.',
         appDescription:
           'Free toolbox: Base64, URL, hexadecimal, HTML, JWT, file hashes, timestamps and UUIDs, with no data upload.',
       },
@@ -211,7 +210,7 @@ export const ENCODER = {
         'base64 url encode decode jwt hash md5 sha256 sha1 timestamp epoch uuid hex html entities checksum',
       h1: 'Encoder / decoder',
       intro:
-        'Eight developer and administrator tools in one page: Base64, URL, hexadecimal and HTML encoding and decoding, JWT reading, MD5 and SHA hashes of text or files, timestamp conversion and UUID generation. Everything is computed in your browser.',
+        'Eight developer and administrator tools in one page: Base64, URL, hexadecimal and HTML encoding and decoding, JWT reading, MD5 and SHA hashes of text or files, timestamp conversion and UUID generation.',
       tabs: {
         base64: 'Base64',
         url: 'URL',
@@ -279,7 +278,7 @@ export const ENCODER = {
           noExpiry: 'No expiry date (exp)',
         },
         notice:
-          'The token is only decoded: its signature is NOT verified (that needs the key). Avoid pasting a still-valid production token here if you are not comfortable: everything stays in your browser, but it is better to do without.',
+          'The token is only decoded: its signature is NOT verified (that needs the key). Avoid pasting a still-valid production token here if you are not comfortable: nothing is sent, but it is better to do without.',
         unsigned: 'This token is unsigned (alg "none" or empty signature): anyone can forge one.',
         errors: {
           format: 'A JWT has three parts separated by dots.',
@@ -347,7 +346,7 @@ export const ENCODER = {
         },
         invalid: 'This is not a valid UUID.',
       },
-      privacy: 'Everything is computed in your browser: texts, files and tokens are never sent.',
+      privacy: 'Texts, files and tokens are never sent.',
       seo: {
         whatTitle: 'What the tool does',
         what: [

@@ -27,6 +27,8 @@ export interface SiteText {
     tagline: string;
   };
   home: {
+    /** Titres de section de l'accueil ; *mot* est mis en italique. */
+    skillsTitle: string;
     skillsMore: string;
     featuredTitle: string;
     careerTitle: string;
@@ -89,29 +91,31 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
       cvFr: 'CV en français (PDF)',
       cvEn: 'Resume in English (PDF)',
       form: 'Formulaire de contact',
-      tagline: 'Technicien informatique à Laval.',
+      tagline: 'Technicien informatique et systèmes numériques.',
     },
     home: {
+      skillsTitle: 'Ce que je sais *faire*',
       skillsMore: 'Toutes les compétences',
-      featuredTitle: 'Réalisations à la une',
-      careerTitle: 'Parcours en bref',
+      featuredTitle: 'Quelques *réalisations*',
+      careerTitle: 'Où j’ai *travaillé*',
       careerIntro: "Où j'ai travaillé, du plus récent au plus ancien.",
       careerMore: 'Voir tout le parcours',
-      resourcesTitle: 'Ressources',
+      resourcesTitle: 'À lire, à *garder* sous la main',
       resourcesIntro:
-        "Ce que mon travail m'a donné envie de partager : des notes, des outils et des commandes à garder sous la main.",
-      contactTitle: 'Parlons de votre besoin',
-      contactText: 'Un message suffit pour démarrer. Vous pouvez aussi télécharger mon CV.',
+        "Ce que mon travail m'a donné envie de partager : des articles pour comprendre une panne, et les commandes qu'on finit toujours par rechercher.",
+      contactTitle: 'Une question, un projet ?',
+      contactText:
+        'Écrivez-moi : je lis chaque message et je réponds moi-même. Mon CV est aussi en PDF.',
       indexLabel: 'Sur ce site',
       index: {
-        projects: 'Une page par projet, avec sa stack',
-        tools: 'DNS, e-mail, réseau, SEO : gratuits, sans inscription',
-        cheatsheets: 'Commandes à copier, recherche instantanée',
-        posts: 'Méthodes de diagnostic pas à pas',
+        projects: 'Ce que j’ai installé, déployé ou migré',
+        tools: 'Gratuits, sans compte à créer',
+        cheatsheets: 'Les commandes qu’on oublie toujours',
+        posts: 'Des pannes expliquées pas à pas',
       },
-      toolsTitle: 'Outils en ligne',
+      toolsTitle: 'Des *outils* pour le quotidien',
       toolsIntro:
-        'Écrits pour des problèmes que je croise en support : vérifier une zone DNS, lire les en-têtes d’un e-mail, auditer un site.',
+        'Ils sont nés de problèmes croisés en support : une zone DNS à vérifier, un e-mail qui finit en spam, un site à auditer.',
       toolsMore: 'Les {n} outils',
     },
     career: {
@@ -232,29 +236,31 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
       cvFr: 'CV en français (PDF)',
       cvEn: 'Resume in English (PDF)',
       form: 'Contact form',
-      tagline: 'IT technician based in Laval, France.',
+      tagline: 'IT and digital systems technician.',
     },
     home: {
+      skillsTitle: 'What I *do*',
       skillsMore: 'All skills',
-      featuredTitle: 'Featured projects',
-      careerTitle: 'Career at a glance',
+      featuredTitle: 'A few *projects*',
+      careerTitle: 'Where I’ve *worked*',
       careerIntro: 'Where I have worked, most recent first.',
       careerMore: 'See the full career',
-      resourcesTitle: 'Resources',
+      resourcesTitle: 'Worth *reading*, worth keeping',
       resourcesIntro:
-        'What my work made me want to share: notes, tools and commands worth keeping at hand.',
-      contactTitle: "Let's talk about what you need",
-      contactText: 'One message is enough to get started. You can also download my resume.',
+        'What my work made me want to share: articles to make sense of an outage, and the commands you always end up looking up.',
+      contactTitle: 'A question, a project?',
+      contactText:
+        'Write to me: I read every message and reply myself. My resume is also available as a PDF.',
       indexLabel: 'On this site',
       index: {
-        projects: 'One page per project, with its stack',
-        tools: 'DNS, email, networking, SEO: free, no sign-up',
-        cheatsheets: 'Commands to copy, instant search',
-        posts: 'Step-by-step troubleshooting methods',
+        projects: 'What I’ve installed, deployed or migrated',
+        tools: 'Free, no account needed',
+        cheatsheets: 'The commands you always forget',
+        posts: 'Outages explained step by step',
       },
-      toolsTitle: 'Online tools',
+      toolsTitle: '*Tools* for everyday work',
       toolsIntro:
-        'Written for problems I run into in support: checking a DNS zone, reading email headers, auditing a site.',
+        'They came out of problems I run into in support: a DNS zone to check, an email landing in spam, a site to audit.',
       toolsMore: 'All {n} tools',
     },
     career: {

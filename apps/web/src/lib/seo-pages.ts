@@ -68,7 +68,7 @@ export const careerLd = (p: PageInput, role: string, jobs: RoleInput[], educatio
         memberOf: {
           '@type': 'Organization',
           name: job.company,
-          address: { '@type': 'PostalAddress', addressLocality: job.location },
+          address: { '@type': 'PostalAddress', addressCountry: 'FR' },
         },
       })),
       hasCredential: education.map((name) => ({

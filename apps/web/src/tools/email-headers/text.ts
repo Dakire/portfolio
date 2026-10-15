@@ -23,7 +23,7 @@ const fr = {
     meta: {
       title: "Analyseur d'en-têtes d'e-mail : SPF, DKIM, DMARC, délais | Guillaume Richard",
       description:
-        "Collez les en-têtes d'un e-mail : chemin de livraison avec délais et chiffrement, résultats SPF, DKIM et DMARC, alignement, usurpation du nom affiché, signaux de spam. Gratuit, dans votre navigateur.",
+        "Collez les en-têtes d'un e-mail : chemin de livraison avec délais et chiffrement, résultats SPF, DKIM et DMARC, alignement, usurpation du nom affiché, signaux de spam. Gratuit, sans inscription.",
       appDescription:
         "Outil gratuit d'analyse des en-têtes d'un e-mail : chemin, délais, authentification SPF/DKIM/DMARC, usurpation et spam.",
     },
@@ -132,7 +132,7 @@ const fr = {
       headers: { name: 'En-tête', value: 'Valeur', count: (n: number) => `${n} en-têtes` },
     },
     privacy:
-      "Les en-têtes que vous collez sont analysés dans votre navigateur et ne sont jamais envoyés. Ils peuvent contenir des adresses et des adresses IP : n'hésitez pas à les masquer avant de les partager.",
+      "Les en-têtes que vous collez ne quittent pas votre ordinateur. Ils peuvent contenir des adresses et des adresses IP : n'hésitez pas à les masquer avant de les partager.",
     seo: {
       whatTitle: "Ce que fait l'outil",
       what: [
@@ -343,7 +343,7 @@ const en = {
     meta: {
       title: 'Email header analyzer: path, delays, SPF, DKIM, DMARC | Guillaume Richard',
       description:
-        'Paste the headers of an email: delivery path with delays and encryption, SPF, DKIM and DMARC results, alignment, display-name spoofing, spam signals. Free, in your browser.',
+        'Paste the headers of an email: delivery path with delays and encryption, SPF, DKIM and DMARC results, alignment, display-name spoofing, spam signals. Free, no sign-up.',
       appDescription:
         'Free tool to analyse email headers: path, delays, SPF/DKIM/DMARC authentication, spoofing and spam.',
     },
@@ -452,7 +452,7 @@ const en = {
       headers: { name: 'Header', value: 'Value', count: (n: number) => `${n} headers` },
     },
     privacy:
-      'The headers you paste are analysed in your browser and never sent. They may contain addresses and IP addresses: feel free to mask them before sharing.',
+      'The headers you paste never leave your computer. They may contain addresses and IP addresses: feel free to mask them before sharing.',
     seo: {
       whatTitle: 'What the tool does',
       what: [

@@ -1,9 +1,8 @@
 ---
-// Accueil « Référence » : cartes des références et recherche globale (tous les index, chargés à la demande).
+// Accueil « Cheatsheets » : la liste des cheatsheets. Pas de recherche globale (trop de résultats mélangés) : chaque cheatsheet a la sienne.
 import Card from '@grichard/ui/components/Card.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import ReferenceSearch from '../components/ReferenceSearch.astro';
 import '../styles/reference.css';
 import { ROUTES, type Lang } from '../lib/i18n';
 import { cheatsheetsHubLd, ogImage } from '../lib/seo-pages';
@@ -41,11 +40,9 @@ const ld = cheatsheetsHubLd(
   alternates={hubAlternates()}
   image={ogImage(`page-cheatsheets-${lang}`, ui.hubH1)}
   ld={ld}
-  scripts={['/js/libs/minisearch.js', '/js/reference.js']}
 >
   <PageHero title={ui.hubH1} lead={ui.hubIntro} crumbs={trail} />
   <div class="container section stack-lg">
-    <ReferenceSearch lang={lang} cats={refs.map((r) => ({ id: r.id, label: r.h1 }))} />
     <section class="stack" aria-labelledby="ref-cards-title">
       <h2 id="ref-cards-title">{ui.cards}</h2>
       <ul class="cards" role="list">
@@ -62,6 +59,5 @@ const ld = cheatsheetsHubLd(
         ))}
       </ul>
     </section>
-    <p class="ref-source">{ui.privacy}</p>
   </div>
 </Base>

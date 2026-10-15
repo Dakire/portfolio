@@ -1,6 +1,6 @@
 ---
 // Composant de recherche réutilisable : le même balisage sur toutes les pages « Référence », piloté par public/js/reference.js.
-import { REF_UI, catalogUrl, fileUrl, hubPath, type RefMeta } from '../reference/refs';
+import { REF_UI, catalogUrl, fileUrl, type RefMeta } from '../reference/refs';
 import type { Lang } from '../lib/i18n';
 
 interface Props {
@@ -20,7 +20,6 @@ const label = ref ? (ref.searchLabel ?? ui.searchLabel) : ui.searchLabelAll;
   data-reference
   data-index={ref ? fileUrl(ref) : 'all'}
   data-catalog={ref ? undefined : catalogUrl()}
-  data-hub={hubPath(lang)}
   data-docs-url={ref?.docs?.url}
   data-docs-label={ref?.docs?.label}
   aria-labelledby="ref-search-title"

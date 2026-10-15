@@ -102,8 +102,7 @@ export const ICS_COMPARE = {
           'Ce fichier ne ressemble pas à un calendrier iCalendar (BEGIN:VCALENDAR introuvable).',
         read: 'Impossible de lire ce fichier.',
       },
-      privacy:
-        'Vos fichiers ne sont jamais envoyés : ils sont lus et comparés dans votre navigateur.',
+      privacy: 'Vos fichiers restent sur votre ordinateur : ils ne sont jamais envoyés.',
       seo: {
         whatTitle: "Ce que fait l'outil",
         what: [
@@ -237,7 +236,7 @@ export const ICS_COMPARE = {
         notIcs: 'This file does not look like an iCalendar file (BEGIN:VCALENDAR not found).',
         read: 'This file could not be read.',
       },
-      privacy: 'Your files are never uploaded: they are read and compared in your browser.',
+      privacy: 'Your files stay on your computer: they are never uploaded.',
       seo: {
         whatTitle: 'What the tool does',
         what: [

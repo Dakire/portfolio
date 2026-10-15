@@ -83,7 +83,7 @@ export const ICS_SPLIT = {
           'Ce fichier ne ressemble pas à un calendrier iCalendar (BEGIN:VCALENDAR introuvable).',
         read: 'Impossible de lire ce fichier.',
       },
-      privacy: "Votre fichier n'est jamais envoyé : il est lu et découpé dans votre navigateur.",
+      privacy: 'Votre fichier reste sur votre ordinateur : il n’est jamais envoyé.',
       seo: {
         whatTitle: "Ce que fait l'outil",
         what: [
@@ -190,7 +190,7 @@ export const ICS_SPLIT = {
         notIcs: 'This file does not look like an iCalendar file (BEGIN:VCALENDAR not found).',
         read: 'This file could not be read.',
       },
-      privacy: 'Your file is never uploaded: it is read and split in your browser.',
+      privacy: 'Your file stays on your computer: it is never uploaded.',
       seo: {
         whatTitle: 'What the tool does',
         what: [

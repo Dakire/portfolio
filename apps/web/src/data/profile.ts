@@ -156,7 +156,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
       {
         role: 'Technicien informatique et systèmes numériques',
         company: 'TIXIA Services numériques',
-        location: 'Laval, France',
+        location: 'France',
         date: 'Depuis août 2023',
         start: '2023-08',
         points: [
@@ -170,7 +170,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
       {
         role: 'Intervenant dépannage informatique',
         company: 'AlloVoisin / Particuliers',
-        location: 'Laval & Le Mans',
+        location: 'France',
         date: 'Depuis 2021',
         start: '2021',
         points: [
@@ -193,7 +193,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
       {
         role: 'Technicien de maintenance IT',
         company: 'Tibco (groupe Lactalis)',
-        location: 'Laval, France',
+        location: 'France',
         date: 'Janvier 2019',
         start: '2019-01',
         end: '2019-01',
@@ -273,7 +273,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
     educationTitle: 'Formation & langues',
     education: [
       'Licence Informatique (Développement et Programmation) - Le Mans Université (2023)',
-      "Baccalauréat Scientifique (Sciences de l'Ingénieur) - Lycée Immaculée Conception, Laval (2020)",
+      "Baccalauréat Scientifique (Sciences de l'Ingénieur) - Lycée Immaculée Conception (2020)",
     ],
     languagesInfo: 'Français (langue maternelle), anglais (langue maternelle).',
   },
@@ -357,7 +357,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
       {
         role: 'IT and Digital Systems Technician',
         company: 'TIXIA Services numériques',
-        location: 'Laval, France',
+        location: 'France',
         date: 'Since August 2023',
         start: '2023-08',
         points: [
@@ -371,7 +371,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
       {
         role: 'IT support technician',
         company: 'AlloVoisin / Private individuals',
-        location: 'Laval & Le Mans',
+        location: 'France',
         date: 'Since 2021',
         start: '2021',
         points: [
@@ -394,7 +394,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
       {
         role: 'IT maintenance technician',
         company: 'Tibco (Lactalis Group)',
-        location: 'Laval, France',
+        location: 'France',
         date: 'January 2019',
         start: '2019-01',
         end: '2019-01',
@@ -474,7 +474,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
     educationTitle: 'Education & languages',
     education: [
       'Bachelor of Science in Computer Science (Development & Programming) - Le Mans University (2023)',
-      'French Scientific Baccalauréat (Engineering Sciences) - Lycée Immaculée Conception, Laval (2020)',
+      'French Scientific Baccalauréat (Engineering Sciences) - Lycée Immaculée Conception (2020)',
     ],
     languagesInfo: 'French (native), English (native).',
   },

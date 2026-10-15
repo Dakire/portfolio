@@ -76,7 +76,7 @@ export interface Portfolio extends ProfileText {
 export const PROFILE = {
   name: 'Guillaume Richard',
   email: 'contact@grichard.eu',
-  location: 'Laval, France',
+  location: 'France',
   linkedin: 'https://www.linkedin.com/in/guillaume-richard-in',
   github: 'https://github.com/Dakire',
 };
@@ -86,7 +86,7 @@ const BASE_DATA: Record<Lang, Omit<Portfolio, keyof ProfileText>> = {
     meta: {
       title: 'Guillaume Richard | Technicien IT, réseau et sécurité',
       description:
-        'Portfolio de Guillaume Richard, technicien informatique à Laval : réseau, sécurité (Stormshield), Microsoft 365, Google Workspace, DNS et formation IA et RGPD.',
+        'Portfolio de Guillaume Richard, technicien informatique : réseau, sécurité (Stormshield), Microsoft 365, Google Workspace, DNS et formation IA et RGPD.',
     },
     ui: {
       skip: 'Aller au contenu principal',
@@ -183,7 +183,7 @@ const BASE_DATA: Record<Lang, Omit<Portfolio, keyof ProfileText>> = {
       sections: [
         {
           h: '1. Éditeur du site',
-          p: 'Ce site est édité par Guillaume Richard, un particulier. Résidant à : Laval, 53000, France. Contact : contact@grichard.eu',
+          p: 'Ce site est édité par Guillaume Richard, un particulier. Résidant en France. Contact : contact@grichard.eu',
         },
         {
           h: '2. Hébergement',
@@ -208,7 +208,7 @@ const BASE_DATA: Record<Lang, Omit<Portfolio, keyof ProfileText>> = {
     meta: {
       title: 'Guillaume Richard | IT & Digital Systems Technician',
       description:
-        'Portfolio of Guillaume Richard, IT technician in Laval, France: networks, security (Stormshield), Microsoft 365, Google Workspace, DNS, AI and GDPR training.',
+        'Portfolio of Guillaume Richard, IT technician: networks, security (Stormshield), Microsoft 365, Google Workspace, DNS, AI and GDPR training.',
     },
     ui: {
       skip: 'Skip to main content',
@@ -304,7 +304,7 @@ const BASE_DATA: Record<Lang, Omit<Portfolio, keyof ProfileText>> = {
       sections: [
         {
           h: '1. Publisher',
-          p: 'This website is published by Guillaume Richard, a private individual, residing in Laval, 53000, France. Contact: contact@grichard.eu',
+          p: 'This website is published by Guillaume Richard, a private individual, residing in France. Contact: contact@grichard.eu',
         },
         {
           h: '2. Hosting',
