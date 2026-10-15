@@ -1168,7 +1168,8 @@ input[data-filter-table]:focus-visible {
   font-size: var(--text-hero);
   font-weight: 560;
   line-height: 0.98;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.028em;
+  word-spacing: 0.04em;
 }
 /* Le nom : à la ligne, en couleur d'accent, souligné d'un trait plein sous la ligne de base */
 .hero-name {
