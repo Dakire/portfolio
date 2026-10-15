@@ -23,7 +23,7 @@
     "@grichard/tools-core": "workspace:*",
     "@grichard/ui": "workspace:*",
     "astro": "^7.3.8",
-    "lucide-preact": "^1.53.0",
+    "lucide-preact": "^1.55.0",
     "preact": "^11.0.1"
   },
   "devDependencies": {
