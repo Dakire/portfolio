@@ -280,7 +280,14 @@
     },
     {
       "path": "/sitemap.xml",
-      "type": "application/xml"
+      "type": "application/xml",
+      "kind": "sitemap"
+    },
+    {
+      "path": "/sitemap-0.xml",
+      "type": "application/xml",
+      "kind": "sitemap",
+      "since": "web"
     },
     {
       "path": "/robots.txt",

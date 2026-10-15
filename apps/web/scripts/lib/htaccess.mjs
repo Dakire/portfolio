@@ -193,6 +193,12 @@ export function buildHtaccess({ hashes, base = '', authFile } = {}) {
     '# Fichiers et dossiers cachés (.git, .env, …) : 404, sauf /.well-known/ (security.txt)',
     '<IfModule mod_alias.c>',
     '    RedirectMatch 404 "/\\.(?!well-known/)"',
+    ...(preprod
+      ? []
+      : [
+          "    # Ancienne préproduction (www/preprod/, supprimée à la main par FTP) : 410, retirée de l'index même si des fichiers subsistent",
+          '    RedirectMatch 410 "^/preprod(/|$)"',
+        ]),
     '</IfModule>',
     '',
     '# ----------------------------------------------------------------------',

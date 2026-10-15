@@ -25,18 +25,28 @@ const entries = contract.entries.filter((entry) => !(legacyDist && entry.since =
 // Anciennes URL renommées : 301 vers la nouvelle (le site d'avant la refonte n'a pas ces URL).
 const redirects = legacyDist ? [] : (contract.redirects ?? []);
 
+// Sitemap : une liste d'URL (<urlset>) complète, jamais un index ni une page HTML (voir docs/seo.md).
+function expectUrlset(xml) {
+  expect(xml.startsWith('<?xml')).toBe(true);
+  expect(xml).toMatch(/<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9"/);
+  expect(xml.trimEnd().endsWith('</urlset>')).toBe(true);
+  expect(xml).toMatch(/<loc>https:\/\/grichard\.eu\/<\/loc>/);
+}
+
 describe(base ? `contrat public en ligne (${base})` : 'contrat public (dist/)', () => {
   it.each(entries)('$path', async ({ path, type, kind }) => {
     if (!base) {
       expect(existsSync(distFile(path)), distFile(path)).toBe(true);
       if (kind === 'json')
         expect(() => JSON.parse(readFileSync(distFile(path), 'utf-8'))).not.toThrow();
+      if (kind === 'sitemap') expectUrlset(readFileSync(distFile(path), 'utf-8'));
       return;
     }
     const res = await fetch(base + path, { redirect: 'manual', headers });
     expect(res.status).toBe(200);
     expect(res.headers.get('content-type') ?? '').toContain(type);
     if (kind === 'json') JSON.parse(await res.text());
+    if (kind === 'sitemap') expectUrlset(await res.text());
   });
 
   // (Une suite sans test fait échouer vitest : sur le site d'avant la refonte, la liste est vide.)

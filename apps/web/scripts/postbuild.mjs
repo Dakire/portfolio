@@ -1,5 +1,5 @@
 // Étapes après `astro build` :
-//  1. /sitemap.xml (URL historique, citée par robots.txt) : copie de l'index produit par @astrojs/sitemap ;
+//  1. /sitemap.xml (référence, citée par robots.txt) : liste d'URL reprise de sitemap-0.xml produit par @astrojs/sitemap ;
 //  2. empreintes SHA-256 des scripts en ligne (hydratation des îlots Astro) : écrites dans .cache/csp-hashes.json, lues par le générateur
 //     de .htaccess pour les autoriser dans la CSP sans 'unsafe-inline' ;
 //  3. dist/.htaccess (en-têtes de sécurité, CSP, cache, redirections), généré avec ces empreintes ;
@@ -98,8 +98,28 @@ const html = ({ title, kicker, lang }, fonts) => `<!doctype html>
   </div>
 </body></html>`;
 
+/**
+ * Sitemap : /sitemap.xml est la référence (déclarée dans robots.txt, soumise à la Search Console). C'est une liste d'URL (<urlset>)
+ * et non un index : un seul fichier, lisible sans second téléchargement, comme le servait l'ancien site.
+ * @astrojs/sitemap produit sitemap-index.xml + sitemap-0.xml ; on reprend sitemap-0.xml (épuré des espaces de noms inutilisés).
+ * sitemap-0.xml reste publié, identique, parce qu'il a déjà été soumis à la Search Console ; sitemap-index.xml, jamais déclaré, est retiré.
+ * Au-delà de 50 000 URL, @astrojs/sitemap produirait un sitemap-1.xml : le build s'arrête plutôt que de publier un sitemap incomplet.
+ */
 async function sitemap() {
-  await copyFile(join(DIST, 'sitemap-index.xml'), join(DIST, 'sitemap.xml'));
+  const files = (await readdir(DIST)).filter((f) => /^sitemap-\d+\.xml$/.test(f));
+  if (files.length !== 1)
+    throw new Error(`sitemap : un seul fichier sitemap-N.xml attendu, trouvé ${files.join(', ')}`);
+  const xml = (await readFile(join(DIST, 'sitemap-0.xml'), 'utf-8')).replace(
+    /<urlset[^>]*>/,
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+  );
+  if (/<(?:news|image|video|xhtml):/.test(xml))
+    throw new Error(
+      'sitemap : une extension (image, vidéo, hreflang) est utilisée, garder son espace de noms',
+    );
+  await writeFile(join(DIST, 'sitemap.xml'), xml);
+  await writeFile(join(DIST, 'sitemap-0.xml'), xml);
+  await rm(join(DIST, 'sitemap-index.xml'), { force: true });
 }
 
 /** Images des pages hors blog : liste produite par pages/og-cards.json.ts, retirée de dist/ après lecture. */

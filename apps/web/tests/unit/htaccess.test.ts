@@ -80,6 +80,11 @@ describe('.htaccess de production', () => {
     expect(file).toMatch(/FilesMatch "\\\.\(html\|xml\|json\|txt\)\$"/);
   });
 
+  it("répond 410 sur l'ancienne préproduction, en production seulement", () => {
+    expect(file).toContain('RedirectMatch 410 "^/preprod(/|$)"');
+    expect(buildHtaccess({ hashes, base: '/preprod' })).not.toContain('RedirectMatch 410');
+  });
+
   it("n'indexe pas la production à l'envers : aucun X-Robots-Tag ni mot de passe", () => {
     expect(file).not.toContain('X-Robots-Tag');
     expect(file).not.toContain('AuthType');

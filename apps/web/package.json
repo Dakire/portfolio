@@ -13,7 +13,8 @@
     "test": "vitest run",
     "reference:build": "node scripts/reference/build.mjs",
     "reference:gam": "node scripts/reference/gam.mjs",
-    "reference:links": "node scripts/reference/check-links.mjs"
+    "reference:links": "node scripts/reference/check-links.mjs",
+    "sitemap:check": "node scripts/check-sitemap.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.2",

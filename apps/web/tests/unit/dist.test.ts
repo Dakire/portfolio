@@ -119,17 +119,57 @@ describe('site construit', () => {
     expect(titles.length - new Set(titles).size).toBe(0);
   });
 
-  it('le sitemap ne liste que des pages existantes et pas de page noindex', () => {
-    const xml = readFileSync(join(DIST, 'sitemap-0.xml'), 'utf-8');
+  describe('sitemap (référence : /sitemap.xml, voir docs/seo.md)', () => {
+    const xml = readFileSync(join(DIST, 'sitemap.xml'), 'utf-8');
     const locs = attr(xml, /<loc>([^<]+)<\/loc>/g);
-    expect(locs.length).toBeGreaterThan(30);
-    for (const loc of locs) {
-      const target = resolveTarget(loc, '/')!;
-      expect(existsSync(target), loc).toBe(true);
-      expect(readFileSync(target, 'utf-8'), loc).not.toMatch(
-        /<meta name="robots" content="[^"]*noindex/,
-      );
-    }
+    const canonical = (html: string) => attr(html, /<link rel="canonical" href="([^"]+)"/)[0];
+    const noindex = (html: string) => /<meta name="robots" content="[^"]*noindex/.test(html);
+
+    it('est une liste d’URL (urlset) UTF-8 au bon espace de noms, pas un index', () => {
+      expect(xml.startsWith('<?xml version="1.0" encoding="UTF-8"?>')).toBe(true);
+      expect(xml).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
+      expect(xml).not.toContain('<sitemapindex');
+      expect(xml.trimEnd().endsWith('</urlset>')).toBe(true);
+      expect(xml.match(/<url>/g)).toHaveLength(locs.length);
+    });
+
+    it('sitemap-0.xml (déjà soumis à la Search Console) est identique ; sitemap-index.xml n’est plus publié', () => {
+      expect(readFileSync(join(DIST, 'sitemap-0.xml'), 'utf-8')).toBe(xml);
+      expect(existsSync(join(DIST, 'sitemap-index.xml'))).toBe(false);
+    });
+
+    it('robots.txt déclare /sitemap.xml et rien d’autre', () => {
+      const robots = readFileSync(join(DIST, 'robots.txt'), 'utf-8');
+      const declared = [...robots.matchAll(/^Sitemap:\s*(\S+)/gm)].map((m) => m[1]);
+      expect(declared).toEqual([`${SITE}/sitemap.xml`]);
+    });
+
+    it('liste des URL absolues, uniques, avec des dates lastmod valides', () => {
+      expect(locs.length).toBeGreaterThan(30);
+      expect(new Set(locs).size).toBe(locs.length);
+      for (const loc of locs) expect(loc).toMatch(/^https:\/\/grichard\.eu\/(?:[^\s?#]*\/)?$/);
+      for (const date of attr(xml, /<lastmod>([^<]+)<\/lastmod>/g))
+        expect(Number.isNaN(Date.parse(date)), date).toBe(false);
+    });
+
+    it('chaque URL est une page existante, indexable, dont la canonique est elle-même', () => {
+      for (const loc of locs) {
+        const target = resolveTarget(loc, '/')!;
+        expect(existsSync(target), loc).toBe(true);
+        const html = readFileSync(target, 'utf-8');
+        expect(noindex(html), loc).toBe(false);
+        expect(canonical(html), loc).toBe(loc);
+      }
+    });
+
+    it('chaque page indexable et auto-canonique figure dans le sitemap (aucune page oubliée)', () => {
+      const missing = pages
+        .filter((p) => p.url !== '/404.html' && !noindex(p.html))
+        .filter((p) => canonical(p.html) === SITE + p.url)
+        .map((p) => SITE + p.url)
+        .filter((url) => !locs.includes(url));
+      expect(missing).toEqual([]);
+    });
   });
 
   it('ai-catalog.json est un JSON valide et les PDF du CV existent', () => {

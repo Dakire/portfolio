@@ -37,7 +37,7 @@ Le FTP s'ouvre dans le dossier personnel de l'hébergement :
    ];
    ```
 5. Vérifier dans le manager OVH que le moteur PHP est bien en **8.5**.
-6. Ancienne préproduction : supprimer à la main, par FTP, `www/preprod/` et `app/preprod/` s'ils existent. La livraison ne les supprime jamais d'elle-même.
+6. Ancienne préproduction : supprimer à la main, par FTP, `www/preprod/` et `app/preprod/` s'ils existent. La livraison ne les supprime jamais d'elle-même. Le `.htaccess` de production y répond déjà 410 (voir [seo.md](seo.md)).
 
 ## Si seul www/ est accessible en écriture
 
