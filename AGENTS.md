@@ -18,7 +18,7 @@ Monorepo de grichard.eu. Production sur OVH mutualisé : **fichiers statiques + 
 
 ## Architecture du site
 
-Menu À propos · Parcours · Compétences · Réalisations · Ressources (+ Contact) ; Ressources = Blog, Outils, Cheatsheets (ADR 0009, docs/refonte-portfolio.md). Contenu du profil : `apps/web/src/data/profile.ts` ; liens vers articles/outils/cheatsheets : `data/related.ts`. Une URL renommée = entrée dans `REDIRECTS` (`scripts/lib/htaccess.mjs`) et `redirects` du contrat. Lancer aussi `pnpm test:contract` (ancien site) avant de pousser : la CI le fait.
+Menu à plat À propos · Parcours · Compétences · Réalisations · Blog · Outils · Cheatsheets (+ Contact) ; `/ressources/` reste en ligne hors du menu (ADR 0009, docs/refonte-portfolio.md). Ne jamais mentionner la ville (Laval) sur le site. Contenu du profil : `apps/web/src/data/profile.ts` ; liens vers articles/outils/cheatsheets : `data/related.ts`. Une URL renommée = entrée dans `REDIRECTS` (`scripts/lib/htaccess.mjs`) et `redirects` du contrat. Lancer aussi `pnpm test:contract` (ancien site) avant de pousser : la CI le fait.
 
 ## Règles
 

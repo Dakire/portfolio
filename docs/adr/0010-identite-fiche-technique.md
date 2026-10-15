@@ -30,3 +30,13 @@ L'identité précédente (fond prune, accent corail, dégradé corail → violet
 - Images de partage (`postbuild.mjs`), `og-image.png`, favicon et icônes régénérés aux nouvelles couleurs ; `theme-color` et manifeste alignés.
 - Le portail Symfony hérite automatiquement des tokens.
 - Contrastes : `packages/ui/tests/contrast.test.ts` passe dans les deux thèmes (texte ≥ 4,5:1, bordures ≥ 3:1).
+
+## Mise à jour 2026-10-15 (soir) : plus éditorial, moins « gabarit »
+
+Retour du propriétaire : garder ce thème, mais le rendre moins « IA », plus artistique.
+
+- **Italique de Fraunces** (fichier `opsz` italique, téléchargé seulement si la page s'en sert) : le nom dans le hero, et un mot par titre de section de l'accueil (`*mot*` dans le texte, voir `SectionHead`).
+- **Lignes de crête** (`HeroArt.astro`) : un relevé de signal empilé derrière le hero, calculé au build (SVG déterministe, aucun script), une trace en ambre ; dessiné une fois à l'arrivée, immobile si l'utilisateur réduit les animations, masqué en couleurs forcées.
+- **Signature** : le nom en très grand, en creux, au bas de chaque page (décoratif, `aria-hidden`).
+- **Sélecteur de thème en icônes** (libellés pour les lecteurs d'écran et en infobulle) : place gagnée pour le menu à sept entrées ; menu repliable sous 76rem.
+- **Ton** : titres d'accueil plus parlés (« Ce que je sais faire », « Où j'ai travaillé »), moins d'insistance sur le traitement « dans le navigateur » (l'encadré Confidentialité ne reste que sur les outils où la question se pose).

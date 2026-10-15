@@ -1,6 +1,6 @@
 # ADR 0009 : architecture d'information orientée portfolio
 
-**Statut** : accepté (2026-10-14). Détail, audit et plan : [docs/refonte-portfolio.md](../refonte-portfolio.md).
+**Statut** : accepté (2026-10-14). **Mise à jour 2026-10-15** : à la demande du propriétaire, Blog, Outils et Cheatsheets sont « défusionnés » : ils deviennent des entrées du menu principal (sept entrées à plat, plus Contact) ; la sous-navigation « Ressources » disparaît, le menu déroulant passe sur « Outils » (outils par catégorie), la page `/ressources/` reste en ligne (URL du contrat) sans entrée de menu. La page Cheatsheets n'a plus de recherche globale : chaque cheatsheet garde la sienne. Détail, audit et plan : [docs/refonte-portfolio.md](../refonte-portfolio.md).
 
 **Contexte.** L'accueil regroupait projets, compétences, expériences, outils et blog (près de 10 000 px sur mobile), avec du contenu en double sur les pages de section. Les projets n'avaient pas de page propre. La navigation était une liste plate de sept liens.
 
