@@ -36,6 +36,13 @@ export interface SiteText {
     resourcesIntro: string;
     contactTitle: string;
     contactText: string;
+    /** Sommaire du site sous le hero : ce qu'on trouve ici, avec le nombre réel d'éléments. */
+    indexLabel: string;
+    index: { projects: string; tools: string; cheatsheets: string; posts: string };
+    toolsTitle: string;
+    toolsIntro: string;
+    /** « Les 12 outils » : {n} est remplacé par le nombre d'outils. */
+    toolsMore: string;
   };
   career: { title: string; description: string; cvTitle: string; cvText: string };
   resources: {
@@ -65,6 +72,8 @@ export interface SiteText {
     cheatsheets: string;
     others: string;
     code: string;
+    kind: string;
+    kinds: { perso: string; pro: string };
   };
   skills: { projects: string; posts: string; tools: string; cheatsheets: string; proofs: string };
   contactBand: { title: string; text: string };
@@ -93,6 +102,17 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
         "Ce que mon travail m'a donné envie de partager : des notes, des outils et des commandes à garder sous la main.",
       contactTitle: 'Parlons de votre besoin',
       contactText: 'Un message suffit pour démarrer. Vous pouvez aussi télécharger mon CV.',
+      indexLabel: 'Sur ce site',
+      index: {
+        projects: 'Une page par projet, avec sa stack',
+        tools: 'DNS, e-mail, réseau, SEO : gratuits, sans inscription',
+        cheatsheets: 'Commandes à copier, recherche instantanée',
+        posts: 'Méthodes de diagnostic pas à pas',
+      },
+      toolsTitle: 'Outils en ligne',
+      toolsIntro:
+        'Écrits pour des problèmes que je croise en support : vérifier une zone DNS, lire les en-têtes d’un e-mail, auditer un site.',
+      toolsMore: 'Les {n} outils',
     },
     career: {
       title: 'Parcours professionnel',
@@ -188,6 +208,8 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
       cheatsheets: 'Cheatsheets',
       others: 'Autres réalisations',
       code: 'Voir le code sur GitHub',
+      kind: 'Type',
+      kinds: { perso: 'Projet personnel', pro: 'Réalisation professionnelle' },
     },
     skills: {
       projects: 'Réalisations',
@@ -223,6 +245,17 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
         'What my work made me want to share: notes, tools and commands worth keeping at hand.',
       contactTitle: "Let's talk about what you need",
       contactText: 'One message is enough to get started. You can also download my resume.',
+      indexLabel: 'On this site',
+      index: {
+        projects: 'One page per project, with its stack',
+        tools: 'DNS, email, networking, SEO: free, no sign-up',
+        cheatsheets: 'Commands to copy, instant search',
+        posts: 'Step-by-step troubleshooting methods',
+      },
+      toolsTitle: 'Online tools',
+      toolsIntro:
+        'Written for problems I run into in support: checking a DNS zone, reading email headers, auditing a site.',
+      toolsMore: 'All {n} tools',
     },
     career: {
       title: 'Career',
@@ -300,6 +333,8 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
       cheatsheets: 'Cheatsheets',
       others: 'More projects',
       code: 'View the code on GitHub',
+      kind: 'Type',
+      kinds: { perso: 'Personal project', pro: 'Professional work' },
     },
     skills: {
       projects: 'Projects',

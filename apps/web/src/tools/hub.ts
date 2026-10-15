@@ -16,6 +16,7 @@ export const HUB = {
     privacy:
       'Ce que vous déposez ou saisissez dans les outils de fichiers et de texte reste dans votre navigateur : rien n’est envoyé au site. Les outils DNS interrogent des résolveurs publics (Cloudflare, Google) pour lire les enregistrements du domaine demandé. Le rapport SEO et le vérificateur de sitemap passent par grichard.eu, qui interroge le site indiqué sans rien conserver.',
     schemaName: 'Outils pour techniciens IT',
+    groupsLabel: 'Catégories d’outils',
   },
   en: {
     meta: {
@@ -33,5 +34,58 @@ export const HUB = {
     privacy:
       'What you drop or type into the file and text tools stays in your browser: nothing is sent to the site. The DNS tools query public resolvers (Cloudflare, Google) to read the records of the domain you ask about. The SEO report and the sitemap checker go through grichard.eu, which queries the given site without keeping anything.',
     schemaName: 'Tools for IT technicians',
+    groupsLabel: 'Tool categories',
   },
 };
+
+/** Catégories de la page « Outils » : chaque outil du registre figure dans un seul groupe (vérifié par tests/unit/tool-groups.test.ts). */
+export const TOOL_GROUPS = [
+  {
+    id: 'dns-email',
+    tools: ['dns', 'propagation', 'email-headers'],
+    fr: {
+      title: 'DNS et messagerie',
+      text: 'Lire une zone, suivre une modification, comprendre pourquoi un e-mail arrive en spam.',
+    },
+    en: {
+      title: 'DNS and email',
+      text: 'Read a zone, follow a change, understand why an email lands in spam.',
+    },
+  },
+  {
+    id: 'web',
+    tools: ['seo', 'sitemap'],
+    fr: {
+      title: 'Sites web et SEO',
+      text: 'Auditer une page ou un sitemap comme le ferait un moteur de recherche.',
+    },
+    en: {
+      title: 'Websites and SEO',
+      text: 'Audit a page or a sitemap the way a search engine would.',
+    },
+  },
+  {
+    id: 'calendars',
+    tools: ['ics-split', 'ics-compare'],
+    fr: {
+      title: 'Calendriers (ICS)',
+      text: 'Découper un export trop lourd pour être importé, vérifier qu’une migration n’a rien perdu.',
+    },
+    en: {
+      title: 'Calendars (ICS)',
+      text: 'Split an export too large to import, check that a migration lost nothing.',
+    },
+  },
+  {
+    id: 'network-data',
+    tools: ['subnet', 'json', 'encoder', 'units', 'password'],
+    fr: {
+      title: 'Réseau, données et sécurité',
+      text: 'Les petits calculs et conversions du quotidien : sous-réseaux, JSON, encodages, unités, mots de passe.',
+    },
+    en: {
+      title: 'Networking, data and security',
+      text: 'Everyday calculations and conversions: subnets, JSON, encodings, units, passwords.',
+    },
+  },
+] as const;

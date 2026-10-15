@@ -34,14 +34,19 @@ const CATEGORIES = {
 const esc = (s) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-/** Champs du front matter (les valeurs textuelles sont des chaînes JSON entre guillemets, voir content.config.ts). */
+/** Champs du front matter (valeurs simples, ou chaînes YAML entre guillemets doubles ou simples). */
 function frontMatter(text) {
   const block = text.replace(/\r\n/g, '\n').match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
   const fields = {};
   for (const line of block.split('\n')) {
     const i = line.indexOf(':');
     const value = line.slice(i + 1).trim();
-    fields[line.slice(0, i).trim()] = value.startsWith('"') ? JSON.parse(value) : value;
+    // Chaîne YAML entre guillemets doubles (JSON) ou simples ('' vaut une apostrophe) : sans ce traitement, les guillemets apparaissaient dans l'image.
+    fields[line.slice(0, i).trim()] = value.startsWith('"')
+      ? JSON.parse(value)
+      : /^'.*'$/.test(value)
+        ? value.slice(1, -1).replace(/''/g, "'")
+        : value;
   }
   return fields;
 }
@@ -73,24 +78,24 @@ const html = ({ title, kicker, lang }, fonts) => `<!doctype html>
   @font-face { font-family: 'Fraunces Variable'; font-weight: 100 900; src: url(${fonts.fraunces}) format('woff2-variations'); }
   @font-face { font-family: 'JetBrains Mono Variable'; font-weight: 100 800; src: url(${fonts.mono}) format('woff2-variations'); }
   * { box-sizing: border-box; margin: 0; }
-  /* Couleurs du thème sombre de packages/ui/src/tokens.css */
-  body { width: ${SIZE.width}px; height: ${SIZE.height}px; overflow: hidden; background: #130f16; color: #fcf5f0; position: relative;
+  /* Couleurs du thème sombre de packages/ui/src/tokens.css (fiche technique : graphite, voyant ambre, trame de points) */
+  body { width: ${SIZE.width}px; height: ${SIZE.height}px; overflow: hidden; background: #0f1113; color: #f3f0e7; position: relative;
     font-family: 'Inter Variable', system-ui, sans-serif; }
-  .glow { position: absolute; inset: 0; background:
-    radial-gradient(60% 70% at 8% 0%, rgb(255 146 112 / .22), transparent 70%),
-    radial-gradient(50% 60% at 100% 100%, rgb(196 161 255 / .18), transparent 70%); }
-  .grid { position: absolute; inset: 0; background-image: linear-gradient(#3a2d42 1px, transparent 1px), linear-gradient(90deg, #3a2d42 1px, transparent 1px);
-    background-size: 56px 56px; -webkit-mask-image: linear-gradient(to bottom, #000, transparent 80%); opacity: .55; }
+  .grid { position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, #4a535b 1.5px, transparent 0);
+    background-size: 36px 36px; -webkit-mask-image: linear-gradient(to bottom, #000, transparent 85%); opacity: .7; }
+  .rule { position: absolute; left: 76px; right: 76px; top: 140px; height: 10px; border-top: 1px solid #7d8790;
+    background: repeating-linear-gradient(90deg, #7d8790 0 1px, transparent 1px 36px) top / 100% 7px no-repeat; }
   .frame { position: absolute; inset: 0; padding: 64px 76px; display: flex; flex-direction: column; justify-content: space-between; }
   .brand { font: 700 40px 'Fraunces Variable', Georgia, serif; letter-spacing: -.01em; }
-  .brand b { color: #ff9270; font-weight: 700; }
-  .kicker { color: #ff9270; font: 600 26px 'JetBrains Mono Variable', ui-monospace, monospace; margin-bottom: 22px; text-transform: lowercase; }
-  h1 { font: 650 ${titleSize(title)}px/1.08 'Fraunces Variable', Georgia, serif; letter-spacing: -.02em; max-width: 1020px;
+  .brand::before { content: ''; display: inline-block; width: 18px; height: 18px; margin-right: 16px; background: #f5a524; }
+  .brand b { color: #f5a524; font-weight: 700; }
+  .kicker { color: #f5a524; font: 500 24px 'JetBrains Mono Variable', ui-monospace, monospace; margin-bottom: 24px; text-transform: uppercase; letter-spacing: .08em; }
+  h1 { font: 580 ${titleSize(title)}px/1.04 'Fraunces Variable', Georgia, serif; letter-spacing: -.035em; max-width: 1020px;
     display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-  .bar { height: 6px; width: 160px; border-radius: 6px; background: linear-gradient(90deg, #ff9270, #c4a1ff); }
+  .bar { height: 8px; width: 160px; background: #f5a524; }
 </style></head><body>
-  <div class="glow"></div>
   <div class="grid"></div>
+  <div class="rule"></div>
   <div class="frame">
     <div class="brand">grichard<b>.eu</b></div>
     <div><p class="kicker">${esc(kicker)}</p><h1>${esc(title)}</h1></div>
@@ -142,7 +147,9 @@ async function ogImages() {
 
   const files = await readdir(join(DIST, '_astro'));
   const font = (name) => {
-    const file = files.find((f) => new RegExp(`^${name}-latin-wght-normal\\..*\\.woff2$`).test(f));
+    const file = files.find((f) =>
+      new RegExp(`^${name}-latin-(?:wght|opsz)-normal\\..*\\.woff2$`).test(f),
+    );
     return file ? `./_astro/${file}` : '';
   };
   const fonts = { inter: font('inter'), fraunces: font('fraunces'), mono: font('jetbrains-mono') };

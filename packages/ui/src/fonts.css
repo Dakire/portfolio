@@ -1,4 +1,4 @@
-/* Polices auto-hébergées (Inter pour le texte, Fraunces pour les titres, JetBrains Mono pour le code), licence OFL.
+/* Polices auto-hébergées (Inter pour le texte, Fraunces pour les titres, avec son axe de taille optique (opsz) : les grands titres prennent la coupe « display », JetBrains Mono pour le code), licence OFL.
  * Seuls les jeux latin et latin-ext sont embarqués ; le navigateur ne télécharge que ceux dont il a besoin (unicode-range). */
 
 @font-face {
@@ -56,7 +56,7 @@
   font-style: normal;
   font-display: swap;
   font-weight: 100 900;
-  src: url(../node_modules/@fontsource-variable/fraunces/files/fraunces-latin-ext-wght-normal.woff2)
+  src: url(../node_modules/@fontsource-variable/fraunces/files/fraunces-latin-ext-opsz-normal.woff2)
     format('woff2-variations');
   unicode-range:
     U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
@@ -69,7 +69,7 @@
   font-style: normal;
   font-display: swap;
   font-weight: 100 900;
-  src: url(../node_modules/@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2)
+  src: url(../node_modules/@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2)
     format('woff2-variations');
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,

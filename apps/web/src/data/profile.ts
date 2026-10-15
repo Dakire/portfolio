@@ -34,6 +34,8 @@ export interface Project {
   href?: string;
   /** Affiché sur l'accueil. */
   featured?: boolean;
+  /** Nature du projet, affichée seulement si elle est renseignée (à compléter par Guillaume, ne rien deviner). */
+  kind?: 'perso' | 'pro';
   /** Blocs facultatifs de la page de détail : tant qu'ils sont absents, rien n'est affiché. À remplir par Guillaume. */
   context?: string;
   role?: string;
@@ -209,6 +211,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
       {
         slug: 'homelab-proxmox',
         skill: 'network',
+        kind: 'perso',
         featured: true,
         title: 'Homelab Proxmox, OPNsense et WireGuard',
         desc: 'Un laboratoire personnel sous Proxmox pour tester configurations et services avant de les déployer : pare-feu OPNsense, VPN WireGuard, réseau segmenté et machines virtuelles de test.',
@@ -409,6 +412,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
       {
         slug: 'homelab-proxmox',
         skill: 'network',
+        kind: 'perso',
         featured: true,
         title: 'Proxmox, OPNsense and WireGuard homelab',
         desc: 'A personal lab on Proxmox to test configurations and services before deploying them: OPNsense firewall, WireGuard VPN, a segmented network and test virtual machines.',

@@ -1,10 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
 import ToolCards from '../components/ToolCards.astro';
 import '../styles/tools.css';
 import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
-import { HUB } from '../tools/hub';
+import { HUB, TOOL_GROUPS } from '../tools/hub';
 import { TOOLS, toolPath, toolUi } from '../tools/registry';
 import { breadcrumbLd } from '../lib/seo';
 
@@ -44,7 +45,29 @@ const ld = {
 >
   <PageHero path="~/tools" title={hub.h1} lead={hub.intro} />
   <div class="container section stack-lg">
-    <ToolCards lang={lang} />
+    <nav class="tool-groups-nav" aria-label={hub.groupsLabel}>
+      <ul role="list">
+        {TOOL_GROUPS.map((group, i) => (
+          <li>
+            <a href={`#${group.id}`}>
+              <span class="label" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              {group[lang].title}
+              <span class="tool-groups-count">{group.tools.length}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    {TOOL_GROUPS.map((group, i) => (
+      <section class="tool-group" id={group.id} aria-labelledby={`${group.id}-title`}>
+        <SectionHead id={`${group.id}-title`} index={i + 1} title={group[lang].title} />
+        <p class="section-intro">{group[lang].text}</p>
+        <ToolCards lang={lang} headingLevel={3} ids={group.tools} />
+      </section>
+    ))}
 
     <section class="tool-section" aria-labelledby="privacy-title">
       <h2 id="privacy-title">{hub.privacyTitle}</h2>

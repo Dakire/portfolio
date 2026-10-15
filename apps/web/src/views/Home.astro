@@ -1,19 +1,21 @@
 ---
 import Button from '@grichard/ui/components/Button.astro';
-import Card from '@grichard/ui/components/Card.astro';
 import CtaBand from '@grichard/ui/components/CtaBand.astro';
+import Tag from '@grichard/ui/components/Tag.astro';
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
-import ProjectCards from '../components/ProjectCards.astro';
-import SkillCards from '../components/SkillCards.astro';
+import SectionHead from '../components/SectionHead.astro';
 import Terminal from '../components/Terminal.astro';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
 import { SITE_TEXT } from '../data/site-text';
 import { getPosts } from '../lib/blog';
 import { withBase } from '../lib/base';
-import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
+import { ROUTES, projectPath, routeAlternates, type Lang } from '../lib/i18n';
 import { homeLd } from '../lib/seo';
 import { resourceLinks } from '../lib/sections';
+import { refsFor } from '../reference/refs';
+import { TOOL_ICONS } from '../tools/icons';
+import { TOOLS, findTool, toolPath, toolUi } from '../tools/registry';
 
 interface Props {
   lang: Lang;
@@ -22,17 +24,41 @@ const { lang } = Astro.props;
 const t = PORTFOLIO_DATA[lang];
 const text = SITE_TEXT[lang];
 const routes = ROUTES[lang];
-const [latest] = await getPosts(lang);
+const posts = await getPosts(lang);
+const [latest] = posts;
 const featured = t.projects.filter((p) => p.featured);
-const links = resourceLinks(lang);
-const resourceCards = [
-  { key: 'blog', title: t.nav.blog, text: text.resources.blogText },
-  { key: 'tools', title: t.nav.tools, text: text.resources.toolsText },
-  { key: 'cheatsheets', title: t.nav.cheatsheets, text: text.resources.cheatsheetsText },
-].flatMap((card) => {
-  const link = links.find((l) => l.key === card.key);
-  return link ? [{ ...card, href: link.href }] : [];
-});
+const skillName = (id: string) => t.skills.find((s) => s.id === id)?.category ?? '';
+const cheatsheets = resourceLinks(lang).find((l) => l.key === 'cheatsheets');
+
+// Sommaire du site : les nombres sont comptés, jamais saisis à la main.
+const index = [
+  {
+    href: routes.projects,
+    name: t.nav.projects,
+    count: t.projects.length,
+    desc: text.home.index.projects,
+  },
+  { href: routes.tools, name: t.nav.tools, count: TOOLS.length, desc: text.home.index.tools },
+  ...(cheatsheets
+    ? [
+        {
+          href: cheatsheets.href,
+          name: t.nav.cheatsheets,
+          count: refsFor(lang).length,
+          desc: text.home.index.cheatsheets,
+        },
+      ]
+    : []),
+  { href: routes.blog, name: t.nav.blog, count: posts.length, desc: text.home.index.posts },
+];
+
+// Outils mis en avant : ceux qui répondent aux questions les plus fréquentes en support.
+const homeTools = ['dns', 'email-headers', 'propagation', 'seo', 'sitemap', 'subnet'].flatMap(
+  (id) => {
+    const tool = findTool(id);
+    return tool ? [{ ...toolUi(tool, lang), href: toolPath(tool, lang), icon: tool.icon }] : [];
+  },
+);
 ---
 
 <Base
@@ -43,18 +69,27 @@ const resourceCards = [
   alternates={routeAlternates('home')}
   ld={homeLd(lang, t.meta.title, t.hero.role)}
 >
-  <header class="page-hero grid-bg">
+  <header class="hero grid-bg">
     <div class="container hero-grid">
-      <div class="stack">
-        <p class="hero-badge">{PROFILE.location}</p>
+      <div class="hero-copy">
+        <p class="label led hero-kicker">
+          {PROFILE.location}
+          <span class="sep" aria-hidden="true">
+            {' '}
+            /{' '}
+          </span>
+          {t.hero.role}
+        </p>
         <h1 class="hero-title">
-          {t.hero.greeting} <span>{PROFILE.name}</span>
+          {t.hero.greeting} <span class="hero-name">{PROFILE.name}</span>
         </h1>
-        <p class="lead">{t.hero.role}</p>
-        <p class="prose">{t.hero.pitch}</p>
+        <p class="hero-pitch">{t.hero.pitch}</p>
         <p class="row">
           <Button variant="primary" href={routes.projects}>
-            {t.hero.projectsBtn}
+            {t.hero.projectsBtn}{' '}
+            <span class="arrow" aria-hidden="true">
+              →
+            </span>
           </Button>
           <Button href={routes.contact}>{t.hero.contactBtn}</Button>
           <Button variant="ghost" href={withBase(t.hero.cvLink)}>
@@ -64,69 +99,157 @@ const resourceCards = [
       </div>
       <Terminal lang={lang} />
     </div>
+
+    <nav class="container site-index" aria-label={text.home.indexLabel}>
+      <ul role="list">
+        {index.map((item) => (
+          <li>
+            <a href={item.href}>
+              <span class="site-index-count">{item.count}</span>
+              <span class="site-index-name">
+                {item.name} <span aria-hidden="true">→</span>
+              </span>
+              <span class="site-index-desc">{item.desc}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
   </header>
 
   <div class="container sections">
-    <section id="skills" aria-labelledby="skills-title" class="stack">
-      <h2 id="skills-title">{t.skillsTitle}</h2>
-      <SkillCards skills={t.skills} compact={{ href: routes.skills }} />
-      <p>
-        <a href={routes.skills}>{text.home.skillsMore} →</a>
-      </p>
-    </section>
-
-    <section id="projects" aria-labelledby="projects-title" class="stack">
-      <h2 id="projects-title">{text.home.featuredTitle}</h2>
-      <ProjectCards items={featured} lang={lang} level={3} />
-      <p>
-        <a href={routes.projects}>{t.projectsAll} →</a>
-      </p>
-    </section>
-
-    <section id="career" aria-labelledby="career-title" class="stack">
-      <h2 id="career-title">{text.home.careerTitle}</h2>
-      <p class="prose">{text.home.careerIntro}</p>
-      <ol class="career-glance">
-        {t.experiences.map((job) => (
+    <section aria-labelledby="skills-title">
+      <SectionHead
+        id="skills-title"
+        index={1}
+        title={t.skillsTitle}
+        more={{ href: routes.skills, label: text.home.skillsMore }}
+      />
+      <ol class="ports" role="list">
+        {t.skills.map((skill, i) => (
           <li>
-            <span class="career-role">{job.role}</span>
-            <span class="meta">
-              {job.company} · {job.date}
-            </span>
+            <a href={`${routes.skills}#${skill.id}`}>
+              <span class="port-id" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span class="port-body">
+                <span class="port-name">{skill.category}</span>
+                <span class="port-desc">{skill.short}</span>
+              </span>
+            </a>
           </li>
         ))}
       </ol>
-      <p>
-        <a href={routes.career}>{text.home.careerMore} →</a>
-      </p>
     </section>
 
-    <section id="resources" aria-labelledby="resources-title" class="stack">
-      <h2 id="resources-title">{text.home.resourcesTitle}</h2>
-      <p class="prose">{text.home.resourcesIntro}</p>
-      <div class="cards cards-wide">
-        {resourceCards.map((card) => (
-          <Card class="card-stretch">
+    <section aria-labelledby="projects-title">
+      <SectionHead
+        id="projects-title"
+        index={2}
+        title={text.home.featuredTitle}
+        more={{ href: routes.projects, label: t.projectsAll }}
+      />
+      <ul class="feature-grid" role="list">
+        {featured.map((project) => (
+          <li class="card card-stretch feature">
+            <p class="label">
+              {skillName(project.skill)}
+              {project.kind && <> · {text.project.kinds[project.kind]}</>}
+            </p>
             <h3>
-              <a class="card-link" href={card.href}>
-                {card.title}
+              <a class="card-link" href={projectPath(lang, project.slug)}>
+                {project.title}
               </a>
             </h3>
-            <p>{card.text}</p>
-          </Card>
+            <p>{project.desc}</p>
+            <p class="row tags">
+              {project.tags.map((tag) => (
+                <Tag>{tag}</Tag>
+              ))}
+            </p>
+          </li>
         ))}
-      </div>
-      {latest && (
-        <div class="stack">
-          <h3>{t.blog.title}</h3>
-          <div class="cards cards-wide">
+      </ul>
+    </section>
+
+    <section aria-labelledby="tools-title">
+      <SectionHead
+        id="tools-title"
+        index={3}
+        title={text.home.toolsTitle}
+        more={{
+          href: routes.tools,
+          label: text.home.toolsMore.replace('{n}', String(TOOLS.length)),
+        }}
+      />
+      <p class="section-intro">{text.home.toolsIntro}</p>
+      <ul class="tool-rows" role="list">
+        {homeTools.map((tool) => {
+          const Icon = TOOL_ICONS[tool.icon];
+          return (
+            <li>
+              <a href={tool.href}>
+                <Icon size={22} class="tool-row-icon" aria-hidden="true" />
+                <span class="tool-row-name">{tool.name}</span>
+                <span class="tool-row-desc">{tool.card}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+
+    <section aria-labelledby="career-title">
+      <SectionHead
+        id="career-title"
+        index={4}
+        title={text.home.careerTitle}
+        more={{ href: routes.career, label: text.home.careerMore }}
+      />
+      <ol class="log" role="list">
+        {t.experiences.map((job) => (
+          <li>
+            <span class="log-date">{job.date}</span>
+            <span class="log-role">{job.role}</span>
+            <span class="log-org">{job.company}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section aria-labelledby="resources-title">
+      <SectionHead
+        id="resources-title"
+        index={5}
+        title={text.home.resourcesTitle}
+        more={{ href: routes.resources, label: text.resources.title }}
+      />
+      <p class="section-intro">{text.home.resourcesIntro}</p>
+      <div class="resources-split">
+        {latest && (
+          <div class="stack">
+            <p class="label">{t.blog.title}</p>
             <PostCard post={latest} minLabel={t.blog.min} />
           </div>
-        </div>
-      )}
-      <p>
-        <a href={routes.resources}>{text.resources.title} →</a>
-      </p>
+        )}
+        {cheatsheets && (
+          <div class="stack">
+            <p class="label">{t.nav.cheatsheets}</p>
+            <a class="card cheat-card" href={cheatsheets.href}>
+              <span class="cheat-prompt" aria-hidden="true">
+                $ grep -i gpupdate ~/cheatsheets
+              </span>
+              <span class="cheat-text">{text.resources.cheatsheetsText}</span>
+              <span class="more-link">
+                {t.nav.cheatsheets}{' '}
+                <span class="arrow" aria-hidden="true">
+                  →
+                </span>
+              </span>
+            </a>
+          </div>
+        )}
+      </div>
     </section>
 
     <section id="contact" aria-labelledby="contact-title">
@@ -137,7 +260,10 @@ const resourceCards = [
         </p>
         <Fragment slot="actions">
           <Button variant="primary" href={routes.contact}>
-            {t.hero.contactBtn}
+            {t.hero.contactBtn}{' '}
+            <span class="arrow" aria-hidden="true">
+              →
+            </span>
           </Button>
           <Button href={withBase(t.hero.cvLink)}>{t.hero.cvBtn}</Button>
         </Fragment>

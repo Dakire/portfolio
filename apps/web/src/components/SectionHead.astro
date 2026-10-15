@@ -1,0 +1,29 @@
+---
+// En-tête de section « fiche technique » : numéro (décoratif), titre, filet gradué et lien « tout voir » facultatif.
+// Le numéro est masqué aux lecteurs d'écran : il ne fait que rythmer la page.
+interface Props {
+  id: string;
+  /** Numéro de section, affiché sur deux chiffres. */
+  index: number;
+  title: string;
+  more?: { href: string; label: string };
+}
+const { id, index, title, more } = Astro.props;
+---
+
+<div class="section-head">
+  <span class="section-index label" aria-hidden="true">
+    {String(index).padStart(2, '0')}
+  </span>
+  <h2 id={id}>{title}</h2>
+  <span class="section-rule" aria-hidden="true"></span>
+  {more && (
+    <a class="more-link" href={more.href}>
+      {more.label}{' '}
+      <span class="arrow" aria-hidden="true">
+        →
+      </span>
+    </a>
+  )}
+</div>
+<slot />

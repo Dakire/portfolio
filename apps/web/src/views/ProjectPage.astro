@@ -71,6 +71,12 @@ const hasBlocks = Boolean(
             ))}
           </dd>
         </div>
+        {project.kind && (
+          <div>
+            <dt>{text.project.kind}</dt>
+            <dd>{text.project.kinds[project.kind]}</dd>
+          </div>
+        )}
         {domain && (
           <div>
             <dt>{text.project.domain}</dt>
