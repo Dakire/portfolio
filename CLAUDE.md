@@ -14,26 +14,27 @@ Ne jamais introduire de dépendance d'exécution Node, ni d'appel à un service 
 
 ## Commandes (racine)
 
-| Besoin                            | Commande                                                                                          |
-| --------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Installer                         | `pnpm install` (installe aussi les hooks)                                                         |
-| Formater / vérifier               | `pnpm format` / `pnpm format:check`                                                               |
-| **Tout vérifier avant un push**   | `pnpm verify` (mêmes contrôles que la CI, PHP compris ; `--no-e2e` pour aller plus vite)          |
-| Site actuel : build               | `pnpm legacy:build`                                                                               |
-| Site actuel : lint+tests+e2e      | `pnpm legacy:check`                                                                               |
-| Contrat des 70 URL publiques      | `pnpm test:contract` (après un build complet)                                                     |
-| Contrat sur le site en ligne      | `CONTRACT_BASE_URL=https://grichard.eu pnpm test:contract`                                        |
-| Audit des dépendances             | `pnpm audit:prod`                                                                                 |
-| Site (Astro) : dev                | `pnpm --filter @grichard/web dev` (page de style : `/design/`)                                    |
-| Site : build / types / lint       | `pnpm --filter @grichard/web build` / `check` / `lint`                                            |
-| Site : e2e + axe                  | `pnpm --filter @grichard/web test:e2e`                                                            |
-| Design system : tests             | `pnpm --filter @grichard/ui test`                                                                 |
-| API PHP : installer               | `cd apps/api && composer install`                                                                 |
-| API PHP : tests / style / analyse | `composer test` / `composer cs` / `composer stan` (dans `apps/api`)                               |
-| Références : régénérer les index  | `pnpm --filter @grichard/web reference:build` (GAM : `reference:gam` ; liens : `reference:links`) |
-| Contrat sur le nouveau site       | `CONTRACT_DIST=apps/web/dist pnpm test:contract` (après `pnpm --filter @grichard/web build`)      |
+| Besoin                             | Commande                                                                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Installer                          | `pnpm install` (installe aussi les hooks)                                                         |
+| Formater / vérifier                | `pnpm format` / `pnpm format:check`                                                               |
+| **Tout vérifier avant un push**    | `pnpm verify` (mêmes contrôles que la CI, PHP compris ; `--no-e2e` pour aller plus vite)          |
+| Site actuel : build                | `pnpm legacy:build`                                                                               |
+| Site actuel : lint+tests+e2e       | `pnpm legacy:check`                                                                               |
+| Contrat des 70 URL publiques       | `pnpm test:contract` (après un build complet)                                                     |
+| Contrat sur le site en ligne       | `CONTRACT_BASE_URL=https://grichard.eu pnpm test:contract`                                        |
+| Audit des dépendances              | `pnpm audit:prod`                                                                                 |
+| Site (Astro) : dev                 | `pnpm --filter @grichard/web dev` (page de style : `/design/`)                                    |
+| Site : build / types / lint        | `pnpm --filter @grichard/web build` / `check` / `lint`                                            |
+| Site : e2e + axe                   | `pnpm --filter @grichard/web test:e2e`                                                            |
+| Design system : tests              | `pnpm --filter @grichard/ui test`                                                                 |
+| API PHP : installer                | `cd apps/api && composer install`                                                                 |
+| API PHP : tests / style / analyse  | `composer test` / `composer cs` / `composer stan` (dans `apps/api`)                               |
+| Références : régénérer les index   | `pnpm --filter @grichard/web reference:build` (GAM : `reference:gam` ; liens : `reference:links`) |
+| Contrat sur le nouveau site        | `CONTRACT_DIST=apps/web/dist pnpm test:contract` (après `pnpm --filter @grichard/web build`)      |
+| Sitemap en ligne (GET, chaque URL) | `pnpm --filter @grichard/web sitemap:check` (référence : `/sitemap.xml`, voir docs/seo.md)        |
 
-Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. Portail Symfony (`apps/portal`, voir [docs/portail.md](docs/portail.md)) : `composer install`, `composer test|cs|stan` dans `apps/portal`. Déploiement : [docs/deploiement.md](docs/deploiement.md) (production automatique après CI verte sur `main` ; à la main : retour arrière, portail).
+Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. `/sitemap.xml` (liste d'URL, référence déclarée dans `robots.txt`) est produit par `postbuild.mjs` : voir [docs/seo.md](docs/seo.md). Identité visuelle : [ADR 0010](docs/adr/0010-identite-fiche-technique.md). Portail Symfony (`apps/portal`, voir [docs/portail.md](docs/portail.md)) : `composer install`, `composer test|cs|stan` dans `apps/portal`. Déploiement : [docs/deploiement.md](docs/deploiement.md) (production automatique après CI verte sur `main` ; à la main : retour arrière, portail).
 
 ## Architecture cible
 
