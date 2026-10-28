@@ -2,6 +2,7 @@
 title: 'Fin de Windows 10 : préparer le passage à Windows 11'
 description: 'Prérequis matériels, inventaire du parc, mises à jour de sécurité étendues (ESU), cycle de vie de Windows 11 et plan de migration pour une PME.'
 date: 2026-10-03
+updated: 2026-10-28
 category: poste-de-travail
 tags: ['Windows 11', 'Windows 10']
 ---
@@ -43,7 +44,7 @@ L'application **Bilan de santé du PC** de Microsoft donne aussi un verdict de c
 Microsoft propose des **mises à jour de sécurité étendues (ESU)** pour Windows 10 version 22H2. Elles ne contiennent que des correctifs de sécurité critiques et importants, sans nouveautés ni support général.
 
 - **Entreprises et organismes de formation** : jusqu'à **3 ans** de couverture, soit jusqu'en octobre 2028. Le tarif annoncé est de **61 $ par appareil la première année, puis il double chaque année** (122 $, puis 244 $). L'ESU est incluse sans surcoût pour les postes Windows 10 hébergés sur Windows 365 ou Azure Virtual Desktop.
-- **Particuliers** : une seule année, qui se termine le **13 octobre 2026**. Dans l'Espace économique européen (France comprise), l'inscription est gratuite avec un compte Microsoft. Ailleurs, elle passe par la sauvegarde Windows, 1 000 points Microsoft Rewards ou un paiement de 30 $.
+- **Particuliers** : Microsoft a **prolongé la couverture jusqu'au 12 octobre 2027** (elle devait s'arrêter le 13 octobre 2026). Il faut s'inscrire en se connectant avec un **compte Microsoft** (compte administrateur, pas un compte enfant), sur un poste en Windows 10 22H2 Famille, Pro, Éducation Pro ou Workstations, à jour. Les options annoncées : synchroniser ses paramètres avec la sauvegarde Windows (sans frais), échanger 1 000 points Microsoft Rewards, ou payer 30 $ une fois (une licence couvre jusqu'à 10 appareils). Les personnes déjà inscrites sont couvertes automatiquement jusqu'à la nouvelle date. Pour l'Espace économique européen (France comprise), Microsoft indique seulement que les modalités et le calendrier d'inscription peuvent varier : une inscription gratuite avec compte Microsoft y avait été annoncée, à vérifier sur la page de Microsoft au moment de vous inscrire.
 
 Les montants et conditions peuvent évoluer : vérifiez la **page officielle de Microsoft** avant de décider. L'ESU est une solution d'attente, pas une stratégie : elle coûte, et son prix double chaque année pour les entreprises.
 
@@ -94,4 +95,6 @@ Le plus tôt est le mieux : une migration planifiée coûte presque toujours moi
 - [Microsoft : cycle de vie de Windows 11 Famille et Pro](https://learn.microsoft.com/en-us/lifecycle/products/windows-11-home-and-pro)
 - [Microsoft : configuration requise de Windows 11](https://www.microsoft.com/fr-fr/windows/windows-11-specifications)
 - [Petri : fin de support de Microsoft Deployment Toolkit](https://petri.com/microsoft-deployment-toolkit-end-of-support/)
+- [Microsoft : programme ESU pour les particuliers (Windows 10)](https://www.microsoft.com/windows/extended-security-updates) (couverture jusqu'au 12 octobre 2027, compte Microsoft requis)
+- [Microsoft : fin de support de Windows 10](https://www.microsoft.com/en-us/windows/end-of-support)
 - [Redmond Magazine : tarifs des mises à jour de sécurité étendues (ESU) pour Windows 10](https://redmondmag.com/articles/2024/04/04/microsoft-reveals-pricing-for-windows-10-extended-security-updates.aspx)

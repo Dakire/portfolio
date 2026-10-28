@@ -2,6 +2,7 @@
 title: 'Windows 10 End of Support: Planning the Move to Windows 11'
 description: 'Hardware requirements, fleet inventory, Extended Security Updates (ESU), Windows 11 lifecycle and a migration plan for a small business.'
 date: 2026-10-03
+updated: 2026-10-28
 translationOf: 'fin-support-windows-10-passer-a-windows-11'
 category: poste-de-travail
 tags: ['Windows 11', 'Windows 10']
@@ -44,7 +45,7 @@ Microsoft's **PC Health Check** app also gives a compatibility verdict computer 
 Microsoft offers **Extended Security Updates (ESU)** for Windows 10 version 22H2. They contain only critical and important security fixes, with no new features and no general support.
 
 - **Businesses and education organizations**: up to **3 years** of coverage, i.e. until October 2028. The announced price is **$61 per device for the first year, then it doubles each year** ($122, then $244). ESU is included at no extra cost for Windows 10 machines hosted on Windows 365 or Azure Virtual Desktop.
-- **Individuals**: a single year, ending on **13 October 2026**. In the European Economic Area (France included), enrollment is free with a Microsoft account. Elsewhere, it requires Windows Backup sync, 1,000 Microsoft Rewards points or a one-time $30 payment.
+- **Individuals**: Microsoft has **extended coverage to 12 October 2027** (it was due to stop on 13 October 2026). You enroll by signing in with a **Microsoft account** (an administrator account, not a child account), on a Windows 10 22H2 Home, Pro, Pro Education or Workstations PC that is up to date. The announced options: sync your settings with Windows Backup (no cost), redeem 1,000 Microsoft Rewards points, or pay $30 once (one license covers up to 10 devices). People already enrolled are covered automatically until the new date. For the European Economic Area (France included), Microsoft only says that enrollment options and timing may vary: free enrollment with a Microsoft account had been announced there, so check Microsoft's page when you enroll.
 
 Amounts and conditions may change: check **Microsoft's official page** before deciding. ESU is a stopgap, not a strategy: it costs money, and for businesses its price doubles every year.
 
@@ -95,4 +96,6 @@ The sooner the better: a planned migration almost always costs less than an emer
 - [Microsoft: Windows 11 Home and Pro lifecycle](https://learn.microsoft.com/en-us/lifecycle/products/windows-11-home-and-pro)
 - [Microsoft: Windows 11 specifications and system requirements](https://www.microsoft.com/en-us/windows/windows-11-specifications)
 - [Petri: Microsoft Deployment Toolkit reaches end of support](https://petri.com/microsoft-deployment-toolkit-end-of-support/)
+- [Microsoft: consumer Extended Security Updates (ESU) program for Windows 10](https://www.microsoft.com/windows/extended-security-updates) (coverage until 12 October 2027, Microsoft account required)
+- [Microsoft: end of support for Windows 10](https://www.microsoft.com/en-us/windows/end-of-support)
 - [Redmond Magazine: Windows 10 Extended Security Updates pricing](https://redmondmag.com/articles/2024/04/04/microsoft-reveals-pricing-for-windows-10-extended-security-updates.aspx)
