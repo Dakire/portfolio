@@ -1,9 +1,13 @@
 ---
 import { render } from 'astro:content';
+import Button from '@grichard/ui/components/Button.astro';
+import CtaBand from '@grichard/ui/components/CtaBand.astro';
 import Tag from '@grichard/ui/components/Tag.astro';
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
+import { POST_RELATED, hasRelated, resolveRelated } from '../data/related';
+import { SITE_TEXT } from '../data/site-text';
 import {
   CATEGORIES,
   categoryPath,
@@ -35,9 +39,25 @@ const alternates: Partial<Alternates> = {
   [lang]: path,
   ...(translation ? { [translation.lang]: postPath(translation.lang, translation.slug) } : {}),
 };
-const related = (await getPosts(lang))
-  .filter((p) => p.slug !== post.slug && p.data.category === post.data.category)
-  .slice(0, 2);
+// Suites de lecture : même catégorie d'abord, puis tags en commun, puis les plus récents (3 au plus), pour qu'aucun article ne finisse sans suite.
+const others = (await getPosts(lang)).filter((p) => p.slug !== post.slug);
+const sharedTags = (p: Post) => p.data.tags.filter((tag) => post.data.tags.includes(tag)).length;
+const related = [
+  ...others.filter((p) => p.data.category === post.data.category),
+  ...others
+    .filter((p) => p.data.category !== post.data.category && sharedTags(p) > 0)
+    .sort((a, b) => sharedTags(b) - sharedTags(a)),
+  ...others.filter((p) => p.data.category !== post.data.category && sharedTags(p) === 0),
+].slice(0, 3);
+const frSlug = lang === 'fr' ? post.slug : (post.data.translationOf ?? '');
+const further = await resolveRelated(lang, POST_RELATED[frSlug]);
+const furtherLinks = [...further.tools, ...further.refs];
+const contactBand = SITE_TEXT[lang].contactBand;
+// Titre de l'onglet : le suffixe de marque n'est ajouté que s'il tient dans ~65 caractères (au-delà, les résultats de recherche le tronquent).
+const pageTitle =
+  post.data.title.length + PROFILE.name.length + 3 <= 65
+    ? `${post.data.title} | ${PROFILE.name}`
+    : post.data.title;
 const image = {
   url: `${SITE}${withBase(`/og/${post.slug}.png`)}`,
   width: 1200,
@@ -53,7 +73,7 @@ const crumbs = [
 
 <Base
   lang={lang}
-  title={`${post.data.title} | ${PROFILE.name}`}
+  title={pageTitle}
   description={post.data.description}
   path={path}
   alternates={alternates}
@@ -151,6 +171,19 @@ const crumbs = [
       </footer>
     </article>
 
+    {hasRelated(further) && (
+      <section class="stack related" aria-labelledby="further-title">
+        <h2 id="further-title">{lang === 'fr' ? 'Pour aller plus loin' : 'Go further'}</h2>
+        <ul role="list">
+          {furtherLinks.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
     {related.length > 0 && (
       <section class="stack related" aria-labelledby="related-title">
         <h2 id="related-title">{t.related}</h2>
@@ -161,5 +194,14 @@ const crumbs = [
         </div>
       </section>
     )}
+
+    <CtaBand title={contactBand.title}>
+      <p>{contactBand.text}</p>
+      <Fragment slot="actions">
+        <Button variant="primary" href={ROUTES[lang].contact}>
+          {PORTFOLIO_DATA[lang].hero.contactBtn}
+        </Button>
+      </Fragment>
+    </CtaBand>
   </div>
 </Base>

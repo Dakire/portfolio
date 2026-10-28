@@ -730,6 +730,14 @@ html[data-terminal-max] {
   .toc {
     position: sticky;
     top: 6rem;
+    max-height: calc(100dvh - 8rem);
+    overflow-y: auto;
+  }
+}
+@media (max-width: 63.999rem) {
+  /* En une colonne (mobile, tablette), le sommaire passe avant le texte : en fin d'article il ne sert plus. */
+  .toc {
+    order: -1;
   }
 }
 .toc {

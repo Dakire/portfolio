@@ -98,6 +98,27 @@ export const REF_RELATED: Record<string, Related> = {
   'evenements-windows': { refs: ['active-directory', 'windows-11'] },
 };
 
+/** Article (slug français) -> outils et cheatsheets à proposer en fin d'article (le sens inverse de `tools` et `refs` ci-dessus). */
+export const POST_RELATED: Record<string, Related> = {
+  'spf-dkim-dmarc-expliques': { tools: ['dns', 'email-headers'] },
+  'diagnostic-dns-dig-nslookup-propagation-ttl': {
+    tools: ['dns', 'propagation'],
+    refs: ['reseau'],
+  },
+  'delivrabilite-diagnostiquer-mails-spam-rejetes': { tools: ['email-headers', 'dns'] },
+  'migration-messagerie-google-workspace-microsoft-365': {
+    tools: ['dns', 'propagation'],
+    refs: ['powershell-m365', 'gam'],
+  },
+  'securiser-microsoft-365-google-workspace-reglages-de-base': {
+    tools: ['password'],
+    refs: ['powershell-m365', 'gam'],
+  },
+  'fin-support-windows-10-passer-a-windows-11': { refs: ['windows-11', 'bios-uefi'] },
+  'faille-uefi-pxe-edk2-cve-2026-97631': { refs: ['bios-uefi', 'windows-11'] },
+  'cyberattaque-frigos-supermarches-controleurs-froid': { tools: ['subnet'], refs: ['reseau'] },
+};
+
 /** Cheatsheet -> réalisations où ces commandes servent. */
 export const REF_PROJECTS: Record<string, string[]> = {
   gam: ['migrations-messagerie', 'automatisation-scripts'],
