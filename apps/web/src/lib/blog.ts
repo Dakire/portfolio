@@ -10,6 +10,7 @@ export const CATEGORIES: Record<string, Record<Lang, string>> = {
   migration: { fr: 'Migration', en: 'Migration' },
   securite: { fr: 'Sécurité', en: 'Security' },
   'poste-de-travail': { fr: 'Poste de travail', en: 'Workstation' },
+  actualites: { fr: 'Actualités', en: 'News' },
 };
 
 const CATEGORY_PATH: Record<Lang, string> = { fr: 'categorie', en: 'category' };

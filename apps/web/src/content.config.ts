@@ -14,7 +14,14 @@ const blog = defineCollection({
     translationOf: z.string().optional(),
     /** Script autonome facultatif chargé par l'article (ex. filtre de tableau). */
     script: z.string().startsWith('/js/').optional(),
-    category: z.enum(['messagerie', 'dns', 'migration', 'securite', 'poste-de-travail']),
+    category: z.enum([
+      'messagerie',
+      'dns',
+      'migration',
+      'securite',
+      'poste-de-travail',
+      'actualites',
+    ]),
     tags: z.array(z.string()).min(1).max(6),
   }),
 });

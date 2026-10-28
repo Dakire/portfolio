@@ -21,6 +21,7 @@ const CATEGORIES = {
     migration: 'Migration',
     securite: 'Sécurité',
     'poste-de-travail': 'Poste de travail',
+    actualites: 'Actualités',
   },
   en: {
     messagerie: 'Email',
@@ -28,6 +29,7 @@ const CATEGORIES = {
     migration: 'Migration',
     securite: 'Security',
     'poste-de-travail': 'Workstation',
+    actualites: 'News',
   },
 };
 
