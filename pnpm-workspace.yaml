@@ -4,6 +4,11 @@ packages:
   - apps/*
   - packages/*
 
+# astro > unifont fige undici en 8.11.2, versions touchées par plusieurs avis « high » (GHSA-xjj6-f33q-929c et suivants) :
+# on force une version corrigée (build seulement, aucun impact en production). À retirer quand unifont la reprendra.
+overrides:
+  undici: '>=8.12.2 <9'
+
 # Les scripts d'installation des dépendances ne s'exécutent que pour les paquets listés ici (sécurité de la chaîne d'approvisionnement).
 onlyBuiltDependencies:
   - esbuild
