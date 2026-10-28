@@ -178,9 +178,145 @@
   font-size: var(--text-sm);
 }
 
+/* Recherche globale : bouton de l'en-tête (affiché par /js/search.js) et boîte de dialogue modale */
+.search-open {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--body);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.search-open[hidden] {
+  display: none;
+}
+/* Grand écran : icône seule (la place manque dans l'en-tête) ; le libellé reste lu par les lecteurs d'écran */
+@media (min-width: 76rem) {
+  .search-open {
+    justify-content: center;
+    width: var(--target);
+    padding: 0;
+  }
+  .search-open-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+.search-open:hover {
+  background: var(--raised);
+  color: var(--ink);
+}
+.search {
+  width: min(40rem, calc(100vw - 2rem));
+  max-height: min(34rem, calc(100dvh - 4rem));
+  margin: 8dvh auto auto;
+  padding: var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--body);
+  box-shadow: var(--shadow-lg);
+  overflow-y: auto;
+}
+.search::backdrop {
+  background: color-mix(in srgb, var(--canvas) 72%, transparent);
+}
+.search-bar {
+  display: flex;
+  gap: var(--space-2);
+}
+.search-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: var(--target);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--canvas);
+  color: var(--ink);
+  font: inherit;
+}
+.search-close {
+  min-height: var(--target);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.search-close:hover {
+  background: var(--raised);
+}
+.search-results {
+  margin-top: var(--space-3);
+}
+.search-message {
+  margin: 0;
+  padding: var(--space-3);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+.search-list {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.search-link {
+  display: grid;
+  gap: 0.15rem;
+  min-height: var(--target);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--body);
+  text-decoration: none;
+}
+.search-link:hover,
+.search-link:focus-visible {
+  background: var(--raised);
+}
+.search-title {
+  color: var(--ink);
+  font-weight: 600;
+}
+.search-hint {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
 .section-bar {
   padding-block: var(--space-2);
   border-bottom: 1px solid var(--line);
+}
+
+/* Grand écran : espacements resserrés pour que nom, sept liens, recherche, langue, thème et Contact tiennent sur une seule ligne */
+@media (min-width: 76rem) {
+  .site-header-inner,
+  .site-menu {
+    column-gap: var(--space-4);
+  }
+  .site-nav a {
+    padding-inline: 0.375rem;
+  }
 }
 
 /* Bouton Contact : toujours visible. Petit écran : entre le nom et le bouton Menu ; grand écran : à droite du menu. */
@@ -1076,6 +1212,65 @@ input[data-filter-table]:focus-visible {
 .subnav {
   display: none;
 }
+.sub-toggle {
+  display: none;
+}
+/* Petit écran avec JavaScript : bouton chevron à côté de « Outils », qui déplie les outils par catégorie */
+@media (max-width: 75.99rem) {
+  .js .has-sub {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .js .has-sub > a {
+    flex: 1 1 auto;
+  }
+  .js .sub-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--target);
+    min-height: var(--target);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .js .sub-toggle:hover {
+    background: var(--raised);
+  }
+  .js .sub-toggle::before {
+    content: '';
+    width: 0.55rem;
+    height: 0.55rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform var(--duration) var(--ease);
+  }
+  .js .sub-toggle[aria-expanded='true']::before {
+    transform: translateY(2px) rotate(-135deg);
+  }
+  .js .has-sub[data-sub-open] > .subnav {
+    display: block;
+    flex-basis: 100%;
+    padding: 0 0 var(--space-2) var(--space-4);
+  }
+  .js .subnav-title {
+    margin: var(--space-2) 0 0;
+    padding-inline: var(--space-2);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+  .js .subnav a {
+    font-size: var(--text-sm);
+  }
+}
 @media (min-width: 76rem) {
   .has-sub {
     position: relative;
@@ -1143,6 +1338,23 @@ input[data-filter-table]:focus-visible {
 }
 .cards > li > .card {
   flex: 1;
+}
+/* Carte d'article : invitation à lire en pied de carte (alignée en bas), description limitée à trois lignes */
+.card-post {
+  display: flex;
+  flex-direction: column;
+}
+.card-post-text {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+.card .card-post-cta {
+  margin-top: auto;
+  padding-top: var(--space-3);
+  color: var(--link);
 }
 .example-code {
   margin: 0;
@@ -1616,20 +1828,17 @@ h2 i {
     linear-gradient(90deg, transparent 18%, #000 55%), linear-gradient(transparent, #000 30%);
   mask-composite: intersect;
 }
-.art-fill {
-  fill: var(--canvas);
-}
 .art-line {
-  fill: none;
+  fill: var(--canvas);
   stroke: var(--line-strong);
   stroke-width: 1;
-  opacity: 0.55;
+  stroke-opacity: 0.55;
   vector-effect: non-scaling-stroke;
 }
 .art-signal .art-line {
   stroke: var(--accent);
   stroke-width: 1.5;
-  opacity: 1;
+  stroke-opacity: 1;
 }
 /* Apparition : fondu et léger glissement de toute l'illustration (opacité et transformation seules : animation composée par le GPU) */
 @media (prefers-reduced-motion: no-preference) {

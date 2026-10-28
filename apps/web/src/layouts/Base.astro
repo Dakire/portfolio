@@ -8,6 +8,7 @@ import '../styles/site.css';
 import SkipLink from '@grichard/ui/components/SkipLink.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import SearchDialog from '../components/SearchDialog.astro';
 import { ROUTES, SITE, UI, otherLang, type Alternates, type Lang } from '../lib/i18n';
 import { BASE, withBase } from '../lib/base';
 import { OG_DEFAULT, jsonForScript, versioned } from '../lib/seo';
@@ -54,7 +55,7 @@ const feed = {
   title: lang === 'fr' ? 'Blog de Guillaume Richard' : "Guillaume Richard's blog",
   href: `${SITE}${ROUTES[lang].rss}`,
 };
-const allScripts = [...scripts, '/js/nav.js', '/js/cursor.js', '/js/consent.js'];
+const allScripts = [...scripts, '/js/nav.js', '/js/search.js', '/js/cursor.js', '/js/consent.js'];
 ---
 
 <!doctype html>
@@ -119,6 +120,7 @@ const allScripts = [...scripts, '/js/nav.js', '/js/cursor.js', '/js/consent.js']
       <slot />
     </main>
     <SiteFooter lang={lang} />
+    <SearchDialog lang={lang} />
     {allScripts.map((src) => (
       <script is:inline defer src={versioned(src)} />
     ))}

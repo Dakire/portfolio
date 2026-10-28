@@ -10,7 +10,7 @@
 
 **Génération** (reproductible, aucune édition à la main) : `@astrojs/sitemap` (`apps/web/astro.config.mjs`) écrit `sitemap-index.xml` et `sitemap-0.xml` ; `apps/web/scripts/postbuild.mjs` (`sitemap()`) en tire `sitemap.xml` (même contenu, espaces de noms inutilisés retirés) et supprime l'index. Au-delà de 50 000 URL, le build échoue au lieu de publier un sitemap partiel.
 
-**Contenu** : toutes les pages indexables et auto-canoniques, et seulement elles. Exclus : `/404`, page de style, pages de filtre du blog (`noindex`), redirections. `<lastmod>` seulement quand la date est réelle (articles, index du blog), jamais la date du build.
+**Contenu** : toutes les pages indexables et auto-canoniques, et seulement elles. Exclus : `/404`, page de style, pages de tag du blog (`noindex`). Les pages de catégorie du blog sont indexables (texte d'introduction propre dans `lib/blog.ts`, liens vers les outils dans `data/related.ts`), redirections. `<lastmod>` seulement quand la date est réelle (articles, index du blog), jamais la date du build.
 
 ### Diagnostic du 15 octobre 2026 (« sitemap.xml » en erreur dans la Search Console, « sitemap-0.xml » accepté)
 

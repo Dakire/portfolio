@@ -3,7 +3,16 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import PostCard from '../components/PostCard.astro';
 import { PORTFOLIO_DATA } from '../data/content';
-import { CATEGORIES, categoryPath, getPosts, postPath, slugify, tagPath } from '../lib/blog';
+import { CATEGORY_RELATED, resolveRelated } from '../data/related';
+import {
+  CATEGORIES,
+  CATEGORY_TEXT,
+  categoryPath,
+  getPosts,
+  postPath,
+  slugify,
+  tagPath,
+} from '../lib/blog';
 import { ROUTES, routeAlternates, SITE, type Alternates, type Lang } from '../lib/i18n';
 import { blogLd } from '../lib/seo';
 
@@ -31,27 +40,45 @@ const tagNames = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b, lang));
 const tagLabel = tag ? tagNames.find((x) => slugify(x) === tag) : undefined;
 const heading = category ? CATEGORIES[category]?.[lang] : tagLabel;
 const kind = category ? (lang === 'fr' ? 'Catégorie' : 'Category') : 'Tag';
-const title = heading ? `${kind} : ${heading} | ${t.siteName}` : t.siteName;
+// Une catégorie est un hub thématique indexable (texte d'introduction propre, liens vers les outils) ; un tag reste une page de filtre (noindex).
+const categoryText = category ? CATEGORY_TEXT[category]?.[lang] : undefined;
+const title = !heading
+  ? t.siteName
+  : categoryText
+    ? `${heading} : ${lang === 'fr' ? 'articles et guides' : 'articles and guides'} | ${t.siteName}`
+    : `${kind} : ${heading} | ${t.siteName}`;
 const path = category
   ? categoryPath(lang, category)
   : tag
     ? tagPath(lang, tagLabel ?? tag)
     : routes.blog;
-// Les pages filtrées n'ont pas d'équivalent exact dans l'autre langue : seule l'index est lié par hreflang.
-const alternates: Partial<Alternates> | undefined = heading ? undefined : routeAlternates('blog');
+const furtherLinks = category ? await resolveRelated(lang, CATEGORY_RELATED[category]) : undefined;
+const categoryLinks = furtherLinks ? [...furtherLinks.tools, ...furtherLinks.refs] : [];
+// Index et catégories ont un équivalent dans l'autre langue (si elle a des articles dans la catégorie) ; les tags, non.
+const hasOtherLang = category
+  ? (await getPosts(lang === 'fr' ? 'en' : 'fr')).some((p) => p.data.category === category)
+  : true;
+const alternates: Partial<Alternates> | undefined = category
+  ? hasOtherLang
+    ? { fr: categoryPath('fr', category), en: categoryPath('en', category) }
+    : undefined
+  : heading
+    ? undefined
+    : routeAlternates('blog');
 const labels =
   lang === 'fr'
     ? { categories: 'Catégories', tags: 'Tags', allPosts: 'Tous' }
     : { categories: 'Categories', tags: 'Tags', allPosts: 'All' };
+const toolsTitle = lang === 'fr' ? 'Outils et aide-mémoire liés' : 'Related tools and cheatsheets';
 ---
 
 <Base
   lang={lang}
   title={title}
-  description={t.pageDescription}
+  description={categoryText?.description ?? t.pageDescription}
   path={path}
   alternates={alternates}
-  noindex={Boolean(heading)}
+  noindex={Boolean(tag)}
   ld={
     heading
       ? undefined
@@ -69,7 +96,7 @@ const labels =
   <PageHero
     path={heading ? `~/blog/${category ?? tag}` : '~/blog'}
     title={heading ?? t.siteName}
-    lead={heading ? undefined : t.pageIntro}
+    lead={categoryText?.intro ?? (heading ? undefined : t.pageIntro)}
   />
   <div class="container section stack-lg">
     <nav aria-label={labels.categories} class="stack">
@@ -95,13 +122,28 @@ const labels =
     </nav>
 
     {posts.length > 0 ? (
-      <div class="cards cards-wide">
+      <ul class="cards cards-wide" role="list">
         {posts.map((post) => (
-          <PostCard post={post} minLabel={t.min} />
+          <li>
+            <PostCard post={post} minLabel={t.min} />
+          </li>
         ))}
-      </div>
+      </ul>
     ) : (
       <p>{t.emptyText}</p>
+    )}
+
+    {categoryLinks.length > 0 && (
+      <section class="stack" aria-labelledby="category-tools-title">
+        <h2 id="category-tools-title">{toolsTitle}</h2>
+        <ul role="list">
+          {categoryLinks.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
     )}
 
     <section class="stack" aria-labelledby="tags-title">

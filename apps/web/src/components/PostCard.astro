@@ -10,7 +10,7 @@ interface Props {
 const { post, minLabel } = Astro.props;
 ---
 
-<Card href={postPath(post.lang, post.slug)}>
+<Card href={postPath(post.lang, post.slug)} class="card-post">
   <p class="meta post-meta">
     <Tag>{CATEGORIES[post.data.category]?.[post.lang]}</Tag>
     <span>
@@ -19,5 +19,11 @@ const { post, minLabel } = Astro.props;
     </span>
   </p>
   <h3>{post.data.title}</h3>
-  <p>{post.data.description}</p>
+  <p class="card-post-text">{post.data.description}</p>
+  <span class="label more-link card-post-cta">
+    {post.lang === 'fr' ? 'Lire l’article' : 'Read the article'}
+    <span class="arrow" aria-hidden="true">
+      →
+    </span>
+  </span>
 </Card>

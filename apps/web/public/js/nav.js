@@ -37,6 +37,23 @@
     });
   });
 
+  // Petit écran : « Outils » se déplie en accordéon (chaque outil par catégorie), comme le sous-menu au survol sur grand écran.
+  const closeSubs = () =>
+    document.querySelectorAll('[data-sub-toggle]').forEach((toggle) => {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.closest('.has-sub')?.removeAttribute('data-sub-open');
+    });
+  document.querySelectorAll('[data-sub-toggle]').forEach((toggle) => {
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.closest('.has-sub')?.toggleAttribute('data-sub-open', open);
+    });
+  });
+
   // Passage en grand écran : la navigation est toujours visible, l'état replié n'a plus de sens.
-  wide.addEventListener('change', () => set(false));
+  wide.addEventListener('change', () => {
+    set(false);
+    closeSubs();
+  });
 })();

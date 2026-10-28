@@ -75,7 +75,17 @@ const groups = TOOL_GROUPS.map((group) => ({
                 {ui.nav[item.key]}
               </a>
               {item.key === 'tools' && (
-                <div class="subnav">
+                <button
+                  type="button"
+                  class="sub-toggle"
+                  aria-expanded="false"
+                  aria-controls="subnav-tools"
+                  aria-label={ui.toolsSub}
+                  data-sub-toggle
+                />
+              )}
+              {item.key === 'tools' && (
+                <div class="subnav" id="subnav-tools">
                   <div class="subnav-groups">
                     {groups.map((group) => (
                       <div>
@@ -97,6 +107,24 @@ const groups = TOOL_GROUPS.map((group) => ({
         </ul>
       </nav>
       <div class="site-tools">
+        <button type="button" class="search-open" data-search-open aria-haspopup="dialog" hidden>
+          <svg
+            class="search-open-icon"
+            viewBox="0 0 20 20"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle cx="8.5" cy="8.5" r="5.5"></circle>
+            <path d="m13 13 4 4"></path>
+          </svg>
+          <span class="search-open-label">{ui.search}</span>
+        </button>
         <a href={otherHref ?? ROUTES[other].home} hreflang={other} lang={other} class="lang-link">
           {ui.langName}
         </a>

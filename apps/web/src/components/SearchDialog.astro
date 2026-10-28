@@ -1,0 +1,46 @@
+---
+// Recherche globale : boîte de dialogue modale native (focus piégé, Échap, retour du focus au bouton), alimentée par /search-index.json
+// et pilotée par /js/search.js. Sans JavaScript, le bouton d'ouverture reste masqué : le site se parcourt par ses menus.
+import { withBase } from '../lib/base';
+import { UI, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ui = UI[lang];
+---
+
+<dialog
+  id="search"
+  class="search"
+  aria-labelledby="search-title"
+  data-index={withBase('/search-index.json')}
+  data-lang={lang}
+  data-hint={ui.searchHint}
+  data-none={ui.searchNone}
+  data-count={ui.searchCount}
+  data-error={ui.searchError}
+>
+  <h2 id="search-title" class="visually-hidden">
+    {ui.search}
+  </h2>
+  <div class="search-bar">
+    <input
+      type="search"
+      id="search-input"
+      class="search-input"
+      placeholder={ui.searchPlaceholder}
+      aria-label={ui.search}
+      aria-controls="search-results"
+      autocomplete="off"
+      spellcheck="false"
+      enterkeyhint="search"
+    />
+    <button type="button" class="search-close" data-search-close>
+      {ui.close}
+    </button>
+  </div>
+  <p id="search-status" class="visually-hidden" role="status"></p>
+  <div id="search-results" class="search-results"></div>
+</dialog>

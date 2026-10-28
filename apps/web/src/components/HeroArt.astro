@@ -25,15 +25,23 @@ const lines = Array.from({ length: LINES }, (_, k) => {
     w: 18 + rand() * 46,
     h: (18 + rand() * 70) * (0.35 + k / LINES),
   }));
-  const pts: string[] = [];
+  // Ordonnées au dixième de pixel (entiers), écrites en relatif : même dessin, environ trois fois moins de texte dans le HTML de l'accueil.
+  const ys: number[] = [];
   for (let x = 0; x <= W; x += STEP) {
     const envelope = Math.exp(-(((x - W * 0.66) / (W * 0.24)) ** 2));
     const noise = Math.sin(x * 0.045 + k) * 2.2 + Math.sin(x * 0.13 + k * 3) * 1.1;
     const lift = peaks.reduce((sum, p) => sum + p.h * Math.exp(-(((x - p.x) / p.w) ** 2)), 0);
-    pts.push(`${x},${(base - envelope * (lift + noise * 3) - noise).toFixed(1)}`);
+    ys.push(Math.round((base - envelope * (lift + noise * 3) - noise) * 10));
   }
-  const stroke = `M${pts.join(' L')}`;
-  return { stroke, fill: `${stroke} L${W},${H} L0,${H} Z`, signal: k === 13 };
+  const tenths = (n: number) =>
+    (n / 10)
+      .toFixed(1)
+      .replace(/\.0$/, '')
+      .replace(/^(-?)0\./, '$1.');
+  const steps = ys.slice(1).map((y, i) => `${STEP},${tenths(y - (ys[i] ?? 0))}`);
+  // Un seul tracé par courbe : le trait et le remplissage (la fermeture passe hors du cadre, donc ne se voit pas).
+  const d = `M0,${tenths(ys[0] ?? 0)}l${steps.join(' ')}L${W + 20},${H + 20}L-20,${H + 20}Z`;
+  return { d, signal: k === 13 };
 });
 ---
 
@@ -46,8 +54,7 @@ const lines = Array.from({ length: LINES }, (_, k) => {
 >
   {lines.map((line) => (
     <g class={line.signal ? 'art-signal' : undefined}>
-      <path class="art-fill" d={line.fill} />
-      <path class="art-line" d={line.stroke} />
+      <path class="art-line" d={line.d} />
     </g>
   ))}
 </svg>

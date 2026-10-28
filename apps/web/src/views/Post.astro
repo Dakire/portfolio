@@ -187,11 +187,13 @@ const crumbs = [
     {related.length > 0 && (
       <section class="stack related" aria-labelledby="related-title">
         <h2 id="related-title">{t.related}</h2>
-        <div class="cards cards-wide">
+        <ul class="cards cards-wide" role="list">
           {related.map((p) => (
-            <PostCard post={p} minLabel={t.min} />
+            <li>
+              <PostCard post={p} minLabel={t.min} />
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
     )}
 

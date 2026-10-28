@@ -69,15 +69,8 @@ function articleDates() {
 }
 const LASTMOD = articleDates();
 
-// Pages absentes du sitemap : interne, erreur, et pages de filtre du blog (noindex).
-const EXCLUDED = [
-  '/design/',
-  '/404',
-  '/blog/categorie/',
-  '/blog/tag/',
-  '/en/blog/category/',
-  '/en/blog/tag/',
-];
+// Pages absentes du sitemap : interne, erreur, et pages de tag du blog (noindex). Les catégories, elles, sont indexables.
+const EXCLUDED = ['/design/', '/404', '/blog/tag/', '/en/blog/tag/'];
 
 export default defineConfig({
   site: 'https://grichard.eu',

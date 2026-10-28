@@ -117,6 +117,32 @@ export const POST_RELATED: Record<string, Related> = {
   'fin-support-windows-10-passer-a-windows-11': { refs: ['windows-11', 'bios-uefi'] },
   'faille-uefi-pxe-edk2-cve-2026-97631': { refs: ['bios-uefi', 'windows-11'] },
   'cyberattaque-frigos-supermarches-controleurs-froid': { tools: ['subnet'], refs: ['reseau'] },
+  'patch-tuesday-octobre-2026-pme': { refs: ['windows-11', 'evenements-windows'] },
+  'exchange-online-smtp-auth-basic-fin-2026': {
+    tools: ['email-headers', 'dns'],
+    refs: ['powershell-m365'],
+  },
+  'fin-support-windows-server-2016-janvier-2027': { refs: ['active-directory', 'windows-11'] },
+  'secure-boot-certificats-2011-expiration-verifier': { refs: ['bios-uefi', 'windows-11'] },
+  'certificats-tls-duree-de-vie-200-100-47-jours': { tools: ['dns'] },
+  'calcul-masque-cidr-expliques': { tools: ['subnet'], refs: ['reseau'] },
+  'enregistrements-dns-a-mx-cname-txt-expliques': {
+    tools: ['dns', 'propagation'],
+    refs: ['reseau'],
+  },
+  'lire-en-tetes-email-received-spf-dkim-dmarc': { tools: ['email-headers', 'dns'] },
+  'journaux-evenements-windows-id-a-connaitre': {
+    refs: ['evenements-windows', 'active-directory'],
+  },
+};
+
+/** Catégorie du blog -> outils et cheatsheets proposés sur sa page. */
+export const CATEGORY_RELATED: Record<string, Related> = {
+  messagerie: { tools: ['email-headers', 'dns'], refs: ['powershell-m365', 'gam'] },
+  dns: { tools: ['dns', 'propagation', 'subnet'], refs: ['reseau'] },
+  migration: { tools: ['dns', 'propagation'], refs: ['powershell-m365', 'gam'] },
+  securite: { tools: ['password'], refs: ['evenements-windows', 'active-directory'] },
+  'poste-de-travail': { refs: ['windows-11', 'bios-uefi', 'active-directory'] },
 };
 
 /** Cheatsheet -> réalisations où ces commandes servent. */

@@ -122,11 +122,13 @@ const examples = (
     {posts.length > 0 && (
       <section class="stack" aria-labelledby="latest">
         <h2 id="latest">{text.latest}</h2>
-        <div class="cards cards-wide">
+        <ul class="cards cards-wide" role="list">
           {posts.map((post) => (
-            <PostCard post={post} minLabel={t.blog.min} />
+            <li>
+              <PostCard post={post} minLabel={t.blog.min} />
+            </li>
           ))}
-        </div>
+        </ul>
         <p>
           <a href={routes.blog}>{t.blog.all} →</a>
         </p>
