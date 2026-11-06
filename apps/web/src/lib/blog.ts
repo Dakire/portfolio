@@ -11,6 +11,7 @@ export const CATEGORIES: Record<string, Record<Lang, string>> = {
   securite: { fr: 'Sécurité', en: 'Security' },
   'poste-de-travail': { fr: 'Poste de travail', en: 'Workstation' },
   actualites: { fr: 'Actualités', en: 'News' },
+  ia: { fr: 'IA', en: 'AI' },
 };
 
 /** Page de catégorie (indexable) : description pour les résultats de recherche et introduction affichée sous le titre. */
@@ -96,6 +97,22 @@ export const CATEGORY_TEXT: Record<
         'Articles on Windows workstations and servers: end of support, migrations, Secure Boot and firmware, deployment.',
       intro:
         'Windows workstations and servers: end of support and migrations, Secure Boot and firmware, deployment. Action plans for a small organization, with the deadlines to watch.',
+    },
+  },
+  ia: {
+    fr: {
+      title: 'IA au travail : ChatGPT, Claude, Gemini, Copilot, Mistral',
+      description:
+        'Utiliser l’IA dans un métier informatique : comparatifs honnêtes, cas d’usage (scripts, dépannage, documentation, logs), confidentialité et RGPD, tarifs datés.',
+      intro:
+        'J’utilise l’IA depuis 2022 et j’ai commencé avec ChatGPT. Cette rubrique compare les assistants du moment sans les juger sur leur marketing : ce qu’ils font bien, où ils se trompent, ce qu’on peut leur confier ou non, et ce qu’ils coûtent à la date de rédaction.',
+    },
+    en: {
+      title: 'AI at work: ChatGPT, Claude, Gemini, Copilot, Mistral',
+      description:
+        'Using AI in an IT job: honest comparisons, use cases (scripts, troubleshooting, documentation, logs), privacy and GDPR, dated pricing.',
+      intro:
+        'I have used AI since 2022 and started with ChatGPT. This section compares today’s assistants without repeating their marketing: what they do well, where they get it wrong, what you can and cannot hand them, and what they cost at the time of writing.',
     },
   },
   actualites: {

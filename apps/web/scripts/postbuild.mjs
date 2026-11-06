@@ -22,6 +22,7 @@ const CATEGORIES = {
     securite: 'Sécurité',
     'poste-de-travail': 'Poste de travail',
     actualites: 'Actualités',
+    ia: 'IA',
   },
   en: {
     messagerie: 'Email',
@@ -30,6 +31,7 @@ const CATEGORIES = {
     securite: 'Security',
     'poste-de-travail': 'Workstation',
     actualites: 'News',
+    ia: 'AI',
   },
 };
 

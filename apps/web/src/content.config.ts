@@ -28,6 +28,7 @@ const blog = defineCollection({
       'securite',
       'poste-de-travail',
       'actualites',
+      'ia',
     ]),
     tags: z.array(z.string()).min(1).max(6),
   }),
