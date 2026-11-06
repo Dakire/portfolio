@@ -3,7 +3,7 @@
 meta:
   id: powershell-m365
   order: 2
-  title: 'PowerShell Microsoft 365 : cheatsheet | Guillaume Richard'
+  title: 'PowerShell Microsoft 365 : commandes et cheatsheet'
   h1: PowerShell Microsoft 365
   description: 'Cheatsheet PowerShell pour Microsoft 365 : Exchange Online, Graph, Entra ID, Teams, SharePoint, avec module, permissions, exemple et piège courant.'
   intro: 'Cmdlets des modules actuels (Exchange Online, Microsoft Graph PowerShell, Teams, SharePoint Online). MSOnline et AzureAD sont dépréciés : utilisez Microsoft Graph PowerShell.'
@@ -64,6 +64,19 @@ entries:
     perms: 'Exchange Administrator ou rôle « Mail Recipients »'
     pitfall: 'Le transfert externe est souvent bloqué par la politique anti-spam sortante du tenant.'
     doc: exchange/set-mailbox
+  - name: Set-MailboxAutoReplyConfiguration
+    cat: exchange
+    syn: Set-MailboxAutoReplyConfiguration -Identity <id> -AutoReplyState Enabled|Disabled|Scheduled
+    desc: Active, programme ou coupe la réponse automatique d'absence d'une boîte (message interne et externe).
+    ex:
+      - "Set-MailboxAutoReplyConfiguration -Identity user@contoso.com -AutoReplyState Enabled -InternalMessage 'Absent jusqu''au 5 janvier.' -ExternalMessage 'Absent jusqu''au 5 janvier.'"
+      - "Set-MailboxAutoReplyConfiguration -Identity user@contoso.com -AutoReplyState Scheduled -StartTime '2026-12-22 18:00' -EndTime '2027-01-05 08:00' -InternalMessage 'Congés'"
+      - 'Set-MailboxAutoReplyConfiguration -Identity user@contoso.com -AutoReplyState Disabled'
+    tags: [absence, répondeur, congés]
+    module: ExchangeOnlineManagement
+    perms: 'Exchange Administrator ou rôle « Mail Recipients »'
+    pitfall: 'Sans -ExternalMessage, les expéditeurs externes ne reçoivent rien ; -ExternalAudience (Known ou All) limite ou élargit les destinataires de la réponse.'
+    doc: exchange/set-mailboxautoreplyconfiguration
   - name: New-Mailbox
     cat: exchange
     syn: New-Mailbox -Shared -Name <nom> -DisplayName <nom>

@@ -2,7 +2,7 @@
 meta:
   id: active-directory
   order: 4
-  title: 'Active Directory : cheatsheet PowerShell | Guillaume Richard'
+  title: 'Commandes PowerShell Active Directory : cheatsheet'
   h1: Active Directory (RSAT PowerShell)
   description: 'Cheatsheet Active Directory : Get-ADUser, Search-ADAccount, réplication, GPO, dcdiag et FSMO, avec droits requis, exemples et pièges courants.'
   intro: 'Cmdlets du module ActiveDirectory (RSAT) et outils en ligne de commande pour administrer et dépanner un domaine : comptes, groupes, réplication, GPO, contrôleurs de domaine.'

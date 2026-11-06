@@ -94,14 +94,26 @@
         for (const data of datas)
           for (const e of data.entries) docs.push({ ...e, _ref: data.meta, _i: docs.length });
         engine = new MiniSearch({
-          fields: ['name', 'alias', 'syn', 'desc', 'ex', 'tags', 'extra'],
+          fields: ['name', 'alias', 'syn', 'desc', 'ex', 'tags', 'kwn', 'kw', 'extra'],
           idField: '_i',
           processTerm: (t) => fold(t),
           searchOptions: {
-            boost: { name: 10, alias: 6, syn: 4, desc: 3, ex: 2, tags: 1, extra: 1 },
+            boost: {
+              name: 10,
+              alias: 6,
+              kwn: 6,
+              syn: 4,
+              desc: 3,
+              ex: 2,
+              kw: 1.5,
+              tags: 1,
+              extra: 1,
+            },
             prefix: true,
             fuzzy: (t) => (t.length < 4 ? false : 0.2),
             combineWith: 'AND',
+            // commandes courantes (exemples concrets ajoutés à la main) : un peu devant les variantes rares
+            boostDocument: (id) => (docs[id]?.common ? 1.6 : 1),
           },
         });
         engine.addAll(
@@ -113,6 +125,10 @@
             desc: d.desc ?? '',
             ex: (d.ex ?? []).join('\n'),
             tags: (d.tags ?? []).join(' '),
+            // mots français du glossaire (« deleguer » -> delegate), cherchés mais jamais affichés :
+            // kwn vient du nom de la commande (poids fort), kw du reste
+            kwn: d.kwn ?? '',
+            kw: d.kw ?? '',
             extra: [d.module, d.perms, d.pitfall, d.equiv, d.cat, d._ref.title]
               .filter(Boolean)
               .join(' '),
@@ -132,7 +148,12 @@
     const terms = words(q);
     const fq = fold(q.trim());
     let found;
-    if (!terms.length) found = docs.map((doc) => ({ doc, terms: [] }));
+    // sans recherche : les commandes courantes (exemples concrets) d'abord, puis l'ordre de la source
+    if (!terms.length)
+      found = [...docs.filter((d) => d.common), ...docs.filter((d) => !d.common)].map((doc) => ({
+        doc,
+        terms: [],
+      }));
     else {
       found = engine.search(q).map((r) => {
         const doc = docs[r.id];

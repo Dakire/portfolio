@@ -10,6 +10,8 @@ export const ROOT = join(here, '..', '..');
 export const SRC_DIR = join(ROOT, 'data', 'reference', 'src');
 export const OUT_DIR = join(ROOT, 'public', 'data', 'reference');
 export const DATA_URL = '/data/reference';
+export const GLOSSARY_FILE = join(ROOT, 'data', 'reference', 'glossaire.yml');
+export const EXAMPLES_DIR = join(ROOT, 'data', 'reference', 'exemples');
 
 const ENTRY_KEYS = new Set([
   'name',
@@ -145,10 +147,84 @@ export function readSources() {
 
 export const serialize = (data) => JSON.stringify(data) + '\n';
 
+const fold = (s) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+const tokens = (s) =>
+  fold(s)
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean);
+
+/** Glossaire français -> mots des commandes : [{ fr: string[], en: string[] }]. */
+export function readGlossary() {
+  if (!existsSync(GLOSSARY_FILE)) return [];
+  const list = parse(readFileSync(GLOSSARY_FILE, 'utf-8')) ?? [];
+  return list.map((g, i) => {
+    if (!Array.isArray(g?.fr) || !Array.isArray(g?.en) || !g.fr.length || !g.en.length)
+      throw new Error(`glossaire.yml : groupe n°${i + 1} sans listes « fr » et « en »`);
+    return { fr: g.fr.map(String), en: g.en.map((w) => fold(String(w))) };
+  });
+}
+
+/** Groupes du glossaire qui s'appliquent à un texte : un mot de « en » est un mot du texte (ou, s'il a 5 lettres ou plus, le début d'un mot). */
+function glossaryHits(text, glossary) {
+  const words = tokens(text);
+  const set = new Set(words);
+  const kw = new Set();
+  for (const g of glossary)
+    if (g.en.some((en) => set.has(en) || (en.length >= 5 && words.some((w) => w.startsWith(en)))))
+      for (const fr of g.fr) kw.add(fr);
+  return kw;
+}
+
+/**
+ * Mots de recherche français d'une entrée, indexés mais jamais affichés : « kwn » pour ce que dit le nom de la commande
+ * (poids fort), « kw » pour le reste (alias, syntaxe, tags). « supprimer utilisateur » place ainsi « gam delete user »
+ * devant « gam <UserTypeEntity> delete messages » (dont seul l'alias « gam user … » parle d'utilisateur).
+ */
+export function frenchKeywords(entry, glossary) {
+  const inName = glossaryHits(entry.name, glossary);
+  const rest = glossaryHits(
+    [...(entry.alias ?? []), entry.syn ?? '', ...(entry.tags ?? [])].join(' '),
+    glossary,
+  );
+  return { kwn: [...inName].join(' '), kw: [...rest].filter((w) => !inName.has(w)).join(' ') };
+}
+
+/** Exemples concrets d'une référence générée (data/reference/exemples/<id>.yml) : { idEntrée: { desc?, ex? } }. */
+export function readExamples(id) {
+  const file = join(EXAMPLES_DIR, `${id}.yml`);
+  return existsSync(file) ? (parse(readFileSync(file, 'utf-8')) ?? {}) : {};
+}
+
+/** Ajoute les exemples concrets (en tête, sans doublon), la description française et la marque « common » ; idempotent. */
+export function applyExamples(refId, entries, examples) {
+  const byId = new Map(entries.map((e) => [e.id, e]));
+  for (const [id, x] of Object.entries(examples)) {
+    const e = byId.get(id);
+    if (!e)
+      throw new Error(
+        `exemples/${refId}.yml : l'entrée « ${id} » n'existe plus dans ${refId}.json`,
+      );
+    if (x.desc) e.desc = text(x.desc);
+    const ex = asList(x.ex).map((v) => v.trim());
+    if (ex.length) e.ex = [...ex, ...(e.ex ?? []).filter((v) => !ex.includes(v))];
+    e.common = true; // commande courante : légèrement favorisée dans le classement de la recherche
+  }
+  return entries;
+}
+
+/** Entrées publiées : champs de recherche français « kwn » et « kw » recalculés (les références anglaises n'en ont pas). */
+const withKeywords = (meta, entries, glossary) =>
+  entries.map(({ kw: _kw, kwn: _kwn, ...e }) => {
+    if (meta.lang !== 'fr') return e;
+    const { kwn, kw } = frenchKeywords(e, glossary);
+    return { ...e, ...(kwn && { kwn }), ...(kw && { kw }) };
+  });
+
 /** Tous les fichiers de sortie {nom: contenu} ; les références « generated » (GAM) gardent leur JSON existant. */
 export function computeOutputs() {
   const outputs = {};
   const metas = [];
+  const glossary = readGlossary();
   for (const { file, source } of readSources()) {
     const built = buildReference(file, source);
     const order = source.meta.order ?? 99;
@@ -158,11 +234,18 @@ export function computeOutputs() {
       // Les entrées viennent du dernier « reference:gam » ; les textes de la page (titre, description…) de la source YAML.
       const generated = JSON.parse(readFileSync(existing, 'utf-8'));
       const merged = { ...generated.meta, ...built.meta, count: generated.meta.count };
-      outputs[`${built.meta.id}.json`] = serialize({ meta: merged, entries: generated.entries });
+      const entries = applyExamples(merged.id, generated.entries, readExamples(merged.id));
+      outputs[`${built.meta.id}.json`] = serialize({
+        meta: merged,
+        entries: withKeywords(merged, entries, glossary),
+      });
       metas.push({ ...merged, order });
       continue;
     }
-    outputs[`${built.meta.id}.json`] = serialize(built);
+    outputs[`${built.meta.id}.json`] = serialize({
+      meta: built.meta,
+      entries: withKeywords(built.meta, built.entries, glossary),
+    });
     metas.push({ ...built.meta, order });
   }
   metas.sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));

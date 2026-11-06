@@ -2,7 +2,7 @@
 meta:
   id: reseau
   order: 5
-  title: 'Réseau : cheatsheet nslookup, dig, tcpdump | Guillaume Richard'
+  title: 'Commandes réseau : nslookup, dig, ping, tcpdump'
   h1: Réseau et diagnostic
   description: 'Cheatsheet réseau pour techniciens : nslookup, dig, ping, tracert, ss, tcpdump, curl, nmap et ports courants, sous Windows et Linux.'
   intro: 'Les commandes de diagnostic réseau (DNS, routage, ports, captures) sous Windows et Linux, plus les ports TCP/UDP les plus courants.'

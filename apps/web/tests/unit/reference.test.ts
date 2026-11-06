@@ -4,7 +4,13 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error module JavaScript sans types (script de génération)
-import { OUT_DIR, computeOutputs, vendorMiniSearch } from '../../scripts/reference/lib.mjs';
+import {
+  OUT_DIR,
+  computeOutputs,
+  frenchKeywords,
+  readGlossary,
+  vendorMiniSearch,
+} from '../../scripts/reference/lib.mjs';
 
 const outputs = computeOutputs() as Record<string, string>;
 
@@ -56,6 +62,29 @@ describe('index de la référence', () => {
       if (e.url) expect(e.url, e.name).toMatch(/^https:\/\//);
       expect(Boolean(e.syn || e.desc), e.name).toBe(true);
     }
+  });
+
+  it('glossaire : les mots français du nom de la commande sont séparés du reste', () => {
+    const glossary = readGlossary();
+    const k = frenchKeywords(
+      { name: 'gam <UserTypeEntity> delete messages', alias: ['gam user delete messages'] },
+      glossary,
+    ) as { kwn: string; kw: string };
+    expect(k.kwn).toContain('supprimer');
+    expect(k.kwn).not.toContain('utilisateur');
+    expect(k.kw).toContain('utilisateur');
+    // « ou » (unité d'organisation) ne doit pas s'appliquer à « output » : préfixe seulement à partir de 5 lettres
+    expect(frenchKeywords({ name: 'output' }, glossary)).toEqual({ kwn: '', kw: '' });
+  });
+
+  it('GAM : les exemples concrets passent en premier et la délégation est trouvable en français', () => {
+    const gam = JSON.parse(readFileSync(join(OUT_DIR, 'gam.json'), 'utf-8')) as {
+      entries: { id: string; ex?: string[]; kwn?: string; common?: boolean }[];
+    };
+    const e = gam.entries.find((x) => x.id === 'gam-usertypeentity-delegate-delegates-to');
+    expect(e?.ex?.[0]).toBe('gam user direction@example.com delegate to assistante@example.com');
+    expect(e?.kwn).toContain('déléguer');
+    expect(e?.common).toBe(true);
   });
 
   it('chaque référence a au moins les entrées promises', () => {

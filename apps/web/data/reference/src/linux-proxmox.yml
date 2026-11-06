@@ -2,7 +2,7 @@
 meta:
   id: linux-proxmox
   order: 6
-  title: 'Linux et Proxmox : cheatsheet commandes | Guillaume Richard'
+  title: 'Commandes Linux et Proxmox : cheatsheet'
   h1: Linux, Fedora et Proxmox
   description: 'Cheatsheet Linux et Proxmox VE : dnf, systemctl, journalctl, firewalld, LVM, rsync, et qm, pct, pvesh, vzdump pour les VM et conteneurs.'
   intro: 'Gestion de paquets, services et journaux sous Fedora/RHEL (dnf, systemd), outils système courants, et ligne de commande Proxmox VE pour les VM, conteneurs, sauvegardes et le cluster.'

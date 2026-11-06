@@ -3,7 +3,7 @@
 meta:
   id: windows-11
   order: 3
-  title: 'Windows 11 : cheatsheet PowerShell et CMD | Guillaume Richard'
+  title: 'Commandes Windows 11 : cheatsheet PowerShell et CMD'
   h1: PowerShell et commandes Windows 11
   description: 'Cheatsheet des commandes Windows 11 : sfc, DISM, chkdsk, réseau, services, BitLocker, winget, avec équivalent CMD ou Linux et niveau de risque.'
   intro: "Commandes de dépannage et d'administration Windows 11, en PowerShell et en CMD. Chaque entrée indique son niveau de risque : lecture seule, modifie le système, ou nécessite une invite élevée (administrateur)."
@@ -460,6 +460,7 @@ entries:
       - 'netsh winsock reset'
       - 'netsh int ip reset'
       - 'netsh advfirewall show allprofiles'
+    tags: [wifi, mot de passe wifi, clé wifi, pare-feu]
     risk: admin
     perms: Invite élevée pour modifier (lecture simple sans élévation, sauf key=clear)
     pitfall: 'winsock reset et int ip reset demandent un redémarrage. key=clear affiche un mot de passe Wi-Fi en clair.'

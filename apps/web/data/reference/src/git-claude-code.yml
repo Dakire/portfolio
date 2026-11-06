@@ -2,7 +2,7 @@
 meta:
   id: git-claude-code
   order: 7
-  title: 'Git, GitHub, Claude Code : cheatsheet | Guillaume Richard'
+  title: 'Commandes Git, GitHub CLI et Claude Code : cheatsheet'
   h1: Git, GitHub et Claude Code
   description: 'Cheatsheet Git, GitHub CLI et Claude Code : commit, rebase, reset, gh pr, commandes slash et raccourcis, avec des exemples à copier.'
   intro: 'Les commandes Git du quotidien, la CLI GitHub (gh) et les commandes slash et raccourcis de Claude Code.'

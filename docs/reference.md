@@ -34,9 +34,14 @@ Les JSON sont **commités** : après une modification d'un `.yml`, relancez `ref
 | `tags`  | Mots-clés                                                             | 1                  |
 | autres  | `module`, `perms`, `equiv`, `pitfall`, catégorie, nom de la référence | 1                  |
 
+## Recherche en français et exemples concrets
+
+- **Glossaire** (`apps/web/data/reference/glossaire.yml`) : chaque groupe associe des mots français (`fr`) aux mots des commandes (`en`). Au build, une entrée d'une cheatsheet française dont le nom, les alias, la syntaxe ou les tags contiennent un mot de `en` reçoit les mots de `fr` dans deux champs de recherche invisibles : `kwn` (mot trouvé dans le **nom** de la commande, poids 6) et `kw` (ailleurs, poids 1,5). Ainsi « deleguer » trouve `gam … delegate to`, et « supprimer utilisateur » place `gam delete user` devant `gam … delete messages`. Un mot de `en` de moins de 5 lettres doit correspondre à un mot entier (« ou » ne s'applique pas à « output ») ; à partir de 5 lettres, il suffit qu'il commence un mot (« forward » trouve « forwardingaddress »). Pour une requête qui ne donne rien, ajouter un groupe au glossaire ou des `tags` à l'entrée, relancer `reference:build`.
+- **Exemples concrets d'une référence générée** (`apps/web/data/reference/exemples/<id>.yml`, aujourd'hui GAM) : par identifiant d'entrée, une `desc` en français et des `ex` réels (adresses en `example.com`) qui passent avant la syntaxe du wiki. Ces entrées sont marquées `common` : un peu favorisées dans le classement, et affichées en premier quand la recherche est vide. Le build échoue si un identifiant n'existe plus après une régénération de `gam.json`.
+
 ## Tests manuels de la recherche
 
-Faute de frappe (`mailbx`), accents (`etiquette` pour « Étiquette »), multi-mots (`bitlocker status`), préfixe (`get-mail`), clavier seul (`/`, `Ctrl+K`, `↓`, `↑`, `Entrée`, `Échap`), URL partagée (`?q=…&cat=…`), mobile (375 px), thème sombre, annonce `aria-live` du nombre de résultats. Les cas automatisables sont dans `tests/e2e/reference.spec.ts`.
+Requêtes en français sur GAM (`deleguer`, `absence`, `supprimer utilisateur`, `transfert mail`), faute de frappe (`mailbx`), accents (`etiquette` pour « Étiquette »), multi-mots (`bitlocker status`), préfixe (`get-mail`), clavier seul (`/`, `Ctrl+K`, `↓`, `↑`, `Entrée`, `Échap`), URL partagée (`?q=…&cat=…`), mobile (375 px), thème sombre, annonce `aria-live` du nombre de résultats. Les cas automatisables sont dans `tests/e2e/reference.spec.ts`.
 
 ## Options de présentation d'une cheatsheet
 

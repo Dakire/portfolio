@@ -2,7 +2,7 @@
 meta:
   id: evenements-windows
   order: 8
-  title: "Codes d'événements Windows : cheatsheet | Guillaume Richard"
+  title: "ID d'événements Windows : 4624, 4625, 4740 (cheatsheet)"
   h1: Codes d'événements Windows
   description: 'Cheatsheet des événements Windows utiles en sécurité et dépannage : 4624, 4625, 4740, 4672, 7045, 1102, avec journal, sens et requête PowerShell.'
   intro: 'Les événements à connaître pour auditer les connexions, les comptes, les services et les arrêts inattendus, avec le journal concerné et la requête Get-WinEvent pour les retrouver.'

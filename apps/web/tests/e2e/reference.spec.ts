@@ -118,6 +118,19 @@ test.describe('Référence : recherche', () => {
     await expect(page.getByText('Apache License 2.0')).toBeVisible();
   });
 
+  test('GAM : recherche en français et exemple concret', async ({ page }) => {
+    await page.goto('/cheatsheets/gam/');
+    const box = page.getByRole('searchbox');
+    await box.fill('deleguer'); // glossaire : déléguer -> delegate
+    const first = results(page).first();
+    await expect(first.locator('h3')).toContainText('delegate|delegates to');
+    await expect(first).toContainText('gam user direction@example.com delegate to');
+    await box.fill('supprimer utilisateur');
+    await expect(results(page).first().locator('h3')).toHaveText(/^gam delete user$/);
+    await box.fill('absence');
+    await expect(results(page).first().locator('h3')).toContainText('vacation');
+  });
+
   test('/cheatsheets/ liste les cheatsheets, sans recherche globale', async ({ page }) => {
     await page.goto('/cheatsheets/');
     await expect(page.getByRole('search')).toHaveCount(0);
