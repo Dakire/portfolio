@@ -27,7 +27,7 @@ export interface SiteText {
     tagline: string;
   };
   home: {
-    /** Titres de section de l'accueil ; *mot* est mis en italique. */
+    /** Titres de section de l'accueil (texte simple ; un *mot* serait affiché en couleur d'accent, à réserver à une exception). */
     skillsTitle: string;
     skillsMore: string;
     featuredTitle: string;
@@ -45,6 +45,20 @@ export interface SiteText {
     toolsIntro: string;
     /** « Les 12 outils » : {n} est remplacé par le nombre d'outils. */
     toolsMore: string;
+    /** Sur-titre posé sur un filet au-dessus de chaque section. */
+    eyebrows: { skills: string; projects: string; tools: string; career: string; reading: string };
+    /** Tuile « recherche » de l'accueil : un vrai exemple de requête et son premier résultat. */
+    cheatDemo: {
+      title: string;
+      query: string;
+      name: string;
+      desc: string;
+      ex?: string;
+      href: string;
+      more: string;
+    };
+    readingTitle: string;
+    readingMore: string;
   };
   career: { title: string; description: string; cvTitle: string; cvText: string };
   resources: {
@@ -94,13 +108,13 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
       tagline: 'Technicien informatique et systèmes numériques.',
     },
     home: {
-      skillsTitle: 'Ce que je sais *faire*',
+      skillsTitle: 'Ce que je sais faire',
       skillsMore: 'Toutes les compétences',
-      featuredTitle: 'Quelques *réalisations*',
-      careerTitle: 'Où j’ai *travaillé*',
+      featuredTitle: 'Quelques réalisations',
+      careerTitle: 'Où j’ai travaillé',
       careerIntro: "Où j'ai travaillé, du plus récent au plus ancien.",
       careerMore: 'Voir tout le parcours',
-      resourcesTitle: 'À lire, à *garder* sous la main',
+      resourcesTitle: 'À lire, à garder sous la main',
       resourcesIntro:
         "Ce que mon travail m'a donné envie de partager : des articles pour comprendre une panne, et les commandes qu'on finit toujours par rechercher.",
       contactTitle: 'Une question, un projet ?',
@@ -113,10 +127,28 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
         cheatsheets: 'Les commandes qu’on oublie toujours',
         posts: 'Des pannes expliquées pas à pas',
       },
-      toolsTitle: 'Des *outils* pour le quotidien',
+      toolsTitle: 'Des outils pour le quotidien',
       toolsIntro:
         'Ils sont nés de problèmes croisés en support : une zone DNS à vérifier, un e-mail qui finit en spam, un site à auditer.',
       toolsMore: 'Les {n} outils',
+      eyebrows: {
+        skills: 'Compétences',
+        projects: 'Réalisations',
+        tools: 'Outils et aide-mémoire',
+        career: 'Parcours',
+        reading: 'Blog',
+      },
+      cheatDemo: {
+        title: 'Cheatsheets : cherchez en français',
+        query: 'deleguer',
+        name: 'gam <user> delegate to',
+        desc: 'Déléguer une boîte Gmail à un autre utilisateur.',
+        ex: 'gam user direction@example.com delegate to assistante@example.com',
+        href: '/cheatsheets/gam/?q=deleguer',
+        more: 'Essayer la recherche',
+      },
+      readingTitle: 'Derniers articles',
+      readingMore: 'Tous les articles',
     },
     career: {
       title: 'Parcours professionnel',
@@ -239,13 +271,13 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
       tagline: 'IT and digital systems technician.',
     },
     home: {
-      skillsTitle: 'What I *do*',
+      skillsTitle: 'What I do',
       skillsMore: 'All skills',
-      featuredTitle: 'A few *projects*',
-      careerTitle: 'Where I’ve *worked*',
+      featuredTitle: 'A few projects',
+      careerTitle: 'Where I’ve worked',
       careerIntro: 'Where I have worked, most recent first.',
       careerMore: 'See the full career',
-      resourcesTitle: 'Worth *reading*, worth keeping',
+      resourcesTitle: 'Worth reading, worth keeping',
       resourcesIntro:
         'What my work made me want to share: articles to make sense of an outage, and the commands you always end up looking up.',
       contactTitle: 'A question, a project?',
@@ -258,10 +290,27 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
         cheatsheets: 'The commands you always forget',
         posts: 'Outages explained step by step',
       },
-      toolsTitle: '*Tools* for everyday work',
+      toolsTitle: 'Tools for everyday work',
       toolsIntro:
         'They came out of problems I run into in support: a DNS zone to check, an email landing in spam, a site to audit.',
       toolsMore: 'All {n} tools',
+      eyebrows: {
+        skills: 'Skills',
+        projects: 'Projects',
+        tools: 'Tools and cheatsheets',
+        career: 'Career',
+        reading: 'Blog',
+      },
+      cheatDemo: {
+        title: 'Cheatsheets: search by brand or model',
+        query: 'dell',
+        name: 'Dell',
+        desc: 'BIOS/UEFI: F2 · Boot menu: F12 (Latitude, XPS, Inspiron, OptiPlex…)',
+        href: '/en/cheatsheets/bios-uefi-keys/?q=dell',
+        more: 'Try the search',
+      },
+      readingTitle: 'Latest articles',
+      readingMore: 'All articles',
     },
     career: {
       title: 'Career',

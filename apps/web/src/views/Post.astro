@@ -6,7 +6,7 @@ import Tag from '@grichard/ui/components/Tag.astro';
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
-import { POST_RELATED, hasRelated, resolveRelated } from '../data/related';
+import { POST_RELATED, resolveRelated } from '../data/related';
 import { SITE_TEXT } from '../data/site-text';
 import {
   CATEGORIES,
@@ -143,9 +143,6 @@ const crumbs = [
       </header>
 
       <div class="post-layout">
-        <div class="post-body">
-          <Content />
-        </div>
         {toc.length > 1 && (
           <nav class="toc" aria-labelledby="toc-title">
             <h2 id="toc-title" class="meta">
@@ -159,6 +156,23 @@ const crumbs = [
               ))}
             </ol>
           </nav>
+        )}
+        <div class="post-body">
+          <Content />
+        </div>
+        {furtherLinks.length > 0 && (
+          <aside class="post-aside" aria-labelledby="further-title">
+            <h2 id="further-title" class="meta">
+              {lang === 'fr' ? 'Pour aller plus loin' : 'Go further'}
+            </h2>
+            <ul role="list">
+              {furtherLinks.map((link) => (
+                <li>
+                  <a href={link.href}>{link.label}</a>
+                </li>
+              ))}
+            </ul>
+          </aside>
         )}
       </div>
 
@@ -174,19 +188,6 @@ const crumbs = [
         </ul>
       </footer>
     </article>
-
-    {hasRelated(further) && (
-      <section class="stack related" aria-labelledby="further-title">
-        <h2 id="further-title">{lang === 'fr' ? 'Pour aller plus loin' : 'Go further'}</h2>
-        <ul role="list">
-          {furtherLinks.map((link) => (
-            <li>
-              <a href={link.href}>{link.label}</a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
 
     {related.length > 0 && (
       <section class="stack related" aria-labelledby="related-title">

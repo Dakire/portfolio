@@ -1,0 +1,50 @@
+---
+// Bord d'une bande inversée (.band) : une trace de signal, plate avec quelques impulsions, comme un relevé de mesure.
+// Calculée au build et déterministe (même dessin à chaque build), sans script. Décorative (aria-hidden).
+// position="top" : la bande commence sous la trace, qui est dessinée en ambre ; "bottom" : la bande finit sur la trace.
+interface Props {
+  position?: 'top' | 'bottom';
+  /** Graine : deux bords de la même page ne se ressemblent pas. */
+  seed?: number;
+}
+const { position = 'top', seed: initial = 7 } = Astro.props;
+const W = 1440;
+const H = 48;
+
+let seed = initial;
+const rand = () => {
+  seed = (seed * 1664525 + 1013904223) % 4294967296;
+  return seed / 4294967296;
+};
+
+// Paliers (x, y) : une ligne de base qui dérive doucement, et deux ou trois impulsions (montée brève, descente, retour).
+const base = position === 'top' ? 30 : 18;
+const points: [number, number][] = [[0, base]];
+let x = 0;
+const pulses = new Set(Array.from({ length: 3 }, () => Math.floor(rand() * 8)));
+for (let i = 0; i < 8; i++) {
+  x += 120 + rand() * 60;
+  const y = base + Math.round((rand() - 0.5) * 8);
+  points.push([Math.round(x), y]);
+  if (pulses.has(i)) {
+    points.push([Math.round(x + 18), base - 22]);
+    points.push([Math.round(x + 36), base + 14]);
+    points.push([Math.round(x + 52), y]);
+    x += 52;
+  }
+}
+points.push([W, base]);
+const trace = points.map(([px, py], i) => `${i ? 'L' : 'M'}${px} ${py}`).join(' ');
+const fill = position === 'top' ? `${trace} L${W} ${H} L0 ${H} Z` : `${trace} L${W} 0 L0 0 Z`;
+---
+
+<svg
+  class={`band-edge band-edge-${position}`}
+  viewBox={`0 0 ${W} ${H}`}
+  preserveAspectRatio="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d={fill}></path>
+  {position === 'top' && <path class="trace" d={trace}></path>}
+</svg>

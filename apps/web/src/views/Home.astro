@@ -1,15 +1,13 @@
 ---
 import Button from '@grichard/ui/components/Button.astro';
 import CtaBand from '@grichard/ui/components/CtaBand.astro';
-import Tag from '@grichard/ui/components/Tag.astro';
 import Base from '../layouts/Base.astro';
-import PostCard from '../components/PostCard.astro';
 import SectionHead from '../components/SectionHead.astro';
-import HeroArt from '../components/HeroArt.astro';
+import BandEdge from '../components/BandEdge.astro';
 import Terminal from '../components/Terminal.astro';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
 import { SITE_TEXT } from '../data/site-text';
-import { getPosts } from '../lib/blog';
+import { CATEGORIES, getPosts, isoDate, postPath } from '../lib/blog';
 import { withBase } from '../lib/base';
 import { ROUTES, projectPath, routeAlternates, type Lang } from '../lib/i18n';
 import { homeLd } from '../lib/seo';
@@ -26,7 +24,17 @@ const t = PORTFOLIO_DATA[lang];
 const text = SITE_TEXT[lang];
 const routes = ROUTES[lang];
 const posts = await getPosts(lang);
-const [latest] = posts;
+const reading = posts.slice(0, 4);
+const demo = text.home.cheatDemo;
+// Le nom en deux temps : le prénom à l'encre, le nom en couleur d'accent (sur sa propre ligne en grand écran).
+const [firstName, ...rest] = PROFILE.name.split(' ');
+const lastName = rest.join(' ');
+const dateFmt = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-FR' : 'en-GB', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
 const featured = t.projects.filter((p) => p.featured);
 const skillName = (id: string) => t.skills.find((s) => s.id === id)?.category ?? '';
 const cheatsheets = resourceLinks(lang).find((l) => l.key === 'cheatsheets');
@@ -53,13 +61,11 @@ const index = [
   { href: routes.blog, name: t.nav.blog, count: posts.length, desc: text.home.index.posts },
 ];
 
-// Outils mis en avant : ceux qui répondent aux questions les plus fréquentes en support.
-const homeTools = ['dns', 'email-headers', 'propagation', 'seo', 'sitemap', 'subnet'].flatMap(
-  (id) => {
-    const tool = findTool(id);
-    return tool ? [{ ...toolUi(tool, lang), href: toolPath(tool, lang), icon: tool.icon }] : [];
-  },
-);
+// Outils mis en avant : ceux qui répondent aux questions les plus fréquentes en support (cinq tuiles autour de la recherche).
+const homeTools = ['dns', 'email-headers', 'propagation', 'subnet', 'seo'].flatMap((id) => {
+  const tool = findTool(id);
+  return tool ? [{ ...toolUi(tool, lang), href: toolPath(tool, lang), icon: tool.icon }] : [];
+});
 ---
 
 <Base
@@ -70,16 +76,16 @@ const homeTools = ['dns', 'email-headers', 'propagation', 'seo', 'sitemap', 'sub
   alternates={routeAlternates('home')}
   ld={homeLd(lang, t.meta.title, t.hero.role)}
 >
-  <header class="hero grid-bg">
-    <HeroArt />
+  <header class="hero">
     <div class="container hero-grid">
       <div class="hero-copy">
         <p class="label led hero-kicker">{t.hero.role}</p>
+        <p class="hero-hello">{t.hero.greeting}</p>
         <h1 class="hero-title">
-          {t.hero.greeting} <span class="hero-name">{PROFILE.name}</span>
+          {firstName} <span>{lastName}</span>
         </h1>
         <p class="hero-pitch">{t.hero.pitch}</p>
-        <p class="row">
+        <p class="row hero-actions">
           <Button variant="primary" href={routes.projects}>
             {t.hero.projectsBtn}{' '}
             <span class="arrow" aria-hidden="true">
@@ -87,9 +93,9 @@ const homeTools = ['dns', 'email-headers', 'propagation', 'seo', 'sitemap', 'sub
             </span>
           </Button>
           <Button href={routes.contact}>{t.hero.contactBtn}</Button>
-          <Button variant="ghost" href={withBase(t.hero.cvLink)}>
+          <a class="hero-cv" href={withBase(t.hero.cvLink)}>
             {t.hero.cvBtn}
-          </Button>
+          </a>
         </p>
       </div>
       <Terminal lang={lang} />
@@ -116,7 +122,7 @@ const homeTools = ['dns', 'email-headers', 'propagation', 'seo', 'sitemap', 'sub
     <section aria-labelledby="skills-title">
       <SectionHead
         id="skills-title"
-        index={1}
+        eyebrow={text.home.eyebrows.skills}
         title={text.home.skillsTitle}
         more={{ href: routes.skills, label: text.home.skillsMore }}
       />
@@ -136,41 +142,52 @@ const homeTools = ['dns', 'email-headers', 'propagation', 'seo', 'sitemap', 'sub
         ))}
       </ol>
     </section>
+  </div>
 
-    <section aria-labelledby="projects-title">
+  <BandEdge position="top" seed={11} />
+  <section class="band home-band" aria-labelledby="projects-title">
+    <div class="container">
       <SectionHead
         id="projects-title"
-        index={2}
+        eyebrow={text.home.eyebrows.projects}
         title={text.home.featuredTitle}
         more={{ href: routes.projects, label: t.projectsAll }}
       />
-      <ul class="feature-grid" role="list">
+      <ul class="band-projects" role="list">
         {featured.map((project) => (
-          <li class="card card-stretch feature">
-            <p class="label">
-              {skillName(project.skill)}
-              {project.kind && <> · {text.project.kinds[project.kind]}</>}
-            </p>
-            <h3>
-              <a class="card-link" href={projectPath(lang, project.slug)}>
-                {project.title}
-              </a>
-            </h3>
-            <p>{project.desc}</p>
-            <p class="row tags">
-              {project.tags.map((tag) => (
-                <Tag>{tag}</Tag>
-              ))}
-            </p>
+          <li class="band-project">
+            <div class="band-project-text">
+              <p class="label">
+                {skillName(project.skill)}
+                {project.kind && <> · {text.project.kinds[project.kind]}</>}
+              </p>
+              <h3>
+                <a href={projectPath(lang, project.slug)}>{project.title}</a>
+              </h3>
+              <p>{project.desc}</p>
+            </div>
+            <dl class="spec-sheet">
+              <div>
+                <dt>{lang === 'fr' ? 'Domaine' : 'Area'}</dt>
+                <dd>{skillName(project.skill)}</dd>
+              </div>
+              <div>
+                <dt>{lang === 'fr' ? 'Outils' : 'Tools'}</dt>
+                <dd>{project.tags.join(' · ')}</dd>
+              </div>
+            </dl>
           </li>
         ))}
       </ul>
-    </section>
+    </div>
+  </section>
+  <BandEdge position="bottom" seed={29} />
 
+  <div class="container sections">
     <section aria-labelledby="tools-title">
       <SectionHead
         id="tools-title"
-        index={3}
+        eyebrow={text.home.eyebrows.tools}
         title={text.home.toolsTitle}
         more={{
           href: routes.tools,
@@ -178,74 +195,83 @@ const homeTools = ['dns', 'email-headers', 'propagation', 'seo', 'sitemap', 'sub
         }}
       />
       <p class="section-intro">{text.home.toolsIntro}</p>
-      <ul class="tool-rows" role="list">
+      <ul class="bento" role="list">
+        <li class="tile bento-search">
+          <h3>
+            <a href={withBase(demo.href)}>{demo.title}</a>
+          </h3>
+          <p class="demo-field" aria-hidden="true">
+            <span>{demo.query}</span>
+            <kbd class="kbd">/</kbd>
+          </p>
+          <div class="demo-hit">
+            <p class="demo-name">{demo.name}</p>
+            <p>{demo.desc}</p>
+            {demo.ex && <pre><code>{demo.ex}</code></pre>}
+          </div>
+          {cheatsheets && (
+            <p class="demo-more">
+              <a class="more-link" href={cheatsheets.href}>
+                {t.nav.cheatsheets} ({refsFor(lang).length}){' '}
+                <span class="arrow" aria-hidden="true">
+                  →
+                </span>
+              </a>
+            </p>
+          )}
+        </li>
         {homeTools.map((tool) => {
           const Icon = TOOL_ICONS[tool.icon];
           return (
-            <li>
-              <a href={tool.href}>
-                <Icon size={22} class="tool-row-icon" aria-hidden="true" />
-                <span class="tool-row-name">{tool.name}</span>
-                <span class="tool-row-desc">{tool.card}</span>
-              </a>
+            <li class="tile bento-tool">
+              <Icon size={20} class="bento-icon" aria-hidden="true" />
+              <h3>
+                <a href={tool.href}>{tool.name}</a>
+              </h3>
+              <p>{tool.card}</p>
             </li>
           );
         })}
       </ul>
     </section>
 
-    <section aria-labelledby="career-title">
-      <SectionHead
-        id="career-title"
-        index={4}
-        title={text.home.careerTitle}
-        more={{ href: routes.career, label: text.home.careerMore }}
-      />
-      <ol class="log" role="list">
-        {t.experiences.map((job) => (
-          <li>
-            <span class="log-date">{job.date}</span>
-            <span class="log-role">{job.role}</span>
-            <span class="log-org">{job.company}</span>
-          </li>
-        ))}
-      </ol>
-    </section>
+    <div class="home-split">
+      <section aria-labelledby="career-title">
+        <SectionHead
+          id="career-title"
+          eyebrow={text.home.eyebrows.career}
+          title={text.home.careerTitle}
+          more={{ href: routes.career, label: text.home.careerMore }}
+        />
+        <ol class="log" role="list">
+          {t.experiences.map((job) => (
+            <li>
+              <span class="log-date">{job.date}</span>
+              <span class="log-role">{job.role}</span>
+              <span class="log-org">{job.company}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-    <section aria-labelledby="resources-title">
-      <SectionHead
-        id="resources-title"
-        index={5}
-        title={text.home.resourcesTitle}
-        more={{ href: routes.resources, label: text.resources.title }}
-      />
-      <p class="section-intro">{text.home.resourcesIntro}</p>
-      <div class="resources-split">
-        {latest && (
-          <div class="stack">
-            <p class="label">{t.blog.title}</p>
-            <PostCard post={latest} minLabel={t.blog.min} />
-          </div>
-        )}
-        {cheatsheets && (
-          <div class="stack">
-            <p class="label">{t.nav.cheatsheets}</p>
-            <a class="card cheat-card" href={cheatsheets.href}>
-              <span class="cheat-prompt" aria-hidden="true">
-                $ grep -i gpupdate ~/cheatsheets
-              </span>
-              <span class="cheat-text">{text.resources.cheatsheetsText}</span>
-              <span class="more-link">
-                {t.nav.cheatsheets}{' '}
-                <span class="arrow" aria-hidden="true">
-                  →
-                </span>
-              </span>
-            </a>
-          </div>
-        )}
-      </div>
-    </section>
+      <section aria-labelledby="reading-title">
+        <SectionHead
+          id="reading-title"
+          eyebrow={text.home.eyebrows.reading}
+          title={text.home.readingTitle}
+          more={{ href: routes.blog, label: text.home.readingMore }}
+        />
+        <ol class="reading" role="list">
+          {reading.map((post) => (
+            <li>
+              <time datetime={isoDate(post.data.date)}>{dateFmt.format(post.data.date)}</time>
+              <a href={postPath(lang, post.slug)}>{post.data.title}</a>
+              <span class="reading-cat">{CATEGORIES[post.data.category]?.[lang]}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    </div>
 
     <section id="contact" aria-labelledby="contact-title">
       <CtaBand title={text.home.contactTitle}>

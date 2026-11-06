@@ -61,9 +61,13 @@ const ld = {
       </ul>
     </nav>
 
-    {TOOL_GROUPS.map((group, i) => (
+    {TOOL_GROUPS.map((group) => (
       <section class="tool-group" id={group.id} aria-labelledby={`${group.id}-title`}>
-        <SectionHead id={`${group.id}-title`} index={i + 1} title={group[lang].title} />
+        <SectionHead
+          id={`${group.id}-title`}
+          eyebrow={lang === 'fr' ? 'Outils' : 'Tools'}
+          title={group[lang].title}
+        />
         <p class="section-intro">{group[lang].text}</p>
         <ToolCards lang={lang} headingLevel={3} ids={group.tools} />
       </section>

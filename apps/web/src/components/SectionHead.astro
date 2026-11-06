@@ -1,32 +1,32 @@
 ---
-// En-tête de section « fiche technique » : numéro (décoratif), titre, filet gradué et lien « tout voir » facultatif.
-// Le numéro est masqué aux lecteurs d'écran : il ne fait que rythmer la page.
+// En-tête de section : sur-titre posé sur un filet (ce qu'est la section), puis le titre et le lien « tout voir » facultatif.
+// Le sur-titre est du texte décoratif répété par le titre : il est masqué aux lecteurs d'écran.
 interface Props {
   id: string;
-  /** Numéro de section, affiché sur deux chiffres. */
-  index: number;
-  /** Titre ; un *mot* entre astérisques est mis en italique (accent typographique, pas d'emphase sémantique). */
+  /** Sur-titre court en capitales (ex. « Réalisations ») ; à défaut, seul le filet est tracé. */
+  eyebrow?: string;
+  /** Titre ; un *mot* entre astérisques prend la couleur d'accent (exception, pas une habitude). */
   title: string;
   more?: { href: string; label: string };
 }
-const { id, index, title, more } = Astro.props;
-// « Ce que je sais *faire* » -> ['Ce que je sais ', 'faire', ''] : les morceaux impairs sont en italique.
+const { id, eyebrow, title, more } = Astro.props;
 const parts = title.split('*');
 ---
 
 <div class="section-head">
-  <span class="section-index label" aria-hidden="true">
-    {String(index).padStart(2, '0')}
-  </span>
-  <h2 id={id}>{parts.map((part, i) => (i % 2 ? <i>{part}</i> : part))}</h2>
-  <span class="section-rule" aria-hidden="true"></span>
-  {more && (
-    <a class="more-link" href={more.href}>
-      {more.label}{' '}
-      <span class="arrow" aria-hidden="true">
-        →
-      </span>
-    </a>
-  )}
+  <p class="rule-label" aria-hidden="true">
+    {eyebrow ?? ''}
+  </p>
+  <div class="section-head-row">
+    <h2 id={id}>{parts.map((part, i) => (i % 2 ? <i>{part}</i> : part))}</h2>
+    {more && (
+      <a class="more-link" href={more.href}>
+        {more.label}{' '}
+        <span class="arrow" aria-hidden="true">
+          →
+        </span>
+      </a>
+    )}
+  </div>
 </div>
 <slot />
