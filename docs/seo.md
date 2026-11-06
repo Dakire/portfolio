@@ -1,5 +1,7 @@
 # SEO technique : sitemap, indexation, vérifications
 
+Audit page par page et règles de titres et descriptions : [seo-audit.md](seo-audit.md). Requêtes ciblées et suivi : [seo-plan.md](seo-plan.md).
+
 ## Sitemap : quelle URL fait référence
 
 | URL                  | Rôle                                                                                                                                              |
