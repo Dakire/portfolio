@@ -132,7 +132,7 @@ const fr = {
       headers: { name: 'En-tête', value: 'Valeur', count: (n: number) => `${n} en-têtes` },
     },
     privacy:
-      "Les en-têtes que vous collez ne quittent pas votre ordinateur. Ils peuvent contenir des adresses et des adresses IP : n'hésitez pas à les masquer avant de les partager.",
+      'Les en-têtes que vous collez ne quittent pas votre ordinateur. Ils contiennent des adresses e-mail et des adresses IP : masquez-les avant de les partager.',
     seo: {
       whatTitle: "Ce que fait l'outil",
       what: [

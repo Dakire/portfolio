@@ -98,7 +98,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
     },
     aboutTitle: 'À propos de moi',
     about:
-      "L'informatique me passionne depuis toujours, et j'ai gardé l'habitude de tout tester pour comprendre comment ça marche. Aujourd'hui, je suis technicien informatique : je travaille au quotidien sur les systèmes et les réseaux, la messagerie dans le cloud (Microsoft 365 et Google Workspace), le DNS et le support, de la demande de l'utilisateur jusqu'à sa résolution. Quand une tâche se répète, j'écris l'outil qui la fait à ma place.",
+      "Je suis technicien informatique, et j'ai toujours testé les choses pour comprendre comment elles marchent. Au quotidien, je travaille sur les systèmes et les réseaux, la messagerie dans le cloud (Microsoft 365 et Google Workspace), le DNS et le support, de la demande de l'utilisateur jusqu'à sa résolution. Quand une tâche revient, j'écris l'outil qui la fait à ma place.",
     aboutMore: [
       'Ce site rassemble mon parcours, mes réalisations et mes compétences. Il montre aussi ce qui en est sorti : un blog de notes techniques, des outils en ligne et des cheatsheets de commandes.',
     ],
@@ -160,8 +160,8 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         date: 'Depuis août 2023',
         start: '2023-08',
         points: [
-          'Administration avancée de Microsoft 365 et Google Workspace : identités, sécurité, maintien en conditions opérationnelles.',
-          'Migrations complexes de messagerie : IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail et Outlook vers le cloud.',
+          'Administration de Microsoft 365 et de Google Workspace : identités, sécurité, maintien en conditions opérationnelles.',
+          'Migrations de messagerie : IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail et Outlook vers le cloud.',
           'Gestion des zones DNS, analyse des en-têtes SMTP et de la délivrabilité (SPF, DKIM, DMARC).',
           'Administration Windows Server : MDT, WDS, Active Directory, DHCP, DNS, bureau à distance.',
           'Support IT de N1 à N3 (escalade N4 auprès des éditeurs) et masterisation de PC.',
@@ -299,7 +299,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
     },
     aboutTitle: 'About me',
     about:
-      "I have loved computers for as long as I can remember, and I still test everything to see how it works. Today I am an IT technician: every day I work on systems and networks, cloud email (Microsoft 365 and Google Workspace), DNS and support, from the user's request all the way to the fix. When a task keeps coming back, I write the tool that does it for me.",
+      "I am an IT technician, and I have always tested things to see how they work. Day to day I work on systems and networks, cloud email (Microsoft 365 and Google Workspace), DNS and support, from the user's request to the fix. When a task keeps coming back, I write the tool that does it for me.",
     aboutMore: [
       'This site brings together my career, my work and my skills. It also shows what came out of them: a blog of technical notes, online tools and command cheatsheets.',
     ],
@@ -361,8 +361,8 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         date: 'Since August 2023',
         start: '2023-08',
         points: [
-          'Advanced administration of Microsoft 365 and Google Workspace: identities, security, operational maintenance.',
-          'Complex email migrations: IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail and Outlook to the cloud.',
+          'Administration of Microsoft 365 and Google Workspace: identities, security, operational maintenance.',
+          'Email migrations: IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail and Outlook to the cloud.',
           'DNS zone management, SMTP header analysis and deliverability (SPF, DKIM, DMARC).',
           'Windows Server administration: MDT, WDS, Active Directory, DHCP, DNS, remote desktop.',
           'L1 to L3 IT support (L4 escalation to vendors) and PC imaging.',
