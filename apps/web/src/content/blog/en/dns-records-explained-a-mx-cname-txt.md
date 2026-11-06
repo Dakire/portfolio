@@ -1,6 +1,7 @@
 ---
 title: 'DNS records explained: A, MX, CNAME, TXT and the others'
-description: 'The role of each DNS record (A, AAAA, CNAME, MX, TXT, NS, SOA, CAA, PTR, SRV), with examples, classic pitfalls, email (SPF, DKIM, DMARC) and basic dig and nslookup commands.'
+description: 'What the A, AAAA, CNAME, MX, TXT, NS, SOA, CAA, PTR and SRV DNS records do: examples, classic pitfalls and basic dig and nslookup commands.'
+summary: 'The role of each DNS record (A, AAAA, CNAME, MX, TXT, NS, SOA, CAA, PTR, SRV), with examples, classic pitfalls, email (SPF, DKIM, DMARC) and basic dig and nslookup commands.'
 date: 2026-10-28
 translationOf: 'enregistrements-dns-a-mx-cname-txt-expliques'
 category: dns

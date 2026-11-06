@@ -5,7 +5,7 @@ export const UNITS_TOOL = {
       meta: {
         title: 'Convertisseur Go/Gio, Mbit/s, hexadécimal, binaire | Guillaume Richard',
         description:
-          "Convertissez octets, Ko/Kio, Mo/Mio, Go/Gio, To/Tio, bits et débits (Mbit/s, Mo/s), calculez un temps de transfert et passez du décimal à l'hexadécimal, au binaire et à l'octal. Local, sans envoi.",
+          "Convertissez Go et Gio, bits et octets, Mbit/s et Mo/s, calculez un temps de transfert et passez du décimal à l'hexadécimal ou au binaire.",
         appDescription:
           'Convertisseur gratuit de tailles (SI et binaires), de débits réseau, de temps de transfert et de bases numériques (décimal, hexadécimal, binaire, octal).',
       },
@@ -155,7 +155,7 @@ export const UNITS_TOOL = {
       meta: {
         title: 'GB/GiB, Mbit/s, hexadecimal, binary converter | Guillaume Richard',
         description:
-          'Convert bytes, KB/KiB, MB/MiB, GB/GiB, TB/TiB, bits and data rates (Mbit/s, MB/s), compute a transfer time and convert decimal to hexadecimal, binary and octal. Local, nothing uploaded.',
+          'Convert GB and GiB, bits and bytes, Mbit/s and MB/s, compute a transfer time and convert decimal to hexadecimal, binary or octal.',
         appDescription:
           'Free converter for data sizes (SI and binary), network rates, transfer times and number bases (decimal, hexadecimal, binary, octal).',
       },

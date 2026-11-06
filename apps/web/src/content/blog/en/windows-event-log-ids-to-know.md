@@ -1,6 +1,7 @@
 ---
 title: 'Windows Event Log IDs Worth Knowing'
-description: 'The security and startup events to watch in a small business: logons, accounts, groups, lockouts, Kerberos, with PowerShell filters and the audit prerequisites.'
+description: 'The Windows event IDs to watch in a small business: logons (4624, 4625), accounts, groups, lockouts, Kerberos, with PowerShell filters.'
+summary: 'The security and startup events to watch in a small business: logons, accounts, groups, lockouts, Kerberos, with PowerShell filters and the audit prerequisites.'
 date: 2026-10-28
 translationOf: 'journaux-evenements-windows-id-a-connaitre'
 category: securite

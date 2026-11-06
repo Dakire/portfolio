@@ -5,7 +5,7 @@ export const JSON_TOOL = {
       meta: {
         title: 'Formateur et validateur JSON en ligne | Guillaume Richard',
         description:
-          'Validez, indentez, minifiez et triez du JSON. Chaque erreur est localisée (ligne, colonne) avec une explication. Les nombres et les chaînes ne sont jamais modifiés.',
+          'Validez, indentez, minifiez et triez du JSON en ligne. Chaque erreur est localisée (ligne, colonne) et expliquée. Les valeurs ne sont jamais modifiées.',
         appDescription:
           'Outil gratuit pour valider, formater, minifier et trier du JSON (RFC 8259), avec erreurs localisées à la ligne et à la colonne.',
       },

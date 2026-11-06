@@ -1,6 +1,8 @@
 ---
 title: 'Exchange Online : la fin de SMTP AUTH par mot de passe, et vos scanners, imprimantes et applications'
-description: "Microsoft va désactiver par défaut l'envoi SMTP authentifié par mot de passe dans Exchange Online fin décembre 2026. Comment repérer ce qui en dépend et le migrer."
+seoTitle: 'SMTP AUTH Exchange Online : fin du mot de passe en 2026'
+description: "Exchange Online coupe par défaut l'envoi SMTP AUTH par mot de passe fin décembre 2026 : repérer scanners, imprimantes et applications concernés, puis migrer."
+summary: "Microsoft va désactiver par défaut l'envoi SMTP authentifié par mot de passe dans Exchange Online fin décembre 2026. Comment repérer ce qui en dépend et le migrer."
 date: 2026-10-28
 category: messagerie
 tags: ['Exchange Online', 'Microsoft 365', 'SMTP', 'OAuth']

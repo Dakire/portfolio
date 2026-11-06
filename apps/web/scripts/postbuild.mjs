@@ -61,6 +61,7 @@ async function articles() {
   ]) {
     for (const file of (await readdir(dir)).filter((f) => f.endsWith('.md'))) {
       const fm = frontMatter(await readFile(join(dir, file), 'utf-8'));
+      if (fm.draft === 'true') continue; // brouillon : pas de page, donc pas d'image de partage
       out.push({
         slug: file.slice(0, -3),
         lang,

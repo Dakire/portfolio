@@ -1,6 +1,8 @@
 ---
 title: 'Exchange Online: The End of Password-Based SMTP AUTH, and Your Scanners, Printers and Apps'
-description: 'Microsoft will turn off password-based authenticated SMTP submission by default in Exchange Online at the end of December 2026. How to find what depends on it and migrate it.'
+seoTitle: 'Exchange Online SMTP AUTH: Basic Auth Ends in 2026'
+description: 'Exchange Online turns off password-based SMTP AUTH by default at the end of December 2026: find the scanners, printers and apps that depend on it, then migrate.'
+summary: 'Microsoft will turn off password-based authenticated SMTP submission by default in Exchange Online at the end of December 2026. How to find what depends on it and migrate it.'
 date: 2026-10-28
 translationOf: 'exchange-online-smtp-auth-basic-fin-2026'
 category: messagerie

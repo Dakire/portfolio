@@ -5,7 +5,7 @@ export const PASSWORD = {
       meta: {
         title: 'Générateur de mot de passe : aléatoire, prononçable, PIN | Guillaume Richard',
         description:
-          "Générez des mots de passe forts avec l'aléa cryptographique de votre navigateur : longueur, jeux de caractères, sans caractères ambigus, prononçables, codes PIN, entropie estimée.",
+          'Générez un mot de passe fort et aléatoire dans votre navigateur : longueur, caractères, sans ambiguïté, prononçable, code PIN, entropie estimée.',
         appDescription:
           "Générateur gratuit de mots de passe, phrases prononçables et codes PIN, avec estimation de l'entropie. Aucune donnée n'est envoyée.",
       },
@@ -105,7 +105,7 @@ export const PASSWORD = {
       meta: {
         title: 'Secure password generator: random, pronounceable, PIN | Guillaume Richard',
         description:
-          "Generate strong passwords with your browser's cryptographic randomness: length, character sets, no ambiguous characters, pronounceable, PIN codes, estimated entropy.",
+          'Generate a strong random password in your browser: length, character sets, no ambiguous characters, pronounceable, PIN codes, estimated entropy.',
         appDescription:
           'Free generator of passwords, pronounceable passphrases and PIN codes, with entropy estimates. No data is sent.',
       },

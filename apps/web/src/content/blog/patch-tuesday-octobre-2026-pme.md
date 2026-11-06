@@ -1,6 +1,8 @@
 ---
 title: "Patch Tuesday d'octobre 2026 : quoi installer en premier dans une petite structure"
-description: "Une faille Windows Shell déjà exploitée, un record de correctifs, deux problèmes connus à surveiller et la fin de Windows 11 24H2 Famille et Pro : ce qu'il faut traiter d'abord, ce qui peut attendre."
+seoTitle: 'Patch Tuesday octobre 2026 : quoi installer en premier'
+description: "Patch Tuesday d'octobre 2026 : une faille Windows Shell exploitée, un record de correctifs, deux problèmes connus et la fin de Windows 11 24H2. Les priorités."
+summary: "Une faille Windows Shell déjà exploitée, un record de correctifs, deux problèmes connus à surveiller et la fin de Windows 11 24H2 Famille et Pro : ce qu'il faut traiter d'abord, ce qui peut attendre."
 date: 2026-10-28
 category: securite
 tags: ['Patch Tuesday', 'Windows 11', 'Sécurité', 'Mises à jour']

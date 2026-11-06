@@ -1,6 +1,8 @@
 ---
 title: "Panne Orange du 21 octobre 2026 : ce que l'on sait et comment s'en protéger"
-description: "Dix heures sans réseau mobile Orange et Sosh : chronologie, cause annoncée, et les mesures concrètes pour qu'une panne d'opérateur ne bloque pas une petite entreprise."
+seoTitle: "Panne Orange du 21 octobre 2026 : ce que l'on sait"
+description: "Dix heures sans réseau mobile Orange et Sosh : chronologie, cause annoncée et mesures pour qu'une panne d'opérateur ne bloque pas une petite entreprise."
+summary: "Dix heures sans réseau mobile Orange et Sosh : chronologie, cause annoncée, et les mesures concrètes pour qu'une panne d'opérateur ne bloque pas une petite entreprise."
 date: 2026-10-28
 category: actualites
 tags: ['Orange', 'Panne', "Continuité d'activité"]

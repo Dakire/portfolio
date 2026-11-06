@@ -1,5 +1,6 @@
 ---
 title: 'Fin de Windows 10 : préparer le passage à Windows 11'
+seoTitle: 'Fin de Windows 10 : ESU, date et passage à Windows 11'
 description: 'Prérequis matériels, inventaire du parc, mises à jour de sécurité étendues (ESU), cycle de vie de Windows 11 et plan de migration pour une PME.'
 date: 2026-10-03
 updated: 2026-10-28

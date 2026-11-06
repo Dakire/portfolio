@@ -1,6 +1,7 @@
 ---
 title: "Journaux d'événements Windows : les ID à connaître"
-description: "Les événements de sécurité et de démarrage à surveiller dans une petite structure : ouvertures de session, comptes, groupes, verrouillages, Kerberos, avec filtres PowerShell et prérequis d'audit."
+description: "Les ID d'événements Windows à surveiller : ouvertures de session (4624, 4625), comptes, groupes, verrouillages, Kerberos, avec filtres PowerShell."
+summary: "Les événements de sécurité et de démarrage à surveiller dans une petite structure : ouvertures de session, comptes, groupes, verrouillages, Kerberos, avec filtres PowerShell et prérequis d'audit."
 date: 2026-10-28
 category: securite
 tags: ['Windows', 'Journaux', 'Active Directory', 'Audit', 'PowerShell']

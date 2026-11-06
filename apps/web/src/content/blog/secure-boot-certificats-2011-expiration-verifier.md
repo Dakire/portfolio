@@ -1,6 +1,8 @@
 ---
 title: 'Secure Boot : les certificats de 2011 ont expiré, comment vérifier'
-description: 'Les certificats Secure Boot de 2011 ont expiré en juin et octobre 2026. Ce que cela change, comment vérifier un poste ou un serveur, mettre à jour le firmware, et le cas de Linux, du double démarrage et des machines virtuelles.'
+seoTitle: 'Secure Boot : certificats 2011 expirés, comment vérifier'
+description: 'Les certificats Secure Boot de 2011 ont expiré en juin et octobre 2026 : vérifier un PC ou un serveur, mettre à jour le firmware, cas de Linux et des VM.'
+summary: 'Les certificats Secure Boot de 2011 ont expiré en juin et octobre 2026. Ce que cela change, comment vérifier un poste ou un serveur, mettre à jour le firmware, et le cas de Linux, du double démarrage et des machines virtuelles.'
 date: 2026-10-28
 category: poste-de-travail
 tags: ['Secure Boot', 'UEFI', 'Windows', 'Linux', 'Virtualisation']

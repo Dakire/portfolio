@@ -1,6 +1,8 @@
 ---
 title: 'Enregistrements DNS expliqués : A, MX, CNAME, TXT et les autres'
-description: 'Le rôle de chaque enregistrement DNS (A, AAAA, CNAME, MX, TXT, NS, SOA, CAA, PTR, SRV), avec exemples, pièges classiques, messagerie (SPF, DKIM, DMARC) et commandes dig et nslookup.'
+seoTitle: 'Enregistrements DNS expliqués : A, MX, CNAME, TXT'
+description: 'Rôle des enregistrements DNS A, AAAA, CNAME, MX, TXT, NS, SOA, CAA, PTR et SRV : exemples, pièges classiques et commandes dig et nslookup.'
+summary: 'Le rôle de chaque enregistrement DNS (A, AAAA, CNAME, MX, TXT, NS, SOA, CAA, PTR, SRV), avec exemples, pièges classiques, messagerie (SPF, DKIM, DMARC) et commandes dig et nslookup.'
 date: 2026-10-28
 category: dns
 tags: ['DNS', 'MX', 'CNAME', 'TXT', 'dig', 'nslookup']

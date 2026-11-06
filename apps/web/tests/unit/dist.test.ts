@@ -119,6 +119,23 @@ describe('site construit', () => {
     expect(titles.length - new Set(titles).size).toBe(0);
   });
 
+  // Ce que Google affiche sans couper : ~62 caractères de titre, ~160 de description (voir docs/seo-audit.md).
+  it('titres et descriptions des pages indexables tiennent dans les résultats de recherche', () => {
+    const decode = (s: string) =>
+      s
+        .replace(/&amp;/g, '&')
+        .replace(/&#39;|&#x27;/g, "'")
+        .replace(/&quot;/g, '"');
+    for (const p of pages) {
+      if (p.url === '/404.html' || /noindex/.test(p.html.slice(0, p.html.indexOf('</head>'))))
+        continue;
+      const title = decode(attr(p.html, /<title>([^<]+)<\/title>/)[0] ?? '');
+      const desc = decode(attr(p.html, /<meta name="description" content="([^"]*)"/)[0] ?? '');
+      expect(title.length, `${p.url} : title « ${title} »`).toBeLessThanOrEqual(62);
+      expect(desc.length, `${p.url} : description`).toBeLessThanOrEqual(160);
+    }
+  });
+
   describe('sitemap (référence : /sitemap.xml, voir docs/seo.md)', () => {
     const xml = readFileSync(join(DIST, 'sitemap.xml'), 'utf-8');
     const locs = attr(xml, /<loc>([^<]+)<\/loc>/g);

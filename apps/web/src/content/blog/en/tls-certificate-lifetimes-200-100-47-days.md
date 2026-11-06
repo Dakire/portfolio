@@ -1,6 +1,7 @@
 ---
 title: 'TLS certificates: 200, then 100, then 47 days of validity'
-description: 'Since 15 March 2026, a public TLS certificate lasts 200 days at most, then 100 days in 2027 and 47 days in 2029. The schedule, what it changes and how to prepare.'
+description: 'Since 15 March 2026 a public TLS certificate lasts 200 days at most, then 100 days in 2027 and 47 days in 2029. The schedule and how to prepare.'
+summary: 'Since 15 March 2026, a public TLS certificate lasts 200 days at most, then 100 days in 2027 and 47 days in 2029. The schedule, what it changes and how to prepare.'
 date: 2026-10-28
 translationOf: 'certificats-tls-duree-de-vie-200-100-47-jours'
 category: securite

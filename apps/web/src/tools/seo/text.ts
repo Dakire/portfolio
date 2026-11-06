@@ -7,7 +7,7 @@ const fr = {
     meta: {
       title: 'Rapport SEO gratuit : audit technique d’une page | Guillaume Richard',
       description:
-        'Auditez une page en quelques secondes : title, meta description, canonical, Hn, images, liens cassés, Open Graph, JSON-LD, robots.txt, HTTPS, HSTS et en-têtes de sécurité. Score, priorités et export.',
+        'Audit SEO gratuit d’une page : title, meta description, canonical, Hn, images, liens cassés, Open Graph, JSON-LD, HTTPS et en-têtes de sécurité.',
       appDescription:
         'Audit SEO technique gratuit : plus de 30 contrôles classés par priorité (critique, important, info), avec recommandation pour chacun, export JSON et impression.',
     },
@@ -140,7 +140,7 @@ const en: typeof fr = {
     meta: {
       title: 'Free SEO report: technical audit of a page | Guillaume Richard',
       description:
-        'Audit a page in seconds: title, meta description, canonical, headings, images, broken links, Open Graph, JSON-LD, robots.txt, HTTPS, HSTS and security headers. Score, priorities and export.',
+        'Free SEO audit of a page: title, meta description, canonical, headings, images, broken links, Open Graph, JSON-LD, HTTPS and security headers.',
       appDescription:
         'Free technical SEO audit: over 30 checks ranked by priority (critical, important, info), each with a recommendation, JSON export and print.',
     },

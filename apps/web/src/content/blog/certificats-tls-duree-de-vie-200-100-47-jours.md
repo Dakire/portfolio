@@ -1,6 +1,7 @@
 ---
 title: 'Certificats TLS : 200, 100 puis 47 jours de durée de vie'
-description: 'Depuis le 15 mars 2026, un certificat TLS public ne dure plus que 200 jours maximum, puis 100 jours en 2027 et 47 jours en 2029. Calendrier, impacts et préparation.'
+description: 'Un certificat TLS public dure 200 jours au plus depuis mars 2026, puis 100 jours en 2027 et 47 jours en 2029 : calendrier, impacts et préparation.'
+summary: 'Depuis le 15 mars 2026, un certificat TLS public ne dure plus que 200 jours maximum, puis 100 jours en 2027 et 47 jours en 2029. Calendrier, impacts et préparation.'
 date: 2026-10-28
 category: securite
 tags: ['TLS', 'Certificats', 'ACME', "Let's Encrypt", 'CAA', 'DNS']

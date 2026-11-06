@@ -1,6 +1,7 @@
 ---
 title: 'CIDR and subnet masks explained: /24, /27 and subnetting'
-description: 'Understand CIDR notation (/24, /27…), the dotted-decimal mask, usable addresses, splitting a network into subnets, the /31 and /32 cases and private ranges, with checked calculations.'
+description: 'CIDR notation (/24, /27), dotted-decimal masks, usable addresses and subnetting, with checked calculations and a free subnet calculator.'
+summary: 'Understand CIDR notation (/24, /27…), the dotted-decimal mask, usable addresses, splitting a network into subnets, the /31 and /32 cases and private ranges, with checked calculations.'
 date: 2026-10-28
 translationOf: 'calcul-masque-cidr-expliques'
 category: dns

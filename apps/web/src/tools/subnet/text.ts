@@ -5,7 +5,7 @@ export const SUBNET = {
       meta: {
         title: 'Calculatrice réseau IPv4 / IPv6 : CIDR, masque, VLSM | Guillaume Richard',
         description:
-          "Calculez réseau, broadcast, masque, plage d'hôtes et nombre d'adresses d'un CIDR IPv4 ou IPv6. Découpez en sous-réseaux, planifiez un VLSM, vérifiez l'appartenance d'une IP. Gratuit.",
+          "Calculatrice IP en ligne : réseau, broadcast, masque, plage d'hôtes d'un CIDR IPv4 ou IPv6, découpage en sous-réseaux et VLSM. Gratuit.",
         appDescription:
           'Outil gratuit de calcul réseau IPv4 et IPv6 : CIDR, masque, plage, découpage en sous-réseaux et VLSM.',
       },

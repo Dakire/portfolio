@@ -1,6 +1,7 @@
 ---
 title: "Lire les en-têtes d'un e-mail : Received, SPF, DKIM, DMARC"
-description: "Où trouver les en-têtes dans Outlook, Gmail et Thunderbird, comment lire Received, Authentication-Results et DKIM-Signature, et que conclure d'un spam, d'une usurpation ou d'un retard."
+description: 'Trouver les en-têtes dans Outlook, Gmail ou Thunderbird, lire Received, Authentication-Results et DKIM-Signature, repérer spam, usurpation ou retard.'
+summary: "Où trouver les en-têtes dans Outlook, Gmail et Thunderbird, comment lire Received, Authentication-Results et DKIM-Signature, et que conclure d'un spam, d'une usurpation ou d'un retard."
 date: 2026-10-28
 category: messagerie
 tags: ['En-têtes', 'SPF', 'DKIM', 'DMARC', 'Délivrabilité']

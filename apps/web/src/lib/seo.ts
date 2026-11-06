@@ -177,6 +177,12 @@ export const blogLd = (
   })),
 });
 
+/** Titre de page : au-delà de 62 caractères, le suffixe « | Guillaume Richard » est retiré (Google tronquerait le titre). */
+export const fitTitle = (title: string, max = 62) => {
+  const bare = title.replace(/\s+\|\s+[^|]+$/, '');
+  return title.length > max ? bare : title;
+};
+
 /** Description de page : la phrase d'origine, coupée proprement à 157 caractères au plus. */
 export const shortDescription = (text: string, max = 157) =>
   text.length <= max ? text : `${text.slice(0, max).replace(/\s+\S*$/, '')}…`;

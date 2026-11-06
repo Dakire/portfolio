@@ -54,10 +54,11 @@ const further = await resolveRelated(lang, POST_RELATED[frSlug]);
 const furtherLinks = [...further.tools, ...further.refs];
 const contactBand = SITE_TEXT[lang].contactBand;
 // Titre de l'onglet : le suffixe de marque n'est ajouté que s'il tient dans ~65 caractères (au-delà, les résultats de recherche le tronquent).
+const shortTitle = post.data.seoTitle ?? post.data.title;
 const pageTitle =
-  post.data.title.length + PROFILE.name.length + 3 <= 65
-    ? `${post.data.title} | ${PROFILE.name}`
-    : post.data.title;
+  shortTitle.length + PROFILE.name.length + 3 <= 62
+    ? `${shortTitle} | ${PROFILE.name}`
+    : shortTitle;
 const image = {
   url: `${SITE}${withBase(`/og/${post.slug}.png`)}`,
   width: 1200,
@@ -124,7 +125,7 @@ const crumbs = [
           · {readingMinutes(post.body)} {t.min}
         </p>
         <h1>{post.data.title}</h1>
-        <p class="lead">{post.data.description}</p>
+        <p class="lead">{post.data.summary ?? post.data.description}</p>
         {translation && (
           <p>
             <a

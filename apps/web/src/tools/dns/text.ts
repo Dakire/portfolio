@@ -35,7 +35,7 @@ const fr = {
     meta: {
       title: 'DNS Lookup : A, MX, SPF, DKIM, DMARC, DNSSEC | Guillaume Richard',
       description:
-        "Analysez le DNS d'un domaine : A, AAAA, MX, SPF (avec décompte des requêtes), DKIM (sélecteurs devinés selon le fournisseur), DMARC, doublons, DNSSEC, CAA, MTA-STS et BIMI. Gratuit, sans inscription.",
+        "Vérifiez le DNS d'un domaine en ligne : A, MX, SPF (décompte des requêtes), DKIM, DMARC, DNSSEC, CAA, MTA-STS et BIMI. Gratuit, sans inscription.",
       appDescription:
         "Outil gratuit d'analyse DNS et de délivrabilité e-mail : valide la syntaxe de SPF, DKIM et DMARC, détecte les doublons et devine les sélecteurs DKIM.",
     },
@@ -875,7 +875,7 @@ const en = {
     meta: {
       title: 'DNS Lookup: A, MX, SPF, DKIM, DMARC, DNSSEC | Guillaume Richard',
       description:
-        "Analyse a domain's DNS: A, AAAA, MX, SPF (with lookup count), DKIM (selectors guessed from your provider), DMARC, duplicates, DNSSEC, CAA, MTA-STS and BIMI. Free, no sign-up.",
+        "Check a domain's DNS online: A, MX, SPF (lookup count), DKIM, DMARC, DNSSEC, CAA, MTA-STS and BIMI. Free, no sign-up.",
       appDescription:
         'Free DNS and email deliverability tool: validates SPF, DKIM and DMARC syntax, detects duplicates and guesses DKIM selectors.',
     },

@@ -5,7 +5,7 @@ export const ENCODER = {
       meta: {
         title: 'Encodeur / décodeur : Base64, URL, JWT, hash, UUID | Guillaume Richard',
         description:
-          "Encodez et décodez du Base64, des URL, de l'hexadécimal et des entités HTML ; lisez un JWT ; calculez MD5, SHA-1, SHA-256, SHA-512 d'un texte ou d'un fichier ; convertissez un timestamp ; générez des UUID. Dans votre navigateur.",
+          'Encodez et décodez Base64, URL, hexadécimal, entités HTML ; lisez un JWT ; calculez MD5 ou SHA-256 ; générez des UUID. Dans votre navigateur.',
         appDescription:
           'Boîte à outils gratuite : Base64, URL, hexadécimal, HTML, JWT, empreintes de fichiers, horodatages et UUID, sans envoi de données.',
       },
@@ -200,7 +200,7 @@ export const ENCODER = {
       meta: {
         title: 'Encoder / decoder: Base64, URL, JWT, hash, UUID | Guillaume Richard',
         description:
-          'Encode and decode Base64, URLs, hexadecimal and HTML entities; read a JWT; compute MD5, SHA-1, SHA-256, SHA-512 of text or a file; convert a timestamp; generate UUIDs.',
+          'Encode and decode Base64, URLs, hex and HTML entities; read a JWT; compute MD5 or SHA-256 hashes; generate UUIDs. Runs in your browser.',
         appDescription:
           'Free toolbox: Base64, URL, hexadecimal, HTML, JWT, file hashes, timestamps and UUIDs, with no data upload.',
       },

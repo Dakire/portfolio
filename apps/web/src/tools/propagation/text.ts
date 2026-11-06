@@ -7,7 +7,7 @@ export const PROPAGATION = {
       meta: {
         title: 'Propagation DNS : un changement est-il visible partout ? | Guillaume Richard',
         description:
-          "Vérifiez la propagation DNS d'un nom (A, AAAA, CNAME, MX, NS, TXT, SOA, CAA) auprès de 9 résolveurs publics : même réponse partout ? valeur attendue déjà visible ? Résultat en direct, gratuit, sans inscription.",
+          "Vérifiez la propagation DNS d'un enregistrement (A, CNAME, MX, TXT, NS…) auprès de 9 résolveurs publics, en direct. Gratuit, sans inscription.",
         appDescription:
           'Outil gratuit de vérification de propagation DNS : interroge plusieurs résolveurs publics et compare leurs réponses à la valeur attendue.',
       },
@@ -147,7 +147,7 @@ export const PROPAGATION = {
       meta: {
         title: 'DNS propagation checker: is your change visible everywhere? | Guillaume Richard',
         description:
-          'Check DNS propagation of a name (A, AAAA, CNAME, MX, NS, TXT, SOA, CAA) against 9 public resolvers: same answer everywhere? Is the expected value visible yet? Live results, free, no sign-up.',
+          'Check DNS propagation of a record (A, CNAME, MX, TXT, NS…) against 9 public resolvers, live. Is the new value visible everywhere yet? Free.',
         appDescription:
           'Free DNS propagation checker: queries several public resolvers and compares their answers with the expected value.',
       },

@@ -1,6 +1,7 @@
 ---
 title: 'Reading Email Headers: Received, SPF, DKIM, DMARC'
-description: 'Where to find headers in Outlook, Gmail and Thunderbird, how to read Received, Authentication-Results and DKIM-Signature, and what to conclude from spam, spoofing or a delay.'
+description: 'Where to find headers in Outlook, Gmail and Thunderbird, how to read Received, Authentication-Results and DKIM-Signature, and spot spam or spoofing.'
+summary: 'Where to find headers in Outlook, Gmail and Thunderbird, how to read Received, Authentication-Results and DKIM-Signature, and what to conclude from spam, spoofing or a delay.'
 date: 2026-10-28
 translationOf: 'lire-en-tetes-email-received-spf-dkim-dmarc'
 category: messagerie

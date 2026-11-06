@@ -11,7 +11,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 import SearchDialog from '../components/SearchDialog.astro';
 import { ROUTES, SITE, UI, otherLang, type Alternates, type Lang } from '../lib/i18n';
 import { BASE, withBase } from '../lib/base';
-import { OG_DEFAULT, jsonForScript, versioned } from '../lib/seo';
+import { OG_DEFAULT, fitTitle, jsonForScript, versioned } from '../lib/seo';
 
 interface Props {
   lang: Lang;
@@ -32,7 +32,7 @@ interface Props {
 }
 const {
   lang,
-  title,
+  title: rawTitle,
   description,
   path,
   alternates = {},
@@ -45,6 +45,7 @@ const {
 } = Astro.props;
 
 // Préproduction (PUBLIC_NOINDEX=1) : aucune page n'est indexable, quoi que demande la page.
+const title = fitTitle(rawTitle);
 const noindex = noindexProp || import.meta.env.PUBLIC_NOINDEX === '1';
 const ui = UI[lang];
 const url = `${SITE}${path}`;

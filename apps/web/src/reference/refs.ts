@@ -43,7 +43,7 @@ export const REF_UI = {
   fr: {
     hubTitle: 'Cheatsheets IT : GAM, PowerShell, Windows | Guillaume Richard',
     hubDescription:
-      'Cheatsheets de commandes pour techniciens : GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux, Proxmox, Git, touches BIOS. Exemples à copier.',
+      'Aide-mémoire de commandes : GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux, Git, touches BIOS. Exemples à copier.',
     hubH1: 'Cheatsheets : aide-mémoire de commandes',
     hubIntro:
       'Les commandes qu’on finit toujours par rechercher, rangées par outil. Chacune a sa page, avec sa propre recherche, des exemples à copier et le lien vers la documentation officielle.',

@@ -1,6 +1,7 @@
 ---
 title: 'Windows Server 2016: End of Support on 12 January 2027'
-description: 'Windows Server 2016 extended support ends on 12 January 2027. Inventory, migrating to Server 2025 or 2022, Extended Security Updates (ESU) through Azure Arc, Active Directory and a plan for a small organization.'
+description: 'Windows Server 2016 support ends on 12 January 2027: inventory, migrating to Server 2025 or 2022, ESU through Azure Arc, and Active Directory.'
+summary: 'Windows Server 2016 extended support ends on 12 January 2027. Inventory, migrating to Server 2025 or 2022, Extended Security Updates (ESU) through Azure Arc, Active Directory and a plan for a small organization.'
 date: 2026-10-28
 translationOf: 'fin-support-windows-server-2016-janvier-2027'
 category: poste-de-travail

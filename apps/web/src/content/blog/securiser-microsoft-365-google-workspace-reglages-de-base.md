@@ -1,6 +1,7 @@
 ---
 title: 'Sécuriser Microsoft 365 et Google Workspace : réglages de base'
-description: 'MFA, comptes administrateurs, authentification héritée, transferts automatiques, partage externe, sauvegarde et départs : les mesures essentielles pour une PME.'
+description: "MFA, comptes administrateurs, authentification héritée, transferts, partage externe, sauvegarde et départs : les réglages de sécurité essentiels d'une PME."
+summary: 'MFA, comptes administrateurs, authentification héritée, transferts automatiques, partage externe, sauvegarde et départs : les mesures essentielles pour une PME.'
 date: 2026-10-03
 category: securite
 tags: ['Microsoft 365', 'Google Workspace', 'Sécurité']

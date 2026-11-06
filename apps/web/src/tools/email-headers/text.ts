@@ -23,7 +23,7 @@ const fr = {
     meta: {
       title: "Analyseur d'en-têtes d'e-mail : SPF, DKIM, DMARC, délais | Guillaume Richard",
       description:
-        "Collez les en-têtes d'un e-mail : chemin de livraison avec délais et chiffrement, résultats SPF, DKIM et DMARC, alignement, usurpation du nom affiché, signaux de spam. Gratuit, sans inscription.",
+        "Analysez les en-têtes d'un e-mail : chemin et délais, résultats SPF, DKIM et DMARC, alignement, usurpation, signaux de spam. Gratuit, sans inscription.",
       appDescription:
         "Outil gratuit d'analyse des en-têtes d'un e-mail : chemin, délais, authentification SPF/DKIM/DMARC, usurpation et spam.",
     },
@@ -343,7 +343,7 @@ const en = {
     meta: {
       title: 'Email header analyzer: path, delays, SPF, DKIM, DMARC | Guillaume Richard',
       description:
-        'Paste the headers of an email: delivery path with delays and encryption, SPF, DKIM and DMARC results, alignment, display-name spoofing, spam signals. Free, no sign-up.',
+        'Analyze email headers: delivery path and delays, SPF, DKIM and DMARC results, alignment, spoofing and spam signals. Free, no sign-up.',
       appDescription:
         'Free tool to analyse email headers: path, delays, SPF/DKIM/DMARC authentication, spoofing and spam.',
     },

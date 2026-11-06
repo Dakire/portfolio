@@ -1,6 +1,8 @@
 ---
 title: 'Supermarket Fridge Cyberattack in France: What We Know and the Lessons'
-description: 'On the night of 11 to 12 October 2026, refrigeration controllers in hundreds of supermarkets were hacked. Equipment, cause, losses, and measures for any connected device.'
+seoTitle: 'Supermarket Fridge Cyberattack in France: Facts and Lessons'
+description: '11 to 12 October 2026: refrigeration controllers hacked in hundreds of French supermarkets. Equipment, cause, losses and measures for any connected device.'
+summary: 'On the night of 11 to 12 October 2026, refrigeration controllers in hundreds of supermarkets were hacked. Equipment, cause, losses, and measures for any connected device.'
 date: 2026-10-28
 translationOf: 'cyberattaque-frigos-supermarches-controleurs-froid'
 category: actualites

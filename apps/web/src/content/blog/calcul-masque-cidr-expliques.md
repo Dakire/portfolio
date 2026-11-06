@@ -1,6 +1,8 @@
 ---
 title: 'Calcul de masque et CIDR expliqués : /24, /27, sous-réseaux'
-description: 'Comprendre la notation CIDR (/24, /27…), le masque décimal, les adresses utilisables, le découpage en sous-réseaux, les cas /31 et /32 et les adresses privées, avec des calculs vérifiés.'
+seoTitle: 'Masque de sous-réseau et CIDR expliqués : /24, /27'
+description: 'Notation CIDR (/24, /27), masque décimal, adresses utilisables et découpage en sous-réseaux, avec des calculs vérifiés et une calculatrice réseau.'
+summary: 'Comprendre la notation CIDR (/24, /27…), le masque décimal, les adresses utilisables, le découpage en sous-réseaux, les cas /31 et /32 et les adresses privées, avec des calculs vérifiés.'
 date: 2026-10-28
 category: dns
 tags: ['Réseau', 'CIDR', 'Masque', 'Sous-réseau', 'IPv4', 'RFC 1918']

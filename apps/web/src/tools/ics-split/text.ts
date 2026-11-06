@@ -5,7 +5,7 @@ export const ICS_SPLIT = {
       meta: {
         title: 'Découper un fichier ICS (calendrier) en plusieurs fichiers | Guillaume Richard',
         description:
-          "Découpez un gros fichier .ics en plusieurs : par nombre d'événements, par taille, par année, par mois ou un par fichier. Les séries récurrentes restent entières. Gratuit.",
+          "Découpez un gros fichier .ics en plusieurs : par nombre d'événements, taille, année ou mois. Les séries récurrentes restent entières. Gratuit.",
         appDescription:
           'Outil gratuit pour découper un fichier iCalendar (.ics) en plusieurs fichiers, sans envoi de données.',
       },

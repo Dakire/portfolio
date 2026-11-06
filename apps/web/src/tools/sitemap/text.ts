@@ -6,7 +6,7 @@ const fr = {
     meta: {
       title: 'Vérificateur de sitemap.xml gratuit : erreurs et robots.txt | Guillaume Richard',
       description:
-        'Vérifiez un sitemap.xml : découverte via robots.txt, XML et protocole sitemaps.org, index, gzip, limite de 50 000 URL, doublons, lastmod, URL bloquées par robots.txt et échantillon de pages testées.',
+        'Vérifiez un sitemap.xml en ligne : robots.txt, syntaxe XML, index, limite de 50 000 URL, doublons, lastmod, URL bloquées et pages testées.',
       appDescription:
         'Outil gratuit de vérification de sitemap.xml : fichiers, URL déclarées, cohérence avec robots.txt et statut d’un échantillon de pages.',
     },
@@ -116,7 +116,7 @@ const en: typeof fr = {
     meta: {
       title: 'Free sitemap.xml checker: errors, robots.txt, URLs | Guillaume Richard',
       description:
-        'Check a sitemap.xml: discovery through robots.txt, XML and sitemaps.org protocol, indexes, gzip, 50,000-URL limit, duplicates, lastmod, URLs blocked by robots.txt and a sample of tested pages.',
+        'Check a sitemap.xml online: robots.txt discovery, XML syntax, indexes, 50,000-URL limit, duplicates, lastmod, blocked URLs and tested pages.',
       appDescription:
         'Free sitemap.xml checker: files, declared URLs, consistency with robots.txt and the status of a sample of pages.',
     },

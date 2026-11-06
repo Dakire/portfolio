@@ -14,15 +14,20 @@ export const CATEGORIES: Record<string, Record<Lang, string>> = {
 };
 
 /** Page de catégorie (indexable) : description pour les résultats de recherche et introduction affichée sous le titre. */
-export const CATEGORY_TEXT: Record<string, Record<Lang, { description: string; intro: string }>> = {
+export const CATEGORY_TEXT: Record<
+  string,
+  Record<Lang, { title: string; description: string; intro: string }>
+> = {
   messagerie: {
     fr: {
+      title: 'Messagerie pro : SPF, DKIM, DMARC et délivrabilité',
       description:
         'Articles sur la messagerie professionnelle : SPF, DKIM, DMARC, délivrabilité, lecture des en-têtes et envoi de courrier depuis des équipements.',
       intro:
         'Cette rubrique traite de la messagerie d’entreprise côté administrateur : pourquoi un message part en spam, comment lire ses en-têtes, comment configurer SPF, DKIM et DMARC, et comment faire envoyer du courrier à des scanners ou à des applications. Les articles renvoient vers les outils du site pour vérifier un domaine ou analyser un message.',
     },
     en: {
+      title: 'Business email: SPF, DKIM, DMARC and deliverability',
       description:
         'Articles on business email: SPF, DKIM, DMARC, deliverability, reading headers and sending mail from devices.',
       intro:
@@ -31,12 +36,14 @@ export const CATEGORY_TEXT: Record<string, Record<Lang, { description: string; i
   },
   dns: {
     fr: {
+      title: 'DNS : enregistrements, dig, nslookup et sous-réseaux',
       description:
         'Articles sur le DNS et le réseau : enregistrements A, MX, CNAME, TXT, TTL, propagation, dig, nslookup et calcul de sous-réseaux CIDR.',
       intro:
         'Enregistrements A, MX, CNAME ou TXT, TTL et propagation, commandes dig et nslookup, masques de sous-réseau : de quoi comprendre et diagnostiquer le DNS et l’adressage d’un petit réseau. Chaque article renvoie vers l’outil correspondant du site.',
     },
     en: {
+      title: 'DNS: records, dig, nslookup and subnetting',
       description:
         'Articles on DNS and networking: A, MX, CNAME and TXT records, TTL, propagation, dig, nslookup and CIDR subnet calculation.',
       intro:
@@ -45,12 +52,14 @@ export const CATEGORY_TEXT: Record<string, Record<Lang, { description: string; i
   },
   migration: {
     fr: {
+      title: 'Migration de messagerie : Google Workspace et Microsoft 365',
       description:
         'Articles sur les migrations de messagerie entre Google Workspace et Microsoft 365 : préparation, DNS, bascule et vérifications.',
       intro:
         'Passer d’une messagerie à une autre sans perdre de courrier ni de disponibilité : préparation, enregistrements DNS, bascule et vérifications, entre Google Workspace et Microsoft 365.',
     },
     en: {
+      title: 'Email migration: Google Workspace and Microsoft 365',
       description:
         'Articles on email migrations between Google Workspace and Microsoft 365: preparation, DNS, cutover and checks.',
       intro:
@@ -59,12 +68,14 @@ export const CATEGORY_TEXT: Record<string, Record<Lang, { description: string; i
   },
   securite: {
     fr: {
+      title: 'Sécurité informatique en PME : réglages, failles, correctifs',
       description:
         'Articles sur la sécurité d’une petite structure : réglages de base, authentification, journaux Windows, vulnérabilités et correctifs.',
       intro:
         'Réglages de sécurité pour une petite structure (comptes, authentification, journaux), et décryptage des vulnérabilités et des correctifs qui comptent : ce qui est exploité, ce qui est urgent, ce qu’il faut faire.',
     },
     en: {
+      title: 'IT security for small businesses: settings, flaws, patches',
       description:
         'Articles on security for a small organization: baseline settings, authentication, Windows logs, vulnerabilities and patches.',
       intro:
@@ -73,12 +84,14 @@ export const CATEGORY_TEXT: Record<string, Record<Lang, { description: string; i
   },
   'poste-de-travail': {
     fr: {
+      title: 'Windows en entreprise : fin de support, migration, Secure Boot',
       description:
         'Articles sur le parc de postes et de serveurs Windows : fins de support, migrations, Secure Boot et firmware, déploiement.',
       intro:
         'Postes et serveurs Windows : fins de support et migrations, Secure Boot et firmware, déploiement. Des plans d’action pour une petite structure, avec les échéances à surveiller.',
     },
     en: {
+      title: 'Windows at work: end of support, migration, Secure Boot',
       description:
         'Articles on Windows workstations and servers: end of support, migrations, Secure Boot and firmware, deployment.',
       intro:
@@ -87,12 +100,14 @@ export const CATEGORY_TEXT: Record<string, Record<Lang, { description: string; i
   },
   actualites: {
     fr: {
+      title: 'Actualités IT : cyberattaques, pannes et failles décryptées',
       description:
         'Analyses d’incidents et de failles récents (cyberattaques, pannes, vulnérabilités), recoupées avec les sources officielles, avec les actions à en tirer.',
       intro:
         'Analyses des incidents et des failles du moment (cyberattaques, pannes, vulnérabilités), publiées après coup, quand les faits sont recoupés avec les sources officielles, avec les actions concrètes à en tirer pour une petite structure.',
     },
     en: {
+      title: 'IT news: cyberattacks, outages and flaws explained',
       description:
         'Analyses of recent incidents and flaws (cyberattacks, outages, vulnerabilities), cross-checked against official sources, with the actions to take.',
       intro:
@@ -118,7 +133,7 @@ export const categoryPath = (lang: Lang, category: string) =>
 export const tagPath = (lang: Lang, tag: string) =>
   `${ROUTES[lang].blog}${TAG_PATH[lang]}/${slugify(tag)}/`;
 
-/** Articles d'une langue, du plus récent au plus ancien. L'identifiant « en/<slug> » désigne un article anglais. */
+/** Articles publiés d'une langue (brouillons exclus), du plus récent au plus ancien. L'identifiant « en/<slug> » désigne un article anglais. */
 export async function getPosts(lang: Lang): Promise<Post[]> {
   const all = await getCollection('blog');
   return all
@@ -129,7 +144,7 @@ export async function getPosts(lang: Lang): Promise<Post[]> {
         slug: isEn ? entry.id.slice(3) : entry.id,
       });
     })
-    .filter((post) => post.lang === lang)
+    .filter((post) => post.lang === lang && !post.data.draft)
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 

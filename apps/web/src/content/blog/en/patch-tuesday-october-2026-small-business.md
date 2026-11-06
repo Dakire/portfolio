@@ -1,6 +1,8 @@
 ---
 title: 'October 2026 Patch Tuesday: What to Install First in a Small Organization'
-description: 'An exploited Windows Shell flaw, a record number of fixes, two known issues to watch and the end of Windows 11 24H2 Home and Pro: what to handle first and what can wait.'
+seoTitle: 'October 2026 Patch Tuesday: What to Install First'
+description: 'October 2026 Patch Tuesday: an exploited Windows Shell flaw, a record number of fixes, two known issues and the end of Windows 11 24H2. The priorities.'
+summary: 'An exploited Windows Shell flaw, a record number of fixes, two known issues to watch and the end of Windows 11 24H2 Home and Pro: what to handle first and what can wait.'
 date: 2026-10-28
 translationOf: 'patch-tuesday-octobre-2026-pme'
 category: securite

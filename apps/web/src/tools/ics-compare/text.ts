@@ -5,7 +5,7 @@ export const ICS_COMPARE = {
       meta: {
         title: 'Comparer deux fichiers ICS : source moins destination | Guillaume Richard',
         description:
-          'Comparez deux calendriers .ics et obtenez les événements de la source absents de la destination, prêts à importer. Détecte les doublons et les événements modifiés. Gratuit.',
+          'Comparez deux calendriers .ics et récupérez les événements de la source absents de la destination, prêts à importer. Doublons détectés. Gratuit.',
         appDescription:
           'Outil gratuit pour comparer deux fichiers iCalendar (.ics) et extraire les événements manquants, sans envoi de données.',
       },

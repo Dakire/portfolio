@@ -1,6 +1,8 @@
 ---
 title: "Cyberattaque des frigos de supermarchés : ce que l'on sait, et les leçons"
-description: 'Dans la nuit du 11 au 12 octobre 2026, des centaines de supermarchés ont vu leurs régulateurs de froid piratés. Équipements, cause, pertes, et mesures pour tout objet connecté.'
+seoTitle: 'Cyberattaque des frigos de supermarchés : faits et leçons'
+description: 'Nuit du 11 au 12 octobre 2026 : régulateurs de froid piratés dans des centaines de supermarchés. Équipements, cause, pertes et mesures à prendre.'
+summary: 'Dans la nuit du 11 au 12 octobre 2026, des centaines de supermarchés ont vu leurs régulateurs de froid piratés. Équipements, cause, pertes, et mesures pour tout objet connecté.'
 date: 2026-10-28
 category: actualites
 tags: ['Cyberattaque', 'IoT', 'Fin de vie']

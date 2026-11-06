@@ -1,5 +1,6 @@
 ---
 title: 'Orange Outage of 21 October 2026: What We Know and How to Protect Yourself'
+seoTitle: 'Orange Outage of 21 October 2026: What We Know'
 description: 'Ten hours without Orange and Sosh mobile service: timeline, announced cause, and concrete measures so an operator outage does not stop a small business.'
 date: 2026-10-28
 translationOf: 'panne-orange-21-octobre-2026-reseau-mobile'

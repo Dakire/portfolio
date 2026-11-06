@@ -14,7 +14,7 @@ import {
   tagPath,
 } from '../lib/blog';
 import { ROUTES, routeAlternates, SITE, type Alternates, type Lang } from '../lib/i18n';
-import { blogLd } from '../lib/seo';
+import { blogLd, breadcrumbLd } from '../lib/seo';
 
 interface Props {
   lang: Lang;
@@ -45,7 +45,7 @@ const categoryText = category ? CATEGORY_TEXT[category]?.[lang] : undefined;
 const title = !heading
   ? t.siteName
   : categoryText
-    ? `${heading} : ${lang === 'fr' ? 'articles et guides' : 'articles and guides'} | ${t.siteName}`
+    ? categoryText.title
     : `${kind} : ${heading} | ${t.siteName}`;
 const path = category
   ? categoryPath(lang, category)
@@ -81,7 +81,34 @@ const toolsTitle = lang === 'fr' ? 'Outils et aide-mémoire liés' : 'Related to
   noindex={Boolean(tag)}
   ld={
     heading
-      ? undefined
+      ? categoryText && {
+          '@context': 'https://schema.org',
+          '@graph': [
+            {
+              '@type': 'CollectionPage',
+              '@id': `${SITE}${path}#page`,
+              url: `${SITE}${path}`,
+              name: categoryText.title,
+              description: categoryText.description,
+              inLanguage: lang === 'fr' ? 'fr-FR' : 'en',
+              isPartOf: { '@id': `${SITE}/#website` },
+              mainEntity: {
+                '@type': 'ItemList',
+                itemListElement: posts.map((p, i) => ({
+                  '@type': 'ListItem',
+                  position: i + 1,
+                  url: `${SITE}${postPath(lang, p.slug)}`,
+                  name: p.data.title,
+                })),
+              },
+            },
+            breadcrumbLd([
+              { name: lang === 'fr' ? 'Accueil' : 'Home', path: routes.home },
+              { name: 'Blog', path: routes.blog },
+              { name: heading, path },
+            ]),
+          ],
+        }
       : blogLd(
           lang,
           t.siteName,

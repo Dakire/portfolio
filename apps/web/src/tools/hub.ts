@@ -2,10 +2,9 @@
 export const HUB = {
   fr: {
     meta: {
-      title:
-        'Outils en ligne pour techniciens IT : DNS, SEO, e-mail, calendriers, réseau | Guillaume Richard',
+      title: 'Outils en ligne pour techniciens IT : DNS, e-mail, réseau',
       description:
-        "Outils gratuits pour techniciens et administrateurs : DNS Lookup (A, MX, SPF, DKIM, DMARC), propagation DNS, découpeur et comparateur de fichiers ICS, calculatrice réseau, analyseur d'en-têtes d'e-mail, encodeurs, formateur JSON, convertisseurs d'unités.",
+        "Outils gratuits pour techniciens IT : DNS Lookup (SPF, DKIM, DMARC), propagation DNS, en-têtes d'e-mail, calculatrice réseau, fichiers ICS, audit SEO.",
     },
     h1: 'Outils pour techniciens IT',
     intro:
@@ -20,10 +19,9 @@ export const HUB = {
   },
   en: {
     meta: {
-      title:
-        'Online tools for IT technicians: DNS, email, calendars, networking | Guillaume Richard',
+      title: 'Online tools for IT technicians: DNS, email, networking',
       description:
-        'Free tools for technicians and administrators: DNS Lookup (A, MX, SPF, DKIM, DMARC), DNS propagation, ICS file splitter and comparer, subnet calculator, email header analyzer, encoders, JSON formatter, unit converters.',
+        'Free tools for IT technicians: DNS Lookup (SPF, DKIM, DMARC), DNS propagation, email headers, subnet calculator, ICS files and SEO audit.',
     },
     h1: 'Tools for IT technicians',
     intro:

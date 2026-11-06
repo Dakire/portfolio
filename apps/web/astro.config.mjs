@@ -52,6 +52,7 @@ function articleDates() {
   ]) {
     for (const file of readdirSync(dir).filter((f) => f.endsWith('.md'))) {
       const head = readFileSync(`${dir}/${file}`, 'utf-8').split('---')[1] ?? '';
+      if (/^draft:\s*true/m.test(head)) continue; // brouillon : aucune page publiée
       const date = /^updated:\s*(\S+)/m.exec(head)?.[1] ?? /^date:\s*(\S+)/m.exec(head)?.[1];
       if (date) dates.set(`${prefix}${file.replace(/\.md$/, '')}/`, date);
     }

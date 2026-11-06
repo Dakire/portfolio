@@ -1,5 +1,6 @@
 ---
 title: 'Windows 10 End of Support: Planning the Move to Windows 11'
+seoTitle: 'Windows 10 End of Support: ESU and Moving to Windows 11'
 description: 'Hardware requirements, fleet inventory, Extended Security Updates (ESU), Windows 11 lifecycle and a migration plan for a small business.'
 date: 2026-10-03
 updated: 2026-10-28
