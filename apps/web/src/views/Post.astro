@@ -32,7 +32,10 @@ const lang: Lang = post.lang;
 const t = PORTFOLIO_DATA[lang].blog;
 const ui = UI[lang];
 const { Content, headings } = await render(post);
-const toc = headings.filter((h) => h.depth === 2);
+// Sommaire : la liste numérote déjà ; un intertitre « 4. Si un poste… » perd son numéro pour ne pas afficher « 04. 4. ».
+const toc = headings
+  .filter((h) => h.depth === 2)
+  .map((h) => ({ ...h, text: h.text.replace(/^\d+\.\s+/, '') }));
 const translation = await getTranslation(post);
 const path = postPath(lang, post.slug);
 const alternates: Partial<Alternates> = {
