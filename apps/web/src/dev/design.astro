@@ -15,6 +15,9 @@ const colors = [
   'raised',
   'line',
   'line-strong',
+  'guide',
+  'band',
+  'band-ink',
   'ink',
   'body',
   'muted',
@@ -129,6 +132,47 @@ const sizes = ['display', '2xl', 'xl', 'lg', 'base', 'sm', 'xs'];
         </Fragment>
       </CtaBand>
     </section>
+
+    <section class="stack" aria-labelledby="identite">
+      <h2 id="identite">Identité (ADR 0011)</h2>
+      <p class="prose">
+        Titres en Bricolage Grotesque condensée, texte en Atkinson Hyperlegible Next, libellés en
+        JetBrains Mono. Un sur-titre posé sur un filet nomme chaque section ; la numérotation est
+        réservée aux contenus ordonnés (étapes, sommaire).
+      </p>
+      <p class="rule-label">Sur-titre sur filet</p>
+      <h3 class="type-display-sample">Un titre de section, condensé et serré</h3>
+      <ol class="steps">
+        <li>Première étape : le numéro en chasse fixe, un filet au-dessus.</li>
+        <li>Deuxième étape : l'ordre est une information.</li>
+      </ol>
+      <dl class="spec-sheet">
+        <div>
+          <dt>Domaine</dt>
+          <dd>Réseau &amp; Systèmes</dd>
+        </div>
+        <div>
+          <dt>Outils</dt>
+          <dd>Proxmox · OPNsense · WireGuard</dd>
+        </div>
+      </dl>
+      <div class="tile">
+        <h3>Tuile</h3>
+        <p>
+          Le seul composant au grand rayon (<code>--radius-tile</code>), fond en aplat, un filet.
+        </p>
+      </div>
+    </section>
+    <div class="band design-band">
+      <div class="container stack">
+        <p class="rule-label">Bande inversée</p>
+        <h2>Fond de bande, texte et accent recalculés</h2>
+        <p>
+          Les jetons <code>--band-*</code> sont testés à 4,5:1 dans les deux thèmes ; le lien et
+          l'accent restent lisibles. <a href="#identite">Un lien</a>
+        </p>
+      </div>
+    </div>
 
     <section class="stack" aria-labelledby="alertes">
       <h2 id="alertes">Alertes</h2>
@@ -268,6 +312,24 @@ const sizes = ['display', '2xl', 'xl', 'lg', 'base', 'sm', 'xs'];
   }
   .swatch-line {
     --chip: var(--line);
+  }
+  .swatch-guide {
+    --chip: var(--guide);
+  }
+  .swatch-band {
+    --chip: var(--band);
+  }
+  .swatch-band-ink {
+    --chip: var(--band-ink);
+  }
+  .design-band {
+    padding-block: var(--space-6);
+  }
+  .type-display-sample {
+    font-size: var(--text-display);
+    font-stretch: var(--stretch-display);
+    font-weight: 760;
+    line-height: 1;
   }
   .swatch-line-strong {
     --chip: var(--line-strong);

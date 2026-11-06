@@ -1,6 +1,6 @@
 # ADR 0010 : identité visuelle « fiche technique »
 
-**Statut** : accepté (2026-10-15). Remplace la palette et les principes visuels de l'[ADR 0005](0005-identite-visuelle.md) ; le mécanisme (CSS à tokens, sans Tailwind, contrastes testés) est inchangé. **`packages/ui/src/tokens.css` fait foi.**
+**Statut** : accepté (2026-10-15) ; polices, palette et mise en page revues par l'[ADR 0011](0011-identite-atelier.md) (2026-11-06). Remplace la palette et les principes visuels de l'[ADR 0005](0005-identite-visuelle.md) ; le mécanisme (CSS à tokens, sans Tailwind, contrastes testés) est inchangé. **`packages/ui/src/tokens.css` fait foi.**
 
 ## Contexte
 
