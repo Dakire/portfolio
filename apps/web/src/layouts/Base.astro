@@ -104,6 +104,7 @@ const allScripts = [...scripts, '/js/nav.js', '/js/search.js', '/js/cursor.js', 
     {ld && <script type="application/ld+json" set:html={jsonForScript(ld)} />}
   </head>
   <body>
+    <div class="page-rails" aria-hidden="true"></div>
     <SkipLink label={ui.skip} />
     <SiteHeader lang={lang} path={path} otherHref={otherHref} />
     <main id="contenu" tabindex="-1">
