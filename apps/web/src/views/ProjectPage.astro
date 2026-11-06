@@ -60,121 +60,124 @@ const hasBlocks = Boolean(
     <p class="lead">{project.desc}</p>
   </PageHero>
   <div class="container stack-lg section">
-    <section class="stack" aria-labelledby="summary">
-      <h2 id="summary">{text.project.summary}</h2>
-      <dl class="facts">
-        <div>
-          <dt>{text.project.stack}</dt>
-          <dd class="row">
-            {project.tags.map((tag) => (
-              <Tag>{tag}</Tag>
-            ))}
-          </dd>
-        </div>
-        {project.kind && (
-          <div>
-            <dt>{text.project.kind}</dt>
-            <dd>{text.project.kinds[project.kind]}</dd>
-          </div>
-        )}
-        {domain && (
-          <div>
-            <dt>{text.project.domain}</dt>
-            <dd>
-              <a href={`${routes.skills}#${domain.id}`}>{domain.category}</a>
-            </dd>
-          </div>
-        )}
-        {project.href && (
-          <div>
-            <dt>GitHub</dt>
-            <dd>
-              <a href={project.href} rel="noopener">
-                {text.project.code}
-                <span class="visually-hidden"> {UI[lang].external}</span>
-              </a>
-            </dd>
-          </div>
-        )}
-      </dl>
-    </section>
-
-    {hasBlocks && (
-      <>
-        {project.context && (
-          <section class="stack" aria-labelledby="context">
-            <h2 id="context">{text.project.context}</h2>
-            <p class="prose">{project.context}</p>
-          </section>
-        )}
-        {project.role && (
-          <section class="stack" aria-labelledby="role">
-            <h2 id="role">{text.project.role}</h2>
-            <p class="prose">{project.role}</p>
-          </section>
-        )}
-        {project.steps && project.steps.length > 0 && (
-          <section class="stack" aria-labelledby="steps">
-            <h2 id="steps">{text.project.steps}</h2>
-            <ol class="points">
-              {project.steps.map((step) => (
-                <li>{step}</li>
-              ))}
-            </ol>
-          </section>
-        )}
-        {project.result && (
-          <section class="stack" aria-labelledby="result">
-            <h2 id="result">{text.project.result}</h2>
-            <p class="prose">{project.result}</p>
-          </section>
-        )}
-      </>
-    )}
-
-    {hasRelated(related) && (
-      <section class="stack" aria-labelledby="proofs">
-        <h2 id="proofs">{text.project.proofs}</h2>
-        <div class="proofs">
-          {related.posts.length > 0 && (
-            <div>
-              <h3>{text.project.posts}</h3>
-              <ul class="link-list">
-                {related.posts.map((l) => (
-                  <li>
-                    <a href={l.href}>{l.label}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+    <div class={`project-layout${hasBlocks ? '' : ' is-single'}`}>
+      {hasBlocks && (
+        <div class="project-main stack-lg">
+          {project.context && (
+            <section class="stack" aria-labelledby="context">
+              <h2 id="context">{text.project.context}</h2>
+              <p class="prose">{project.context}</p>
+            </section>
           )}
-          {related.tools.length > 0 && (
-            <div>
-              <h3>{text.project.tools}</h3>
-              <ul class="link-list">
-                {related.tools.map((l) => (
-                  <li>
-                    <a href={l.href}>{l.label}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {project.role && (
+            <section class="stack" aria-labelledby="role">
+              <h2 id="role">{text.project.role}</h2>
+              <p class="prose">{project.role}</p>
+            </section>
           )}
-          {related.refs.length > 0 && (
-            <div>
-              <h3>{text.project.cheatsheets}</h3>
-              <ul class="link-list">
-                {related.refs.map((l) => (
-                  <li>
-                    <a href={l.href}>{l.label}</a>
-                  </li>
+          {project.steps && project.steps.length > 0 && (
+            <section class="stack" aria-labelledby="steps">
+              <h2 id="steps">{text.project.steps}</h2>
+              <ol class="steps">
+                {project.steps.map((step) => (
+                  <li>{step}</li>
                 ))}
-              </ul>
-            </div>
+              </ol>
+            </section>
+          )}
+          {project.result && (
+            <section class="stack" aria-labelledby="result">
+              <h2 id="result">{text.project.result}</h2>
+              <p class="prose">{project.result}</p>
+            </section>
           )}
         </div>
-      </section>
-    )}
+      )}
+      <aside class="project-aside stack-lg" aria-label={text.project.summary}>
+        <section class="stack project-facts" aria-labelledby="summary">
+          <h2 id="summary">{text.project.summary}</h2>
+          <dl class="facts">
+            <div>
+              <dt>{text.project.stack}</dt>
+              <dd class="row">
+                {project.tags.map((tag) => (
+                  <Tag>{tag}</Tag>
+                ))}
+              </dd>
+            </div>
+            {project.kind && (
+              <div>
+                <dt>{text.project.kind}</dt>
+                <dd>{text.project.kinds[project.kind]}</dd>
+              </div>
+            )}
+            {domain && (
+              <div>
+                <dt>{text.project.domain}</dt>
+                <dd>
+                  <a href={`${routes.skills}#${domain.id}`}>{domain.category}</a>
+                </dd>
+              </div>
+            )}
+            {project.href && (
+              <div>
+                <dt>GitHub</dt>
+                <dd>
+                  <a href={project.href} rel="noopener">
+                    {text.project.code}
+                    <span class="visually-hidden"> {UI[lang].external}</span>
+                  </a>
+                </dd>
+              </div>
+            )}
+          </dl>
+        </section>
+
+        {hasRelated(related) && (
+          <section class="stack project-proofs" aria-labelledby="proofs">
+            <h2 id="proofs">{text.project.proofs}</h2>
+            <div class="proofs proofs-stack">
+              {related.posts.length > 0 && (
+                <div>
+                  <h3>{text.project.posts}</h3>
+                  <ul class="link-list">
+                    {related.posts.map((l) => (
+                      <li>
+                        <a href={l.href}>{l.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {related.tools.length > 0 && (
+                <div>
+                  <h3>{text.project.tools}</h3>
+                  <ul class="link-list">
+                    {related.tools.map((l) => (
+                      <li>
+                        <a href={l.href}>{l.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {related.refs.length > 0 && (
+                <div>
+                  <h3>{text.project.cheatsheets}</h3>
+                  <ul class="link-list">
+                    {related.refs.map((l) => (
+                      <li>
+                        <a href={l.href}>{l.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+      </aside>
+    </div>
 
     <section class="stack" aria-labelledby="others">
       <h2 id="others">{text.project.others}</h2>
