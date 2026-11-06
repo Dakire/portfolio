@@ -1999,3 +1999,14 @@ h2 i {
   color: var(--muted);
   font-size: var(--text-xs);
 }
+
+/* Cartes d'outils : même forme que les tuiles de l'accueil */
+.card.tool-card {
+  border-radius: var(--radius-tile);
+}
+.card.tool-card::before {
+  border-top-left-radius: var(--radius-tile);
+}
+.card.tool-card::after {
+  border-bottom-right-radius: var(--radius-tile);
+}

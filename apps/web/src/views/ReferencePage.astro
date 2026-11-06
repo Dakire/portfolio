@@ -46,6 +46,23 @@ const links = [
   { title: ui.relatedRefs, items: related.refs.filter((l) => l.href !== path) },
   { title: ui.relatedProjects, items: related.projects },
 ].filter((group) => group.items.length > 0);
+// Sommaire de la page (ancres) : seulement les sections présentes, dans l'ordre d'affichage.
+const tocLabels = {
+  search: lang === 'fr' ? 'Recherche' : 'Search',
+  top: ref.topTitle ?? ui.topTitle,
+  all: ui.allTitle,
+  related: ui.related,
+  source: ui.sourceTitle,
+};
+const hasTop = Boolean(ref.top?.length);
+const pageToc = [
+  ...(hasTop && !ref.topAfter ? [{ id: 'ref-top-title', label: tocLabels.top }] : []),
+  { id: 'ref-search-title', label: tocLabels.search },
+  ...(hasTop && ref.topAfter ? [{ id: 'ref-top-title-after', label: tocLabels.top }] : []),
+  ...(entries.length > 0 ? [{ id: 'ref-all-title', label: tocLabels.all }] : []),
+  ...(hasRelated(related) ? [{ id: 'ref-related-title', label: tocLabels.related }] : []),
+  ...(ref.source ? [{ id: 'ref-source-title', label: tocLabels.source }] : []),
+];
 ---
 
 <Base
@@ -70,13 +87,22 @@ const links = [
 >
   <PageHero title={ref.h1} lead={ref.intro} crumbs={trail} />
   <div class="container section stack-lg">
+    <nav class="page-toc" aria-label={lang === 'fr' ? 'Sur cette page' : 'On this page'}>
+      <ul role="list">
+        {pageToc.map((item) => (
+          <li>
+            <a href={`#${item.id}`}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    {!ref.topAfter && <RefTop lang={lang} reference={ref} id="ref-top-title" />}
+    <ReferenceSearch lang={lang} ref={ref} cats={ref.cats} />
     {ref.notice && (
       <p class="ref-notice" role="note">
         {ref.notice}
       </p>
     )}
-    {!ref.topAfter && <RefTop lang={lang} reference={ref} id="ref-top-title" />}
-    <ReferenceSearch lang={lang} ref={ref} cats={ref.cats} />
     {ref.topAfter && <RefTop lang={lang} reference={ref} id="ref-top-title-after" />}
     {entries.length > 0 && (
       <section class="stack" aria-labelledby="ref-all-title">
