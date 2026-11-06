@@ -58,6 +58,11 @@ describe.each(Object.entries(themes))('thème %s', (_name, t) => {
     expect(ratio(t['line-strong']!, t[surface]!)).toBeGreaterThanOrEqual(3);
   });
 
+  it('le texte des bandes inversées atteint 4.5:1 sur leur fond', () => {
+    for (const text of ['band-ink', 'band-muted', 'band-accent'])
+      expect(ratio(t[text]!, t['band']!), `${text} sur band`).toBeGreaterThanOrEqual(4.5);
+  });
+
   it('l’anneau de focus atteint 3:1 sur chaque surface', () => {
     for (const surface of surfaces)
       expect(ratio(t['focus']!, t[surface]!)).toBeGreaterThanOrEqual(3);

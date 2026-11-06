@@ -21,6 +21,8 @@ body {
   font-size: var(--text-base);
   line-height: var(--leading-body);
   font-optical-sizing: auto;
+  font-synthesis: none; /* jamais de faux gras ni de faux italique (Bricolage n'a pas d'italique) */
+  hanging-punctuation: first;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -45,13 +47,21 @@ h4 {
   text-wrap: balance;
 }
 h1,
-h2 {
+h2,
+h3 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-stretch: var(--stretch-display);
+  font-weight: 700;
 }
 h1 {
   font-size: var(--text-display);
-  letter-spacing: -0.03em;
+  font-weight: 760;
+  line-height: 1.02;
+  letter-spacing: var(--tracking-display);
+}
+h2 {
+  line-height: 1.08;
+  letter-spacing: -0.02em;
 }
 h2 {
   font-size: var(--text-2xl);
@@ -99,6 +109,11 @@ pre,
 samp {
   font-family: var(--font-mono);
   font-size: 0.92em;
+  font-variant-ligatures: none; /* « != », « -> » restent lisibles tels qu'on les tape */
+}
+
+table {
+  font-variant-numeric: tabular-nums;
 }
 
 /* Listes de navigation ou de métadonnées (role="list" pour que les lecteurs d'écran les annoncent malgré l'absence de puces) */

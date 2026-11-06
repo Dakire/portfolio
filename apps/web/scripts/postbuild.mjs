@@ -1,5 +1,5 @@
 // Étapes après `astro build` :
-//  1. /sitemap.xml (référence, citée par robots.txt) : liste d'URL reprise de sitemap-0.xml produit par @astrojs/sitemap ;
+//  1. /root-access.xml (référence, citée par robots.txt) : liste d'URL reprise de sitemap-0.xml produit par @astrojs/sitemap ;
 //  2. empreintes SHA-256 des scripts en ligne (hydratation des îlots Astro) : écrites dans .cache/csp-hashes.json, lues par le générateur
 //     de .htaccess pour les autoriser dans la CSP sans 'unsafe-inline' ;
 //  3. dist/.htaccess (en-têtes de sécurité, CSP, cache, redirections), généré avec ces empreintes ;
@@ -77,40 +77,43 @@ const titleSize = (title) => (title.length <= 42 ? 76 : title.length <= 72 ? 64 
 
 const html = ({ title, kicker, lang }, fonts) => `<!doctype html>
 <html lang="${lang}"><head><meta charset="utf-8"><style>
-  @font-face { font-family: 'Inter Variable'; font-weight: 100 900; src: url(${fonts.inter}) format('woff2-variations'); }
-  @font-face { font-family: 'Fraunces Variable'; font-weight: 100 900; src: url(${fonts.fraunces}) format('woff2-variations'); }
-  @font-face { font-family: 'JetBrains Mono Variable'; font-weight: 100 800; src: url(${fonts.mono}) format('woff2-variations'); }
+  @font-face { font-family: 'Text'; font-weight: 200 800; src: url(${fonts.text}) format('woff2-variations'); }
+  @font-face { font-family: 'Display'; font-weight: 200 800; font-stretch: 75% 100%; src: url(${fonts.display}) format('woff2-variations'); }
+  @font-face { font-family: 'Mono'; font-weight: 100 800; src: url(${fonts.mono}) format('woff2-variations'); }
   * { box-sizing: border-box; margin: 0; }
-  /* Couleurs du thème sombre de packages/ui/src/tokens.css (fiche technique : graphite, voyant ambre, trame de points) */
-  body { width: ${SIZE.width}px; height: ${SIZE.height}px; overflow: hidden; background: #0f1113; color: #f3f0e7; position: relative;
-    font-family: 'Inter Variable', system-ui, sans-serif; }
-  .grid { position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, #4a535b 1.5px, transparent 0);
-    background-size: 36px 36px; -webkit-mask-image: linear-gradient(to bottom, #000, transparent 85%); opacity: .7; }
-  .rule { position: absolute; left: 76px; right: 76px; top: 140px; height: 10px; border-top: 1px solid #7d8790;
-    background: repeating-linear-gradient(90deg, #7d8790 0 1px, transparent 1px 36px) top / 100% 7px no-repeat; }
-  .frame { position: absolute; inset: 0; padding: 64px 76px; display: flex; flex-direction: column; justify-content: space-between; }
-  .brand { font: 700 40px 'Fraunces Variable', Georgia, serif; letter-spacing: -.01em; }
-  .brand::before { content: ''; display: inline-block; width: 18px; height: 18px; margin-right: 16px; background: #f5a524; }
-  .brand b { color: #f5a524; font-weight: 700; }
-  .kicker { color: #f5a524; font: 500 24px 'JetBrains Mono Variable', ui-monospace, monospace; margin-bottom: 24px; text-transform: uppercase; letter-spacing: .08em; }
-  h1 { font: 580 ${titleSize(title)}px/1.04 'Fraunces Variable', Georgia, serif; letter-spacing: -.035em; max-width: 1020px;
+  /* Couleurs du thème sombre de packages/ui/src/tokens.css (ADR 0011) : colonne encadrée, rails hachurés, lignes de construction, voyant ambre */
+  body { width: ${SIZE.width}px; height: ${SIZE.height}px; overflow: hidden; background: #101316; color: #eef1f3; position: relative;
+    font-family: 'Text', system-ui, sans-serif; }
+  .rail { position: absolute; top: 0; bottom: 0; width: 44px; border: solid #262c32; border-width: 0 1px;
+    background: repeating-linear-gradient(-45deg, #262c32 0 1px, transparent 1px 9px); }
+  .rail.l { left: 40px; } .rail.r { right: 40px; }
+  .h { position: absolute; left: 0; right: 0; height: 1px; background: #262c32; }
+  .h.t { top: 150px; } .h.b { bottom: 120px; }
+  .frame { position: absolute; top: 0; bottom: 0; left: 84px; right: 84px; padding: 58px 56px; display: flex; flex-direction: column; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 16px; font: 600 30px 'Mono', ui-monospace, monospace; letter-spacing: -.01em; }
+  .brand::before { content: ''; width: 16px; height: 16px; background: #f5a524; box-shadow: 0 0 22px #f5a52480; }
+  .brand b { color: #f5a524; font-weight: 600; }
+  .kicker { color: #f5a524; font: 500 22px 'Mono', ui-monospace, monospace; margin-bottom: 22px; text-transform: uppercase; letter-spacing: .1em; }
+  h1 { font: 760 ${titleSize(title)}px/1 'Display', 'Arial Narrow', sans-serif; font-stretch: 82%; letter-spacing: -.025em; max-width: 980px;
     display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-  .bar { height: 8px; width: 160px; background: #f5a524; }
+  .foot { display: flex; justify-content: space-between; align-items: center; font: 500 20px 'Mono', ui-monospace, monospace; color: #98a2ab; }
+  .foot i { font-style: normal; display: inline-block; width: 120px; height: 6px; background: #f5a524; }
 </style></head><body>
-  <div class="grid"></div>
-  <div class="rule"></div>
+  <div class="rail l"></div><div class="rail r"></div>
+  <div class="h t"></div><div class="h b"></div>
   <div class="frame">
-    <div class="brand">grichard<b>.eu</b></div>
+    <div class="brand"><span>grichard<b>.eu</b></span></div>
     <div><p class="kicker">${esc(kicker)}</p><h1>${esc(title)}</h1></div>
-    <div class="bar"></div>
+    <div class="foot"><span>Guillaume Richard · technicien IT</span><i></i></div>
   </div>
 </body></html>`;
 
 /**
- * Sitemap : /sitemap.xml est la référence (déclarée dans robots.txt, soumise à la Search Console). C'est une liste d'URL (<urlset>)
+ * Sitemap : /root-access.xml est la référence (déclarée dans robots.txt, à soumettre à la Search Console). C'est une liste d'URL (<urlset>)
  * et non un index : un seul fichier, lisible sans second téléchargement, comme le servait l'ancien site.
  * @astrojs/sitemap produit sitemap-index.xml + sitemap-0.xml ; on reprend sitemap-0.xml (épuré des espaces de noms inutilisés).
- * sitemap-0.xml reste publié, identique, parce qu'il a déjà été soumis à la Search Console ; sitemap-index.xml, jamais déclaré, est retiré.
+ * sitemap.xml et sitemap-0.xml restent publiés, identiques, parce qu'ils ont déjà été soumis à la Search Console (une URL publique ne
+ * disparaît pas) ; sitemap-index.xml, jamais déclaré, est retiré.
  * Au-delà de 50 000 URL, @astrojs/sitemap produirait un sitemap-1.xml : le build s'arrête plutôt que de publier un sitemap incomplet.
  */
 async function sitemap() {
@@ -125,6 +128,7 @@ async function sitemap() {
     throw new Error(
       'sitemap : une extension (image, vidéo, hreflang) est utilisée, garder son espace de noms',
     );
+  await writeFile(join(DIST, 'root-access.xml'), xml);
   await writeFile(join(DIST, 'sitemap.xml'), xml);
   await writeFile(join(DIST, 'sitemap-0.xml'), xml);
   await rm(join(DIST, 'sitemap-index.xml'), { force: true });
@@ -151,11 +155,15 @@ async function ogImages() {
   const files = await readdir(join(DIST, '_astro'));
   const font = (name) => {
     const file = files.find((f) =>
-      new RegExp(`^${name}-latin-(?:wght|opsz)-normal\\..*\\.woff2$`).test(f),
+      new RegExp(`^${name}-latin-(?:wght|wdth)-normal\\..*\\.woff2$`).test(f),
     );
     return file ? `./_astro/${file}` : '';
   };
-  const fonts = { inter: font('inter'), fraunces: font('fraunces'), mono: font('jetbrains-mono') };
+  const fonts = {
+    text: font('atkinson-hyperlegible-next'),
+    display: font('bricolage-grotesque'),
+    mono: font('jetbrains-mono'),
+  };
   const tmp = join(DIST, '.og-render.html');
   let browser;
   let generated = 0;
@@ -199,7 +207,7 @@ async function ogImages() {
     await rm(tmp, { force: true });
   }
   console.log(
-    `[postbuild] sitemap.xml, ${generated} images OG${fallback ? `, ${fallback} images génériques (repli)` : ''}`,
+    `[postbuild] root-access.xml, ${generated} images OG${fallback ? `, ${fallback} images génériques (repli)` : ''}`,
   );
 }
 

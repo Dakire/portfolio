@@ -23,7 +23,7 @@
     root.dataset.theme = theme;
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', theme === 'light' ? '#f4f1e9' : '#0f1113');
+      ?.setAttribute('content', theme === 'light' ? '#f3f4f5' : '#101316');
     for (const group of document.querySelectorAll('[data-theme-switch]')) {
       group.hidden = false;
       for (const button of group.querySelectorAll('[data-theme-set]')) {
