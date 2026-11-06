@@ -134,6 +134,9 @@ export const POST_RELATED: Record<string, Related> = {
   'journaux-evenements-windows-id-a-connaitre': {
     refs: ['evenements-windows', 'active-directory'],
   },
+  'cyberattaque-credit-mutuel-arkea-novembre-2026': { tools: ['email-headers', 'password'] },
+  'penurie-ram-ssd-prix-ia-2026': { tools: ['units'], refs: ['windows-11', 'bios-uefi'] },
+  'failles-openssh-symfony-novembre-2026': { refs: ['linux-proxmox', 'reseau'] },
 };
 
 /** Catégorie du blog -> outils et cheatsheets proposés sur sa page. */
