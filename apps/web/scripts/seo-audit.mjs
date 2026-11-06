@@ -24,7 +24,7 @@ const strip = (s) =>
     .trim();
 const attr = (tag, name) => tag.match(new RegExp(`${name}="([^"]*)"`))?.[1];
 
-const sitemap = readFileSync(join(DIST, 'sitemap.xml'), 'utf8');
+const sitemap = readFileSync(join(DIST, 'root-access.xml'), 'utf8');
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace(SITE, ''));
 
 const fileFor = (path) => join(DIST, path, 'index.html');

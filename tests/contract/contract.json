@@ -284,6 +284,12 @@
       "kind": "sitemap"
     },
     {
+      "path": "/root-access.xml",
+      "type": "application/xml",
+      "kind": "sitemap",
+      "since": "web"
+    },
+    {
       "path": "/sitemap-0.xml",
       "type": "application/xml",
       "kind": "sitemap",

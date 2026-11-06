@@ -18,4 +18,4 @@ Allow: /
 Disallow: /contact.php
 Disallow: /tools.php
 
-Sitemap: https://grichard.eu/sitemap.xml
+Sitemap: https://grichard.eu/root-access.xml

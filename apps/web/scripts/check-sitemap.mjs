@@ -1,7 +1,7 @@
 // Vérification du sitemap en ligne, par de vraies requêtes GET (pas HEAD) et sans suivre les redirections.
 //   pnpm --filter @grichard/web sitemap:check                       # https://grichard.eu
 //   pnpm --filter @grichard/web sitemap:check -- https://exemple.fr
-// Contrôle : robots.txt déclare /sitemap.xml ; /sitemap.xml répond 200 en XML, est un <urlset> valide ; chaque URL répond 200 sans
+// Contrôle : robots.txt déclare /root-access.xml ; /root-access.xml répond 200 en XML, est un <urlset> valide ; chaque URL répond 200 sans
 // redirection, sans noindex (balise ou en-tête), avec une canonique égale à elle-même. Code de retour non nul au premier écart.
 const origin = (
   process.argv.slice(2).find((a) => a.startsWith('http')) ?? 'https://grichard.eu'
@@ -14,19 +14,21 @@ const get = (url) => fetch(url, { redirect: 'manual', headers: { 'user-agent': U
 const robots = await get(`${origin}/robots.txt`);
 const declared = [...(await robots.text()).matchAll(/^Sitemap:\s*(\S+)/gim)].map((m) => m[1]);
 console.log(`robots.txt : ${robots.status}, Sitemap déclaré : ${declared.join(', ') || 'aucun'}`);
-if (!declared.includes(`${origin}/sitemap.xml`))
-  problems.push('robots.txt ne déclare pas /sitemap.xml');
+if (!declared.includes(`${origin}/root-access.xml`))
+  problems.push('robots.txt ne déclare pas /root-access.xml');
 
-const res = await get(`${origin}/sitemap.xml`);
+const res = await get(`${origin}/root-access.xml`);
 const type = res.headers.get('content-type') ?? '';
 const xml = await res.text();
-console.log(`/sitemap.xml : ${res.status}, ${type}, ${xml.length} octets`);
-if (res.status !== 200) problems.push(`/sitemap.xml répond ${res.status}`);
-if (!/\b(application|text)\/xml\b/.test(type)) problems.push(`/sitemap.xml servi en « ${type} »`);
-if (!xml.startsWith('<?xml')) problems.push('/sitemap.xml ne commence pas par la déclaration XML');
+console.log(`/root-access.xml : ${res.status}, ${type}, ${xml.length} octets`);
+if (res.status !== 200) problems.push(`/root-access.xml répond ${res.status}`);
+if (!/\b(application|text)\/xml\b/.test(type))
+  problems.push(`/root-access.xml servi en « ${type} »`);
+if (!xml.startsWith('<?xml'))
+  problems.push('/root-access.xml ne commence pas par la déclaration XML');
 if (!xml.includes('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'))
-  problems.push('/sitemap.xml n’est pas un <urlset> à l’espace de noms sitemaps.org');
-if (!xml.trimEnd().endsWith('</urlset>')) problems.push('/sitemap.xml est tronqué');
+  problems.push('/root-access.xml n’est pas un <urlset> à l’espace de noms sitemaps.org');
+if (!xml.trimEnd().endsWith('</urlset>')) problems.push('/root-access.xml est tronqué');
 
 const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 if (new Set(locs).size !== locs.length) problems.push('URL en double dans le sitemap');

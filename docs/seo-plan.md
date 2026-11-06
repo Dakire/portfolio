@@ -97,8 +97,8 @@ Une page pilier par grand sujet, qui rassemble articles, outil et cheatsheet, r�
 
 ## 3. Étapes manuelles (Guillaume)
 
-1. **Google Search Console** (`https://search.google.com/search-console`) : propriété `grichard.eu` (domaine). Menu Sitemaps : soumettre `sitemap.xml` (si `sitemap-0.xml` est encore listé, le retirer). Vérifier « Réussite » et le nombre d'URL découvertes.
-2. **Bing Webmaster Tools** (`https://www.bing.com/webmasters`) : ajouter le site (import possible depuis la Search Console), soumettre `https://grichard.eu/sitemap.xml`. Bing alimente aussi DuckDuckGo et Copilot.
+1. **Google Search Console** (`https://search.google.com/search-console`) : propriété `grichard.eu` (domaine). Menu Sitemaps : soumettre `root-access.xml`, puis retirer `sitemap.xml` et `sitemap-0.xml` de la liste (les fichiers restent servis). Vérifier « Réussite » et le nombre d'URL découvertes.
+2. **Bing Webmaster Tools** (`https://www.bing.com/webmasters`) : ajouter le site (import possible depuis la Search Console), soumettre `https://grichard.eu/root-access.xml`. Bing alimente aussi DuckDuckGo et Copilot.
 3. **Demander l'indexation** des pages modifiées le 6 novembre 2026 (Inspection d'URL) : `/cheatsheets/gam/`, `/blog/fin-support-windows-10-passer-a-windows-11/`, `/blog/exchange-online-smtp-auth-basic-fin-2026/`.
 4. **Suivi de position** : le plus simple et gratuit est la Search Console elle-même (Performances > Requêtes, filtrer par page, comparer sur 28 jours). Pour un suivi quotidien des requêtes de ce tableau, un outil tiers (par exemple un service de suivi de position payant) est nécessaire : à choisir par Guillaume. **M'envoyer un export CSV** des requêtes (Performances > Exporter) dans un mois permet de remplacer les « à vérifier » par des chiffres réels et de réviser ce plan.
 5. **Signaux Web essentiels** : consulter le rapport de la Search Console une fois qu'il a assez de données.

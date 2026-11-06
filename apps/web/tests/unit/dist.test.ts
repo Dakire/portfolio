@@ -136,8 +136,8 @@ describe('site construit', () => {
     }
   });
 
-  describe('sitemap (référence : /sitemap.xml, voir docs/seo.md)', () => {
-    const xml = readFileSync(join(DIST, 'sitemap.xml'), 'utf-8');
+  describe('sitemap (référence : /root-access.xml, voir docs/seo.md)', () => {
+    const xml = readFileSync(join(DIST, 'root-access.xml'), 'utf-8');
     const locs = attr(xml, /<loc>([^<]+)<\/loc>/g);
     const canonical = (html: string) => attr(html, /<link rel="canonical" href="([^"]+)"/)[0];
     const noindex = (html: string) => /<meta name="robots" content="[^"]*noindex/.test(html);
@@ -150,15 +150,16 @@ describe('site construit', () => {
       expect(xml.match(/<url>/g)).toHaveLength(locs.length);
     });
 
-    it('sitemap-0.xml (déjà soumis à la Search Console) est identique ; sitemap-index.xml n’est plus publié', () => {
+    it('sitemap.xml et sitemap-0.xml (déjà soumis à la Search Console) sont identiques ; sitemap-index.xml n’est plus publié', () => {
+      expect(readFileSync(join(DIST, 'sitemap.xml'), 'utf-8')).toBe(xml);
       expect(readFileSync(join(DIST, 'sitemap-0.xml'), 'utf-8')).toBe(xml);
       expect(existsSync(join(DIST, 'sitemap-index.xml'))).toBe(false);
     });
 
-    it('robots.txt déclare /sitemap.xml et rien d’autre', () => {
+    it('robots.txt déclare /root-access.xml et rien d’autre', () => {
       const robots = readFileSync(join(DIST, 'robots.txt'), 'utf-8');
       const declared = [...robots.matchAll(/^Sitemap:\s*(\S+)/gm)].map((m) => m[1]);
-      expect(declared).toEqual([`${SITE}/sitemap.xml`]);
+      expect(declared).toEqual([`${SITE}/root-access.xml`]);
     });
 
     it('liste des URL absolues, uniques, avec des dates lastmod valides', () => {

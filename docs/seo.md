@@ -4,13 +4,14 @@ Audit page par page et règles de titres et descriptions : [seo-audit.md](seo-au
 
 ## Sitemap : quelle URL fait référence
 
-| URL                  | Rôle                                                                                                                                              |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`/sitemap.xml`**   | **Référence.** Liste d'URL (`<urlset>`), déclarée dans `robots.txt`, à soumettre dans la Search Console.                                          |
-| `/sitemap-0.xml`     | Copie identique, conservée parce qu'elle a déjà été soumise à la Search Console. Peut être retirée de la Search Console ; le fichier reste servi. |
-| `/sitemap-index.xml` | N'est plus publié (jamais déclaré ; la livraison le supprime du serveur).                                                                         |
+| URL                    | Rôle                                                                                                                                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`/root-access.xml`** | **Référence** depuis le 6 novembre 2026 (nom choisi par Guillaume). Liste d'URL (`<urlset>`), seule déclarée dans `robots.txt`, à soumettre dans la Search Console et Bing Webmaster Tools. |
+| `/sitemap.xml`         | Copie identique, ancienne référence déjà soumise : le fichier reste servi (une URL publique ne disparaît pas). Peut être retirée de la Search Console.                                      |
+| `/sitemap-0.xml`       | Copie identique, conservée parce qu'elle a déjà été soumise à la Search Console. Peut être retirée de la Search Console ; le fichier reste servi.                                           |
+| `/sitemap-index.xml`   | N'est plus publié (jamais déclaré ; la livraison le supprime du serveur).                                                                                                                   |
 
-**Génération** (reproductible, aucune édition à la main) : `@astrojs/sitemap` (`apps/web/astro.config.mjs`) écrit `sitemap-index.xml` et `sitemap-0.xml` ; `apps/web/scripts/postbuild.mjs` (`sitemap()`) en tire `sitemap.xml` (même contenu, espaces de noms inutilisés retirés) et supprime l'index. Au-delà de 50 000 URL, le build échoue au lieu de publier un sitemap partiel.
+**Génération** (reproductible, aucune édition à la main) : `@astrojs/sitemap` (`apps/web/astro.config.mjs`) écrit `sitemap-index.xml` et `sitemap-0.xml` ; `apps/web/scripts/postbuild.mjs` (`sitemap()`) en tire `root-access.xml`, et ses deux copies `sitemap.xml` et `sitemap-0.xml` (même contenu, espaces de noms inutilisés retirés), et supprime l'index. Pas de redirection entre ces fichiers : la Search Console traite mal un sitemap redirigé. Au-delà de 50 000 URL, le build échoue au lieu de publier un sitemap partiel.
 
 **Contenu** : toutes les pages indexables et auto-canoniques, et seulement elles. Exclus : `/404`, page de style, pages de tag du blog (`noindex`). Les pages de catégorie du blog sont indexables (texte d'introduction propre dans `lib/blog.ts`, liens vers les outils dans `data/related.ts`), redirections. `<lastmod>` seulement quand la date est réelle (articles, index du blog), jamais la date du build.
 
