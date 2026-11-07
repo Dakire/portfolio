@@ -2106,3 +2106,56 @@ h2 i {
     grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
   }
 }
+
+/* Avatar dessiné : à l'accueil il « dépasse » du bord de la bande (derrière le remplissage de la trace de signal) ;
+   décoratif à cet endroit (alt vide), le nom est déjà dans la page. */
+.band-peek {
+  position: relative;
+  margin-top: var(--space-6);
+}
+.band-peek .container {
+  display: flex;
+  justify-content: flex-end;
+}
+.band-peek-avatar {
+  width: clamp(6.5rem, 8vw + 3rem, 10rem);
+  height: auto;
+  margin-bottom: -0.5rem;
+  margin-right: var(--space-4);
+  transform: rotate(3deg);
+  transform-origin: 50% 100%;
+}
+.band-peek .band-edge {
+  position: relative;
+}
+@media (max-width: 47.99rem) {
+  .band-peek {
+    margin-top: var(--space-5);
+  }
+}
+
+/* À propos : texte et avatar côte à côte en grand écran */
+.about-bio {
+  display: grid;
+  gap: var(--space-6);
+  align-items: start;
+}
+@media (min-width: 52rem) {
+  .about-bio {
+    grid-template-columns: minmax(0, 1fr) 14rem;
+    gap: var(--space-8);
+  }
+}
+.about-avatar {
+  width: min(14rem, 60%);
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-tile);
+  background: var(--band);
+}
+@media (max-width: 51.99rem) {
+  .about-avatar {
+    order: -1;
+    width: 8rem;
+  }
+}

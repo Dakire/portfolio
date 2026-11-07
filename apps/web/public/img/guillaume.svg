@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-labelledby="t">
+  <title id="t">Avatar dessiné de Guillaume Richard : cheveux bruns, barbe courte, pull écru</title>
+  <!-- épaules : pull écru, col rond -->
+  <path d="M26 300C26 246 72 228 112 220L188 220C228 228 274 246 274 300Z" fill="#efe9dc"/>
+  <path d="M26 300C26 246 72 228 112 220L120 222C84 232 52 250 48 300Z" fill="#e4dccb"/>
+  <path d="M274 300C274 246 228 228 188 220L180 222C216 232 248 250 252 300Z" fill="#e4dccb"/>
+  <path d="M112 220Q150 252 188 220" fill="none" stroke="#d3c9b4" stroke-width="5" stroke-linecap="round"/>
+  <path d="M150 262V300" stroke="#e4dccb" stroke-width="3" stroke-linecap="round"/>
+  <!-- cou -->
+  <path d="M120 180V226Q150 248 180 226V180Z" fill="#dca988"/>
+  <path d="M120 200Q150 222 180 200V214Q150 234 120 214Z" fill="#c9916f" opacity=".55"/>
+  <!-- oreilles -->
+  <ellipse cx="91" cy="140" rx="9" ry="16" fill="#e7b393"/>
+  <ellipse cx="209" cy="140" rx="9" ry="16" fill="#e7b393"/>
+  <!-- visage -->
+  <path d="M92 116C92 76 118 56 150 56C182 56 208 76 208 116V140C208 172 184 202 150 206C116 202 92 172 92 140Z" fill="#f2c7a8"/>
+  <!-- joues et nez, ombres douces -->
+  <ellipse cx="116" cy="150" rx="13" ry="8" fill="#eaa98d" opacity=".35"/>
+  <ellipse cx="184" cy="150" rx="13" ry="8" fill="#eaa98d" opacity=".35"/>
+  <path d="M150 112C147 128 144 136 140 142Q150 150 160 142C156 136 153 128 150 112Z" fill="#e0a98a" opacity=".55"/>
+  <!-- barbe courte (mâchoire, menton), moustache -->
+  <path d="M95 140C98 166 110 186 126 197C136 204 144 208 150 208C156 208 164 204 174 197C190 186 202 166 205 140C199 154 192 161 184 164C174 156 162 154 150 156C138 154 126 156 116 164C108 161 101 154 95 140Z" fill="#82583f"/>
+  <path d="M121 168C132 162 142 163 150 167C158 163 168 162 179 168C170 174 162 173 150 172C138 173 130 174 121 168Z" fill="#6a4733"/>
+  <!-- bouche -->
+  <path d="M137 180Q150 187 163 180" fill="none" stroke="#c9847a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M141 180Q150 183 159 180" fill="none" stroke="#e6a399" stroke-width="2" stroke-linecap="round"/>
+  <!-- yeux gris-vert -->
+  <ellipse cx="125" cy="122" rx="11.5" ry="7" fill="#fbf7f1"/>
+  <ellipse cx="175" cy="122" rx="11.5" ry="7" fill="#fbf7f1"/>
+  <circle cx="125" cy="122" r="5.6" fill="#7b8f80"/>
+  <circle cx="175" cy="122" r="5.6" fill="#7b8f80"/>
+  <circle cx="125" cy="122" r="2.6" fill="#232323"/>
+  <circle cx="175" cy="122" r="2.6" fill="#232323"/>
+  <circle cx="123" cy="120" r="1.3" fill="#fff"/>
+  <circle cx="173" cy="120" r="1.3" fill="#fff"/>
+  <path d="M113 120Q125 112 137 119" fill="none" stroke="#4b3426" stroke-width="2" stroke-linecap="round"/>
+  <path d="M163 119Q175 112 187 120" fill="none" stroke="#4b3426" stroke-width="2" stroke-linecap="round"/>
+  <path d="M114 130Q125 135 136 130" fill="none" stroke="#d9a283" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>
+  <path d="M164 130Q175 135 186 130" fill="none" stroke="#d9a283" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>
+  <!-- sourcils droits, fournis -->
+  <path d="M108 106Q125 97 142 104" fill="none" stroke="#4b3426" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M158 104Q175 97 192 106" fill="none" stroke="#4b3426" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- cheveux bruns, frange balayée sur le côté -->
+  <path d="M86 122C73 66 108 28 154 28C203 28 228 66 214 122C212 100 204 86 192 80C180 88 162 82 146 74C128 80 112 88 102 104C96 108 90 114 86 122Z" fill="#4e3627"/>
+  <path d="M95 102C103 76 128 60 158 62C187 64 205 82 209 104C197 90 175 78 150 80C126 82 105 90 95 102Z" fill="#69493a"/>
+  <path d="M104 62C128 46 160 46 184 60" fill="none" stroke="#8a664d" stroke-width="3" stroke-linecap="round" opacity=".65"/>
+  <path d="M96 96C108 84 128 80 148 82" fill="none" stroke="#3b281c" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+</svg>

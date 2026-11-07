@@ -137,20 +137,35 @@ const domains = [...new Set(t.projects.map((p) => p.skill))].map((id) => ({
   <div class="container stack-lg section">
     {page === 'about' && (
       <>
-        <section class="stack" aria-labelledby="bio">
-          <h2 id="bio" class="visually-hidden">
-            {t.aboutTitle}
-          </h2>
-          <p class="prose lead">{t.about}</p>
-          {t.aboutMore.map((p) => (
-            <p class="prose">{p}</p>
-          ))}
-          <p class="row">
-            <Button variant="primary" href={routes.career}>
-              {labels.career}
-            </Button>
-            <Button href={withBase(t.hero.cvLink)}>{labels.cv}</Button>
-          </p>
+        <section class="about-bio" aria-labelledby="bio">
+          <div class="stack">
+            <h2 id="bio" class="visually-hidden">
+              {t.aboutTitle}
+            </h2>
+            <p class="prose lead">{t.about}</p>
+            {t.aboutMore.map((p) => (
+              <p class="prose">{p}</p>
+            ))}
+            <p class="row">
+              <Button variant="primary" href={routes.career}>
+                {labels.career}
+              </Button>
+              <Button href={withBase(t.hero.cvLink)}>{labels.cv}</Button>
+            </p>
+          </div>
+          <img
+            class="about-avatar"
+            src={withBase('/img/guillaume.svg')}
+            alt={
+              lang === 'fr'
+                ? 'Avatar dessiné de Guillaume Richard : cheveux bruns, barbe courte, pull écru'
+                : 'Drawn avatar of Guillaume Richard: brown hair, short beard, cream sweater'
+            }
+            width="300"
+            height="300"
+            loading="lazy"
+            decoding="async"
+          />
         </section>
         <section class="stack" aria-labelledby="about-skills">
           <h2 id="about-skills">{t.skillsTitle}</h2>
