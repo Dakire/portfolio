@@ -16,10 +16,9 @@
   <ellipse cx="116" cy="152" rx="13" ry="8" fill="#eaa98d" opacity=".3"/>
   <ellipse cx="184" cy="152" rx="13" ry="8" fill="#eaa98d" opacity=".3"/>
   <path d="M150 112C147 128 144 136 140 142Q150 150 160 142C156 136 153 128 150 112Z" fill="#e0a98a" opacity=".5"/>
-  <!-- barbe de quelques jours : joues légèrement ombrées, menton plus fourni -->
-  <path d="M96 138C99 166 110 186 126 197C136 204 144 208 150 208C156 208 164 204 174 197C190 186 201 166 204 138C198 152 194 160 186 164C176 160 164 158 150 160C136 158 124 160 114 164C106 160 102 152 96 138Z" fill="#9a7050" opacity=".55"/>
+  <!-- barbe : un seul aplat, joues et menton -->
+  <path d="M96 138C99 166 110 186 126 197C136 204 144 208 150 208C156 208 164 204 174 197C190 186 201 166 204 138C198 152 194 160 186 164C176 160 164 158 150 160C136 158 124 160 114 164C106 160 102 152 96 138Z" fill="#8a5f43"/>
   <path d="M112 170C124 162 140 160 150 163C160 160 176 162 188 170C188 188 174 206 150 209C126 206 112 188 112 170Z" fill="#8a5f43"/>
-  <path d="M122 168C132 163 142 164 150 167C158 164 168 163 178 168C170 172 162 172 150 171C138 172 130 172 122 168Z" fill="#7a5239"/>
   <!-- bouche -->
   <path d="M138 180Q150 186 162 180" fill="none" stroke="#c9847a" stroke-width="4.5" stroke-linecap="round"/>
   <!-- yeux gris-vert -->
@@ -38,10 +37,4 @@
   <path d="M157 106Q174 100 191 108" fill="none" stroke="#4b3426" stroke-width="5" stroke-linecap="round"/>
   <!-- cheveux : mèches balayées vers la gauche, front dégagé à droite, pas de calotte -->
   <path d="M90 134C76 96 84 56 118 42C112 52 112 60 116 66C128 44 156 34 184 40C176 46 176 52 182 56C204 58 218 84 212 132C210 112 206 100 200 92C192 100 184 96 176 90C160 94 138 92 122 98C112 108 108 120 106 134C100 130 94 130 90 134Z" fill="#5a4030"/>
-  <path d="M118 42C140 38 166 36 184 40C196 44 204 52 208 62C190 54 160 52 134 60C120 66 108 80 104 98C100 82 104 56 118 42Z" fill="#6b4e3a"/>
-  <path d="M122 98C140 86 164 80 192 88C178 82 156 82 134 88C124 92 116 100 112 112C114 106 118 100 122 98Z" fill="#4a3426"/>
-  <path d="M126 60C142 50 164 48 182 54" fill="none" stroke="#8d6a50" stroke-width="3" stroke-linecap="round" opacity=".7"/>
-  <path d="M110 84C122 72 140 66 156 66" fill="none" stroke="#8d6a50" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
-  <path d="M104 112C112 100 128 92 148 92" fill="none" stroke="#3a281c" stroke-width="2.5" stroke-linecap="round" opacity=".6"/>
-  <path d="M96 128C92 112 94 98 100 88" fill="none" stroke="#3a281c" stroke-width="2.5" stroke-linecap="round" opacity=".5"/>
 </svg>
