@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import PostCard from '../components/PostCard.astro';
 import { PORTFOLIO_DATA } from '../data/content';
 import { CATEGORY_RELATED, resolveRelated } from '../data/related';
 import {
@@ -9,6 +8,7 @@ import {
   CATEGORY_TEXT,
   categoryPath,
   getPosts,
+  isoDate,
   postPath,
   slugify,
   tagPath,
@@ -69,6 +69,39 @@ const labels =
   lang === 'fr'
     ? { categories: 'Catégories', tags: 'Tags', allPosts: 'Tous' }
     : { categories: 'Categories', tags: 'Tags', allPosts: 'All' };
+// Répartition par rubrique (barre) et registre groupé par mois
+const catCount = new Map<string, number>();
+for (const p of all) catCount.set(p.data.category, (catCount.get(p.data.category) ?? 0) + 1);
+const mixOrder = [...catCount.entries()].sort((a, b) => b[1] - a[1]);
+let mixX = 0;
+const mix = mixOrder.map(([id, n], i) => {
+  const w = (n / all.length) * 100;
+  const seg = { id, n, i, x: mixX, w };
+  mixX += w;
+  return seg;
+});
+const monthFmt = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-FR' : 'en-GB', {
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+const dayFmt = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-FR' : 'en-GB', {
+  day: 'numeric',
+  month: 'short',
+  timeZone: 'UTC',
+});
+const months: { key: string; label: string; posts: typeof posts }[] = [];
+for (const post of posts) {
+  const key = isoDate(post.data.date).slice(0, 7);
+  let group = months.find((m) => m.key === key);
+  if (!group) {
+    group = { key, label: monthFmt.format(post.data.date), posts: [] };
+    months.push(group);
+  }
+  group.posts.push(post);
+}
+const countLabel = (n: number) =>
+  lang === 'fr' ? `${n} article${n > 1 ? 's' : ''}` : `${n} article${n > 1 ? 's' : ''}`;
 const toolsTitle = lang === 'fr' ? 'Outils et aide-mémoire liés' : 'Related tools and cheatsheets';
 ---
 
@@ -125,37 +158,90 @@ const toolsTitle = lang === 'fr' ? 'Outils et aide-mémoire liés' : 'Related to
     title={heading ?? t.siteName}
     lead={categoryText?.intro ?? (heading ? undefined : t.pageIntro)}
   />
-  <div class="container section stack-lg">
-    <nav aria-label={labels.categories} class="stack">
-      <h2 class="visually-hidden">{labels.categories}</h2>
-      <ul class="row" role="list">
-        <li>
-          <a href={routes.blog} class="chip" aria-current={heading ? undefined : 'page'}>
-            {labels.allPosts}
+  <div class="container blog-page">
+    <section class="blog-filters" aria-labelledby="blog-filters-title">
+      <h2 id="blog-filters-title" class="label">
+        {lang === 'fr'
+          ? `Répartition des ${all.length} articles`
+          : `${all.length} articles by topic`}
+      </h2>
+      <svg
+        class="blog-mix"
+        viewBox="0 0 100 12"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        {mix.map((seg) => (
+          <a href={categoryPath(lang, seg.id)} tabindex="-1">
+            <rect
+              class={`mix-${seg.i % 7}`}
+              data-on={category === seg.id ? '' : undefined}
+              x={seg.x + 0.15}
+              y="0"
+              width={Math.max(seg.w - 0.3, 0.2)}
+              height="12"
+            />
           </a>
-        </li>
-        {categoryIds.map((id) => (
+        ))}
+      </svg>
+      <nav aria-label={labels.categories}>
+        <h2 class="visually-hidden">{labels.categories}</h2>
+        <ul class="row" role="list">
           <li>
-            <a
-              href={categoryPath(lang, id)}
-              class="chip"
-              aria-current={category === id ? 'page' : undefined}
-            >
-              {CATEGORIES[id]?.[lang]}
+            <a href={routes.blog} class="chip" aria-current={heading ? undefined : 'page'}>
+              {labels.allPosts}
+              <span class="chip-count">{all.length}</span>
             </a>
           </li>
-        ))}
-      </ul>
-    </nav>
+          {categoryIds.map((id) => (
+            <li>
+              <a
+                href={categoryPath(lang, id)}
+                class="chip"
+                aria-current={category === id ? 'page' : undefined}
+              >
+                {CATEGORIES[id]?.[lang]}
+                <span class="chip-count">{catCount.get(id)}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </section>
 
     {posts.length > 0 ? (
-      <ul class="cards cards-wide" role="list">
-        {posts.map((post) => (
-          <li>
-            <PostCard post={post} minLabel={t.min} />
-          </li>
+      <div class="ledger">
+        {months.map((month) => (
+          <section class="ledger-month" aria-labelledby={`m-${month.key}`}>
+            <header class="ledger-head">
+              <h2 id={`m-${month.key}`}>{month.label}</h2>
+              <span class="label">{countLabel(month.posts.length)}</span>
+            </header>
+            <ul role="list">
+              {month.posts.map((post) => (
+                <li>
+                  <a class="ledger-row" href={postPath(lang, post.slug)}>
+                    <span class="ledger-meta label">
+                      <time datetime={isoDate(post.data.date)}>
+                        {dayFmt.format(post.data.date)}
+                      </time>
+                      {' · '}
+                      {CATEGORIES[post.data.category]?.[lang]}
+                    </span>
+                    <span class="ledger-title">{post.data.title}</span>
+                    <span class="ledger-arrow" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path d="M4 12h15M13 6l6 6-6 6" />
+                      </svg>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
         ))}
-      </ul>
+      </div>
     ) : (
       <p>{t.emptyText}</p>
     )}
