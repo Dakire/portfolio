@@ -37,7 +37,12 @@ export const SKILL_RELATED: Record<SkillId, Related> = {
     tools: ['dns', 'propagation', 'email-headers'],
     refs: ['powershell-m365', 'gam'],
   },
-  training: {},
+  training: {
+    posts: [
+      'ia-informatique-comparatif-assistants-ligne-editoriale',
+      'securiser-microsoft-365-google-workspace-reglages-de-base',
+    ],
+  },
   dev: { tools: ['json', 'encoder', 'seo', 'sitemap'], refs: ['git-claude-code'] },
   support: {
     posts: ['fin-support-windows-10-passer-a-windows-11'],

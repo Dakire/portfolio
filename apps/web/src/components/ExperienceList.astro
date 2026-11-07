@@ -5,8 +5,17 @@ interface Props {
   items: Experience[];
   /** Niveau des titres de poste, selon le titre de section qui précède. */
   level?: 2 | 3;
+  /** Libellé accessible de la liste de compétences. */
+  skillsLabel?: string;
+  /** Libellé qui précède la liste des missions (elles ne sont pas exhaustives). */
+  dutiesLabel?: string;
 }
-const { items, level = 3 } = Astro.props;
+const {
+  items,
+  level = 3,
+  skillsLabel = 'Compétences',
+  dutiesLabel = 'Missions, entre autres :',
+} = Astro.props;
 const Heading = `h${level}` as 'h2' | 'h3';
 ---
 
@@ -15,13 +24,24 @@ const Heading = `h${level}` as 'h2' | 'h3';
     <li class="stack">
       <Heading>{job.role}</Heading>
       <p class="meta">
-        {job.company} · {job.date}
+        {job.company}
+        {job.contract && ` · ${job.contract}`} · {job.date}
       </p>
+      <p class="meta">{dutiesLabel}</p>
       <ul class="points">
         {job.points.map((point) => (
           <li>{point}</li>
         ))}
       </ul>
+      {job.skills && job.skills.length > 0 && (
+        <ul class="row skill-tags" role="list" aria-label={skillsLabel}>
+          {job.skills.map((skill) => (
+            <li>
+              <span class="tag">{skill}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </li>
   ))}
 </ol>

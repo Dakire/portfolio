@@ -10,7 +10,7 @@ import { SITE_TEXT } from '../data/site-text';
 import { withBase } from '../lib/base';
 import { crumbs } from '../lib/crumbs';
 import { careerLd, ogImage } from '../lib/seo-pages';
-import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
+import { ROUTES, projectPath, routeAlternates, type Lang } from '../lib/i18n';
 
 interface Props {
   lang: Lang;
@@ -23,6 +23,9 @@ const title =
   lang === 'fr'
     ? 'Parcours professionnel | Guillaume Richard, technicien IT'
     : 'Career | Guillaume Richard, IT technician';
+const fr = lang === 'fr';
+const skillsLabel = fr ? 'Compétences mises en œuvre' : 'Skills used';
+const projectTitle = (slug: string) => t.projects.find((p) => p.slug === slug)?.title ?? slug;
 const trail = crumbs(lang, [], { label: text.career.title, path: routes.career });
 ---
 
@@ -43,7 +46,7 @@ const trail = crumbs(lang, [], { label: text.career.title, path: routes.career }
     },
     t.hero.role,
     t.experiences,
-    t.education,
+    t.education.map((e) => `${e.title} - ${e.school}`),
   )}
 >
   <PageHero path={text.career.title} title={text.career.title} crumbs={trail}>
@@ -52,16 +55,53 @@ const trail = crumbs(lang, [], { label: text.career.title, path: routes.career }
   <div class="container stack-lg section">
     <section class="stack" aria-labelledby="experiences">
       <h2 id="experiences">{t.experienceTitle}</h2>
-      <ExperienceList items={t.experiences} level={3} />
+      <ExperienceList
+        items={t.experiences}
+        level={3}
+        skillsLabel={skillsLabel}
+        dutiesLabel={fr ? 'Missions, entre autres :' : 'Duties include:'}
+      />
     </section>
     <section class="stack" aria-labelledby="education">
       <h2 id="education">{t.educationTitle}</h2>
-      <ul class="points">
-        {t.education.map((line) => (
-          <li>{line}</li>
+      <ol class="timeline">
+        {t.education.map((e) => (
+          <li class="stack">
+            <h3>{e.title}</h3>
+            <p class="meta">
+              {e.school} · {e.date}
+            </p>
+            {e.points && e.points.length > 0 && (
+              <ul class="points">
+                {e.points.map((point) => (
+                  <li>{point}</li>
+                ))}
+              </ul>
+            )}
+            {e.skills && e.skills.length > 0 && (
+              <ul class="row skill-tags" role="list" aria-label={skillsLabel}>
+                {e.skills.map((skill) => (
+                  <li>
+                    <span class="tag">{skill}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {e.projects && e.projects.length > 0 && (
+              <p class="meta">
+                {fr ? 'Réalisations liées : ' : 'Related projects: '}
+                {e.projects.map((slug, i) => (
+                  <>
+                    {i > 0 && ' · '}
+                    <a href={projectPath(lang, slug)}>{projectTitle(slug)}</a>
+                  </>
+                ))}
+              </p>
+            )}
+          </li>
         ))}
-        <li>{t.languagesInfo}</li>
-      </ul>
+      </ol>
+      <p class="prose">{t.languagesInfo}</p>
     </section>
     <section class="stack" aria-labelledby="cv">
       <h2 id="cv">{text.career.cvTitle}</h2>

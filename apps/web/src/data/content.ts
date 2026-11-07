@@ -3,7 +3,7 @@
 import type { Lang } from '../lib/i18n';
 import { PROFILE_TEXT, type ProfileText } from './profile';
 
-export type { Experience, Project, Skill, SkillId } from './profile';
+export type { Education, Experience, Project, Skill, SkillId } from './profile';
 
 export interface Portfolio extends ProfileText {
   meta: { title: string; description: string };

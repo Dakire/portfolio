@@ -21,8 +21,24 @@ export interface Experience {
   /** Début et fin au format ISO (AAAA-MM), pour les données structurées ; pas de fin = poste en cours. */
   start: string;
   end?: string;
+  /** Type de contrat (CDI, CDD), si connu. */
+  contract?: string;
   /** Ce que recouvre le poste, un point par ligne. */
   points: string[];
+  /** Compétences mises en œuvre (étiquettes). */
+  skills?: string[];
+}
+export interface Education {
+  title: string;
+  school: string;
+  date: string;
+  /** Année d'obtention (jalon de la frise du parcours). */
+  endYear: number;
+  skills?: string[];
+  /** Détails (un point par ligne). */
+  points?: string[];
+  /** Réalisations liées (slugs), affichées comme liens. */
+  projects?: string[];
 }
 export interface Project {
   /** Segment d'URL, identique en français et en anglais (/projets/<slug>/ et /en/projects/<slug>/). */
@@ -71,7 +87,7 @@ export interface ProfileText {
   projectsAll: string;
   projects: Project[];
   educationTitle: string;
-  education: string[];
+  education: Education[];
   languagesInfo: string;
 }
 
@@ -110,7 +126,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         id: 'network',
         category: 'Réseau & Systèmes',
         items:
-          'Windows Server (Active Directory, MDT, WDS, DNS, DHCP, bureau à distance) et Linux. Réseaux LAN/WLAN, VPN, FTP/SFTP. Un homelab me sert à tester configurations et services avant de les déployer.',
+          'Windows Server (Active Directory, serveur de fichiers, DNS, DHCP, bureau à distance, MDT et WDS pour la masterisation de PC) et Linux. Réseaux LAN/WLAN, VPN, FTP/SFTP. Un homelab me sert à tester configurations et services avant de les déployer.',
         short: 'Windows Server, Linux, réseaux LAN/WLAN, VPN',
       },
       {
@@ -124,47 +140,59 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         id: 'messaging',
         category: 'Messagerie & Cloud',
         items:
-          'Microsoft 365 et Google Workspace au quotidien : analyse SMTP, délivrabilité, zones DNS (MX, SPF, DKIM, DMARC) et maintien en conditions opérationnelles (MCO).',
+          'Mise en place et administration de Microsoft 365 et de Google Workspace (avec GAM, en ligne de commande) au quotidien : migrations depuis IMAP (OVH, Gandi, IONOS, Orange…), Gmail et Outlook, analyse SMTP, délivrabilité, zones DNS (MX, SPF, DKIM, DMARC) et maintien en conditions opérationnelles (MCO).',
         short: 'Microsoft 365, Google Workspace, DNS, délivrabilité',
       },
       {
         id: 'training',
-        category: 'Formation IA, M365 & RGPD',
+        category: 'Formation IA, Google Workspace, M365 & RGPD',
         items:
-          "Je forme et j'accompagne les utilisateurs à l'intelligence artificielle, à Microsoft 365 et aux bonnes pratiques du RGPD.",
-        short: 'IA, Microsoft 365, RGPD : former et accompagner',
+          "Je forme et j'accompagne les utilisateurs à l'intelligence artificielle, à Google Workspace, à Microsoft 365 et aux bonnes pratiques du RGPD. Cet accompagnement prolonge le support au quotidien : prise en main des outils et réponses aux questions des utilisateurs.",
+        short: 'IA, Google Workspace, Microsoft 365, RGPD : former et accompagner',
       },
       {
         id: 'dev',
         category: 'Développement & Automatisation',
         items:
-          'Création et gestion de sites (WordPress, Wix, Shopify, React). Scripts et outils en C#, Java, Python, PowerShell, Bash, SQL et PHP.',
+          'Création et gestion de sites (WordPress, Wix, Shopify, Weebly, PrestaShop, React). Scripts et outils en C#, Java, Python, PowerShell, Bash, SQL et PHP. Projets de licence en Java, SDL2 et Angular, et un plugin Minecraft en Java : les dépôts sont sur GitHub.',
         short: 'C#, Python, PowerShell, PHP, sites web',
       },
       {
         id: 'support',
         category: 'Support & Projets IT',
         items:
-          'Support utilisateur de bout en bout (N1 à N3), escalade auprès des éditeurs (N4), déploiement de logiciels métiers et accompagnement technique.',
+          'Support utilisateur de bout en bout (N1 à N3) : gestion des appels et des tickets HelpDesk, escalade auprès des éditeurs (N4), déploiement de logiciels métiers et accompagnement technique.',
         short: 'Support N1 à N3, escalade éditeurs, logiciels métiers',
       },
     ],
     experienceTitle: 'Parcours professionnel',
     experienceIntro:
-      'Mes postes, du plus récent au plus ancien, suivis de ma formation. Le CV complet est disponible en PDF, en français et en anglais.',
+      'Mes postes, du plus récent au plus ancien, suivis de ma formation. Les missions citées sont des exemples, pas une liste exhaustive. Le CV complet est disponible en PDF, en français et en anglais.',
     experiences: [
       {
         role: 'Technicien informatique et systèmes numériques',
         company: 'TIXIA Services numériques',
         location: 'France',
-        date: 'Depuis août 2023',
-        start: '2023-08',
+        contract: 'CDI',
+        date: 'Depuis septembre 2023',
+        start: '2023-09',
         points: [
-          'Administration de Microsoft 365 et de Google Workspace : identités, sécurité, maintien en conditions opérationnelles.',
-          'Migrations de messagerie : IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail et Outlook vers le cloud.',
+          'Mise en place et administration de Google Workspace, avec GAM (administration en ligne de commande).',
+          'Mise en place et administration de Microsoft 365 : identités, sécurité, maintien en conditions opérationnelles.',
+          'Migrations de messagerie vers Google Workspace et Microsoft 365 : IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail et Outlook, avec reprise des zones DNS.',
           'Gestion des zones DNS, analyse des en-têtes SMTP et de la délivrabilité (SPF, DKIM, DMARC).',
-          'Administration Windows Server : MDT, WDS, Active Directory, DHCP, DNS, bureau à distance.',
-          'Support IT de N1 à N3 (escalade N4 auprès des éditeurs) et masterisation de PC.',
+          'Gestion des appels et des tickets : support HelpDesk de N1 à N3, escalade N4 auprès des éditeurs.',
+          'Administration et configuration de Windows Server : Active Directory, serveur de fichiers, DHCP, DNS, bureau à distance.',
+          'Mise en place de MDT et WDS pour la masterisation de PC.',
+          'Création et mise à jour de sites web avec des CMS (Weebly, Wix, Shopify).',
+        ],
+        skills: [
+          'Google Workspace',
+          'Microsoft 365',
+          'GAM',
+          'Windows Server',
+          'MDT et WDS',
+          'Support HelpDesk',
         ],
       },
       {
@@ -182,25 +210,30 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         role: 'Webmaster',
         company: 'Les papiers de Lucas',
         location: 'Changé, France',
+        contract: 'CDD',
         date: 'Avril 2022 - juin 2022',
         start: '2022-04',
         end: '2022-06',
         points: [
-          "Maintenance technique et administration d'un site e-commerce PrestaShop.",
+          'Maintenance et administration du site e-commerce sous PrestaShop.',
           'Audits SEO détaillés, gestion DNS et corrections UX/UI.',
         ],
+        skills: ['PrestaShop', 'SEO', 'DNS'],
       },
       {
         role: 'Technicien de maintenance IT',
         company: 'Tibco (groupe Lactalis)',
         location: 'France',
-        date: 'Janvier 2019',
-        start: '2019-01',
-        end: '2019-01',
+        contract: 'CDD',
+        date: 'Mars 2019 (1 mois)',
+        start: '2019-03',
+        end: '2019-03',
         points: [
-          'Préparation et masterisation de postes informatiques industriels.',
-          'Diagnostic de pannes matérielles et télé-assistance.',
+          'Préparation et masterisation de nouveaux ordinateurs pour Lactalis.',
+          "Réparation d'ordinateurs dans différentes usines : diagnostic de pannes matérielles et télé-assistance.",
+          'Helpdesk et logistique.',
         ],
+        skills: ['Maintenance informatique'],
       },
     ],
     projectsTitle: 'Réalisations',
@@ -248,6 +281,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         tags: ['Matériel', 'Montage', 'Configuration'],
       },
       {
+        // href à ajouter quand le dépôt sera public : https://github.com/Dakire/MSG-EML-To-PDF-With-Attachments (privé pour l'instant)
         slug: 'convertisseur-msg-eml',
         skill: 'dev',
         title: 'Outil de conversion e-mail (C#)',
@@ -269,11 +303,59 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         desc: 'Extensions de navigateur sur mesure et sites web modernes (WordPress, Wix, React).',
         tags: ['JavaScript', 'React', 'Web'],
       },
+      {
+        slug: 'mineral-contest',
+        skill: 'dev',
+        kind: 'perso',
+        title: 'MineralContest (plugin Minecraft)',
+        desc: "Un plugin Spigot qui organise un « mineral contest » sur Minecraft, inspiré d'un plugin de Squeezie : des équipes de joueurs collectent des lingots (fer, or, diamant, émeraude) pour marquer des points. Partie de 60 minutes configurable, téléchargeur de carte et mise à jour automatique.",
+        tags: ['Java', 'Spigot', 'Minecraft'],
+        href: 'https://github.com/Dakire/MineralContest',
+      },
+      {
+        slug: 'jettracker',
+        skill: 'dev',
+        title: 'JetTracker (projet étudiant)',
+        desc: "Projet étudiant qui suit les jets de célébrités : une application Angular, une base Firebase (avec un export JSON pour l'essayer) et un serveur Express local.",
+        tags: ['Angular', 'Express', 'Firebase'],
+        href: 'https://github.com/ju-rouaux/JetTracker',
+      },
+      {
+        slug: 'star-seeker',
+        skill: 'dev',
+        title: 'Star Seeker (rogue-like en SDL2)',
+        desc: "Un rogue-like spatial, inspiré de The Binding of Isaac, développé de zéro avec SDL2 dans un projet étudiant de deuxième année : on explore les planètes de galaxies générées aléatoirement, on combat des monstres et l'expérience se conserve d'une partie à l'autre.",
+        tags: ['SDL2', 'Makefile', 'Jeu vidéo'],
+        href: 'https://github.com/ju-rouaux/Star-Seeker',
+      },
+      {
+        slug: 'nurikabe',
+        skill: 'dev',
+        title: 'Nurikabe (jeu et aide à la résolution)',
+        desc: 'Le jeu de Nurikabe en Java, avec une aide à la résolution des puzzles, développé dans un projet étudiant de troisième année de licence.',
+        tags: ['Java', 'Maven', 'Jeu de logique'],
+        href: 'https://github.com/ju-rouaux/Nurikabe',
+      },
     ],
     educationTitle: 'Formation & langues',
     education: [
-      'Licence Informatique (Développement et Programmation) - Le Mans Université (2023)',
-      "Baccalauréat Scientifique (Sciences de l'Ingénieur) - Lycée Immaculée Conception (2020)",
+      {
+        title: 'Licence Informatique (programmation, développement informatique)',
+        school: 'Le Mans Université',
+        date: 'Sept. 2020 - juin 2023',
+        endYear: 2023,
+        skills: ['Développement de logiciels', 'Développement web'],
+        points: [
+          'Projets universitaires : un rogue-like en SDL2, un jeu de Nurikabe avec aide à la résolution en Java et une application Angular de suivi de jets.',
+        ],
+        projects: ['star-seeker', 'nurikabe', 'jettracker'],
+      },
+      {
+        title: "Baccalauréat scientifique, Sciences de l'ingénieur",
+        school: 'Lycée Immaculée Conception',
+        date: 'Déc. 2017 - janv. 2020',
+        endYear: 2020,
+      },
     ],
     languagesInfo: 'Français (langue maternelle), anglais (langue maternelle).',
   },
@@ -311,7 +393,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         id: 'network',
         category: 'Networks & Systems',
         items:
-          'Windows Server (Active Directory, MDT, WDS, DNS, DHCP, remote desktop) and Linux. LAN/WLAN networks, VPN, FTP/SFTP. A homelab lets me test configurations and services before deploying them.',
+          'Windows Server (Active Directory, file server, DNS, DHCP, remote desktop, MDT and WDS to image PCs) and Linux. LAN/WLAN networks, VPN, FTP/SFTP. A homelab lets me test configurations and services before deploying them.',
         short: 'Windows Server, Linux, LAN/WLAN networks, VPN',
       },
       {
@@ -325,47 +407,59 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         id: 'messaging',
         category: 'Messaging & Cloud',
         items:
-          'Microsoft 365 and Google Workspace day to day: SMTP analysis, deliverability, DNS zones (MX, SPF, DKIM, DMARC) and operational maintenance.',
+          'Setting up and administering Microsoft 365 and Google Workspace (with GAM, on the command line) day to day: migrations from IMAP (OVH, Gandi, IONOS, Orange…), Gmail and Outlook, SMTP analysis, deliverability, DNS zones (MX, SPF, DKIM, DMARC) and operational maintenance.',
         short: 'Microsoft 365, Google Workspace, DNS, deliverability',
       },
       {
         id: 'training',
-        category: 'AI, M365 & GDPR training',
+        category: 'AI, Google Workspace, M365 & GDPR training',
         items:
-          'I train and support users in artificial intelligence, Microsoft 365 and GDPR best practices.',
-        short: 'AI, Microsoft 365, GDPR: training and support',
+          "I train and support users in artificial intelligence, Google Workspace, Microsoft 365 and GDPR best practices. This support extends day-to-day helpdesk work: getting started with the tools and answering users' questions.",
+        short: 'AI, Google Workspace, Microsoft 365, GDPR: training and support',
       },
       {
         id: 'dev',
         category: 'Development & Automation',
         items:
-          'Website creation and management (WordPress, Wix, Shopify, React). Scripts and tools in C#, Java, Python, PowerShell, Bash, SQL and PHP.',
+          'Website creation and management (WordPress, Wix, Shopify, Weebly, PrestaShop, React). Scripts and tools in C#, Java, Python, PowerShell, Bash, SQL and PHP. University projects in Java, SDL2 and Angular, and a Minecraft plugin in Java: the repositories are on GitHub.',
         short: 'C#, Python, PowerShell, PHP, websites',
       },
       {
         id: 'support',
         category: 'IT Support & Projects',
         items:
-          'End-to-end user support (L1 to L3), escalation to software vendors (L4), business application deployment and technical guidance.',
+          'End-to-end user support (L1 to L3): call and helpdesk ticket handling, escalation to software vendors (L4), business application deployment and technical guidance.',
         short: 'L1 to L3 support, vendor escalation, business software',
       },
     ],
     experienceTitle: 'Career',
     experienceIntro:
-      'My roles, most recent first, followed by my education. The full resume is available as a PDF, in English and in French.',
+      'My roles, most recent first, followed by my education. The duties listed are examples, not an exhaustive list. The full resume is available as a PDF, in English and in French.',
     experiences: [
       {
         role: 'IT and Digital Systems Technician',
         company: 'TIXIA Services numériques',
         location: 'France',
-        date: 'Since August 2023',
-        start: '2023-08',
+        contract: 'Permanent contract',
+        date: 'Since September 2023',
+        start: '2023-09',
         points: [
-          'Administration of Microsoft 365 and Google Workspace: identities, security, operational maintenance.',
-          'Email migrations: IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail and Outlook to the cloud.',
+          'Setting up and administering Google Workspace, with GAM (command-line administration).',
+          'Setting up and administering Microsoft 365: identities, security, operational maintenance.',
+          'Email migrations to Google Workspace and Microsoft 365: IMAP (OVH, Gandi, IONOS, Orange, etc.), Gmail and Outlook, with DNS zones carried over.',
           'DNS zone management, SMTP header analysis and deliverability (SPF, DKIM, DMARC).',
-          'Windows Server administration: MDT, WDS, Active Directory, DHCP, DNS, remote desktop.',
-          'L1 to L3 IT support (L4 escalation to vendors) and PC imaging.',
+          'Call and ticket handling: L1 to L3 helpdesk support, L4 escalation to vendors.',
+          'Windows Server administration and configuration: Active Directory, file server, DHCP, DNS, remote desktop.',
+          'Setting up MDT and WDS to image PCs.',
+          'Building and updating websites with CMSs (Weebly, Wix, Shopify).',
+        ],
+        skills: [
+          'Google Workspace',
+          'Microsoft 365',
+          'GAM',
+          'Windows Server',
+          'MDT and WDS',
+          'Helpdesk support',
         ],
       },
       {
@@ -383,25 +477,30 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         role: 'Webmaster',
         company: 'Les papiers de Lucas',
         location: 'Changé, France',
+        contract: 'Fixed-term contract',
         date: 'April 2022 - June 2022',
         start: '2022-04',
         end: '2022-06',
         points: [
-          'Technical maintenance and administration of a PrestaShop e-commerce site.',
+          'Maintenance and administration of the PrestaShop e-commerce site.',
           'Detailed SEO audits, DNS management and UX/UI fixes.',
         ],
+        skills: ['PrestaShop', 'SEO', 'DNS'],
       },
       {
         role: 'IT maintenance technician',
         company: 'Tibco (Lactalis Group)',
         location: 'France',
-        date: 'January 2019',
-        start: '2019-01',
-        end: '2019-01',
+        contract: 'Fixed-term contract',
+        date: 'March 2019 (1 month)',
+        start: '2019-03',
+        end: '2019-03',
         points: [
-          'Preparation and imaging of industrial computers.',
-          'Hardware fault diagnosis and remote assistance.',
+          'Preparation and imaging of new computers for Lactalis.',
+          'Computer repair in several factories: hardware fault diagnosis and remote assistance.',
+          'Helpdesk and logistics.',
         ],
+        skills: ['IT maintenance'],
       },
     ],
     projectsTitle: 'Projects',
@@ -449,6 +548,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         tags: ['Hardware', 'Build', 'Configuration'],
       },
       {
+        // href à ajouter quand le dépôt sera public : https://github.com/Dakire/MSG-EML-To-PDF-With-Attachments (privé pour l'instant)
         slug: 'convertisseur-msg-eml',
         skill: 'dev',
         title: 'MSG/EML to PDF converter (C#)',
@@ -470,11 +570,59 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         desc: 'Custom browser extensions and modern websites (WordPress, Wix, React).',
         tags: ['JavaScript', 'React', 'Web'],
       },
+      {
+        slug: 'mineral-contest',
+        skill: 'dev',
+        kind: 'perso',
+        title: 'MineralContest (Minecraft plugin)',
+        desc: 'A Spigot plugin that runs a "mineral contest" on Minecraft, inspired by a plugin by Squeezie: teams of players collect ingots (iron, gold, diamond, emerald) to score points. Configurable 60-minute game, map downloader and automatic updates.',
+        tags: ['Java', 'Spigot', 'Minecraft'],
+        href: 'https://github.com/Dakire/MineralContest',
+      },
+      {
+        slug: 'jettracker',
+        skill: 'dev',
+        title: 'JetTracker (student project)',
+        desc: "A student project that tracks celebrities' jets: an Angular app, a Firebase database (with a JSON export to try it out) and a local Express server.",
+        tags: ['Angular', 'Express', 'Firebase'],
+        href: 'https://github.com/ju-rouaux/JetTracker',
+      },
+      {
+        slug: 'star-seeker',
+        skill: 'dev',
+        title: 'Star Seeker (SDL2 rogue-like)',
+        desc: 'A space rogue-like inspired by The Binding of Isaac, built from scratch with SDL2 in a second-year student project: you explore the planets of randomly generated galaxies, fight monsters, and experience carries over from one run to the next.',
+        tags: ['SDL2', 'Makefile', 'Video game'],
+        href: 'https://github.com/ju-rouaux/Star-Seeker',
+      },
+      {
+        slug: 'nurikabe',
+        skill: 'dev',
+        title: 'Nurikabe (game and solving help)',
+        desc: "The Nurikabe puzzle game in Java, with help for solving puzzles, built in a third-year bachelor's student project.",
+        tags: ['Java', 'Maven', 'Logic game'],
+        href: 'https://github.com/ju-rouaux/Nurikabe',
+      },
     ],
     educationTitle: 'Education & languages',
     education: [
-      'Bachelor of Science in Computer Science (Development & Programming) - Le Mans University (2023)',
-      'French Scientific Baccalauréat (Engineering Sciences) - Lycée Immaculée Conception (2020)',
+      {
+        title: 'Bachelor of Science in Computer Science (programming, software development)',
+        school: 'Le Mans University',
+        date: 'Sept. 2020 - June 2023',
+        endYear: 2023,
+        skills: ['Software development', 'Web development'],
+        points: [
+          'University projects: a rogue-like game in SDL2, a Nurikabe game with puzzle-solving help in Java, and an Angular app that tracks jets.',
+        ],
+        projects: ['star-seeker', 'nurikabe', 'jettracker'],
+      },
+      {
+        title: 'French Scientific Baccalauréat (Engineering Sciences)',
+        school: 'Lycée Immaculée Conception',
+        date: 'Dec. 2017 - Jan. 2020',
+        endYear: 2020,
+      },
     ],
     languagesInfo: 'French (native), English (native).',
   },

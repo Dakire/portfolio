@@ -25,10 +25,7 @@ const maxYear = now.getUTCFullYear() + 1;
 const span = maxYear - minYear;
 const years = Array.from({ length: span }, (_, i) => minYear + i);
 const pct = (n: number) => ((n - minYear) / span) * 100;
-const marks = t.education.flatMap((line) => {
-  const year = line.match(/\((\d{4})\)\s*$/)?.[1];
-  return year ? [{ label: line.replace(/\s*\(\d{4}\)\s*$/, ''), year: Number(year) }] : [];
-});
+const marks = t.education.map((e) => ({ label: e.title, year: e.endYear }));
 const ongoingLabel = lang === 'fr' ? 'en cours' : 'ongoing';
 ---
 
