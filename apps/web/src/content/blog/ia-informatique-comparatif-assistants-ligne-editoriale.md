@@ -1,19 +1,18 @@
 ---
 title: "L'IA au travail : comparatif des assistants pour un technicien informatique"
-seoTitle: 'IA au travail : ChatGPT, Claude, Gemini, Copilot, Mistral'
+seoTitle: 'Comparatif des assistants IA pour un technicien IT'
 description: 'Comment je choisis un assistant IA pour des scripts, du dépannage et de la documentation : ChatGPT, Claude, Gemini, Copilot, Mistral, DeepSeek, Perplexity.'
 summary: "J'utilise l'IA depuis 2022 et j'ai commencé avec ChatGPT. Ce dossier compare sept assistants sur ce qui compte dans un métier informatique : scripts PowerShell, dépannage, documentation, lecture de logs, et surtout ce qu'on peut leur confier sans enfreindre le RGPD. Chaque outil a son article, avec ses tarifs datés."
 date: 2026-11-06
 category: ia
 tags: ['IA', 'ChatGPT', 'Claude', 'Gemini', 'RGPD']
-draft: true
 ---
 
-_Brouillon rédigé le 6 novembre 2026. Les passages marqués **[À COMPLÉTER PAR GUILLAUME]** attendent mon vécu : questions dans `docs/questions-contenu.md`. Ne pas publier tant qu'il en reste._
+_Dossier rédigé le 6 novembre 2026. Tarifs et versions : pages officielles consultées ce jour-là._
 
 ## Ma ligne éditoriale
 
-J'utilise l'IA depuis 2022 et j'ai commencé avec ChatGPT. **[À COMPLÉTER PAR GUILLAUME : le premier usage, la date, ce que cela a changé dans le travail.]**
+J'utilise l'IA depuis 2022 et j'ai commencé avec ChatGPT, en novembre 2022, dès la sortie de la version conversationnelle. Je m'en sers pour corriger des textes, vérifier rapidement des informations et développer.
 
 Règles de ce dossier :
 
@@ -34,7 +33,7 @@ Règles de ce dossier :
 | DeepSeek                       | Modèles accessibles par API à bas coût                                    | Données traitées en Chine : à exclure pour des données pro   | [DeepSeek](/blog/deepseek-usages-it-confidentialite/)                    |
 | Perplexity                     | Recherche avec sources citées                                             | Vérifier chaque source ; la réponse n'est pas la source      | [Perplexity](/blog/perplexity-recherche-sources-usages-it/)              |
 
-Ce tableau est ma lecture à la date de rédaction. **[À COMPLÉTER PAR GUILLAUME : l'outil utilisé au quotidien et pourquoi.]**
+Ce tableau est ma lecture à la date de rédaction. Au quotidien, j'utilise Claude, Gemini et ChatGPT.
 
 ## Ce que je demande à l'IA dans un métier informatique
 
@@ -43,11 +42,9 @@ Ce tableau est ma lecture à la date de rédaction. **[À COMPLÉTER PAR GUILLAU
 3. **Documenter** : transformer des notes en procédure, reformuler une réponse à un client, relire un compte rendu.
 4. **Lire des journaux** : résumer un extrait, repérer un motif. À condition d'avoir anonymisé l'extrait.
 
-**[À COMPLÉTER PAR GUILLAUME : un cas où l'IA s'est trompée en dépannage, et ce qui l'a révélé.]**
-
 ## Ce qu'on ne colle jamais dans un assistant
 
-Tant que le service n'est pas couvert par un contrat qui encadre le traitement des données, **ne collez pas** :
+Ma règle, sur tous les assistants : jamais de mot de passe, de RIB ou d'IBAN, et jamais de nom ni de prénom. Plus largement, tant que le service n'est pas couvert par un contrat qui encadre le traitement des données, **ne collez pas** :
 
 - mots de passe, clés d'API, jetons, secrets de connexion, clés BitLocker ;
 - données personnelles de clients ou de collègues (noms, e-mails, numéros, adresses IP associées à une personne) ;

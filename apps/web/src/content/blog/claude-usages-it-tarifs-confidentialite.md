@@ -6,14 +6,13 @@ summary: "Claude est l'assistant d'Anthropic. Je le regarde sous l'angle d'un te
 date: 2026-11-06
 category: ia
 tags: ['Claude', 'Anthropic', 'IA', 'RGPD']
-draft: true
 ---
 
-_Brouillon du 6 novembre 2026. **[À COMPLÉTER PAR GUILLAUME]** marque ce qui attend mon vécu (voir `docs/questions-contenu.md`)._
+_Article rédigé le 6 novembre 2026. Tarifs et versions : pages officielles consultées ce jour-là, à vérifier avant de décider._
 
 ## Mon point de départ
 
-**[À COMPLÉTER PAR GUILLAUME : quand et pourquoi j'ai essayé Claude, par rapport à ChatGPT.]**
+Je l'ai essayé plusieurs mois après ChatGPT, vers 2025.
 
 ## Ce qu'il fait bien
 
@@ -27,7 +26,7 @@ _Brouillon du 6 novembre 2026. **[À COMPLÉTER PAR GUILLAUME]** marque ce qui a
 - **Les limites d'usage dépendent de l'offre** et se renouvellent par périodes : un usage intensif butte plus vite sur l'offre gratuite.
 - Il ne voit pas votre parc : une réponse sur « votre » Active Directory repose sur ce que vous lui décrivez.
 
-**[À COMPLÉTER PAR GUILLAUME : un cas où Claude s'est trompé, ou a mieux fait qu'un autre outil.]**
+Là où je le trouve meilleur que les autres assistants : le développement.
 
 ## Cas d'usage IT
 
@@ -59,7 +58,7 @@ Prix en dollars tels qu'affichés (la page ne précise pas le régime de taxes) 
 
 ## Mon usage
 
-**[À COMPLÉTER PAR GUILLAUME : à quoi je m'en sers au quotidien, et ce qui m'a fait garder ou quitter l'outil.]**
+J'utilise l'offre Pro à titre professionnel et l'offre gratuite à titre personnel. Je m'en sers au quotidien, notamment avec Claude Code pour le développement.
 
 ## Que faire ?
 

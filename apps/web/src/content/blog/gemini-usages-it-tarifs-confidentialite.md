@@ -6,14 +6,13 @@ summary: "Gemini est l'assistant de Google. Il prend tout son sens quand on trav
 date: 2026-11-06
 category: ia
 tags: ['Gemini', 'Google', 'IA', 'RGPD']
-draft: true
 ---
 
-_Brouillon du 6 novembre 2026. **[À COMPLÉTER PAR GUILLAUME]** marque ce qui attend mon vécu (voir `docs/questions-contenu.md`)._
+_Article rédigé le 6 novembre 2026. Tarifs et versions : pages officielles consultées ce jour-là, à vérifier avant de décider._
 
 ## Mon point de départ
 
-**[À COMPLÉTER PAR GUILLAUME : mon usage de Gemini, dans quel contexte (Workspace, mobile, recherche).]**
+Je l'utilise au travail et à titre personnel, via Google Workspace, parce que les limites y sont plus élevées.
 
 ## Ce qu'il fait bien
 
@@ -27,7 +26,7 @@ _Brouillon du 6 novembre 2026. **[À COMPLÉTER PAR GUILLAUME]** marque ce qui a
 - Les limites sont exprimées **en multiples** de l'offre gratuite (2 fois, 4 fois) et se renouvellent toutes les cinq heures jusqu'à un plafond hebdomadaire : difficile de savoir à l'avance ce qu'on aura.
 - Comme tous les assistants, il peut inventer une commande : vérifier.
 
-**[À COMPLÉTER PAR GUILLAUME : une erreur de Gemini, ou un cas où il a été le plus utile.]**
+Ce que j'en fais : remettre au propre des prises de notes dans Google Docs, et m'aider sur les formules de Google Sheets.
 
 ## Cas d'usage IT
 
@@ -57,7 +56,7 @@ La page cite le modèle « Gemini 4 Argon » dans les offres payantes. Ces noms 
 
 ## Mon usage
 
-**[À COMPLÉTER PAR GUILLAUME : ce que j'utilise encore, et ce que j'ai laissé.]**
+J'utilise Gemini avec Google Workspace Business Standard (13,60 € HT par mois). Il y est activé par défaut ; avec les licences Business Starter, il est moins présent dans la suite Google.
 
 ## Que faire ?
 

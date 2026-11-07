@@ -6,14 +6,13 @@ summary: "ChatGPT est l'assistant que j'utilise depuis le plus longtemps. Il sai
 date: 2026-11-06
 category: ia
 tags: ['ChatGPT', 'OpenAI', 'IA', 'RGPD']
-draft: true
 ---
 
-_Brouillon du 6 novembre 2026. **[À COMPLÉTER PAR GUILLAUME]** marque ce qui attend mon vécu (voir `docs/questions-contenu.md`). Tarifs : voir la section dédiée._
+_Article rédigé le 6 novembre 2026. Tarifs et versions : pages officielles consultées ce jour-là, à vérifier avant de décider._
 
 ## Mon point de départ
 
-J'ai commencé l'IA avec ChatGPT en 2022. **[À COMPLÉTER PAR GUILLAUME : le premier usage, ce qui a surpris, ce qui a déçu.]**
+J'ai commencé l'IA avec ChatGPT en novembre 2022, dès la sortie de la version conversationnelle.
 
 ## Ce qu'il fait bien
 
@@ -26,8 +25,6 @@ J'ai commencé l'IA avec ChatGPT en 2022. **[À COMPLÉTER PAR GUILLAUME : le pr
 - Il répond avec assurance **même quand il invente** : une option de commande qui n'existe pas, un paramètre de module imaginaire. Vérifiez dans la documentation de l'éditeur.
 - **L'offre change souvent** : noms, paliers et limites bougent. Une capture d'un tarif vieillit en quelques semaines.
 - La page officielle indique que l'offre **Go « peut inclure de la publicité »**.
-
-**[À COMPLÉTER PAR GUILLAUME : un cas où ChatGPT s'est trompé en dépannage, et comment je l'ai vu.]**
 
 ## Cas d'usage IT
 
@@ -51,7 +48,7 @@ La page officielle des offres (chatgpt.com/pricing) liste Free, Go, Plus, Pro (t
 
 ## Mon usage
 
-**[À COMPLÉTER PAR GUILLAUME : ce que j'utilise encore ChatGPT pour faire, et ce que j'ai laissé à un autre outil.]**
+J'utilise ChatGPT au quotidien, avec Claude et Gemini : correction de texte, vérification rapide d'informations, développement.
 
 ## Que faire ?
 

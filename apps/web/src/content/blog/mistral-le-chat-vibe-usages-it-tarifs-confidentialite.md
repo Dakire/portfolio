@@ -6,18 +6,17 @@ summary: "Mistral AI est un éditeur français d'assistants IA. Son produit gran
 date: 2026-11-06
 category: ia
 tags: ['Mistral', 'Le Chat', 'IA', 'RGPD']
-draft: true
 ---
 
-_Brouillon du 6 novembre 2026. **[À COMPLÉTER PAR GUILLAUME]** marque ce qui attend mon vécu (voir `docs/questions-contenu.md`)._
+_Article rédigé le 6 novembre 2026. Tarifs et versions : pages officielles consultées ce jour-là, à vérifier avant de décider._
 
 ## Mon point de départ
 
-**[À COMPLÉTER PAR GUILLAUME : ai-je utilisé Le Chat ? Quand, pourquoi, avec quel résultat ?]**
+Je l'ai utilisé pour du développement rapide, du scripting, et c'était correct. Dans mon choix de l'essayer, c'est la souveraineté qui a compté.
 
 ## Le nom : Le Chat ou Vibe ?
 
-La page tarifaire de Mistral présente aujourd'hui ses offres sous le nom **Vibe** et ne mentionne « Le Chat » que dans une note pour les étudiants, sans expliquer le lien entre les deux. Des sources secondaires datent une transition de nom au 28 mai 2026 ; **je n'ai pas pu le vérifier sur une source officielle**. Dans cet article, « Mistral » désigne le produit grand public de l'éditeur, sous l'un ou l'autre nom.
+La page tarifaire de Mistral présente aujourd'hui ses offres sous le nom **Vibe** et ne mentionne « Le Chat » que dans une note pour les étudiants, sans expliquer le lien entre les deux. Le changement est récent, de mai 2026 (c'est aussi la date que donnent des sources secondaires, le 28 mai) ; **je n'ai pas pu le vérifier sur une source officielle**. Dans cet article, « Mistral » désigne le produit grand public de l'éditeur, sous l'un ou l'autre nom.
 
 ## Ce qu'il fait bien
 
@@ -30,8 +29,6 @@ La page tarifaire de Mistral présente aujourd'hui ses offres sous le nom **Vibe
 - **Le nom du produit** est en transition : mettez à jour vos notes et vos consignes internes quand il se stabilise.
 - La page présente **une incohérence** sur l'offre étudiante (montant des crédits d'API, prix) : vérifiez avant de vous y fier.
 - Comme les autres, il peut se tromper.
-
-**[À COMPLÉTER PAR GUILLAUME : un cas concret, bon ou mauvais.]**
 
 ## Cas d'usage IT
 
@@ -59,7 +56,7 @@ La page affiche aussi « 50 $ par mois » à côté du nombre d'utilisateurs de 
 
 ## Mon usage
 
-**[À COMPLÉTER PAR GUILLAUME : ce que j'en fais, ou pourquoi je ne l'utilise pas.]**
+J'utilise l'offre gratuite.
 
 ## Que faire ?
 

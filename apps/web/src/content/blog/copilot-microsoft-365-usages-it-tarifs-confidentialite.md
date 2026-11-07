@@ -6,14 +6,13 @@ summary: "Copilot n'est pas un assistant de plus : il travaille sur les données
 date: 2026-11-06
 category: ia
 tags: ['Copilot', 'Microsoft 365', 'IA', 'RGPD']
-draft: true
 ---
 
-_Brouillon du 6 novembre 2026. **[À COMPLÉTER PAR GUILLAUME]** marque ce qui attend mon vécu (voir `docs/questions-contenu.md`)._
+_Article rédigé le 6 novembre 2026. Tarifs et versions : pages officielles consultées ce jour-là, à vérifier avant de décider._
 
 ## Mon point de départ
 
-**[À COMPLÉTER PAR GUILLAUME : ce que j'ai testé de Copilot (Chat, applications Microsoft 365), chez qui, dans quel contexte.]**
+J'ai testé Copilot sur un PC compatible.
 
 ## Ce qu'il fait bien
 
@@ -27,7 +26,7 @@ _Brouillon du 6 novembre 2026. **[À COMPLÉTER PAR GUILLAUME]** marque ce qui a
 - **Le coût s'ajoute** à la licence Microsoft 365, et certaines fonctions avancées sont facturées à l'usage en plus.
 - Comme les autres, il peut se tromper : un résumé de réunion ou de document se relit.
 
-**[À COMPLÉTER PAR GUILLAUME : un cas où Copilot a surpris, bien ou mal.]**
+Je n'ai pas vu Copilot faire remonter un document mal partagé, et je ne l'ai déployé chez aucun client : mon retour s'arrête à un essai personnel.
 
 ## Cas d'usage IT
 
@@ -56,7 +55,7 @@ Les offres pour particuliers et familles ne sont pas détaillées sur cette page
 
 ## Mon usage
 
-**[À COMPLÉTER PAR GUILLAUME : si je l'utilise, pour quoi, et pour quels clients.]**
+Je ne paierais pas la licence, ni pour moi ni pour un client : je la trouve trop limitée.
 
 ## Que faire ?
 

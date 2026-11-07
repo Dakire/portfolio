@@ -1,19 +1,18 @@
 ---
 title: 'DeepSeek pour un technicien informatique : usages, limites et RGPD'
 seoTitle: 'DeepSeek au travail : usages IT, limites et RGPD'
-description: "DeepSeek dans un métier informatique : son intérêt par API, les réserves des autorités européennes sur les données, et pourquoi je l'exclus du travail."
+description: 'DeepSeek dans un métier informatique : son intérêt par API, les réserves des autorités européennes sur les données, et pourquoi je ne lui confie aucune donnée.'
 summary: "DeepSeek attire par ses modèles accessibles par API à bas coût. Il pose surtout une question de données : sa politique de confidentialité place le traitement sur des serveurs en Chine, ce qui a conduit des autorités européennes à réagir en 2025. Voici ce que je retiens, ce que je n'ai pas pu vérifier, et la règle d'usage que j'en tire."
 date: 2026-11-06
 category: ia
 tags: ['DeepSeek', 'IA', 'RGPD', 'Confidentialité']
-draft: true
 ---
 
-_Brouillon du 6 novembre 2026. **[À COMPLÉTER PAR GUILLAUME]** marque ce qui attend mon vécu (voir `docs/questions-contenu.md`). Les informations réglementaires datent de 2025 ; je n'ai pas trouvé de source récente sur l'état des procédures._
+_Article rédigé le 6 novembre 2026. Les informations réglementaires datent de 2025 ; je n'ai pas trouvé de source récente sur l'état des procédures._
 
 ## Mon point de départ
 
-**[À COMPLÉTER PAR GUILLAUME : l'ai-je testé ? Pourquoi, avec quelles données (aucune donnée réelle, j'espère), quel résultat ?]**
+Je l'ai testé, par l'API, pour du développement.
 
 ## Ce qu'il fait bien
 
@@ -27,9 +26,9 @@ _Brouillon du 6 novembre 2026. **[À COMPLÉTER PAR GUILLAUME]** marque ce qui a
 - **En janvier 2025**, l'autorité italienne de protection des données (le Garante) a bloqué l'accès à l'application le temps de vérifier la collecte et le stockage des données ; la commissaire de Berlin a demandé à Apple et Google de retirer l'application, estimant le transfert de données vers la Chine non conforme au RGPD ; la CNIL a annoncé examiner ses pratiques. Ces informations viennent de la presse de l'époque.
 - **Je n'ai pas trouvé de source récente** sur l'état actuel de ces procédures. Vérifiez les communiqués du Garante, de l'autorité de Berlin et de la CNIL avant de vous appuyer sur ce paragraphe.
 
-Conséquence pratique : pour toute **donnée professionnelle ou personnelle**, je ne l'utilise pas dans son application ou son site web.
+Conséquence pratique : à éviter, dans son application comme sur son site, pour toute **donnée professionnelle ou personnelle**.
 
-**[À COMPLÉTER PAR GUILLAUME : ma position personnelle et ce qui la motive.]**
+Ce qui m'intéresse : le rapport qualité-prix. Aucun client ni collègue ne m'a posé la question de son usage en entreprise. Ma règle, pour tous les assistants : jamais de mot de passe, de RIB ou d'IBAN, et jamais de nom ni de prénom.
 
 ## Cas d'usage IT (sans donnée réelle)
 
@@ -48,10 +47,6 @@ Conséquence pratique : pour toute **donnée professionnelle ou personnelle**, j
 ## Tarifs et versions
 
 Je n'ai pas pu lire de grille tarifaire officielle pour l'application ; la documentation de l'API publie des tarifs par modèle. **À vérifier sur la plateforme officielle le jour où vous décidez.**
-
-## Mon usage
-
-**[À COMPLÉTER PAR GUILLAUME : ce que j'en fais, ou pourquoi non.]**
 
 ## Que faire ?
 
