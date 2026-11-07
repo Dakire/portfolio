@@ -65,3 +65,22 @@ Trois directions, montrées en situation dans une page de maquettes privée (lie
 ## 7. Refaire les captures
 
 Avec le build et `astro preview` lancés (port 4321), un script Playwright parcourt les cinq pages pour chaque largeur et chaque thème (`localStorage.theme` posé avant le chargement, `reducedMotion: 'reduce'`) et enregistre une capture pleine page.
+
+## 8. Après la refonte (7 novembre 2026)
+
+Mesures sur le build local servi en HTTP (Lighthouse 13, mêmes catégories que l'[audit d'octobre](audit/2026-10-refonte-apres.md)). Performance / accessibilité / bonnes pratiques / SEO :
+
+| Page                              | Mobile                | Desktop               | LCP mobile | CLS | Poids de la page |
+| --------------------------------- | --------------------- | --------------------- | ---------- | --- | ---------------- |
+| `/`                               | 100 / 100 / 100 / 100 | 100 / 100 / 100 / 100 | 0,9 s      | 0   | 188 Ko           |
+| `/blog/fin-support-windows-10-…/` | 100 / 100 / 100 / 100 | 100 / 100 / 100 / 100 | 0,9 s      | 0   | 181 Ko           |
+| `/cheatsheets/gam/`               | 100 / 100 / 100 / 100 | 100 / 100 / 100 / 100 | 0,9 s      | 0   | 204 Ko           |
+| `/projets/migrations-messagerie/` | 100 / 100 / 100 / 100 | 100 / 100 / 100 / 100 | 0,9 s      | 0   | 177 Ko           |
+
+À l'audit d'octobre, l'accueil mobile était à 96 en performance. Gains : une seule police de titres au lieu de deux (plus d'italique de 80 Ko), aucune illustration SVG animée sur l'accueil, plus d'apparition au défilement.
+
+Contrôles : axe (WCAG 2.2 A et AA) vert dans les deux thèmes sur toutes les pages testées par la CI ; rendu relevé à 1440, 768 et 375 px sur l'accueil, un article, une cheatsheet, un outil et une réalisation.
+
+### Ce que cet audit ne mesure pas
+
+Navigation au clavier de bout en bout et lecteur d'écran : à refaire à la main par le propriétaire sur le site en ligne (voir le résumé de livraison).
