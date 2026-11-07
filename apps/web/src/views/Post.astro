@@ -95,6 +95,9 @@ const crumbs = [
     image: image.url,
     keywords: post.data.tags,
     crumbs,
+    section: CATEGORIES[post.data.category]?.[lang],
+    wordCount: (post.body ?? '').split(/\s+/).filter(Boolean).length,
+    minutes: readingMinutes(post.body),
   })}
 >
   <div class="container section">
@@ -111,25 +114,44 @@ const crumbs = [
 
     <article>
       <header class="stack page-hero">
-        <p class="meta">
-          <a href={categoryPath(lang, post.data.category)}>
-            {CATEGORIES[post.data.category]?.[lang]}
-          </a>
-          {' · '}
-          <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date, lang)}</time>
-          {post.data.updated && (
-            <>
-              {' '}
-              · {lang === 'fr' ? 'mis à jour le' : 'updated'}{' '}
-              <time datetime={isoDate(post.data.updated)}>
-                {formatDate(post.data.updated, lang)}
-              </time>
-            </>
-          )}
-          · {readingMinutes(post.body)} {t.min}
-        </p>
         <h1>{post.data.title}</h1>
         <p class="lead">{post.data.summary ?? post.data.description}</p>
+        <dl class="art-meta">
+          <div>
+            <dt class="label">{lang === 'fr' ? 'Publié' : 'Published'}</dt>
+            <dd>
+              <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date, lang)}</time>
+            </dd>
+          </div>
+          {post.data.updated && (
+            <div>
+              <dt class="label">{lang === 'fr' ? 'Mis à jour' : 'Updated'}</dt>
+              <dd>
+                <time datetime={isoDate(post.data.updated)}>
+                  {formatDate(post.data.updated, lang)}
+                </time>
+              </dd>
+            </div>
+          )}
+          <div>
+            <dt class="label">{lang === 'fr' ? 'Rubrique' : 'Topic'}</dt>
+            <dd>
+              <a href={categoryPath(lang, post.data.category)}>
+                {CATEGORIES[post.data.category]?.[lang]}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt class="label">{lang === 'fr' ? 'Lecture' : 'Reading'}</dt>
+            <dd>
+              {readingMinutes(post.body)} {t.min}
+            </dd>
+          </div>
+          <div>
+            <dt class="label">{lang === 'fr' ? 'Auteur' : 'Author'}</dt>
+            <dd>{PROFILE.name}</dd>
+          </div>
+        </dl>
         {translation && (
           <p>
             <a

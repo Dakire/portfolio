@@ -1,6 +1,7 @@
 ---
-import Card from '@grichard/ui/components/Card.astro';
+// Domaines de compétences en lignes (pas de cartes) : titre à gauche, description à droite.
 import type { Portfolio } from '../data/content';
+import Icon from './Icon.astro';
 
 interface Props {
   skills: Portfolio['skills'];
@@ -10,11 +11,26 @@ interface Props {
 const { skills, compact } = Astro.props;
 ---
 
-<div class="cards cards-skills">
+<ul class="lrows" role="list">
   {skills.map((skill) => (
-    <Card href={compact ? `${compact.href}#${skill.id}` : undefined}>
-      <h3>{skill.category}</h3>
-      <p>{compact ? skill.short : skill.items}</p>
-    </Card>
+    <li class:list={['lrow', !compact && 'is-static']}>
+      <h3 class="lrow-title">
+        {compact ? (
+          <a class="lrow-link" href={`${compact.href}#${skill.id}`}>
+            {skill.category}
+          </a>
+        ) : (
+          skill.category
+        )}
+      </h3>
+      <div class="lrow-body">
+        <p>{compact ? skill.short : skill.items}</p>
+      </div>
+      {compact && (
+        <span class="ledger-arrow" aria-hidden="true">
+          <Icon name="arrow" size={18} />
+        </span>
+      )}
+    </li>
   ))}
-</div>
+</ul>

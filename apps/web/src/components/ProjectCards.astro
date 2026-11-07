@@ -1,15 +1,15 @@
 ---
-import Card from '@grichard/ui/components/Card.astro';
-import Tag from '@grichard/ui/components/Tag.astro';
+// Réalisations en lignes de registre : titre, description et outils, flèche ; toute la ligne est cliquable (lien étiré).
 import type { Project } from '../data/content';
+import Icon from './Icon.astro';
 import { UI, projectPath, type Lang } from '../lib/i18n';
 
 interface Props {
   items: Project[];
   lang: Lang;
-  /** Nombre maximal de cartes ; toutes par défaut. */
+  /** Nombre maximal de lignes ; toutes par défaut. */
   limit?: number;
-  /** Niveau des titres de carte, selon le titre de section qui précède. */
+  /** Niveau des titres, selon le titre de section qui précède. */
   level?: 2 | 3;
 }
 const { items, lang, limit, level = 3 } = Astro.props;
@@ -17,27 +17,28 @@ const ui = UI[lang];
 const Heading = `h${level}` as 'h2' | 'h3';
 ---
 
-<div class="cards cards-wide">
+<ul class="lrows" role="list">
   {items.slice(0, limit).map((project) => (
-    <Card class="card-stretch">
-      <Heading>
-        <a class="card-link" href={projectPath(lang, project.slug)}>
+    <li class="lrow">
+      <Heading class="lrow-title">
+        <a class="lrow-link" href={projectPath(lang, project.slug)}>
           {project.title}
         </a>
       </Heading>
-      <p>{project.desc}</p>
-      <p class="row">
-        {project.tags.map((tag) => (
-          <Tag>{tag}</Tag>
-        ))}
-      </p>
-      {project.href && (
-        <p>
-          <a class="card-extra" href={project.href} rel="noopener">
-            GitHub<span class="visually-hidden"> {ui.external}</span>
-          </a>
-        </p>
-      )}
-    </Card>
+      <div class="lrow-body">
+        <p>{project.desc}</p>
+        <p class="lrow-tags">{project.tags.join(' · ')}</p>
+        {project.href && (
+          <p>
+            <a class="lrow-extra" href={project.href} rel="noopener">
+              GitHub<span class="visually-hidden"> {ui.external}</span>
+            </a>
+          </p>
+        )}
+      </div>
+      <span class="ledger-arrow" aria-hidden="true">
+        <Icon name="arrow" size={18} />
+      </span>
+    </li>
   ))}
-</div>
+</ul>
