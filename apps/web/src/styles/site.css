@@ -495,36 +495,47 @@ main:focus {
 }
 
 /* ---------- Bandeau de consentement (injecté par /js/consent.js) ----------
-   En surimpression, fixé en bas : son apparition ne déplace rien (aucun décalage de mise en page, CLS).
-   Premier élément du <body> dans le DOM, il reste atteint dès le premier Tab. Tant qu'il est affiché, scroll-padding-bottom
-   et une marge basse évitent qu'il masque l'élément qui a le focus ou la fin de la page (WCAG 2.4.11). */
+   Premier élément du <body> dans le DOM (atteint dès le premier Tab), affiché en dernier (order) et collé en bas de l'écran
+   (sticky) : il fait partie du flux, donc il ne recouvre jamais la fin de la page et n'ajoute aucun rembourrage au corps.
+   À l'apparition rien ne bouge au-dessus de lui (pas de décalage de mise en page, CLS). */
+body {
+  display: flex;
+  flex-direction: column;
+}
+body > main {
+  flex: 1 0 auto;
+}
+/* Le focus clavier ne doit pas passer sous le bandeau (WCAG 2.4.11) */
+html:has(.consent) {
+  scroll-padding-bottom: 8rem;
+}
 .consent {
-  position: fixed;
-  inset: auto 0 0;
+  order: 99;
+  position: sticky;
+  bottom: 0;
   z-index: var(--z-banner);
+  background: var(--raised);
+  border-top: 1px solid var(--line-strong);
+  box-shadow: 0 -16px 32px -20px rgb(0 0 0 / 0.45);
+  color: var(--ink);
+}
+.consent-in {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3) var(--space-5);
+  gap: var(--space-3) var(--space-6);
+  width: min(100%, var(--container));
   max-height: 50vh;
+  margin-inline: auto;
   overflow-y: auto;
   padding: var(--space-4) var(--gutter);
-  background: var(--raised);
-  border-top: 1px solid var(--line-strong);
-  box-shadow: var(--shadow-lg);
-  color: var(--ink);
-}
-html:has(.consent) {
-  scroll-padding-bottom: 12rem;
-}
-body:has(.consent) {
-  padding-bottom: 12rem;
 }
 .consent p {
-  flex: 1 1 28rem;
+  flex: 1 1 26rem;
   max-width: var(--measure);
   font-size: var(--text-sm);
+  line-height: 1.45;
 }
 .consent-actions {
   display: flex;
@@ -546,14 +557,17 @@ body:has(.consent) {
 .consent-actions button:hover {
   border-color: var(--accent);
 }
-/* Petit écran : carte flottante compacte (texte plus petit, deux boutons côte à côte) au lieu d'un bandeau d'un demi-écran */
+/* Petit écran : carte flottante compacte (deux boutons côte à côte) au lieu d'un bandeau d'un demi-écran */
 @media (max-width: 39.99rem) {
   .consent {
-    inset: auto var(--space-2) var(--space-2);
-    gap: var(--space-3);
-    padding: var(--space-3) var(--space-4);
+    bottom: var(--space-2);
+    margin: 0 var(--space-2) var(--space-2);
     border: 1px solid var(--line-strong);
     border-radius: var(--radius-lg);
+  }
+  .consent-in {
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
   }
   .consent p {
     flex-basis: 100%;
@@ -565,12 +579,6 @@ body:has(.consent) {
   }
   .consent-actions button {
     flex: 1 1 0;
-  }
-  html:has(.consent) {
-    scroll-padding-bottom: 10rem;
-  }
-  body:has(.consent) {
-    padding-bottom: 10rem;
   }
 }
 
@@ -1757,24 +1765,31 @@ h2 i {
   font-style: normal;
 }
 
-/* Signature : le nom en très grand, en creux (contour seul), coupé par le bas de la page. Décorative. */
+/* Signature : le nom en contour, ajusté à la largeur de la page (SVG), jamais coupé. Décorative. */
 .site-footer {
   overflow: hidden;
 }
 .footer-signature {
-  margin: 0 0 -0.22em;
-  padding-inline: var(--gutter);
-  color: transparent;
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 12.5vw, 12.5rem);
-  font-stretch: 75%;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 0.9;
-  text-align: center;
-  white-space: nowrap;
-  -webkit-text-stroke: 1px var(--line-strong);
+  margin: 0;
+  padding: var(--space-5) var(--gutter) var(--space-6);
   user-select: none;
+}
+.footer-signature svg {
+  display: block;
+  width: 100%;
+  max-width: var(--container);
+  height: auto;
+  margin-inline: auto;
+  overflow: visible;
+}
+.footer-signature text {
+  fill: transparent;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-stretch: 75%;
+  stroke: var(--line-strong);
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
 }
 @media (forced-colors: active) {
   .footer-signature {

@@ -219,13 +219,14 @@ test.describe('menu de navigation sur petit écran', () => {
 test('le bandeau de consentement ne décale pas la page (CLS) et ne masque pas la fin de page', async ({
   page,
 }) => {
-  // Position du contenu avec le bandeau, puis sans (choix déjà fait) : elle doit être identique.
+  // Le bandeau est dans le flux (collé en bas, sans rembourrage sur le corps) : la position du contenu avec,
+  // puis sans (choix déjà fait), doit être identique.
   await page.goto('/');
   await expect(page.locator('.consent')).toBeVisible();
   const mainTop = () =>
     page.locator('#contenu').evaluate((el) => el.getBoundingClientRect().top + window.scrollY);
   const withBanner = await mainTop();
-  await expect(page.locator('.consent')).toHaveCSS('position', 'fixed');
+  await expect(page.locator('.consent')).toHaveCSS('position', 'sticky');
 
   const footerLink = page.getByRole('button', { name: 'Gérer les cookies' });
   await footerLink.scrollIntoViewIfNeeded();

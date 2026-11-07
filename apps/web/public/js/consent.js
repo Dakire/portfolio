@@ -125,12 +125,15 @@
       button.dataset.choice = choice;
       actions.append(button);
     }
-    banner.append(message, actions);
+    const inner = document.createElement('div');
+    inner.className = 'consent-in';
+    inner.append(message, actions);
+    banner.append(inner);
     banner.addEventListener('click', (e) => {
       const choice = e.target.closest('button')?.dataset.choice;
       if (choice) choose(choice === 'accept');
     });
-    document.body.prepend(banner); // en tête de page : atteint dès le premier Tab, sans parcourir toute la page
+    document.body.prepend(banner); // premier dans le DOM : atteint dès le premier Tab ; affiché en bas par CSS (order, sticky)
     if (focus) banner.querySelector('button').focus();
   };
 
