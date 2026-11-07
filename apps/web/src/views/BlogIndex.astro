@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
+import PostCard from '../components/PostCard.astro';
 import { PORTFOLIO_DATA } from '../data/content';
 import { CATEGORY_RELATED, resolveRelated } from '../data/related';
 import {
@@ -83,11 +84,6 @@ const mix = mixOrder.map(([id, n], i) => {
 const monthFmt = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-FR' : 'en-GB', {
   month: 'long',
   year: 'numeric',
-  timeZone: 'UTC',
-});
-const dayFmt = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-FR' : 'en-GB', {
-  day: 'numeric',
-  month: 'short',
   timeZone: 'UTC',
 });
 const months: { key: string; label: string; posts: typeof posts }[] = [];
@@ -218,24 +214,10 @@ const toolsTitle = lang === 'fr' ? 'Outils et aide-mémoire liés' : 'Related to
               <h2 id={`m-${month.key}`}>{month.label}</h2>
               <span class="label">{countLabel(month.posts.length)}</span>
             </header>
-            <ul role="list">
+            <ul class="cards cards-wide ledger-cards" role="list">
               {month.posts.map((post) => (
                 <li>
-                  <a class="ledger-row" href={postPath(lang, post.slug)}>
-                    <span class="ledger-meta label">
-                      <time datetime={isoDate(post.data.date)}>
-                        {dayFmt.format(post.data.date)}
-                      </time>
-                      {' · '}
-                      {CATEGORIES[post.data.category]?.[lang]}
-                    </span>
-                    <span class="ledger-title">{post.data.title}</span>
-                    <span class="ledger-arrow" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" width="18" height="18">
-                        <path d="M4 12h15M13 6l6 6-6 6" />
-                      </svg>
-                    </span>
-                  </a>
+                  <PostCard post={post} minLabel={t.min} />
                 </li>
               ))}
             </ul>
