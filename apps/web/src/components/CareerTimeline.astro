@@ -1,0 +1,97 @@
+---
+// Frise du parcours à l'échelle (années en colonnes), calculée depuis les dates du profil : rien n'est saisi à la main.
+// Chaque ligne : poste (texte) et piste (SVG sans style en ligne). Les jalons de formation viennent des années entre parenthèses.
+import { PORTFOLIO_DATA } from '../data/content';
+import type { Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = PORTFOLIO_DATA[lang];
+const toNum = (s: string) => {
+  const [y = 0, m] = s.split('-').map(Number);
+  return y + ((m ?? 1) - 1) / 12;
+};
+const now = new Date();
+const nowNum = now.getUTCFullYear() + now.getUTCMonth() / 12;
+const rows = t.experiences.map((job) => {
+  const start = toNum(job.start);
+  const end = job.end ? toNum(job.end) + 1 / 12 : nowNum;
+  return { job, start, end, ongoing: !job.end };
+});
+const minYear = Math.floor(Math.min(...rows.map((r) => r.start)));
+const maxYear = now.getUTCFullYear() + 1;
+const span = maxYear - minYear;
+const years = Array.from({ length: span }, (_, i) => minYear + i);
+const pct = (n: number) => ((n - minYear) / span) * 100;
+const marks = t.education.flatMap((line) => {
+  const year = line.match(/\((\d{4})\)\s*$/)?.[1];
+  return year ? [{ label: line.replace(/\s*\(\d{4}\)\s*$/, ''), year: Number(year) }] : [];
+});
+const ongoingLabel = lang === 'fr' ? 'en cours' : 'ongoing';
+---
+
+<div
+  class="timeline"
+  role="group"
+  aria-label={
+    lang === 'fr'
+      ? `Frise du parcours, de ${minYear} à ${maxYear - 1}`
+      : `Career timeline, ${minYear} to ${maxYear - 1}`
+  }
+>
+  <div class="timeline-head" aria-hidden="true">
+    <span></span>
+    <ol class="timeline-years" role="presentation">
+      {years.map((y) => (
+        <li>{y}</li>
+      ))}
+    </ol>
+  </div>
+  {rows.map((r) => (
+    <div class="timeline-row">
+      <p class="timeline-name">
+        <b>{r.job.company}</b>
+        {r.job.role} · {r.job.date}
+      </p>
+      <svg
+        class="timeline-track"
+        viewBox="0 0 100 10"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path class="timeline-grid" d={years.map((_, i) => `M${(i / span) * 100} 0V10`).join('')} />
+        <rect
+          class:list={['timeline-bar', r.ongoing && 'is-now']}
+          x={pct(r.start)}
+          y="1"
+          width={Math.max(pct(r.end) - pct(r.start), 0.8)}
+          height="8"
+        />
+      </svg>
+    </div>
+  ))}
+  {marks.length > 0 && (
+    <div class="timeline-row">
+      <p class="timeline-name">
+        <b>{t.educationTitle.split(' & ')[0]}</b>
+        {marks.map((m) => `${m.year}`).join(' · ')}
+      </p>
+      <svg
+        class="timeline-track"
+        viewBox="0 0 100 10"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path class="timeline-grid" d={years.map((_, i) => `M${(i / span) * 100} 0V10`).join('')} />
+        {marks.map((m) => (
+          <rect class="timeline-mark" x={pct(m.year + 0.5) - 0.5} y="0" width="1" height="10" />
+        ))}
+      </svg>
+    </div>
+  )}
+  <p class="visually-hidden">{ongoingLabel}</p>
+</div>

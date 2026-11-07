@@ -4,6 +4,7 @@ import { SITE_TEXT } from '../data/site-text';
 import { withBase } from '../lib/base';
 import { ROUTES, UI, type Lang } from '../lib/i18n';
 import { resourceLinks } from '../lib/sections';
+import SocialLinks from './SocialLinks.astro';
 
 interface Props {
   lang: Lang;
@@ -59,19 +60,6 @@ const resources = resourceLinks(lang).filter((link) => link.key !== 'resources')
             <a href={ROUTES[lang].contact}>{text.form}</a>
           </li>
           <li>
-            <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
-          </li>
-          <li>
-            <a href={PROFILE.linkedin} rel="noopener">
-              LinkedIn<span class="visually-hidden"> {ui.external}</span>
-            </a>
-          </li>
-          <li>
-            <a href={PROFILE.github} rel="noopener">
-              GitHub<span class="visually-hidden"> {ui.external}</span>
-            </a>
-          </li>
-          <li>
             <a href={withBase('/CV_Guillaume_Richard_FR.pdf')} hreflang="fr" lang="fr">
               {SITE_TEXT[lang].footer.cvFr}
             </a>
@@ -82,6 +70,7 @@ const resources = resourceLinks(lang).filter((link) => link.key !== 'resources')
             </a>
           </li>
         </ul>
+        <SocialLinks lang={lang} rss class="footer-social" />
       </nav>
     </div>
     <div class="footer-bottom">

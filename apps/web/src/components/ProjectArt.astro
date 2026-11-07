@@ -1,0 +1,38 @@
+---
+// Schéma au trait de chaque réalisation mise en avant (décoratif). Un slug sans schéma n'affiche rien.
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+---
+
+{slug === 'homelab-proxmox' && (
+  <svg class="project-art" viewBox="0 0 160 100" aria-hidden="true" focusable="false">
+    <rect x="6" y="28" width="52" height="44" />
+    <path d="M14 40h36M14 50h36M14 60h18M58 38l42-20M58 50h42M58 62l42 20" />
+    <circle cx="108" cy="18" r="8" />
+    <circle cx="108" cy="50" r="8" />
+    <circle cx="108" cy="82" r="8" />
+    <path d="M120 50h30" stroke-dasharray="4 4" />
+  </svg>
+)}
+{slug === 'deploiement-windows-server' && (
+  <svg class="project-art" viewBox="0 0 160 100" aria-hidden="true" focusable="false">
+    <rect x="52" y="6" width="56" height="26" />
+    <path d="M62 19h36M80 32v14M24 46h112M24 46v14M80 46v14M136 46v14" />
+    <rect x="4" y="60" width="40" height="30" />
+    <rect x="60" y="60" width="40" height="30" />
+    <rect x="116" y="60" width="40" height="30" />
+    <path d="M10 70h28M66 70h28M122 70h28" />
+  </svg>
+)}
+{slug === 'migrations-messagerie' && (
+  <svg class="project-art" viewBox="0 0 160 100" aria-hidden="true" focusable="false">
+    <rect x="4" y="30" width="44" height="32" />
+    <path d="m4 32 22 16 22-16" />
+    <rect x="112" y="30" width="44" height="32" />
+    <path d="m112 32 22 16 22-16" />
+    <path d="M56 46h48M96 38l8 8-8 8M26 74v10M134 74v10M20 88h12M128 88h12" />
+    <path d="M54 84h52" stroke-dasharray="3 4" />
+  </svg>
+)}

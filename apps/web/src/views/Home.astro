@@ -1,9 +1,10 @@
 ---
-import Button from '@grichard/ui/components/Button.astro';
-import CtaBand from '@grichard/ui/components/CtaBand.astro';
 import Base from '../layouts/Base.astro';
-import SectionHead from '../components/SectionHead.astro';
-import BandEdge from '../components/BandEdge.astro';
+import AvatarPortrait from '../components/AvatarPortrait.astro';
+import CareerTimeline from '../components/CareerTimeline.astro';
+import Icon from '../components/Icon.astro';
+import ProjectArt from '../components/ProjectArt.astro';
+import SocialLinks from '../components/SocialLinks.astro';
 import Terminal from '../components/Terminal.astro';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
 import { SITE_TEXT } from '../data/site-text';
@@ -13,59 +14,93 @@ import { ROUTES, projectPath, routeAlternates, type Lang } from '../lib/i18n';
 import { homeLd } from '../lib/seo';
 import { resourceLinks } from '../lib/sections';
 import { refsFor } from '../reference/refs';
-import { TOOL_ICONS } from '../tools/icons';
 import { TOOLS, findTool, toolPath, toolUi } from '../tools/registry';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
+const fr = lang === 'fr';
 const t = PORTFOLIO_DATA[lang];
 const text = SITE_TEXT[lang];
 const routes = ROUTES[lang];
 const posts = await getPosts(lang);
-const reading = posts.slice(0, 4);
+const [lead, ...others] = posts;
+const reading = others.slice(0, 3);
 const demo = text.home.cheatDemo;
-// Le nom en deux temps : le prénom à l'encre, le nom en couleur d'accent (sur sa propre ligne en grand écran).
 const [firstName, ...rest] = PROFILE.name.split(' ');
 const lastName = rest.join(' ');
-const dateFmt = new Intl.DateTimeFormat(lang === 'fr' ? 'fr-FR' : 'en-GB', {
-  day: '2-digit',
-  month: '2-digit',
+const dayFmt = new Intl.DateTimeFormat(fr ? 'fr-FR' : 'en-GB', {
+  day: 'numeric',
+  month: 'short',
+  timeZone: 'UTC',
+});
+const longFmt = new Intl.DateTimeFormat(fr ? 'fr-FR' : 'en-GB', {
+  day: 'numeric',
+  month: 'long',
   year: 'numeric',
   timeZone: 'UTC',
 });
 const featured = t.projects.filter((p) => p.featured);
 const skillName = (id: string) => t.skills.find((s) => s.id === id)?.category ?? '';
 const cheatsheets = resourceLinks(lang).find((l) => l.key === 'cheatsheets');
-
-// Sommaire du site : les nombres sont comptés, jamais saisis à la main.
-const index = [
-  {
-    href: routes.projects,
-    name: t.nav.projects,
-    count: t.projects.length,
-    desc: text.home.index.projects,
-  },
-  { href: routes.tools, name: t.nav.tools, count: TOOLS.length, desc: text.home.index.tools },
-  ...(cheatsheets
-    ? [
-        {
-          href: cheatsheets.href,
-          name: t.nav.cheatsheets,
-          count: refsFor(lang).length,
-          desc: text.home.index.cheatsheets,
-        },
-      ]
-    : []),
-  { href: routes.blog, name: t.nav.blog, count: posts.length, desc: text.home.index.posts },
-];
-
-// Outils mis en avant : ceux qui répondent aux questions les plus fréquentes en support (cinq tuiles autour de la recherche).
+// Outils mis en avant : ceux qui répondent aux questions les plus fréquentes en support
 const homeTools = ['dns', 'email-headers', 'propagation', 'subnet', 'seo'].flatMap((id) => {
   const tool = findTool(id);
-  return tool ? [{ ...toolUi(tool, lang), href: toolPath(tool, lang), icon: tool.icon }] : [];
+  return tool ? [{ ...toolUi(tool, lang), href: toolPath(tool, lang) }] : [];
 });
+// Phrase d'accroche du profil (reprise du texte « À propos », dans les deux langues)
+const statement = fr
+  ? {
+      main: "J'ai toujours testé les choses pour comprendre comment elles marchent.",
+      sub: "Quand une tâche revient, j'écris l'outil qui la fait à ma place.",
+    }
+  : {
+      main: 'I have always tested things to see how they work.',
+      sub: 'When a task keeps coming back, I write the tool that does it for me.',
+    };
+const labels = fr
+  ? {
+      portfolio: 'Portfolio',
+      projects: 'Réalisations',
+      profile: 'Profil',
+      expertise: "Domaines d'expertise",
+      career: 'Parcours, à l’échelle',
+      careerMore: 'Parcours détaillé, missions et formation',
+      writing: 'Ce que j’écris',
+      blog: 'Blog',
+      allPosts: `Les ${posts.length} articles du blog`,
+      building: 'Ce que je construis',
+      tools: 'Outils et aide-mémoire',
+      tool: 'Outil',
+      cheat: 'Aide-mémoire',
+      allTools: `Tout le catalogue (${TOOLS.length} outils)`,
+      allProjects: `Les ${t.projects.length} réalisations`,
+      contact: 'Contact',
+      contactTitle: 'Une question, une mission ?',
+      contactText:
+        'Le formulaire est le plus direct. Mes profils et mes CV sont aussi à portée de clic.',
+    }
+  : {
+      portfolio: 'Portfolio',
+      projects: 'Projects',
+      profile: 'Profile',
+      expertise: 'Areas of expertise',
+      career: 'Career, to scale',
+      careerMore: 'Full career, duties and education',
+      writing: 'What I write',
+      blog: 'Blog',
+      allPosts: `All ${posts.length} blog posts`,
+      building: 'What I build',
+      tools: 'Tools and cheatsheets',
+      tool: 'Tool',
+      cheat: 'Cheatsheet',
+      allTools: `Full catalogue (${TOOLS.length} tools)`,
+      allProjects: `All ${t.projects.length} projects`,
+      contact: 'Contact',
+      contactTitle: 'A question, a project?',
+      contactText: 'The form is the most direct way. My profiles and résumés are one click away.',
+    };
 ---
 
 <Base
@@ -76,241 +111,225 @@ const homeTools = ['dns', 'email-headers', 'propagation', 'subnet', 'seo'].flatM
   alternates={routeAlternates('home')}
   ld={homeLd(lang, t.meta.title, t.hero.role)}
 >
-  <header class="hero">
-    <div class="container hero-grid">
-      <div class="hero-copy">
-        <p class="label led hero-kicker">{t.hero.role}</p>
-        <p class="hero-hello">{t.hero.greeting}</p>
-        <h1 class="hero-title">
-          {firstName} <span>{lastName}</span>
+  <header class="hm-hero">
+    <div class="container hm-hero-grid">
+      <div class="hm-hero-copy">
+        <p class="label led">{labels.portfolio}</p>
+        <h1 class="hm-name">
+          <span>{firstName}</span>
+          <span>{lastName}</span>
         </h1>
-        <p class="hero-pitch">{t.hero.pitch}</p>
-        <p class="row hero-actions">
-          <Button variant="primary" href={routes.projects}>
-            {t.hero.projectsBtn}{' '}
-            <span class="arrow" aria-hidden="true">
-              →
-            </span>
-          </Button>
-          <Button href={routes.contact}>{t.hero.contactBtn}</Button>
-          <a class="hero-cv" href={withBase(t.hero.cvLink)}>
-            {t.hero.cvBtn}
+        <p class="hm-role">{t.hero.role}</p>
+        <p class="hm-pitch">{t.hero.pitch}</p>
+        <p class="row hm-actions">
+          <a class="btn btn-primary" href={routes.projects}>
+            {t.hero.projectsBtn}
+            <Icon name="arrow" size={18} />
+          </a>
+          <a class="btn" href={routes.contact}>
+            {t.hero.contactBtn}
           </a>
         </p>
+        <SocialLinks lang={lang} cv class="hm-social" />
       </div>
-      <Terminal lang={lang} />
+      <AvatarPortrait lang={lang} />
     </div>
+  </header>
 
-    <nav class="container site-index" aria-label={text.home.indexLabel}>
+  <section class="band hm-band" aria-labelledby="projects-title">
+    <div class="container hm-band-in">
+      <div class="hm-top">
+        <div>
+          <p class="label">{labels.portfolio}</p>
+          <h2 id="projects-title" class="hm-h2">
+            {labels.projects}
+          </h2>
+        </div>
+        <span class="hm-bignum" aria-hidden="true">
+          01
+        </span>
+      </div>
       <ul role="list">
-        {index.map((item) => (
-          <li>
-            <a href={item.href}>
-              <span class="site-index-count">{item.count}</span>
-              <span class="site-index-name">
-                {item.name} <span aria-hidden="true">→</span>
-              </span>
-              <span class="site-index-desc">{item.desc}</span>
+        {featured.map((project) => (
+          <li class="hm-project">
+            <a href={projectPath(lang, project.slug)}>
+              <h3>{project.title}</h3>
+              <div class="hm-project-text">
+                <p class="label">
+                  {skillName(project.skill)}
+                  {project.kind && <> · {text.project.kinds[project.kind]}</>}
+                </p>
+                <p>{project.desc}</p>
+                <p class="hm-project-tags">{project.tags.join(' · ')}</p>
+              </div>
+              <ProjectArt slug={project.slug} />
             </a>
           </li>
         ))}
       </ul>
-    </nav>
-  </header>
+      <p class="hm-band-more">
+        <a class="btn" href={routes.projects}>
+          {labels.allProjects}
+        </a>
+      </p>
+    </div>
+  </section>
 
-  <div class="container sections">
-    <section aria-labelledby="skills-title">
-      <SectionHead
-        id="skills-title"
-        eyebrow={text.home.eyebrows.skills}
-        title={text.home.skillsTitle}
-        more={{ href: routes.skills, label: text.home.skillsMore }}
-      />
-      <ol class="ports" role="list">
-        {t.skills.map((skill, i) => (
+  <section class="container hm-section" aria-labelledby="profile-title">
+    <div class="hm-top">
+      <div>
+        <p class="label">{labels.portfolio}</p>
+        <h2 id="profile-title" class="hm-h2">
+          {labels.profile}
+        </h2>
+      </div>
+      <span class="hm-bignum" aria-hidden="true">
+        02
+      </span>
+    </div>
+    <div class="hm-profile">
+      <div>
+        <h3 class="hm-h3">{labels.expertise}</h3>
+        <ul class="hm-def" role="list">
+          {t.skills.map((skill) => (
+            <li>
+              <a href={`${routes.skills}#${skill.id}`}>
+                <b>{skill.category}</b>
+                <span>{skill.short}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <blockquote class="hm-statement">
+        <p>{statement.main}</p>
+        <p class="hm-statement-sub">{statement.sub}</p>
+      </blockquote>
+    </div>
+    <h3 class="hm-h3 hm-h3-spaced">{labels.career}</h3>
+    <CareerTimeline lang={lang} />
+    <p class="hm-more">
+      <a href={routes.career}>{labels.careerMore}</a>
+    </p>
+  </section>
+
+  <div class="ruler" aria-hidden="true"></div>
+
+  <section class="container hm-section" aria-labelledby="reading-title">
+    <div class="hm-top">
+      <div>
+        <p class="label">{labels.writing}</p>
+        <h2 id="reading-title" class="hm-h2">
+          {labels.blog}
+        </h2>
+      </div>
+      <span class="hm-bignum" aria-hidden="true">
+        03
+      </span>
+    </div>
+    <div class="hm-duo">
+      {lead && (
+        <article class="hm-lead">
+          <p class="label led">
+            {CATEGORIES[lead.data.category]?.[lang]} ·{' '}
+            <time datetime={isoDate(lead.data.date)}>{longFmt.format(lead.data.date)}</time>
+          </p>
+          <h3>
+            <a href={postPath(lang, lead.slug)}>{lead.data.title}</a>
+          </h3>
+          <p>{lead.data.summary ?? lead.data.description}</p>
+          <p class="hm-more">
+            <a href={routes.blog}>{labels.allPosts}</a>
+          </p>
+        </article>
+      )}
+      <ul class="ledger-list" role="list">
+        {reading.map((post) => (
           <li>
-            <a href={`${routes.skills}#${skill.id}`}>
-              <span class="port-id" aria-hidden="true">
-                {String(i + 1).padStart(2, '0')}
+            <a class="ledger-row" href={postPath(lang, post.slug)}>
+              <span class="ledger-meta label">
+                <time datetime={isoDate(post.data.date)}>{dayFmt.format(post.data.date)}</time>
+                {' · '}
+                {CATEGORIES[post.data.category]?.[lang]}
               </span>
-              <span class="port-body">
-                <span class="port-name">{skill.category}</span>
-                <span class="port-desc">{skill.short}</span>
+              <span class="ledger-title">{post.data.title}</span>
+              <span class="ledger-arrow" aria-hidden="true">
+                <Icon name="arrow" size={18} />
               </span>
             </a>
-          </li>
-        ))}
-      </ol>
-    </section>
-  </div>
-
-  <div class="band-peek">
-    <div class="container">
-      <img
-        class="band-peek-avatar avatar-sombre"
-        src={withBase('/img/guillaume-sombre.svg')}
-        alt=""
-        width="300"
-        height="300"
-        loading="lazy"
-        decoding="async"
-      />
-      <img
-        class="band-peek-avatar avatar-clair"
-        src={withBase('/img/guillaume-clair.svg')}
-        alt=""
-        width="300"
-        height="300"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
-    <BandEdge position="top" seed={11} />
-  </div>
-  <section class="band home-band" aria-labelledby="projects-title">
-    <div class="container">
-      <SectionHead
-        id="projects-title"
-        eyebrow={text.home.eyebrows.projects}
-        title={text.home.featuredTitle}
-        more={{ href: routes.projects, label: t.projectsAll }}
-      />
-      <ul class="band-projects" role="list">
-        {featured.map((project) => (
-          <li class="band-project">
-            <div class="band-project-text">
-              <p class="label">
-                {skillName(project.skill)}
-                {project.kind && <> · {text.project.kinds[project.kind]}</>}
-              </p>
-              <h3>
-                <a href={projectPath(lang, project.slug)}>{project.title}</a>
-              </h3>
-              <p>{project.desc}</p>
-            </div>
-            <dl class="spec-sheet">
-              <div>
-                <dt>{lang === 'fr' ? 'Domaine' : 'Area'}</dt>
-                <dd>{skillName(project.skill)}</dd>
-              </div>
-              <div>
-                <dt>{lang === 'fr' ? 'Outils' : 'Tools'}</dt>
-                <dd>{project.tags.join(' · ')}</dd>
-              </div>
-            </dl>
           </li>
         ))}
       </ul>
     </div>
   </section>
-  <BandEdge position="bottom" seed={29} />
 
-  <div class="container sections">
-    <section aria-labelledby="tools-title">
-      <SectionHead
-        id="tools-title"
-        eyebrow={text.home.eyebrows.tools}
-        title={text.home.toolsTitle}
-        more={{
-          href: routes.tools,
-          label: text.home.toolsMore.replace('{n}', String(TOOLS.length)),
-        }}
-      />
-      <p class="section-intro">{text.home.toolsIntro}</p>
-      <ul class="bento" role="list">
-        <li class="tile bento-search">
-          <h3>
-            <a href={withBase(demo.href)}>{demo.title}</a>
-          </h3>
-          <p class="demo-field" aria-hidden="true">
-            <span>{demo.query}</span>
-            <kbd class="kbd">/</kbd>
-          </p>
-          <div class="demo-hit">
-            <p class="demo-name">{demo.name}</p>
-            <p>{demo.desc}</p>
-            {demo.ex && <pre><code>{demo.ex}</code></pre>}
-          </div>
-          {cheatsheets && (
-            <p class="demo-more">
-              <a class="more-link" href={cheatsheets.href}>
-                {t.nav.cheatsheets} ({refsFor(lang).length}){' '}
-                <span class="arrow" aria-hidden="true">
-                  →
-                </span>
-              </a>
-            </p>
-          )}
-        </li>
-        {homeTools.map((tool) => {
-          const Icon = TOOL_ICONS[tool.icon];
-          return (
-            <li class="tile bento-tool">
-              <Icon size={20} class="bento-icon" aria-hidden="true" />
-              <h3>
-                <a href={tool.href}>{tool.name}</a>
-              </h3>
-              <p>{tool.card}</p>
-            </li>
-          );
-        })}
-      </ul>
-    </section>
-
-    <div class="home-split">
-      <section aria-labelledby="career-title">
-        <SectionHead
-          id="career-title"
-          eyebrow={text.home.eyebrows.career}
-          title={text.home.careerTitle}
-          more={{ href: routes.career, label: text.home.careerMore }}
-        />
-        <ol class="log" role="list">
-          {t.experiences.map((job) => (
-            <li>
-              <span class="log-date">{job.date}</span>
-              <span class="log-role">{job.role}</span>
-              <span class="log-org">{job.company}</span>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section aria-labelledby="reading-title">
-        <SectionHead
-          id="reading-title"
-          eyebrow={text.home.eyebrows.reading}
-          title={text.home.readingTitle}
-          more={{ href: routes.blog, label: text.home.readingMore }}
-        />
-        <ol class="reading" role="list">
-          {reading.map((post) => (
-            <li>
-              <time datetime={isoDate(post.data.date)}>{dateFmt.format(post.data.date)}</time>
-              <a href={postPath(lang, post.slug)}>{post.data.title}</a>
-              <span class="reading-cat">{CATEGORIES[post.data.category]?.[lang]}</span>
-            </li>
-          ))}
-        </ol>
-      </section>
+  <section class="container hm-section hm-tools" aria-labelledby="tools-title">
+    <div class="hm-top">
+      <div>
+        <p class="label">{labels.building}</p>
+        <h2 id="tools-title" class="hm-h2">
+          {labels.tools}
+        </h2>
+      </div>
+      <span class="hm-bignum" aria-hidden="true">
+        04
+      </span>
     </div>
-
-    <section id="contact" aria-labelledby="contact-title">
-      <CtaBand title={text.home.contactTitle}>
-        <p>{text.home.contactText}</p>
-        <p>
-          <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
-        </p>
-        <Fragment slot="actions">
-          <Button variant="primary" href={routes.contact}>
-            {t.hero.contactBtn}{' '}
-            <span class="arrow" aria-hidden="true">
-              →
+    <ul class="ledger-list" role="list">
+      {homeTools.map((tool) => (
+        <li>
+          <a class="ledger-row" href={tool.href}>
+            <span class="ledger-meta label led">{labels.tool}</span>
+            <span class="ledger-title">
+              {tool.name}
+              <span class="ledger-sub">{tool.card}</span>
             </span>
-          </Button>
-          <Button href={withBase(t.hero.cvLink)}>{t.hero.cvBtn}</Button>
-        </Fragment>
-      </CtaBand>
-    </section>
-  </div>
+            <span class="ledger-arrow" aria-hidden="true">
+              <Icon name="arrow" size={18} />
+            </span>
+          </a>
+        </li>
+      ))}
+      <li>
+        <a class="ledger-row" href={withBase(demo.href)}>
+          <span class="ledger-meta label">{labels.cheat}</span>
+          <span class="ledger-title">
+            {demo.title}
+            <span class="ledger-sub">{demo.desc}</span>
+          </span>
+          <span class="ledger-arrow" aria-hidden="true">
+            <Icon name="arrow" size={18} />
+          </span>
+        </a>
+      </li>
+    </ul>
+    <p class="hm-more">
+      <a href={routes.tools}>{labels.allTools}</a>
+      {cheatsheets && (
+        <>
+          {' · '}
+          <a href={cheatsheets.href}>{`${t.nav.cheatsheets} (${refsFor(lang).length})`}</a>
+        </>
+      )}
+    </p>
+    <div class="hm-terminal">
+      <Terminal lang={lang} />
+    </div>
+  </section>
+
+  <section class="hm-contact" id="contact" aria-labelledby="contact-title">
+    <div class="container hm-contact-in">
+      <p class="label">{labels.contact}</p>
+      <h2 id="contact-title" class="hm-cta">
+        {labels.contactTitle}
+      </h2>
+      <p class="hm-contact-text">{labels.contactText}</p>
+      <div class="row hm-contact-actions">
+        <a class="btn btn-primary" href={routes.contact}>
+          {t.hero.contactBtn}
+        </a>
+        <SocialLinks lang={lang} cv />
+      </div>
+    </div>
+  </section>
 </Base>

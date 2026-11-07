@@ -1,0 +1,41 @@
+---
+// Icônes dessinées pour le site : trait de 1,75, bouts carrés, grille de 24. Décoratives (aria-hidden) : le nom accessible
+// est porté par le lien ou le bouton qui les contient (aria-label), jamais par l'icône.
+interface Props {
+  name: 'github' | 'linkedin' | 'mail' | 'cv' | 'rss' | 'arrow';
+  size?: number;
+}
+const { name, size = 22 } = Astro.props;
+---
+
+<svg class="ic" viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false">
+  {name === 'github' && (
+    <>
+      <circle cx="6" cy="5" r="2.2" />
+      <circle cx="6" cy="19" r="2.2" />
+      <circle cx="18" cy="8" r="2.2" />
+      <path d="M6 7.2v9.6M18 10.2c0 5-9 3-12 6.6" />
+    </>
+  )}
+  {name === 'linkedin' && (
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="1" />
+      <circle class="ic-fill" cx="8" cy="8" r="1.2" />
+      <path d="M8 11v6M12 17v-6M12 13.5c0-3 5-3 5 0V17" />
+    </>
+  )}
+  {name === 'mail' && (
+    <>
+      <rect x="3" y="5" width="18" height="14" rx="1" />
+      <path d="M3.5 6.5 12 13l8.5-6.5" />
+    </>
+  )}
+  {name === 'cv' && <path d="M6 3h8l4 4v14H6zM14 3v4h4M9 12h6M9 16h6" />}
+  {name === 'rss' && (
+    <>
+      <circle class="ic-fill" cx="5.5" cy="18.5" r="1.5" />
+      <path d="M4 11a9 9 0 0 1 9 9M4 4.5A15.5 15.5 0 0 1 19.5 20" />
+    </>
+  )}
+  {name === 'arrow' && <path d="M4 12h15M13 6l6 6-6 6" />}
+</svg>

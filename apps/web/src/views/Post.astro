@@ -4,7 +4,8 @@ import Button from '@grichard/ui/components/Button.astro';
 import CtaBand from '@grichard/ui/components/CtaBand.astro';
 import Tag from '@grichard/ui/components/Tag.astro';
 import Base from '../layouts/Base.astro';
-import PostCard from '../components/PostCard.astro';
+import Icon from '../components/Icon.astro';
+import SocialLinks from '../components/SocialLinks.astro';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
 import { POST_RELATED, resolveRelated } from '../data/related';
 import { SITE_TEXT } from '../data/site-text';
@@ -176,6 +177,41 @@ const crumbs = [
         )}
       </div>
 
+      <section class="author" aria-labelledby="author-title">
+        <div class="author-avatar" aria-hidden="true">
+          <img
+            class="avatar-sombre"
+            src={withBase('/img/guillaume-sombre.svg')}
+            alt=""
+            width="72"
+            height="72"
+            loading="lazy"
+            decoding="async"
+          />
+          <img
+            class="avatar-clair"
+            src={withBase('/img/guillaume-clair.svg')}
+            alt=""
+            width="72"
+            height="72"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="author-text">
+          <h2 id="author-title" class="label">
+            {lang === 'fr' ? 'Écrit par' : 'Written by'}
+          </h2>
+          <p>
+            <b>{PROFILE.name}</b>
+            <br />
+            {PORTFOLIO_DATA[lang].hero.role}.{' '}
+            <a href={ROUTES[lang].about}>{PORTFOLIO_DATA[lang].nav.about}</a>
+          </p>
+          <SocialLinks lang={lang} />
+        </div>
+      </section>
+
       <footer class="stack">
         <ul class="row" role="list">
           {post.data.tags.map((tag) => (
@@ -192,10 +228,20 @@ const crumbs = [
     {related.length > 0 && (
       <section class="stack related" aria-labelledby="related-title">
         <h2 id="related-title">{t.related}</h2>
-        <ul class="cards cards-wide" role="list">
+        <ul class="ledger-list" role="list">
           {related.map((p) => (
             <li>
-              <PostCard post={p} minLabel={t.min} />
+              <a class="ledger-row" href={postPath(p.lang, p.slug)}>
+                <span class="ledger-meta label">
+                  <time datetime={isoDate(p.data.date)}>{formatDate(p.data.date, p.lang)}</time>
+                  {' · '}
+                  {CATEGORIES[p.data.category]?.[p.lang]}
+                </span>
+                <span class="ledger-title">{p.data.title}</span>
+                <span class="ledger-arrow" aria-hidden="true">
+                  <Icon name="arrow" size={18} />
+                </span>
+              </a>
             </li>
           ))}
         </ul>

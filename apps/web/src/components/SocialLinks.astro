@@ -1,0 +1,62 @@
+---
+// Liens vers les profils et les CV : icônes seules (pas de texte visible), nom accessible par aria-label.
+// Les liens externes précisent « nouvel onglet » aux lecteurs d'écran, comme le reste du site.
+import Icon from './Icon.astro';
+import { PROFILE } from '../data/content';
+import { PORTFOLIO_DATA } from '../data/content';
+import { withBase } from '../lib/base';
+import { ROUTES, UI, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+  /** Ajoute le flux RSS (pied de page). */
+  rss?: boolean;
+  /** Ajoute les deux CV (accueil, contact). */
+  cv?: boolean;
+  class?: string;
+}
+const { lang, rss = false, cv = false, class: className } = Astro.props;
+const ui = UI[lang];
+const hero = PORTFOLIO_DATA[lang].hero;
+const items = [
+  { name: 'github', href: PROFILE.github, label: 'GitHub', external: true },
+  { name: 'linkedin', href: PROFILE.linkedin, label: 'LinkedIn', external: true },
+  { name: 'mail', href: `mailto:${PROFILE.email}`, label: 'E-mail', external: false },
+  ...(cv
+    ? hero.cvLinks.map((link) => ({
+        name: 'cv',
+        href: withBase(link.href),
+        label: link.label,
+        external: false,
+        hreflang: link.lang,
+      }))
+    : []),
+  ...(rss
+    ? [{ name: 'rss', href: ROUTES[lang].rss, label: ui.footerLinks.rss, external: false }]
+    : []),
+] as {
+  name: 'github' | 'linkedin' | 'mail' | 'cv' | 'rss';
+  href: string;
+  label: string;
+  external: boolean;
+  hreflang?: string;
+}[];
+---
+
+<ul class:list={['social', className]} role="list">
+  {items.map((item) => (
+    <li>
+      <a
+        href={item.href}
+        aria-label={item.external ? `${item.label} ${ui.external}` : item.label}
+        title={item.label}
+        rel={item.external ? 'noopener' : undefined}
+        hreflang={item.hreflang}
+        lang={item.hreflang}
+      >
+        <Icon name={item.name} />
+        {item.hreflang && <span class="social-lang">{item.hreflang}</span>}
+      </a>
+    </li>
+  ))}
+</ul>
