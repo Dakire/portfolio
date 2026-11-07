@@ -1,40 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-labelledby="t">
-  <title id="t">Avatar dessiné de Guillaume Richard : cheveux bruns, barbe courte, T-shirt noir</title>
-  <!-- épaules : T-shirt uni, col rond -->
-  <path d="M26 300C26 248 70 230 112 222L188 222C230 230 274 248 274 300Z" fill="#1b1b1f"/>
-  <path d="M26 300C26 248 70 230 112 222L120 224C84 234 52 252 48 300Z" fill="#121215"/>
-  <path d="M274 300C274 248 230 230 188 222L180 224C216 234 248 252 252 300Z" fill="#121215"/>
-  <path d="M112 222Q150 250 188 222" fill="none" stroke="#0b0b0d" stroke-width="6" stroke-linecap="round"/>
+  <title id="t">Avatar dessiné de Guillaume Richard : cheveux bruns relevés, barbe courte, T-shirt gris</title>
+  <!-- T-shirt gris, col rond, motif de skyline -->
+  <path d="M18 300C18 250 64 232 110 224L190 224C236 232 282 250 282 300Z" fill="#4f4f56" stroke="#1f1511" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M18 300C18 250 64 232 110 224L118 226C82 236 52 254 46 300Z" fill="#3f3f46"/>
+  <path d="M282 300C282 250 236 232 190 224L182 226C218 236 248 254 254 300Z" fill="#3f3f46"/>
+  <rect x="104" y="266" width="92" height="34" fill="#d9d9dd"/>
+  <path d="M112 300V282h8v18M124 300V274h10v26M138 300V284h8v18M150 300V270h12v30M166 300V280h8v20M178 300V288h10v12" fill="#4b4b52"/>
+  <path d="M110 224Q150 262 190 224" fill="none" stroke="#1f1511" stroke-width="3" stroke-linecap="round"/>
   <!-- cou -->
-  <path d="M120 180V228Q150 246 180 228V180Z" fill="#dca988"/>
-  <path d="M120 202Q150 222 180 202V216Q150 234 120 216Z" fill="#c9916f" opacity=".5"/>
+  <path d="M120 178V232Q150 254 180 232V178Z" fill="#dc9d6c" stroke="#1f1511" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M120 206Q150 228 180 206V220Q150 240 120 220Z" fill="#c98757" opacity=".55"/>
   <!-- oreilles -->
-  <ellipse cx="92" cy="144" rx="9" ry="15" fill="#e7b393"/>
-  <ellipse cx="208" cy="144" rx="9" ry="15" fill="#e7b393"/>
+  <path d="M92 124C80 122 78 150 90 162C94 164 97 158 97 150Z" fill="#e6a171" stroke="#1f1511" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M208 124C220 122 222 150 210 162C206 164 203 158 203 150Z" fill="#e6a171" stroke="#1f1511" stroke-width="2.5" stroke-linejoin="round"/>
   <!-- visage -->
-  <path d="M93 118C93 78 118 58 150 58C182 58 207 78 207 118V142C207 174 184 202 150 206C116 202 93 174 93 142Z" fill="#f2c7a8"/>
-  <ellipse cx="116" cy="152" rx="13" ry="8" fill="#eaa98d" opacity=".3"/>
-  <ellipse cx="184" cy="152" rx="13" ry="8" fill="#eaa98d" opacity=".3"/>
-  <path d="M150 112C147 128 144 136 140 142Q150 150 160 142C156 136 153 128 150 112Z" fill="#e0a98a" opacity=".5"/>
-  <!-- barbe : un seul aplat, joues et menton -->
-  <path d="M96 138C99 166 110 186 126 197C136 204 144 208 150 208C156 208 164 204 174 197C190 186 201 166 204 138C198 152 194 160 186 164C176 160 164 158 150 160C136 158 124 160 114 164C106 160 102 152 96 138Z" fill="#8a5f43"/>
-  <path d="M112 170C124 162 140 160 150 163C160 160 176 162 188 170C188 188 174 206 150 209C126 206 112 188 112 170Z" fill="#8a5f43"/>
-  <!-- bouche -->
-  <path d="M138 180Q150 186 162 180" fill="none" stroke="#c9847a" stroke-width="4.5" stroke-linecap="round"/>
-  <!-- yeux gris-vert -->
-  <ellipse cx="126" cy="124" rx="11.5" ry="7" fill="#fbf7f1"/>
-  <ellipse cx="174" cy="124" rx="11.5" ry="7" fill="#fbf7f1"/>
-  <circle cx="126" cy="124" r="5.6" fill="#7b8f80"/>
-  <circle cx="174" cy="124" r="5.6" fill="#7b8f80"/>
-  <circle cx="126" cy="124" r="2.6" fill="#232323"/>
-  <circle cx="174" cy="124" r="2.6" fill="#232323"/>
-  <circle cx="124" cy="122" r="1.3" fill="#fff"/>
-  <circle cx="172" cy="122" r="1.3" fill="#fff"/>
-  <path d="M114 122Q126 114 138 121" fill="none" stroke="#4b3426" stroke-width="2" stroke-linecap="round"/>
-  <path d="M162 121Q174 114 186 122" fill="none" stroke="#4b3426" stroke-width="2" stroke-linecap="round"/>
-  <!-- sourcils bruns, assez droits -->
-  <path d="M109 108Q126 100 143 106" fill="none" stroke="#4b3426" stroke-width="5" stroke-linecap="round"/>
-  <path d="M157 106Q174 100 191 108" fill="none" stroke="#4b3426" stroke-width="5" stroke-linecap="round"/>
-  <!-- cheveux : mèches balayées vers la gauche, front dégagé à droite, pas de calotte -->
-  <path d="M90 134C76 96 84 56 118 42C112 52 112 60 116 66C128 44 156 34 184 40C176 46 176 52 182 56C204 58 218 84 212 132C210 112 206 100 200 92C192 100 184 96 176 90C160 94 138 92 122 98C112 108 108 120 106 134C100 130 94 130 90 134Z" fill="#5a4030"/>
+  <path d="M91 112C91 74 118 56 150 56C182 56 209 74 209 112V146C209 178 186 207 150 211C114 207 91 178 91 146Z" fill="#eba877" stroke="#1f1511" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="114" cy="152" rx="13" ry="8" fill="#e08f62" opacity=".25"/>
+  <ellipse cx="186" cy="152" rx="13" ry="8" fill="#e08f62" opacity=".25"/>
+  <!-- nez -->
+  <path d="M150 116C147 132 145 141 139 148Q150 155 161 148C155 141 153 132 150 116Z" fill="#d78d5e" opacity=".55"/>
+  <!-- barbe de quelques jours : un seul aplat -->
+  <path d="M92 138C94 168 108 192 128 203C138 209 145 211 150 211C155 211 162 209 172 203C192 192 206 168 208 138C204 152 200 162 192 168C182 164 170 162 150 164C130 162 118 164 108 168C100 162 96 152 92 138Z" fill="#8b6e5c"/>
+  <path d="M126 167C136 160 144 162 150 165C156 162 164 160 174 167C170 173 160 173 150 172C140 173 130 173 126 167Z" fill="#8b6e5c"/>
+  <!-- sourire -->
+  <path d="M131 178Q150 198 169 178Q150 184 131 178Z" fill="#f6efe8" stroke="#2c1d17" stroke-width="2" stroke-linejoin="round"/>
+  <!-- yeux marron -->
+  <ellipse cx="126" cy="125" rx="12" ry="6.5" fill="#fbf7f1" stroke="#1f1511" stroke-width="1.6"/>
+  <ellipse cx="174" cy="125" rx="12" ry="6.5" fill="#fbf7f1" stroke="#1f1511" stroke-width="1.6"/>
+  <circle cx="127" cy="125" r="5.4" fill="#6b4e33"/>
+  <circle cx="173" cy="125" r="5.4" fill="#6b4e33"/>
+  <circle cx="127" cy="125" r="2.5" fill="#1a1210"/>
+  <circle cx="173" cy="125" r="2.5" fill="#1a1210"/>
+  <circle cx="125" cy="123" r="1.3" fill="#fff"/>
+  <circle cx="171" cy="123" r="1.3" fill="#fff"/>
+  <path d="M113 123Q126 114 139 121M161 121Q174 114 187 123" fill="none" stroke="#1f1511" stroke-width="2" stroke-linecap="round"/>
+  <!-- sourcils épais -->
+  <path d="M110 108Q126 99 143 105M157 105Q174 99 190 108" fill="none" stroke="#2a1b15" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- cheveux bruns foncés, relevés et balayés, un seul aplat -->
+  <path d="M92 134C84 98 88 64 118 46C138 34 170 30 192 40C212 50 218 80 213 112C212 120 211 128 209 136C207 118 204 106 197 98C188 90 176 85 162 83C146 81 128 85 116 93C106 101 99 114 95 128Z" fill="#35251d" stroke="#1f1511" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M112 52C130 40 160 38 186 46M104 72C122 56 148 52 172 58M118 86C134 74 156 72 176 78" fill="none" stroke="#4a362b" stroke-width="2.2" stroke-linecap="round"/>
 </svg>
