@@ -145,7 +145,7 @@ gratuite
 
 ## À vérifier avant publication (de mon côté, au moment de publier)
 
-- Tarifs et paliers de chaque outil, à relire le jour de la publication (ils changent vite). ChatGPT : prix officiels reçus de Guillaume le 7 novembre 2026 (mis à jour). Perplexity : page officielle non lisible, à contrôler à l'inscription.
+- Tarifs et paliers de chaque outil, à relire le jour de la publication (ils changent vite). ChatGPT : prix officiels reçus de Guillaume le 7 novembre 2026 (mis à jour). Perplexity : prix officiels reçus de Guillaume le 7 novembre 2026 (mis à jour).
 - État des procédures des autorités européennes sur DeepSeek (mes sources datent de 2025).
 - Nom du produit Mistral (Le Chat ou Vibe).
 - ~~Versions EN de chaque article~~ : faites le 7 novembre 2026.

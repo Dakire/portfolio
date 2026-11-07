@@ -1,14 +1,14 @@
 ---
 title: 'Perplexity pour un technicien informatique : recherche, sources et limites'
 seoTitle: 'Perplexity au travail : recherche, sources et RGPD'
-description: "Perplexity dans un métier informatique : une recherche qui cite ses sources, comment la vérifier, ce qu'il ne faut pas y coller, et ses offres à contrôler."
-summary: "Perplexity répond à une question en citant des sources. C'est son intérêt pour un technicien qui cherche une documentation, une CVE ou un correctif récent. Mais la réponse n'est pas la source : voici comment je m'en sers, comment je vérifie, et ce que je n'ai pas pu confirmer sur les tarifs."
+description: "Perplexity dans un métier informatique : une recherche qui cite ses sources, comment la vérifier, ce qu'il ne faut pas y coller, et ses offres en dollars."
+summary: "Perplexity répond à une question en citant des sources. C'est son intérêt pour un technicien qui cherche une documentation, une CVE ou un correctif récent. Mais la réponse n'est pas la source : voici comment je m'en sers, comment je vérifie, et ses offres telles que la page officielle les affiche le 7 novembre 2026."
 date: 2026-11-06
 category: ia
 tags: ['Perplexity', 'IA', 'Recherche', 'RGPD']
 ---
 
-_Article rédigé le 6 novembre 2026. Je n'ai pas pu lire la page des offres de Perplexity : les tarifs sont donc à vérifier._
+_Article rédigé le 6 novembre 2026, tarifs mis à jour le 7 novembre 2026 d'après la page officielle des offres (copiée par l'auteur)._
 
 ## Mon point de départ
 
@@ -38,9 +38,15 @@ J'ai commencé à chercher avec Perplexity en 2025.
 - C'est une **recherche** : ce que vous tapez est envoyé à un service tiers. **Ne tapez pas** de noms de clients, de données personnelles ni d'informations internes.
 - Formulez des questions **génériques** (« comment configurer X »), pas « le serveur de l'entreprise Y a le problème Z ».
 
-## Tarifs et versions
+## Tarifs et versions (page officielle, 7 novembre 2026)
 
-Je n'ai pas pu lire la page officielle des offres. Des sites tiers indiquent, **sans source datée de novembre 2026**, un abonnement Pro autour de 20 $ par mois et un abonnement Max autour de 200 $ par mois, avec des tarifs annuels différents selon les sources. **À vérifier à l'inscription**, avant tout achat.
+| Offre               | Prix                                 | Ce que la page indique                                                                                                                                                                                  |
+| ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Gratuit             | 0 $ par mois                         | Recherche uniquement, réponses avec citations, modèles de base, utilisation quotidienne limitée                                                                                                         |
+| Pro (« Populaire ») | 17 $ par mois, facturé annuellement  | Accès étendu à Computer, 4 000 crédits bonus, recherche approfondie, choix entre les meilleurs modèles, documents et applications, plus de limites et de mémoire                                        |
+| Max                 | 167 $ par mois, facturé annuellement | Utilisation maximale de Computer, 35 000 crédits bonus et 10 000 crédits mensuels, recherche de niveau expert, modèles de pointe, limites et mémoire les plus élevées, accès prioritaire aux nouveautés |
+
+La page ne montre pas de prix pour un paiement mensuel : vérifiez-le à l'inscription. Les noms « Pro » et « Max » ne figurent pas dans le texte que j'ai reçu ; je les déduis des montants.
 
 ## Mon usage
 
@@ -51,9 +57,10 @@ J'utilise l'offre gratuite.
 1. Utilisez-le comme un moteur de recherche qui résume, pas comme une réponse définitive.
 2. **Ouvrez toujours la source** pour une information qui engage (sécurité, date, prix).
 3. Ne tapez aucune donnée interne.
-4. Vérifiez le tarif sur le site avant de payer.
+4. Vérifiez le tarif sur le site avant de payer : la page affiche des prix facturés annuellement.
 
 ## Sources
 
+- [Offres Perplexity (page officielle)](https://www.perplexity.ai/pro), consultée le 7 novembre 2026
 - [CNIL : intelligence artificielle](https://www.cnil.fr/fr/intelligence-artificielle)
 - [CERT-FR : alertes et avis de sécurité](https://www.cert.ssi.gouv.fr/)
