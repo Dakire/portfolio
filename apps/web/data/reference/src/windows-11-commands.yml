@@ -1,0 +1,785 @@
+# PowerShell and Windows 11 commands (English) : source éditable, traduction de windows.yml. Après modification : `pnpm --filter @grichard/web reference:build`.
+meta:
+  id: windows-11-commands
+  order: 3
+  title: 'Windows 11 commands: PowerShell and CMD cheatsheet'
+  h1: PowerShell and Windows 11 commands
+  description: 'Windows 11 commands cheatsheet: sfc, DISM, chkdsk, network, services, BitLocker, winget, with CMD or Linux equivalent and risk level.'
+  intro: 'Windows 11 troubleshooting and administration commands, in PowerShell and CMD. Each entry states its risk level: read-only, changes the system, or needs an elevated prompt (administrator).'
+  card: 'sfc, DISM, chkdsk, Get-Process, Get-WinEvent, Test-NetConnection, winget, BitLocker, gpupdate, robocopy: aliases, CMD/Linux equivalent, risk level.'
+  notice: Commands marked 'Needs admin' must be run in a terminal opened 'as administrator'. Read the description before running a command that changes the system.
+  docBases:
+    cmd: https://learn.microsoft.com/windows-server/administration/windows-commands/
+    ps: https://learn.microsoft.com/powershell/module/
+  docs:
+    label: Windows Commands documentation
+    url: https://learn.microsoft.com/windows-server/administration/windows-commands/windows-commands
+  fields:
+    - key: equiv
+      label: CMD / Linux equivalent
+    - key: perms
+      label: Permissions
+    - key: pitfall
+      label: Good to know
+  cats:
+    - id: system
+      label: System
+    - id: network
+      label: Network
+    - id: disk
+      label: Disk
+    - id: files
+      label: Files
+    - id: process
+      label: Processes and services
+    - id: users
+      label: Users
+    - id: security
+      label: Security
+    - id: logs
+      label: Logs
+    - id: updates
+      label: Updates
+    - id: troubleshoot
+      label: Troubleshooting
+  lang: en
+entries:
+  - name: sfc /scannow
+    cat: troubleshoot
+    syn: sfc /scannow
+    desc: Checks protected system files and replaces corrupted ones.
+    ex:
+      - sfc /scannow
+      - sfc /verifyonly
+    alias:
+      - System File Checker
+      - sfc
+    tags:
+      - repair
+      - corruption
+    risk: admin
+    perms: Elevated prompt
+    pitfall: If sfc fails, run DISM /RestoreHealth first and then run sfc again. Details are in %windir%\Logs\CBS\CBS.log.
+    equiv: 'Linux: debsums -c / rpm -Va'
+    doc: cmd/sfc
+  - name: DISM /RestoreHealth
+    cat: troubleshoot
+    syn: DISM /Online /Cleanup-Image /RestoreHealth
+    desc: Repairs the running Windows image from Windows Update or a source.
+    ex:
+      - DISM /Online /Cleanup-Image /CheckHealth
+      - DISM /Online /Cleanup-Image /ScanHealth
+      - DISM /Online /Cleanup-Image /RestoreHealth
+      - DISM /Online /Cleanup-Image /RestoreHealth /Source:wim:D:\sources\install.wim:1 /LimitAccess
+    alias:
+      - DISM
+      - Repair-WindowsImage
+    tags:
+      - repair
+      - image
+      - components
+    risk: admin
+    perms: Elevated prompt
+    pitfall: 'The bar can sit at 20% or 62% for a long time: that is normal. PowerShell equivalent: Repair-WindowsImage -Online -RestoreHealth.'
+    equiv: 'Linux: reinstall the package (apt/dnf reinstall)'
+    url: https://learn.microsoft.com/windows-hardware/manufacture/desktop/dism-image-management-command-line-options-s14
+  - name: chkdsk
+    cat: disk
+    syn: 'chkdsk <drive>: [/f] [/r] [/scan]'
+    desc: Checks a volume's file system and fixes errors.
+    ex:
+      - 'chkdsk C: /scan'
+      - 'chkdsk C: /f /r'
+      - Repair-Volume -DriveLetter C -Scan
+    alias:
+      - Repair-Volume
+    risk: admin
+    perms: Elevated prompt
+    pitfall: /f /r on the system volume requires a restart and can take hours. /scan (NTFS) works online.
+    equiv: 'Linux: fsck, e2fsck'
+    doc: cmd/chkdsk
+  - name: systeminfo
+    cat: system
+    syn: systeminfo [/s <computer>]
+    desc: Shows the Windows version, hardware, memory, installed fixes and domain.
+    ex:
+      - systeminfo
+      - systeminfo | findstr /B /C:"Nom de l'hôte" /C:"Nom du système d'exploitation"
+    risk: read
+    pitfall: The output depends on Windows' language; for scripts, prefer Get-ComputerInfo.
+    equiv: 'Linux: uname -a, lsb_release -a, hostnamectl'
+    doc: cmd/systeminfo
+  - name: Get-ComputerInfo
+    cat: system
+    syn: Get-ComputerInfo [-Property <list>]
+    desc: Detailed system information as a PowerShell object.
+    ex:
+      - Get-ComputerInfo -Property WindowsProductName,WindowsVersion,OsBuildNumber,CsTotalPhysicalMemory
+      - (Get-ComputerInfo).OsLastBootUpTime
+    risk: read
+    pitfall: Without -Property, the command is slow (several seconds) because it collects everything.
+    equiv: 'CMD: systeminfo; Linux: hostnamectl'
+    doc: ps/microsoft.powershell.management/get-computerinfo
+  - name: winver / Get-CimInstance Win32_OperatingSystem
+    cat: system
+    syn: Get-CimInstance Win32_OperatingSystem | Select Caption,Version,BuildNumber
+    desc: Windows version and build.
+    ex:
+      - winver
+      - Get-CimInstance Win32_OperatingSystem | Select Caption,Version,BuildNumber,LastBootUpTime
+    alias:
+      - Get-WmiObject
+    risk: read
+    pitfall: 'Get-WmiObject no longer exists in PowerShell 7: use Get-CimInstance.'
+    equiv: 'CMD: ver; Linux: cat /etc/os-release'
+    doc: ps/cimcmdlets/get-ciminstance
+  - name: hostname / Rename-Computer
+    cat: system
+    syn: Rename-Computer -NewName <name> -Restart
+    desc: Shows or changes the machine name.
+    ex:
+      - hostname
+      - Rename-Computer -NewName PC-COMPTA-01 -Restart
+    risk: admin
+    perms: Elevated prompt to rename
+    pitfall: On a domain-joined machine, add -DomainCredential.
+    equiv: 'Linux: hostnamectl set-hostname'
+    doc: ps/microsoft.powershell.management/rename-computer
+  - name: Restart-Computer / shutdown
+    cat: system
+    syn: shutdown /r /t 0 | Restart-Computer -Force
+    desc: Restarts or shuts down the machine, locally or remotely.
+    ex:
+      - shutdown /r /t 60 /c "Redémarrage de maintenance"
+      - shutdown /a
+      - Restart-Computer -ComputerName PC01 -Force
+    alias:
+      - Stop-Computer
+    risk: admin
+    perms: Shutdown rights (administrator for a remote machine)
+    pitfall: shutdown /a cancels a scheduled shutdown as long as the delay has not elapsed.
+    equiv: 'Linux: shutdown -r now, reboot'
+    doc: cmd/shutdown
+  - name: Get-HotFix
+    cat: updates
+    syn: Get-HotFix [-Id <KB>]
+    desc: Lists installed fixes (KB).
+    ex:
+      - Get-HotFix | Sort-Object InstalledOn -Descending | Select -First 10
+      - Get-HotFix -Id KB5034123
+    risk: read
+    pitfall: 'Does not list all recent cumulative updates: complete with Get-WindowsUpdateLog or the Windows Update history.'
+    equiv: 'CMD: wmic qfe list; Linux: apt list --installed'
+    doc: ps/microsoft.powershell.management/get-hotfix
+  - name: winget upgrade
+    cat: updates
+    syn: winget upgrade [--all] [--id <id>]
+    desc: Lists or installs updates for applications managed by winget.
+    ex:
+      - winget upgrade
+      - winget upgrade --all --include-unknown --accept-package-agreements --accept-source-agreements
+      - winget upgrade --id Mozilla.Firefox
+    alias:
+      - winget
+    risk: modify
+    pitfall: Some applications need elevation; --include-unknown includes those whose version is not detected.
+    equiv: 'Linux: apt upgrade, dnf upgrade'
+    url: https://learn.microsoft.com/windows/package-manager/winget/upgrade
+  - name: winget install
+    cat: updates
+    syn: winget install <name> | --id <id> [-e] [--silent]
+    desc: Installs an application from the winget sources.
+    ex:
+      - winget search vscode
+      - winget install --id Microsoft.VisualStudioCode -e --silent
+      - winget uninstall --id Microsoft.VisualStudioCode
+    risk: modify
+    pitfall: Use --id with -e (exact match) to avoid installing the wrong package.
+    equiv: 'Linux: apt install, dnf install'
+    url: https://learn.microsoft.com/windows/package-manager/winget/install
+  - name: Get-WindowsUpdateLog
+    cat: updates
+    syn: Get-WindowsUpdateLog [-LogPath <file>]
+    desc: Generates a readable Windows Update log from the ETL traces.
+    ex:
+      - Get-WindowsUpdateLog -LogPath $env:USERPROFILE\Desktop\WindowsUpdate.log
+    risk: read
+    pitfall: 'Logs are in ETL format since Windows 10: without this command, WindowsUpdate.log is empty.'
+    doc: ps/windowsupdate/get-windowsupdatelog
+  - name: usoclient / wuauclt
+    cat: updates
+    syn: UsoClient StartScan | StartDownload | StartInstall
+    desc: Triggers update scan or installation from the command line (not officially documented).
+    ex:
+      - UsoClient StartScan
+      - UsoClient StartDownload
+      - UsoClient StartInstall
+    risk: admin
+    perms: Elevated prompt
+    pitfall: 'No output or error return: check in Settings > Windows Update. wuauclt /detectnow no longer works.'
+    equiv: 'Linux: apt update && apt upgrade'
+    url: https://learn.microsoft.com/windows/deployment/update/windows-update-overview
+  - name: Get-ChildItem
+    cat: files
+    syn: Get-ChildItem [-Path <path>] [-Recurse] [-Filter <pattern>] [-Force]
+    desc: Lists files and folders, optionally recursively.
+    alias:
+      - gci
+      - ls
+      - dir
+    ex:
+      - Get-ChildItem C:\Logs -Recurse -Filter *.log | Where-Object Length -gt 100MB
+      - gci -Force -File | Sort-Object LastWriteTime -Descending | Select -First 10
+    risk: read
+    pitfall: -Force also shows hidden and system files; -Filter is faster than -Include.
+    equiv: 'CMD: dir /s; Linux: ls -la, find'
+    doc: ps/microsoft.powershell.management/get-childitem
+  - name: Get-Item
+    cat: files
+    syn: Get-Item <path>
+    desc: Reads a file, folder or registry key (properties, attributes, dates).
+    alias:
+      - gi
+    ex:
+      - Get-Item C:\Windows\System32\notepad.exe | Select Name,Length,LastWriteTime,VersionInfo
+      - Get-Item HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion
+    risk: read
+    pitfall: For a file's content, use Get-Content, not Get-Item.
+    equiv: 'CMD: dir <file>; Linux: stat'
+    doc: ps/microsoft.powershell.management/get-item
+  - name: Get-Content
+    cat: files
+    syn: Get-Content <file> [-Tail <n>] [-Wait]
+    desc: Reads a text file, including continuous follow (like tail -f).
+    alias:
+      - gc
+      - cat
+      - type
+    ex:
+      - Get-Content C:\Logs\app.log -Tail 50 -Wait
+      - Get-Content liste.txt | Select-String 'erreur'
+    risk: read
+    pitfall: 'On a large file, avoid loading everything: use -Tail or -ReadCount.'
+    equiv: 'CMD: type; Linux: cat, tail -f'
+    doc: ps/microsoft.powershell.management/get-content
+  - name: Select-String
+    cat: files
+    syn: Select-String -Pattern <regex> -Path <files>
+    desc: Searches for a pattern in files or a stream (PowerShell grep).
+    alias:
+      - sls
+    ex:
+      - Select-String -Path C:\Logs\*.log -Pattern 'ERROR|FATAL' -CaseSensitive
+      - Get-ChildItem -Recurse *.ps1 | Select-String 'Invoke-Expression'
+    risk: read
+    pitfall: 'The pattern is a regular expression: escape dots or use -SimpleMatch.'
+    equiv: 'CMD: findstr; Linux: grep'
+    doc: ps/microsoft.powershell.utility/select-string
+  - name: robocopy
+    cat: files
+    syn: robocopy <source> <destination> [files] [options]
+    desc: Robust folder copy (resume, multithread, mirror, permissions).
+    ex:
+      - robocopy D:\Donnees E:\Sauvegarde /E /COPY:DAT /R:2 /W:5 /MT:16 /LOG:C:\Temp\robocopy.log
+      - robocopy D:\Donnees E:\Sauvegarde /MIR /XD .git /L
+    tags:
+      - copy
+      - mirror
+      - backup
+    risk: modify
+    pitfall: '/MIR deletes at the destination whatever no longer exists at the source: always test with /L (dry run) first. Return codes 0 to 7 are successes.'
+    equiv: 'Linux: rsync -a'
+    doc: cmd/robocopy
+  - name: Copy-Item / Move-Item / Remove-Item
+    cat: files
+    syn: Copy-Item <source> <destination> [-Recurse]
+    desc: Copies, moves or deletes files and folders.
+    alias:
+      - cp
+      - copy
+      - mv
+      - move
+      - rm
+      - del
+    ex:
+      - Copy-Item C:\Src\* D:\Dest -Recurse
+      - Remove-Item C:\Temp\vieux -Recurse -Force -WhatIf
+    risk: modify
+    pitfall: 'Add -WhatIf before any Remove-Item -Recurse: it does not go through the recycle bin.'
+    equiv: 'CMD: copy, move, del; Linux: cp, mv, rm'
+    doc: ps/microsoft.powershell.management/copy-item
+  - name: icacls
+    cat: files
+    syn: icacls <path> [/grant|/deny|/remove|/reset] [/T]
+    desc: Shows or changes the NTFS permissions of a file or folder.
+    ex:
+      - icacls D:\Partage
+      - icacls D:\Partage /grant "DOMAINE\Groupe":(OI)(CI)M /T
+      - icacls D:\Partage /reset /T
+    risk: admin
+    perms: "'Change permissions' right on the object"
+    pitfall: Without (OI)(CI), the permission is not inherited by subfolders. /reset /T resets the whole tree.
+    equiv: 'Linux: chmod, chown, setfacl'
+    doc: cmd/icacls
+  - name: Get-Acl
+    cat: files
+    syn: Get-Acl <chemin>
+    desc: Reads the permissions of a file, folder or registry key.
+    ex:
+      - (Get-Acl D:\Partage).Access | Select IdentityReference,FileSystemRights,AccessControlType
+    risk: read
+    equiv: 'CMD: icacls; Linux: getfacl'
+    doc: ps/microsoft.powershell.security/get-acl
+  - name: Get-Process
+    cat: process
+    syn: Get-Process [-Name <name>] [-Id <pid>]
+    desc: Lists running processes (memory, CPU, path).
+    alias:
+      - gps
+      - ps
+    ex:
+      - Get-Process | Sort-Object WS -Descending | Select -First 10 Name,Id,@{n='MémoireMo';e={[int]($_.WS/1MB)}}
+      - Get-Process -Name chrome | Stop-Process -WhatIf
+    risk: read
+    pitfall: For a process's path or command line, use Get-CimInstance Win32_Process.
+    equiv: 'CMD: tasklist; Linux: ps aux, top'
+    doc: ps/microsoft.powershell.management/get-process
+  - name: Stop-Process / taskkill
+    cat: process
+    syn: Stop-Process -Name <name> -Force | taskkill /IM <exe> /F
+    desc: Terminates a process.
+    alias:
+      - kill
+      - spps
+    ex:
+      - Stop-Process -Id 1234 -Force
+      - taskkill /IM notepad.exe /F
+      - taskkill /PID 1234 /T /F
+    risk: modify
+    pitfall: /T also terminates child processes. Terminating a system process can cause a blue screen.
+    equiv: 'Linux: kill, pkill'
+    doc: cmd/taskkill
+  - name: tasklist
+    cat: process
+    syn: tasklist [/svc] [/fi "<filter>"]
+    desc: Lists processes with, optionally, the services they host.
+    ex:
+      - tasklist /svc
+      - tasklist /fi "imagename eq svchost.exe" /svc
+      - tasklist /fi "memusage gt 500000"
+    risk: read
+    equiv: 'PowerShell: Get-Process; Linux: ps'
+    doc: cmd/tasklist
+  - name: Get-Service
+    cat: process
+    syn: Get-Service [-Name <name>]
+    desc: Lists services and their state.
+    alias:
+      - gsv
+    ex:
+      - Get-Service | Where-Object { $_.Status -eq 'Running' -and $_.StartType -eq 'Automatic' }
+      - Get-Service wuauserv,bits | Format-Table Name,Status,StartType
+    risk: read
+    equiv: 'CMD: sc query; Linux: systemctl list-units'
+    doc: ps/microsoft.powershell.management/get-service
+  - name: Restart-Service / Set-Service
+    cat: process
+    syn: Restart-Service <name> | Set-Service <name> -StartupType Disabled
+    desc: Restarts a service or changes its startup type.
+    alias:
+      - Start-Service
+      - Stop-Service
+    ex:
+      - Restart-Service Spooler -Force
+      - Set-Service -Name wuauserv -StartupType Manual
+      - net stop spooler && net start spooler
+    risk: admin
+    perms: Elevated prompt
+    pitfall: -Force also restarts dependent services. A disabled service no longer starts, even on demand.
+    equiv: 'CMD: net stop/start, sc; Linux: systemctl restart'
+    doc: ps/microsoft.powershell.management/restart-service
+  - name: Get-CimInstance Win32_Process
+    cat: process
+    syn: Get-CimInstance Win32_Process | Select Name,ProcessId,CommandLine
+    desc: Processes with full command line and parent.
+    ex:
+      - Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" | Select ProcessId,ParentProcessId,CommandLine
+    risk: read
+    equiv: 'CMD: wmic process get ...; Linux: ps -ef'
+    doc: ps/cimcmdlets/get-ciminstance
+  - name: ipconfig
+    cat: network
+    syn: ipconfig [/all] [/release] [/renew] [/flushdns] [/displaydns]
+    desc: Shows the IP configuration and manages the DNS cache and DHCP lease.
+    ex:
+      - ipconfig /all
+      - ipconfig /flushdns
+      - ipconfig /release && ipconfig /renew
+    risk: modify
+    pitfall: /release cuts the connection; do not run it remotely. /all and /displaydns are read-only.
+    equiv: 'PowerShell: Get-NetIPConfiguration, Clear-DnsClientCache; Linux: ip a, resolvectl flush-caches'
+    doc: cmd/ipconfig
+  - name: Test-NetConnection
+    cat: network
+    syn: Test-NetConnection <host> [-Port <port>] [-TraceRoute]
+    desc: Tests connectivity (ping, TCP port, route).
+    alias:
+      - tnc
+    ex:
+      - Test-NetConnection google.com -Port 443
+      - Test-NetConnection 10.0.0.1 -TraceRoute
+      - tnc smtp.office365.com -Port 587 -InformationLevel Quiet
+    risk: read
+    pitfall: Tests TCP only; for a UDP port, use another tool. Blocked ICMP makes the ping fail while the port answers.
+    equiv: 'CMD: ping, telnet; Linux: nc -zv, traceroute'
+    doc: ps/nettcpip/test-netconnection
+  - name: Get-NetAdapter
+    cat: network
+    syn: Get-NetAdapter [-Name <name>]
+    desc: Lists network adapters, their state, speed and MAC address.
+    ex:
+      - Get-NetAdapter | Select Name,Status,LinkSpeed,MacAddress
+      - Restart-NetAdapter -Name 'Ethernet'
+      - Disable-NetAdapter -Name 'Wi-Fi' -Confirm:$false
+    risk: read
+    pitfall: Restart-NetAdapter, Enable-/Disable-NetAdapter change the system (elevated prompt) and cut the connection.
+    equiv: 'CMD: getmac, netsh interface show interface; Linux: ip link'
+    doc: ps/netadapter/get-netadapter
+  - name: Get-NetIPAddress / Get-NetIPConfiguration
+    cat: network
+    syn: Get-NetIPConfiguration [-Detailed]
+    desc: IP addresses, gateway and DNS of each interface.
+    ex:
+      - Get-NetIPConfiguration
+      - Get-NetIPAddress -AddressFamily IPv4 | Select InterfaceAlias,IPAddress,PrefixLength
+    risk: read
+    equiv: 'CMD: ipconfig /all; Linux: ip addr'
+    doc: ps/nettcpip/get-netipconfiguration
+  - name: Resolve-DnsName
+    cat: network
+    syn: Resolve-DnsName <name> [-Type <type>] [-Server <dns>]
+    desc: Queries DNS (A, MX, TXT, CNAME…) without nslookup.
+    ex:
+      - Resolve-DnsName contoso.com -Type MX
+      - Resolve-DnsName contoso.com -Type TXT -Server 1.1.1.1
+    risk: read
+    equiv: 'CMD: nslookup; Linux: dig, host'
+    doc: ps/dnsclient/resolve-dnsname
+  - name: Get-NetTCPConnection
+    cat: network
+    syn: Get-NetTCPConnection [-State Listen] [-LocalPort <port>]
+    desc: TCP connections and listening ports, with the owning process.
+    ex:
+      - Get-NetTCPConnection -State Listen | Select LocalAddress,LocalPort,OwningProcess
+      - Get-Process -Id (Get-NetTCPConnection -LocalPort 443).OwningProcess
+    risk: read
+    equiv: 'CMD: netstat -ano; Linux: ss -tulpn'
+    doc: ps/nettcpip/get-nettcpconnection
+  - name: netsh
+    cat: network
+    syn: netsh <context> <command>
+    desc: Network configuration tool (Wi-Fi, firewall, proxy, stack reset).
+    ex:
+      - netsh wlan show profiles
+      - netsh wlan show profile name="MonWifi" key=clear
+      - netsh winsock reset
+      - netsh int ip reset
+      - netsh advfirewall show allprofiles
+    tags:
+      - wifi
+      - wifi password
+      - wifi key
+      - firewall
+    risk: admin
+    perms: Elevated prompt to change (plain read needs no elevation, except key=clear)
+    pitfall: winsock reset and int ip reset require a restart. key=clear shows a Wi-Fi password in clear text.
+    equiv: 'PowerShell: NetAdapter, NetSecurity modules; Linux: nmcli, iptables'
+    doc: cmd/netsh
+  - name: ping / tracert / pathping
+    cat: network
+    syn: ping <host> [-n <count>] [-t] | tracert <host> | pathping <host>
+    desc: Tests reachability and the network path to a host.
+    ex:
+      - ping -n 4 8.8.8.8
+      - ping -t 192.168.1.1
+      - tracert -d contoso.com
+      - pathping -q 10 contoso.com
+    risk: read
+    pitfall: 'Many firewalls block ICMP: a ping with no reply does not prove the host is down.'
+    equiv: 'Linux: ping -c, traceroute, mtr'
+    doc: cmd/ping
+  - name: Get-Disk / Get-Volume
+    cat: disk
+    syn: Get-Disk | Get-Partition | Get-Volume
+    desc: Physical disks, partitions and volumes (size, free space, health).
+    ex:
+      - Get-Disk | Select Number,FriendlyName,Size,HealthStatus,PartitionStyle
+      - Get-Volume | Select DriveLetter,FileSystemLabel,FileSystem,@{n='LibreGo';e={[math]::Round($_.SizeRemaining/1GB,1)}}
+    risk: read
+    equiv: 'CMD: diskpart > list disk; Linux: lsblk, df -h'
+    doc: ps/storage/get-disk
+  - name: Get-PhysicalDisk
+    cat: disk
+    syn: Get-PhysicalDisk | Get-StorageReliabilityCounter
+    desc: Disk health state and reliability counters (simplified SMART).
+    ex:
+      - Get-PhysicalDisk | Select FriendlyName,MediaType,HealthStatus,OperationalStatus
+      - Get-PhysicalDisk | Get-StorageReliabilityCounter | Select Temperature,Wear,ReadErrorsTotal
+    risk: read
+    pitfall: "A 'Healthy' state does not rule out an imminent failure: also watch Wear and read errors."
+    equiv: 'Linux: smartctl -a'
+    doc: ps/storage/get-physicaldisk
+  - name: cleanmgr / Storage Sense
+    cat: disk
+    syn: cleanmgr /sageset:1 ; cleanmgr /sagerun:1
+    desc: Disk cleanup driven by a saved profile.
+    ex:
+      - cleanmgr /sageset:1
+      - cleanmgr /sagerun:1
+      - Get-ChildItem $env:TEMP -Recurse -Force | Remove-Item -Recurse -Force -WhatIf
+    risk: modify
+    pitfall: Windows 11 partly replaces cleanmgr with Storage Sense (Settings > System > Storage).
+    equiv: 'Linux: apt clean, journalctl --vacuum-size'
+    doc: cmd/cleanmgr
+  - name: diskpart
+    cat: disk
+    syn: diskpart > list disk | select disk <n> | clean | create partition primary
+    desc: Advanced management of disks and partitions in interactive mode.
+    ex:
+      - diskpart
+      - list disk
+      - select disk 1
+      - list partition
+    risk: admin
+    perms: Elevated prompt
+    pitfall: "'clean' erases the whole partition table of the selected disk: double-check the number with list disk."
+    equiv: 'PowerShell: Get-Disk, Initialize-Disk, New-Partition; Linux: fdisk, parted'
+    doc: cmd/diskpart
+  - name: Get-LocalUser
+    cat: users
+    syn: Get-LocalUser [-Name <name>]
+    desc: Lists local accounts and their state.
+    ex:
+      - Get-LocalUser | Select Name,Enabled,LastLogon,PasswordLastSet
+      - Disable-LocalUser -Name 'invite'
+      - New-LocalUser -Name 'support' -NoPassword
+    risk: read
+    pitfall: Creating, enabling or changing an account needs an elevated prompt.
+    equiv: 'CMD: net user; Linux: getent passwd'
+    doc: ps/microsoft.powershell.localaccounts/get-localuser
+  - name: Add-LocalGroupMember
+    cat: users
+    syn: Add-LocalGroupMember -Group <group> -Member <account>
+    desc: Adds an account to a local group (for example Administrators).
+    ex:
+      - Get-LocalGroupMember Administrateurs
+      - Add-LocalGroupMember -Group 'Administrateurs' -Member 'DOMAINE\jdupont'
+      - net localgroup Administrateurs jdupont /add
+    risk: admin
+    perms: Elevated prompt
+    pitfall: "The group name depends on Windows' language (Administrateurs / Administrators): use the SID S-1-5-32-544 to be language-independent."
+    equiv: 'CMD: net localgroup; Linux: usermod -aG'
+    doc: ps/microsoft.powershell.localaccounts/add-localgroupmember
+  - name: whoami
+    cat: users
+    syn: whoami [/groups] [/priv] [/all]
+    desc: Shows the current user, their groups and privileges.
+    ex:
+      - whoami
+      - whoami /groups
+      - whoami /priv
+    risk: read
+    pitfall: whoami /groups lets you check whether the session is elevated (high mandatory level).
+    equiv: 'Linux: whoami, id'
+    doc: cmd/whoami
+  - name: net user
+    cat: users
+    syn: net user [<account> [<password>] [/add] [/domain]]
+    desc: Manages local user accounts (or domain accounts with /domain).
+    ex:
+      - net user
+      - net user jdupont
+      - net user jdupont /domain
+      - net accounts
+    risk: read
+    pitfall: 'Typing the password on the command line leaves it in the history: prefer the prompt (*).'
+    equiv: 'PowerShell: Get-LocalUser, Get-ADUser; Linux: getent passwd'
+    doc: cmd/net-user
+  - name: manage-bde
+    cat: security
+    syn: 'manage-bde -status | -protectors -get <drive>: | -on <drive>:'
+    desc: BitLocker state and management on the command line.
+    ex:
+      - manage-bde -status
+      - 'manage-bde -protectors -get C:'
+      - 'manage-bde -on C: -RecoveryPassword'
+    risk: admin
+    perms: Elevated prompt
+    pitfall: Back up the recovery key (Entra ID, AD or Microsoft account) before encrypting or changing protectors.
+    equiv: 'PowerShell: Get-BitLockerVolume, Enable-BitLocker; Linux: cryptsetup'
+    doc: cmd/manage-bde
+  - name: Get-BitLockerVolume
+    cat: security
+    syn: Get-BitLockerVolume [-MountPoint <drive>]
+    desc: BitLocker encryption state and protectors of each volume.
+    ex:
+      - Get-BitLockerVolume | Select MountPoint,VolumeStatus,ProtectionStatus,EncryptionPercentage
+      - (Get-BitLockerVolume -MountPoint C:).KeyProtector | Where KeyProtectorType -eq RecoveryPassword
+      - "BackupToAAD-BitLockerKeyProtector -MountPoint C: -KeyProtectorId '{GUID}'"
+    risk: read
+    perms: Elevated prompt to read protectors
+    pitfall: Suspend-BitLocker should only be used temporarily (BIOS update) and resumes at the next restart.
+    equiv: 'CMD: manage-bde -status'
+    doc: ps/bitlocker/get-bitlockervolume
+  - name: Get-MpComputerStatus / Start-MpScan
+    cat: security
+    syn: Get-MpComputerStatus ; Start-MpScan -ScanType QuickScan
+    desc: Microsoft Defender Antivirus state and starting a scan.
+    ex:
+      - Get-MpComputerStatus | Select AntivirusEnabled,RealTimeProtectionEnabled,AntivirusSignatureLastUpdated
+      - Update-MpSignature
+      - Start-MpScan -ScanType FullScan
+    risk: modify
+    pitfall: Get-MpComputerStatus is read-only; scanning and updating signatures change the state.
+    equiv: 'CMD: MpCmdRun.exe -Scan'
+    doc: ps/defender/get-mpcomputerstatus
+  - name: gpupdate
+    cat: security
+    syn: gpupdate [/force] [/target:computer|user]
+    desc: Applies group policies immediately.
+    ex:
+      - gpupdate /force
+      - gpupdate /target:computer /force
+    risk: modify
+    pitfall: Some settings (software installation, startup scripts) need a restart or sign-in again (/logoff, /boot).
+    equiv: 'Linux: n/a (sssd, ansible-pull)'
+    doc: cmd/gpupdate
+  - name: gpresult
+    cat: security
+    syn: gpresult /r | /h <file.html> [/scope computer|user]
+    desc: Shows the group policies actually applied to the machine and the user.
+    ex:
+      - gpresult /r
+      - gpresult /h C:\Temp\gpo.html /f
+      - gpresult /scope computer /v
+    risk: read
+    pitfall: For the computer part, run it from an elevated prompt, otherwise the section is empty.
+    equiv: 'PowerShell: Get-GPResultantSetOfPolicy (RSAT)'
+    doc: cmd/gpresult
+  - name: Get-NetFirewallRule
+    cat: security
+    syn: Get-NetFirewallRule [-DisplayName <name>] | New-NetFirewallRule
+    desc: Lists or creates Windows Defender Firewall rules.
+    ex:
+      - Get-NetFirewallRule -Enabled True -Direction Inbound | Select DisplayName,Action,Profile
+      - New-NetFirewallRule -DisplayName 'Autoriser TCP 8080' -Direction Inbound -Protocol TCP -LocalPort 8080 -Action Allow
+    risk: read
+    pitfall: Creating or changing a rule needs an elevated prompt and changes the machine's network exposure.
+    equiv: 'CMD: netsh advfirewall; Linux: iptables, ufw'
+    doc: ps/netsecurity/get-netfirewallrule
+  - name: Get-ExecutionPolicy / Set-ExecutionPolicy
+    cat: security
+    syn: Get-ExecutionPolicy -List
+    desc: The PowerShell script execution policy.
+    ex:
+      - Get-ExecutionPolicy -List
+      - Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+    risk: read
+    pitfall: It is not a security boundary. Prefer -Scope CurrentUser over LocalMachine; Set-ExecutionPolicy changes the system.
+    equiv: 'Linux: chmod +x'
+    doc: ps/microsoft.powershell.security/get-executionpolicy
+  - name: Get-WinEvent
+    cat: logs
+    syn: Get-WinEvent -LogName <log> [-MaxEvents <n>] [-FilterHashtable @{...}]
+    desc: Reads Windows event logs, with efficient filtering.
+    ex:
+      - Get-WinEvent -LogName System -MaxEvents 20 | Select TimeCreated,Id,LevelDisplayName,Message
+      - Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date).AddHours(-24)}
+      - Get-WinEvent -ListLog * | Where RecordCount -gt 0 | Sort RecordCount -Descending | Select -First 10 LogName,RecordCount
+    risk: read
+    perms: Elevated prompt for the Security log
+    pitfall: 'Prefer -FilterHashtable to Where-Object: filtering happens at the source and stays fast on large logs.'
+    equiv: 'CMD: wevtutil qe; Linux: journalctl'
+    doc: ps/microsoft.powershell.diagnostics/get-winevent
+  - name: wevtutil
+    cat: logs
+    syn: wevtutil qe <log> /c:<n> /rd:true /f:text
+    desc: Queries, exports or clears an event log.
+    ex:
+      - wevtutil qe System /c:10 /rd:true /f:text
+      - wevtutil epl Security C:\Temp\security.evtx
+      - wevtutil cl Application
+    risk: admin
+    perms: Elevated prompt to export or clear
+    pitfall: 'wevtutil cl clears the log permanently: export it first with epl.'
+    equiv: 'PowerShell: Get-WinEvent, Clear-EventLog; Linux: journalctl'
+    doc: cmd/wevtutil
+  - name: Get-EventLog
+    cat: logs
+    syn: Get-EventLog -LogName System -Newest <n>
+    desc: Old reading of the classic logs (Windows PowerShell 5.1 only).
+    ex:
+      - Get-EventLog -LogName Application -EntryType Error -Newest 20
+    risk: read
+    pitfall: 'Missing from PowerShell 7: use Get-WinEvent.'
+    equiv: 'Linux: journalctl -p err'
+    doc: ps/microsoft.powershell.management/get-eventlog
+  - name: Get-CimInstance Win32_ReliabilityRecords
+    cat: logs
+    syn: Get-CimInstance Win32_ReliabilityRecords | Select -First 20
+    desc: Reliability history (crashes, installation failures) as in Reliability Monitor.
+    ex:
+      - Get-CimInstance Win32_ReliabilityRecords | Where SourceName -eq 'Application Error' | Select TimeGenerated,ProductName,Message -First 10
+    risk: read
+    equiv: 'UI: perfmon /rel'
+    doc: ps/cimcmdlets/get-ciminstance
+  - name: Reset-ComputerMachinePassword / Test-ComputerSecureChannel
+    cat: troubleshoot
+    syn: Test-ComputerSecureChannel -Repair -Credential <compte>
+    desc: Checks and repairs the trust relationship between the machine and the domain.
+    ex:
+      - Test-ComputerSecureChannel -Verbose
+      - Test-ComputerSecureChannel -Repair -Credential (Get-Credential)
+    risk: admin
+    perms: Elevated prompt and an authorized domain account
+    pitfall: "Message 'The trust relationship between this workstation and the primary domain failed': this is the quickest fix before rejoining the domain."
+    equiv: 'CMD: nltest /sc_verify:<domain>'
+    doc: ps/microsoft.powershell.management/test-computersecurechannel
+  - name: dsregcmd /status
+    cat: troubleshoot
+    syn: dsregcmd /status
+    desc: State of the Entra ID / hybrid join and of the authentication token (PRT).
+    ex:
+      - dsregcmd /status
+      - dsregcmd /status | findstr /i "AzureAdJoined DomainJoined AzureAdPrt"
+    risk: read
+    pitfall: 'AzureAdPrt: NO means a missing primary refresh token (broken SSO): sign in again or redo the join.'
+    equiv: 'Linux: n/a'
+    url: https://learn.microsoft.com/entra/identity/devices/troubleshoot-device-dsregcmd
+  - name: Reset Windows Update (services and cache)
+    cat: troubleshoot
+    syn: net stop wuauserv, bits ; rename SoftwareDistribution ; net start
+    desc: Classic procedure when Windows Update stays stuck.
+    ex:
+      - net stop wuauserv && net stop bits
+      - ren C:\Windows\SoftwareDistribution SoftwareDistribution.old
+      - net start bits && net start wuauserv
+    risk: admin
+    perms: Elevated prompt
+    pitfall: The Windows Update history starts from zero. Try the troubleshooter and DISM /RestoreHealth first.
+    equiv: 'Linux: apt clean && apt update'
+    url: https://learn.microsoft.com/windows/deployment/update/windows-update-resources
+  - name: powercfg /batteryreport
+    cat: troubleshoot
+    syn: powercfg /batteryreport | /energy | /requests
+    desc: Battery report, energy diagnostics, and what prevents sleep.
+    ex:
+      - powercfg /batteryreport /output C:\Temp\batterie.html
+      - powercfg /energy
+      - powercfg /requests
+      - powercfg /a
+    risk: read
+    perms: Elevated prompt for /energy
+    pitfall: /energy takes 60 seconds during which the PC must stay idle. /a lists the available sleep states.
+    equiv: 'Linux: upower -i, powertop'
+    url: https://learn.microsoft.com/windows-hardware/design/device-experiences/powercfg-command-line-options

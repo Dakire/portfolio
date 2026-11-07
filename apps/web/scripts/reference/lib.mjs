@@ -87,6 +87,7 @@ export function buildReference(file, source) {
     ...(m.topTitle && { topTitle: text(m.topTitle) }),
     ...(m.notice && { notice: text(m.notice) }),
     ...(m.generated && { generated: String(m.generated) }),
+    ...(m.generatedFrom && { generatedFrom: String(m.generatedFrom) }),
   };
 
   const seen = new Map();
@@ -229,7 +230,8 @@ export function computeOutputs() {
     const built = buildReference(file, source);
     const order = source.meta.order ?? 99;
     if (built.meta.generated) {
-      const existing = join(OUT_DIR, `${built.meta.id}.json`);
+      // generatedFrom : une version dans une autre langue réutilise les entrées générées d'une autre référence (ex. GAM anglais).
+      const existing = join(OUT_DIR, `${built.meta.generatedFrom ?? built.meta.id}.json`);
       if (!existsSync(existing)) continue; // pas encore généré : la référence n'est pas publiée
       // Les entrées viennent du dernier « reference:gam » ; les textes de la page (titre, description…) de la source YAML.
       const generated = JSON.parse(readFileSync(existing, 'utf-8'));

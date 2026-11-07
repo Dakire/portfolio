@@ -1,0 +1,215 @@
+# Concrete examples for the most common GAM commands (English), added at build time to the entries generated from the GAM wiki.
+# Key = entry id in public/data/reference/gam.json. `desc` replaces the wiki description; `ex` goes before the wiki syntax. Fictional addresses (example.com).
+gam-create-user:
+  desc: Create a user account, with a temporary password to change at first sign-in.
+  ex:
+    - gam create user alice.martin@example.com firstname Alice lastname Martin password "Temporaire-2026!" changepassword on org "/Comptabilite"
+gam-update-user:
+  desc: Change an existing account (password, name, organizational unit…).
+  ex:
+    - gam update user alice.martin@example.com password "Nouveau-2026!" changepassword on
+    - gam update user alice.martin@example.com org "/Direction"
+gam-update-user-3:
+  desc: Change an account's primary address (marriage, typo, domain name change).
+  ex:
+    - gam update user alice.dupont@example.com primaryemail alice.martin@example.com
+gam-info-user:
+  desc: Show a user's full record (aliases, groups, licences, last sign-in).
+  ex:
+    - gam info user alice.martin@example.com
+gam-print-users:
+  desc: Export the list of users as CSV, with the columns useful for an inventory.
+  ex:
+    - gam redirect csv ./utilisateurs.csv print users fields primaryemail,name,orgunitpath,suspended,lastlogintime
+    - gam print users query "orgUnitPath='/Comptabilite'"
+gam-suspend-user:
+  desc: Suspend an account (leaver, compromised account) without deleting its data.
+  ex:
+    - gam suspend user alice.martin@example.com
+gam-unsuspend-user:
+  desc: Reactivate a suspended account.
+  ex:
+    - gam unsuspend user alice.martin@example.com
+gam-delete-user:
+  desc: "Delete an account. Transfer its Drive files first (see 'transfer drive'): they go with the account."
+  ex:
+    - gam delete user ancien.salarie@example.com
+gam-undelete-user:
+  desc: Restore a recently deleted account (Google keeps it for about 20 days), into the chosen organizational unit.
+  ex:
+    - gam undelete user ancien.salarie@example.com org "/Anciens"
+gam-whatis:
+  desc: Find out whether an address is a user, a group or an alias (and of what).
+  ex:
+    - gam whatis contact@example.com
+gam-usertypeentity-update-photo-2:
+  desc: Update a user's profile photo from an image file.
+  ex:
+    - gam user alice.martin@example.com update photo alice.jpg
+gam-usertypeentity-signout:
+  desc: Sign a user out of all sessions (compromised account, lost phone).
+  ex:
+    - gam user alice.martin@example.com signout
+gam-usertypeentity-turnoff2sv:
+  desc: Turn off 2-step verification for a user who lost their phone; they will have to turn it back on.
+  ex:
+    - gam user alice.martin@example.com turnoff2sv
+gam-usertypeentity-deprovision-deprov:
+  desc: 'Employee leaving: revokes app passwords, tokens and backup codes; the options also cut POP/IMAP, sessions and 2SV.'
+  ex:
+    - gam user ancien.salarie@example.com deprovision popimap signout turnoff2sv
+gam-usertypeentity-transfer-drive:
+  desc: Transfer all Drive files from one account to another (do this before deletion).
+  ex:
+    - gam user ancien.salarie@example.com transfer drive responsable@example.com
+gam-usertypeentity-delegate-delegates-to:
+  desc: "Delegate a Gmail mailbox: the delegate can read, send and delete messages on the owner's behalf."
+  ex:
+    - gam user direction@example.com delegate to assistante@example.com
+    - gam user direction@example.com show delegates
+gam-usertypeentity-add-delegate-delegates:
+  desc: Add a delegate to a Gmail mailbox (same effect as 'delegate to').
+  ex:
+    - gam user direction@example.com add delegate assistante@example.com
+gam-usertypeentity-delete-del-delegate-delegates:
+  desc: Remove a delegate from a Gmail mailbox.
+  ex:
+    - gam user direction@example.com delete delegate assistante@example.com
+gam-usertypeentity-show-delegates-delegate:
+  desc: Show a Gmail mailbox's delegates.
+  ex:
+    - gam user direction@example.com show delegates shownames
+gam-usertypeentity-print-delegates-delegate:
+  desc: Export all of the domain's Gmail delegations as CSV (audit).
+  ex:
+    - gam redirect csv ./delegations.csv all users print delegates shownames
+gam-usertypeentity-add-forwardingaddress-forwardingaddresses:
+  desc: Declare a forwarding address (step before 'forward on'; the recipient may have to confirm it).
+  ex:
+    - gam user alice.martin@example.com add forwardingaddress accueil@example.com
+gam-usertypeentity-forward-2:
+  desc: Turn on automatic forwarding of messages to an already declared address, keeping a copy.
+  ex:
+    - gam user alice.martin@example.com forward on keep accueil@example.com
+gam-usertypeentity-forward:
+  desc: Turn off automatic forwarding.
+  ex:
+    - gam user alice.martin@example.com forward off
+gam-usertypeentity-show-forward-forwards:
+  desc: Check whether a mailbox forwards its messages, and where to.
+  ex:
+    - gam user alice.martin@example.com show forward
+gam-usertypeentity-vacation:
+  desc: Turn the out-of-office automatic reply on or off.
+  ex:
+    - gam user alice.martin@example.com vacation on subject "Absente" message "Je suis absente jusqu'au 5 janvier. Pour toute urgence: accueil@example.com"
+    - gam user alice.martin@example.com vacation off
+gam-usertypeentity-signature-file-sigtemplate-txt-html:
+  desc: Apply an HTML signature from a file.
+  ex:
+    - gam user alice.martin@example.com signature file signature.html html
+gam-usertypeentity-create-update-sendas:
+  desc: Add a 'Send mail as' address (alias or shared mailbox).
+  ex:
+    - gam user alice.martin@example.com create sendas contact@example.com name "Contact Example"
+gam-usertypeentity-print-messages:
+  desc: List a mailbox's messages with a Gmail search (sender, date…).
+  ex:
+    - gam user alice.martin@example.com print messages query "from:factures@fournisseur.example newer_than:7d"
+gam-usertypeentity-delete-messages-threads:
+  desc: Delete messages (e.g. a phishing campaign). Without 'doit', GAM only shows what it would delete.
+  ex:
+    - gam user alice.martin@example.com delete messages query "from:expediteur@malveillant.example" doit
+gam-usertypeentity-imap-imap4:
+  desc: Turn a mailbox's IMAP access on or off.
+  ex:
+    - gam user alice.martin@example.com imap off
+gam-create-group:
+  desc: Create a group (mailing list or security group).
+  ex:
+    - gam create group compta@example.com name "Comptabilité" description "Équipe comptable"
+gam-usertypeentity-add-group-groups:
+  desc: Add a user to a group, with their role (member, manager or owner).
+  ex:
+    - gam user alice.martin@example.com add groups member compta@example.com
+gam-info-group-groups:
+  desc: Show a group's settings and members.
+  ex:
+    - gam info group compta@example.com
+gam-print-group-members-2:
+  desc: Export a group's members.
+  ex:
+    - gam print group-members group compta@example.com
+gam-usertypeentity-print-groups:
+  desc: List the groups a user belongs to.
+  ex:
+    - gam user alice.martin@example.com print groups
+gam-delete-group-groups:
+  desc: Delete a group.
+  ex:
+    - gam delete group ancien-groupe@example.com
+gam-create-alias-aliases:
+  desc: Create an alias (secondary address) for a user or a group.
+  ex:
+    - gam create alias contact@example.com user alice.martin@example.com
+gam-print-aliases:
+  desc: Export all of the domain's aliases.
+  ex:
+    - gam redirect csv ./alias.csv print aliases
+gam-calendar:
+  desc: Share a user's calendar with another (freebusy, reader, writer or owner).
+  ex:
+    - gam calendar alice.martin@example.com add writer user assistante@example.com
+gam-usertypeentity-add-calendars:
+  desc: Add a shared calendar to a user's calendar list.
+  ex:
+    - gam user assistante@example.com add calendars alice.martin@example.com
+gam-usertypeentity-show-calendars:
+  desc: Show a user's calendars.
+  ex:
+    - gam user alice.martin@example.com show calendars
+gam-create-org-ou:
+  desc: Create an organizational unit.
+  ex:
+    - gam create org "/Comptabilite" description "Service comptable"
+gam-print-orgs-ous:
+  desc: List organizational units.
+  ex:
+    - gam print orgs
+gam-print-licenses:
+  desc: Export assigned licences.
+  ex:
+    - gam redirect csv ./licences.csv print licenses
+gam-usertypeentity-add-license:
+  desc: "Assign a licence by its SKU ID (e.g. 1010020028: Business Standard; check Google's SKU list)."
+  ex:
+    - gam user alice.martin@example.com add license 1010020028
+gam-print-mobile:
+  desc: Inventory of the smartphones and tablets that sync an account of the domain.
+  ex:
+    - gam redirect csv ./mobiles.csv print mobile
+gam-print-cros:
+  desc: Inventory of Chromebooks.
+  ex:
+    - gam redirect csv ./chromebooks.csv print cros
+gam-report:
+  desc: 'Activity reports: sign-ins, admin actions, Drive…'
+  ex:
+    - gam report login user alice.martin@example.com
+    - gam report admin
+gam-csv-newstudents-csv-gam-create-user:
+  desc: "Batch processing: one command per CSV row; '~column' takes the column's value."
+  ex:
+    - gam csv nouveaux.csv gam create user "~email" firstname "~prenom" lastname "~nom" password "~motdepasse" org "/Nouveaux"
+gam-info-domain:
+  desc: Show the Google Workspace domain information.
+  ex:
+    - gam info domain
+gam-oauth-create:
+  desc: 'First setup: authorize GAM to administer the domain (opens an authorization page).'
+  ex:
+    - gam oauth create
+gam-version:
+  desc: Show the installed GAM version.
+  ex:
+    - gam version

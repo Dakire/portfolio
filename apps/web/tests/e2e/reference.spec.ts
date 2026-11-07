@@ -154,7 +154,14 @@ test.describe('Référence : recherche', () => {
   });
 });
 
-const PAGES = ['/cheatsheets/gam/', '/cheatsheets/powershell-m365/', '/cheatsheets/windows-11/'];
+const PAGES = [
+  '/cheatsheets/gam/',
+  '/cheatsheets/powershell-m365/',
+  '/cheatsheets/windows-11/',
+  '/en/cheatsheets/gam-commands/',
+  '/en/cheatsheets/powershell-microsoft-365/',
+  '/en/cheatsheets/windows-11-commands/',
+];
 for (const theme of ['dark', 'light'] as const) {
   test(`WCAG 2.2 AA : /cheatsheets/ (thème ${theme})`, async ({ page }) => {
     await noConsent(page);

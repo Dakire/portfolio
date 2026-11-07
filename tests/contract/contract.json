@@ -538,6 +538,46 @@
       "path": "/en/cheatsheets/bios-uefi-keys/",
       "type": "text/html",
       "since": "web"
+    },
+    {
+      "path": "/en/cheatsheets/gam-commands/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/cheatsheets/powershell-microsoft-365/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/cheatsheets/windows-11-commands/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/cheatsheets/active-directory-powershell/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/cheatsheets/network-commands/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/cheatsheets/linux-proxmox-commands/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/cheatsheets/git-github-claude-code-commands/",
+      "type": "text/html",
+      "since": "web"
+    },
+    {
+      "path": "/en/cheatsheets/windows-event-ids/",
+      "type": "text/html",
+      "since": "web"
     }
   ]
 }

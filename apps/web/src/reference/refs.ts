@@ -74,9 +74,9 @@ export const REF_UI = {
     relatedProjects: 'Réalisations liées',
   },
   en: {
-    hubTitle: 'IT cheatsheets: BIOS/UEFI keys | Guillaume Richard',
+    hubTitle: 'IT cheatsheets: GAM, PowerShell, Windows | Guillaume Richard',
     hubDescription:
-      'Cheatsheets for technicians: BIOS/UEFI and boot menu keys by PC brand (Dell, HP, Lenovo, ASUS, Acer, MSI, Surface, Mac).',
+      'Command cheatsheets: GAM, PowerShell Microsoft 365, Windows 11, Active Directory, networking, Linux, Git, BIOS keys. Examples to copy.',
     hubH1: 'Cheatsheets: command reference',
     hubIntro:
       'The commands you always end up looking up, sorted by tool. Each one has its own page and search, examples to copy and a link to the official documentation.',
@@ -109,7 +109,17 @@ export const REF_UI = {
 } as const;
 
 /** Références publiées dans les deux langues sous deux identifiants : sert aux liens hreflang et au sélecteur de langue. */
-const TRANSLATIONS: [fr: string, en: string][] = [['bios-uefi', 'bios-uefi-keys']];
+const TRANSLATIONS: [fr: string, en: string][] = [
+  ['bios-uefi', 'bios-uefi-keys'],
+  ['reseau', 'network-commands'],
+  ['linux-proxmox', 'linux-proxmox-commands'],
+  ['git-claude-code', 'git-github-claude-code-commands'],
+  ['active-directory', 'active-directory-powershell'],
+  ['evenements-windows', 'windows-event-ids'],
+  ['powershell-m365', 'powershell-microsoft-365'],
+  ['windows-11', 'windows-11-commands'],
+  ['gam', 'gam-commands'],
+];
 export interface RefEntry {
   id: string;
   name: string;
