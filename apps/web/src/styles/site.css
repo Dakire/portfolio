@@ -2197,19 +2197,23 @@ h2 i {
   height: 100%;
   fill: none;
   stroke: var(--ink);
-  stroke-width: 0.3;
+  stroke-width: 0.4;
 }
 .portrait-notes circle {
   fill: var(--ink);
   stroke: var(--canvas);
   stroke-width: 0.6;
 }
+/* Légendes : corps plus grand et halo de la couleur du fond, lisibles même sur les cheveux ou le disque */
 .portrait-notes text {
   fill: var(--ink);
-  stroke: none;
+  stroke: var(--raised);
+  stroke-width: 1.4px;
+  stroke-linejoin: round;
+  paint-order: stroke fill;
   font-family: var(--font-mono);
-  font-size: 3.1px;
-  font-weight: 600;
+  font-size: 3.6px;
+  font-weight: 700;
 }
 .portrait figcaption {
   display: flex;

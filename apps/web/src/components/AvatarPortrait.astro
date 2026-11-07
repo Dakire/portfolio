@@ -10,8 +10,8 @@ interface Props {
 const { lang } = Astro.props;
 const fr = lang === 'fr';
 const callouts = [
-  { x: 63, y: 11, end: false, a: fr ? 'Formation' : 'Training', b: 'IA · M365 · RGPD' },
-  { x: 75.5, y: 52, end: false, a: fr ? 'Messagerie' : 'Email', b: fr ? '& cloud' : '& cloud' },
+  { x: 61, y: 11, end: false, a: fr ? 'Formation' : 'Training', b: 'IA · M365 · RGPD' },
+  { x: 74, y: 52, end: false, a: fr ? 'Messagerie' : 'Email', b: fr ? '& cloud' : '& cloud' },
   { x: 25.5, y: 46, end: true, a: 'Support', b: fr ? 'N1 → N3' : 'L1 → L3' },
   { x: 20.5, y: 28, end: true, a: fr ? 'Sécurité' : 'Security', b: 'IT' },
 ];
@@ -45,15 +45,15 @@ const callouts = [
       decoding="async"
     />
     <svg class="portrait-notes" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-      <path d="M50 20 58 11H62M67.8 52H74M42.6 46H27M34.6 35.6 27 28H22" />
+      <path d="M50 20 57 11H60M67.8 52H72.5M42.6 46H27M34.6 35.6 27 28H22" />
       <circle cx="50" cy="20" r="1.1" />
       <circle cx="67.8" cy="52" r="1.1" />
       <circle cx="42.6" cy="46" r="1.1" />
       <circle cx="34.6" cy="35.6" r="1.1" />
       {callouts.map((c) => (
-        <text x={c.x} y={c.y - 0.9} text-anchor={c.end ? 'end' : 'start'}>
+        <text x={c.x} y={c.y - 1.2} text-anchor={c.end ? 'end' : 'start'}>
           <tspan x={c.x}>{c.a}</tspan>
-          <tspan x={c.x} dy="3.6">
+          <tspan x={c.x} dy="4.4">
             {c.b}
           </tspan>
         </text>
