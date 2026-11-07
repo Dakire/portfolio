@@ -92,6 +92,7 @@ test('propose un nouvel essai quand Turnstile est injoignable', async ({ page })
   );
   await page.route('https://challenges.cloudflare.com/**', (route) => route.abort());
   await page.goto('/contact/');
+  await page.locator('astro-island').last().scrollIntoViewIfNeeded(); // hydraté à l'approche de l'écran
   await expect(page.getByRole('button', { name: 'Recharger la vérification' })).toBeVisible();
 });
 
