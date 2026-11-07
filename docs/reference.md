@@ -7,7 +7,7 @@ Pages `/cheatsheets/` (accueil et recherche globale) et `/cheatsheets/<id>/`. D�
 Depuis la racine du dépôt (Node ≥ 22, `pnpm install` fait) :
 
 ```bash
-pnpm --filter @grichard/web reference:build   # sources YAML -> public/data/cheatsheets/*.json (+ copie de MiniSearch)
+pnpm --filter @grichard/web reference:build   # sources YAML -> public/data/reference/*.json (+ copie de MiniSearch)
 pnpm --filter @grichard/web reference:gam     # GAM : clone le wiki et régénère gam.json (réseau requis)
 pnpm --filter @grichard/web reference:links   # contrôle les liens de documentation (réseau requis, local uniquement)
 ```
@@ -16,7 +16,7 @@ Les JSON sont **commités** : après une modification d'un `.yml`, relancez `ref
 
 ## Ajouter une référence en 5 étapes
 
-1. **Créer la source** `apps/web/data/cheatsheets/src/<id>.yml` (partir d'une existante). Bloc `meta` : `id`, `order`, `title` (unique sur le site), `h1`, `description` (60 à 300 caractères), `intro`, `card`, `cats` (catégories), `fields` (champs affichés en plus), `docs` (lien général), et au choix `docBase`/`docBases` (préfixes pour `doc:`), `top` (blocs statiques comme « Connexion »), `notice`, `source` (si le contenu vient d'un tiers).
+1. **Créer la source** `apps/web/data/reference/src/<id>.yml` (partir d'une existante). Bloc `meta` : `id`, `order`, `title` (unique sur le site), `h1`, `description` (60 à 300 caractères), `intro`, `card`, `cats` (catégories), `fields` (champs affichés en plus), `docs` (lien général), et au choix `docBase`/`docBases` (préfixes pour `doc:`), `top` (blocs statiques comme « Connexion »), `notice`, `source` (si le contenu vient d'un tiers).
 2. **Écrire les entrées** : `name`, `cat`, `syn` et/ou `desc`, `ex` (liste d'exemples copiables), `alias`, `tags`, `doc` (suffixe) ou `url` (adresse complète), plus les champs `module`, `perms`, `pitfall`, `equiv`, `risk` (`read`, `modify`, `admin`). Mettez entre guillemets toute valeur qui contient « : » ou « # ».
 3. **Générer** : `pnpm --filter @grichard/web reference:build`, puis `reference:links` pour vérifier les URL.
 4. **Brancher** : rien à coder, la page `/cheatsheets/<id>/` et la carte de `/cheatsheets/` sont créées à partir de `index.json`. Ajoutez l'URL à `tests/contract/contract.json` (`"since": "web"`) et à la liste des pages de `tests/e2e/reference.spec.ts` (axe).

@@ -9,16 +9,16 @@ Production OVH mutualisé : **fichiers statiques + PHP 8.5**, accès FTP/SFTP un
 ## Structure
 
 ```
-apps/web        Site public (Astro statique, FR/EN) : pages, blog, outils (îlots Preact), aide-mémoire /cheatsheets/
+apps/web        Site public (Astro statique, FR/EN) : pages, blog, outils (îlots Preact), cheatsheets /cheatsheets/
 apps/api        PHP sans dépendance d'exécution : contact.php (formulaire) et tools.php (rapport SEO,
                 vérificateur de sitemap), couche Net/ protégée contre la SSRF
 apps/portal     Espace client de test (Symfony, SQLite)
-packages/ui     Design system : tokens CSS, thèmes clair/sombre, composants
+packages/ui     Design system : tokens CSS, polices auto-hébergées, thèmes clair/sombre, composants
 packages/tools-core  Logique pure des outils (TypeScript, testée)
 packages/config Configuration partagée
 legacy/         Ancien site (React + Vite), conservé comme référence
 tests/contract  Les URL publiques à ne jamais casser
-docs/           ADR, déploiement, contribution, checklist
+docs/           ADR, déploiement, contribution, checklist, SEO, audit visuel, ton éditorial
 ```
 
 ## Installation et build
@@ -37,9 +37,17 @@ cd apps/api && composer install && composer test && composer cs && composer stan
 
 Dix outils s'exécutent entièrement dans le navigateur (DNS, ICS, réseau, JSON, encodage…). Deux passent par le serveur, car ils lisent un site tiers : le **rapport SEO** (`/outils/seo/`) et le **vérificateur de sitemap** (`/outils/sitemap/`). Leur conception et leurs protections (SSRF, CSRF, Turnstile, quotas, aucune donnée conservée) sont décrites dans l'[ADR 0007](docs/adr/0007-outils-serveur-php-safehttpclient.md).
 
-## Aide-mémoire (section « Référence »)
+## Cheatsheets (aide-mémoire)
 
-Huit références (GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux/Proxmox, Git/Claude Code, événements Windows) avec une recherche instantanée 100 % navigateur (MiniSearch local, index JSON statique). Sources éditables dans `apps/web/data/cheatsheets/src/*.yml`, JSON générés et commités dans `apps/web/public/data/cheatsheets/`. Régénération : `pnpm --filter @grichard/web reference:build` (GAM : `reference:gam`). Ajouter une référence en 5 étapes : [docs/reference.md](docs/reference.md) ; décision : [ADR 0008](docs/adr/0008-references-recherche-cote-client.md).
+Neuf références, chacune en **français et en anglais** (`/cheatsheets/…` et `/en/cheatsheets/…`) : GAM, PowerShell Microsoft 365, Windows 11, Active Directory, réseau, Linux/Proxmox, Git/Claude Code, événements Windows, touches BIOS/UEFI. Recherche instantanée 100 % navigateur (MiniSearch local, index JSON statique), avec un **glossaire français → commandes** (« deleguer » trouve `gam … delegate to`) et des exemples concrets pour les commandes courantes. Sources éditables dans `apps/web/data/reference/src/*.yml`, JSON générés et commités dans `apps/web/public/data/reference/`. Régénération : `pnpm --filter @grichard/web reference:build` (GAM : `reference:gam`). Guide d'ajout, versions anglaises et glossaire : [docs/reference.md](docs/reference.md) ; décision : [ADR 0008](docs/adr/0008-references-recherche-cote-client.md).
+
+## Blog, brouillons et SEO
+
+Articles en Markdown dans `apps/web/src/content/blog/` (français) et `…/en/` (anglais, `translationOf`). Le champ `draft: true` exclut un article de tout : page, liens, sitemap, flux et image de partage ; un test interdit de publier un article qui contient encore un marqueur « À COMPLÉTER ». Titres et descriptions sont limités à 62 et 160 caractères (test automatique). **Le sitemap de référence est `/root-access.xml`** (`/sitemap.xml` et `/sitemap-0.xml` en restent des copies). Audit page par page, plan des requêtes et suivi : [docs/seo.md](docs/seo.md), [docs/seo-audit.md](docs/seo-audit.md), [docs/seo-plan.md](docs/seo-plan.md) ; règles d'écriture : [docs/ton-editorial.md](docs/ton-editorial.md).
+
+## Identité visuelle
+
+Titres en Bricolage Grotesque, texte en Atkinson Hyperlegible Next, code en JetBrains Mono (polices auto-hébergées), thèmes clair et sombre pensés séparément, contrastes testés. Décisions : [ADR 0011](docs/adr/0011-identite-atelier.md) (suite de l'[ADR 0010](docs/adr/0010-identite-fiche-technique.md)) ; page de style : `/design/` en local ; audit : [docs/audit-visuel.md](docs/audit-visuel.md).
 
 ## Déploiement
 
