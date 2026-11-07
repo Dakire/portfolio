@@ -334,3 +334,7 @@ Aucune pour l'instant. Les actions DNS, secrets et réglages GitHub ne sont pas 
 2. **Relire les textes réécrits** (accroche, À propos, compétences, descriptions de réalisations, introductions) : le ton est de moi, les faits viennent du CV.
 3. Le corps des articles de blog et des textes légaux n'a pas été réécrit ; les pages d'outils ne l'ont été que pour la mention « navigateur ».
 4. Vérifier en ligne le Lighthouse de `/contact/` et passer un coup d'œil clavier/lecteur d'écran sur le menu et la sous-navigation.
+
+## 7 novembre 2026 : édition relevé
+
+La composition des pages évolue (portfolio d'abord, registre daté, avatar annoté, frise du parcours à l'échelle, schémas au trait) : voir l'[ADR 0012](adr/0012-edition-releve.md). L'architecture d'information (ADR 0009) et les URL sont inchangées ; quatre réalisations s'ajoutent (`/projets/mineral-contest/`, `/jettracker/`, `/star-seeker/`, `/nurikabe/`).

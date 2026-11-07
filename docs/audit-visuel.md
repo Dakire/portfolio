@@ -84,3 +84,7 @@ Contrôles : axe (WCAG 2.2 A et AA) vert dans les deux thèmes sur toutes les pa
 ### Ce que cet audit ne mesure pas
 
 Navigation au clavier de bout en bout et lecteur d'écran : à refaire à la main par le propriétaire sur le site en ligne (voir le résumé de livraison).
+
+## 9. Édition relevé (7 novembre 2026)
+
+Suite à cet audit, la composition a été reprise (ADR 0012). Défauts corrigés : vide sous le pied de page quand le bandeau de cookies est affiché (rembourrage de 12 rem sur `body` supprimé, bandeau dans le flux), signature du pied de page coupée (SVG ajusté à la largeur), catégories collées aux articles sur le blog (48 px entre chaque zone), cartes identiques sur les listes (lignes de registre). Contrôles : `pnpm verify` (axe dans les deux thèmes, contrat des URL) ; rendu relevé à 1440, 768 et 375 px.

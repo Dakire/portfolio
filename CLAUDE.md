@@ -34,7 +34,7 @@ Ne jamais introduire de dépendance d'exécution Node, ni d'appel à un service 
 | Contrat sur le nouveau site        | `CONTRACT_DIST=apps/web/dist pnpm test:contract` (après `pnpm --filter @grichard/web build`)      |
 | Sitemap en ligne (GET, chaque URL) | `pnpm --filter @grichard/web sitemap:check` (référence : `/root-access.xml`, voir docs/seo.md)    |
 
-Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. `/root-access.xml` (liste d'URL, référence déclarée dans `robots.txt` ; `/sitemap.xml` et `/sitemap-0.xml` en restent des copies identiques) est produit par `postbuild.mjs` : voir [docs/seo.md](docs/seo.md). Identité visuelle : [ADR 0012](docs/adr/0012-edition-releve.md) (composition des pages, portfolio d'abord), suite de l'[ADR 0011](docs/adr/0011-identite-atelier.md) et de l'[ADR 0010](docs/adr/0010-identite-fiche-technique.md). Portail Symfony (`apps/portal`, voir [docs/portail.md](docs/portail.md)) : `composer install`, `composer test|cs|stan` dans `apps/portal`. Déploiement : [docs/deploiement.md](docs/deploiement.md) (production automatique après CI verte sur `main` ; à la main : retour arrière, portail).
+Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. `/root-access.xml` (liste d'URL, référence déclarée dans `robots.txt` ; `/sitemap.xml` et `/sitemap-0.xml` en restent des copies identiques) est produit par `postbuild.mjs` : voir [docs/seo.md](docs/seo.md). Identité visuelle : [ADR 0012](docs/adr/0012-edition-releve.md) (composition des pages, portfolio d'abord ; conventions d'interface ci-dessous), suite de l'[ADR 0011](docs/adr/0011-identite-atelier.md) et de l'[ADR 0010](docs/adr/0010-identite-fiche-technique.md). Portail Symfony (`apps/portal`, voir [docs/portail.md](docs/portail.md)) : `composer install`, `composer test|cs|stan` dans `apps/portal`. Déploiement : [docs/deploiement.md](docs/deploiement.md) (production automatique après CI verte sur `main` ; à la main : retour arrière, portail).
 
 ## Architecture cible
 
@@ -51,6 +51,17 @@ Site portfolio (ADR 0009, [docs/refonte-portfolio.md](docs/refonte-portfolio.md)
 - **TypeScript strict** côté JS. **PHP** : `declare(strict_types=1)`, PER-CS, PHPStan niveau max, PHPUnit.
 - Prettier pour tout sauf `legacy/`. Pas de couleur écrite en dur : utiliser les tokens de `packages/ui/src/tokens.css`. Jamais de `<style>` ni de script en ligne (CSP) ; les scripts sont des fichiers externes. Pas d'attribut `style=""` écrit à la main (seule la coloration syntaxique Shiki en génère : voir ADR 0005).
 - Une dépendance ajoutée doit être justifiée (poids, maintenance, sécurité, compatibilité OVH).
+
+## Conventions d'interface (ADR 0012)
+
+- **Réseaux sociaux** : icônes seules, sans texte visible (`SocialLinks.astro`, `Icon.astro`) ; le nom est dans `aria-label`. Seuls les deux CV portent le code de langue (FR, EN).
+- **Listes** : lignes de registre (`.ledger-row`, `.lrow`, composants `ProjectCards`, `ToolCards`, `SkillCards`) ; cartes seulement pour les articles du blog (avec mini description) et les résultats de cheatsheets. Liens du texte : encre, soulignement d'accent de 2 px.
+- **Bandeau de cookies** : premier dans le DOM (ordre de Tab), affiché en bas par CSS (`order`, `position: sticky`). Ne jamais rembourrer `body` pour lui faire de la place.
+- **SVG de page** : pas de `<title>` (il collisionne avec le titre de page, `dist.test.ts`) ni de `style=""` ; traits et remplissages par classes et tokens.
+- **`.band`** redéfinit `--accent` (ambre vif) : ne pas l'utiliser pour un aplat d'accent (contraste en thème clair) ; voir `.hm-contact`.
+- **Formulaire de contact** hydraté à l'approche de l'écran (`client:visible`) : les tests e2e défilent jusqu'à lui.
+- **Profil** : les missions des expériences sont des exemples, pas une liste exhaustive (libellé « Missions, entre autres »). Le dépôt `MSG-EML-To-PDF-With-Attachments` est privé : ne pas le lier avant que Guillaume le passe en public.
+- **Avatar** : `public/img/guillaume-*.svg` ; après toute modification, régénérer `favicon.svg`, `favicon.ico`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` et `apple-touch-icon.png`.
 
 ## Sécurité (toujours)
 

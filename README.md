@@ -47,7 +47,13 @@ Articles en Markdown dans `apps/web/src/content/blog/` (français) et `…/en/` 
 
 ## Identité visuelle
 
-Titres en Bricolage Grotesque, texte en Atkinson Hyperlegible Next, code en JetBrains Mono (polices auto-hébergées), thèmes clair et sombre pensés séparément, contrastes testés. Décisions : [ADR 0011](docs/adr/0011-identite-atelier.md) (suite de l'[ADR 0010](docs/adr/0010-identite-fiche-technique.md)) ; page de style : `/design/` en local ; audit : [docs/audit-visuel.md](docs/audit-visuel.md).
+Titres en Bricolage Grotesque, texte en Atkinson Hyperlegible Next, code en JetBrains Mono (polices auto-hébergées), thèmes clair et sombre pensés séparément, contrastes testés. Composition « édition relevé » (portfolio d'abord : accueil, réalisations, profil, blog, outils, contact ; registre daté à la place des cartes de liste, règle graduée, icônes dessinées, avatar annoté) : [ADR 0012](docs/adr/0012-edition-releve.md), suite de l'[ADR 0011](docs/adr/0011-identite-atelier.md) et de l'[ADR 0010](docs/adr/0010-identite-fiche-technique.md). Page de style : `/design/` en local ; audit : [docs/audit-visuel.md](docs/audit-visuel.md).
+
+L'avatar (`apps/web/public/img/guillaume-clair.svg` et `-sombre.svg`, T-shirt plus clair en thème sombre) est un dessin à la main ; le favicon et les icônes d'application (`favicon.svg`, `favicon.ico`, `icon-*.png`, `apple-touch-icon.png`) sont régénérés depuis `favicon.svg` à chaque changement de l'avatar.
+
+## Contenu du profil
+
+Expériences (contrat, missions citées à titre d'exemple, compétences), formations, compétences et réalisations sont dans `apps/web/src/data/profile.ts` (français et anglais, parité vérifiée). Chaque réalisation a sa page ; `href` pointe vers son dépôt GitHub quand il est public (MineralContest, JetTracker, Star Seeker, Nurikabe). Le dépôt du convertisseur MSG/EML est privé pour l'instant : son `href` est à ajouter dans `profile.ts` (commentaire en place) quand il sera public. Rien n'est inventé : ce qui n'est pas renseigné n'est pas affiché.
 
 ## Déploiement
 
