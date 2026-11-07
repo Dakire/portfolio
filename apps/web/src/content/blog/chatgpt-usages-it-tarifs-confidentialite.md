@@ -8,7 +8,7 @@ category: ia
 tags: ['ChatGPT', 'OpenAI', 'IA', 'RGPD']
 ---
 
-_Article rédigé le 6 novembre 2026. Tarifs et versions : pages officielles consultées ce jour-là, à vérifier avant de décider._
+_Article rédigé le 6 novembre 2026. Tarifs et versions : pages officielles consultées les 6 et 7 novembre 2026, à vérifier avant de décider._
 
 ## Mon point de départ
 
@@ -42,9 +42,18 @@ J'ai commencé l'IA avec ChatGPT en novembre 2022, dès la sortie de la version 
 - **Pour un usage professionnel**, regardez l'offre Business ou Enterprise : la page officielle indique des offres par utilisateur à partir de 2 utilisateurs. Lisez les conditions sur l'usage des données avant de décider.
 - Vérifiez dans les réglages de votre compte ce qui concerne l'historique et l'amélioration des modèles.
 
-## Tarifs et versions (6 novembre 2026)
+## Tarifs et versions (page officielle française, 7 novembre 2026)
 
-La page officielle des offres (chatgpt.com/pricing) liste Free, Go, Plus, Pro (trois niveaux d'usage), Business (par utilisateur, à partir de 2 utilisateurs) et Enterprise, **mais n'affiche pas de montants** quand je l'ai lue. Plusieurs sites tiers rapportent, à la même période, environ 8 $ par mois pour Go, 20 $ pour Plus, 100 à 500 $ pour Pro : **à vérifier sur la page officielle le jour où vous décidez**, les montants et les paliers changent.
+| Offre      | Prix par mois     | Ce que la page indique                                                                                                               |
+| ---------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Free       | 0 €               | Conversations écrites illimitées avec GPT-6 (sous réserve de mesures contre les abus), le reste limité                               |
+| Go         | 8 €               | Plus de messages, de chargements, d'images et de conversations vocales, mémoire étendue ; **peut inclure des publicités**            |
+| Plus       | 23 €              | Raisonnement avancé avec GPT-6, limites étendues, recherche approfondie, projets, tâches planifiées, GPT personnalisés, Codex étendu |
+| Pro        | à partir de 103 € | Trois niveaux d'usage, raisonnement Pro, sessions longues, jusqu'à 510 € par mois de crédits d'API                                   |
+| Business   | par utilisateur   | À partir de 2 utilisateurs (page consultée le 6 novembre)                                                                            |
+| Enterprise | sur devis         | Contact commercial                                                                                                                   |
+
+Les noms de modèles et les paliers changent vite : vérifiez la page le jour où vous décidez.
 
 ## Mon usage
 
@@ -59,5 +68,5 @@ J'utilise ChatGPT au quotidien, avec Claude et Gemini : correction de texte, vé
 
 ## Sources
 
-- [Offres ChatGPT (page officielle)](https://chatgpt.com/pricing), consultée le 6 novembre 2026
+- [Offres ChatGPT (page officielle, en français)](https://chatgpt.com/pricing), consultée le 7 novembre 2026
 - [CNIL : intelligence artificielle](https://www.cnil.fr/fr/intelligence-artificielle)

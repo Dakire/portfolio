@@ -9,7 +9,7 @@ category: ia
 tags: ['ChatGPT', 'OpenAI', 'AI', 'GDPR']
 ---
 
-_Written on 6 November 2026. Pricing and versions: official pages read that day, to be checked before you decide._
+_Written on 6 November 2026. Pricing and versions: official pages read on 6 and 7 November 2026, to be checked before you decide._
 
 ## My starting point
 
@@ -43,9 +43,18 @@ I started with AI through ChatGPT in November 2022, as soon as the conversationa
 - **For professional use**, look at the Business or Enterprise plan: the official page lists per-user plans starting at 2 users. Read the terms on data use before deciding.
 - Check in your account settings what applies to history and to model improvement.
 
-## Pricing and versions (6 November 2026)
+## Pricing and versions (official French page, 7 November 2026)
 
-The official plans page (chatgpt.com/pricing) lists Free, Go, Plus, Pro (three usage levels), Business (per user, from 2 users) and Enterprise, **but shows no amounts** when I read it. Several third-party sites reported, at the same time, about $8 a month for Go, $20 for Plus and $100 to $500 for Pro: **check the official page the day you decide**, amounts and tiers change.
+| Plan       | Price per month | What the page says                                                                                                    |
+| ---------- | --------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Free       | €0              | Unlimited text chats with GPT-6 (subject to abuse safeguards), everything else limited                                |
+| Go         | €8              | More messages, uploads, images and voice chats, extended memory; **may include ads**                                  |
+| Plus       | €23             | Advanced reasoning with GPT-6, extended limits, deep research, projects, scheduled tasks, custom GPTs, extended Codex |
+| Pro        | from €103       | Three usage levels, Pro reasoning, longer sessions, up to €510 a month in API credits                                 |
+| Business   | per user        | From 2 users (page read on 6 November)                                                                                |
+| Enterprise | custom quote    | Contact sales                                                                                                         |
+
+Model names and tiers change quickly: check the page the day you decide.
 
 ## How I use it
 
@@ -60,5 +69,5 @@ I use ChatGPT daily, alongside Claude and Gemini: text correction, quick fact ch
 
 ## Sources
 
-- [ChatGPT plans (official page)](https://chatgpt.com/pricing), read on 6 November 2026
+- [ChatGPT plans (official page, French version)](https://chatgpt.com/pricing), read on 7 November 2026
 - [CNIL: artificial intelligence](https://www.cnil.fr/fr/intelligence-artificielle) (French)
