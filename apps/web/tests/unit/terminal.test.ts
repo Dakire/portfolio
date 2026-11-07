@@ -182,6 +182,19 @@ describe('commandes', () => {
     expect(text(run('pwd', ctx()))).toBe('/home/guillaume/portfolio');
   });
 
+  it('autres easter eggs : café, 418, ping, vim, 42 (français et anglais, absents de help)', () => {
+    expect(text(run('coffee', ctx()))).toContain('418');
+    expect(text(run('café', ctx()))).toContain('théière');
+    expect(text(run('coffee', ctx('en')))).toContain('teapot');
+    expect(text(run('418', ctx()))).toContain('RFC 2324');
+    expect(text(run('ping', ctx()))).toContain('< 1 ms');
+    expect(text(run('vim', ctx('en')))).toContain(':q');
+    expect(text(run('42', ctx()))).toContain('question');
+    const help = text(run('help', ctx()));
+    for (const hidden of ['coffee', '418', 'ping', 'vim', 'sudo'])
+      expect(help).not.toContain(hidden);
+  });
+
   it('ne produit jamais de HTML : les lignes ne contiennent que du texte', () => {
     const r = run('echo <img src=x onerror=alert(1)>', ctx());
     expect(r.lines[0]![0]).toEqual({ t: '<img src=x onerror=alert(1)>' });

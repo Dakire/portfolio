@@ -358,3 +358,30 @@ test('SEO : les pages du portfolio déclarent leur type et une image de partage 
     );
   }
 });
+
+test('easter egg : le code Konami affiche puis retire les lignes de construction', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const html = page.locator('html');
+  await expect(html).not.toHaveClass(/egg-guides/);
+  for (const key of [
+    'ArrowUp',
+    'ArrowUp',
+    'ArrowDown',
+    'ArrowDown',
+    'ArrowLeft',
+    'ArrowRight',
+    'ArrowLeft',
+    'ArrowRight',
+    'b',
+    'a',
+  ])
+    await page.keyboard.press(key);
+  await expect(html).toHaveClass(/egg-guides/);
+  await expect(
+    page.getByRole('status').filter({ hasText: 'Lignes de construction' }),
+  ).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(html).not.toHaveClass(/egg-guides/);
+});

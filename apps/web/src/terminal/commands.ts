@@ -76,7 +76,19 @@ export const COMMANDS = [
 export type Command = (typeof COMMANDS)[number];
 
 /** Commandes cachées (easter eggs) : complétées et exécutées, absentes de help. */
-const HIDDEN = ['sudo', 'rm', 'exit', 'pwd', 'date', 'echo'] as const;
+const HIDDEN = [
+  'sudo',
+  'rm',
+  'exit',
+  'pwd',
+  'date',
+  'echo',
+  'coffee',
+  '418',
+  'ping',
+  'vim',
+  '42',
+] as const;
 
 export const FILES = ['about.txt', 'stack.txt', 'contact.txt'] as const;
 export const SECTIONS = ['home', 'skills', 'projects', 'tools', 'blog', 'contact'] as const;
@@ -333,6 +345,30 @@ export function run(raw: string, { s, d, theme = 'dark' }: Context): Result {
       return { lines: [[seg(s.rm, 'error')]] };
     case 'exit':
       return { lines: [[seg(s.exit, 'dim')]] };
+    case 'coffee':
+    case 'cafe':
+    case 'café':
+      return {
+        lines: [
+          [seg('    ( (   ', 'accent')],
+          [seg('     ) )  ', 'accent')],
+          [seg('  ........', 'accent')],
+          [seg('  |      |]', 'accent')],
+          [seg('  \\      /', 'accent')],
+          [seg("   `----'", 'accent')],
+          [seg(s.coffee, 'dim')],
+        ],
+      };
+    case '418':
+      return { lines: [[seg(s.teapot, 'dim')]] };
+    case 'ping':
+      return { lines: [[seg(s.ping, 'dim')]] };
+    case 'vim':
+    case 'vi':
+    case 'nano':
+      return { lines: [[seg(s.vim, 'dim')]] };
+    case '42':
+      return { lines: [[seg(s.answer, 'dim')]] };
     default:
       return { lines: [[seg(fill(s.notFound, { cmd }), 'error')]] };
   }

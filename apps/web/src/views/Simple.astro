@@ -153,19 +153,34 @@ const domains = [...new Set(t.projects.map((p) => p.skill))].map((id) => ({
               <Button href={withBase(t.hero.cvLink)}>{labels.cv}</Button>
             </p>
           </div>
-          <img
-            class="about-avatar"
-            src={withBase('/img/guillaume.svg')}
-            alt={
-              lang === 'fr'
-                ? 'Avatar dessiné de Guillaume Richard : cheveux bruns, barbe courte, T-shirt gris'
-                : 'Drawn avatar of Guillaume Richard: brown hair, short beard, grey T-shirt'
-            }
-            width="300"
-            height="300"
-            loading="lazy"
-            decoding="async"
-          />
+          <div class="about-avatar">
+            <img
+              class="avatar-sombre"
+              src={withBase('/img/guillaume-sombre.svg')}
+              alt={
+                lang === 'fr'
+                  ? 'Avatar dessiné de Guillaume Richard : cheveux bruns, barbe courte, T-shirt blanc'
+                  : 'Drawn avatar of Guillaume Richard: brown hair, short beard, white T-shirt'
+              }
+              width="300"
+              height="300"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              class="avatar-clair"
+              src={withBase('/img/guillaume-clair.svg')}
+              alt={
+                lang === 'fr'
+                  ? 'Avatar dessiné de Guillaume Richard : cheveux bruns, barbe courte, T-shirt noir'
+                  : 'Drawn avatar of Guillaume Richard: brown hair, short beard, black T-shirt'
+              }
+              width="300"
+              height="300"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </section>
         <section class="stack" aria-labelledby="about-skills">
           <h2 id="about-skills">{t.skillsTitle}</h2>

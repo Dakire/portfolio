@@ -1,12 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-labelledby="t">
-  <title id="t">Avatar dessiné de Guillaume Richard : cheveux bruns, barbe courte, T-shirt gris</title>
-  <!-- épaules : T-shirt gris, col rond, motif imprimé -->
-  <path d="M26 300C26 248 70 230 112 222L188 222C230 230 274 248 274 300Z" fill="#6f6b76"/>
-  <path d="M26 300C26 248 70 230 112 222L120 224C84 234 52 252 48 300Z" fill="#5f5b66"/>
-  <path d="M274 300C274 248 230 230 188 222L180 224C216 234 248 252 252 300Z" fill="#5f5b66"/>
-  <path d="M112 222Q150 250 188 222" fill="none" stroke="#56525d" stroke-width="6" stroke-linecap="round"/>
-  <rect x="104" y="262" width="92" height="38" fill="#eeeceb"/>
-  <path d="M116 300V280H124V300ZM130 300V270H140V300ZM148 300V276H158V300ZM166 300V284H174V300ZM180 300V272H188V300Z" fill="#46434c"/>
+  <title id="t">Avatar dessiné de Guillaume Richard : cheveux bruns, barbe courte, T-shirt blanc</title>
+  <!-- épaules : T-shirt uni, col rond -->
+  <path d="M26 300C26 248 70 230 112 222L188 222C230 230 274 248 274 300Z" fill="#f4f4f2"/>
+  <path d="M26 300C26 248 70 230 112 222L120 224C84 234 52 252 48 300Z" fill="#e3e3df"/>
+  <path d="M274 300C274 248 230 230 188 222L180 224C216 234 248 252 252 300Z" fill="#e3e3df"/>
+  <path d="M112 222Q150 250 188 222" fill="none" stroke="#d2d2ce" stroke-width="6" stroke-linecap="round"/>
   <!-- cou -->
   <path d="M120 180V228Q150 246 180 228V180Z" fill="#dca988"/>
   <path d="M120 202Q150 222 180 202V216Q150 234 120 216Z" fill="#c9916f" opacity=".5"/>

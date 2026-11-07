@@ -52,6 +52,11 @@ export interface TerminalStrings {
   sudo: string;
   rm: string;
   exit: string;
+  coffee: string;
+  teapot: string;
+  ping: string;
+  vim: string;
+  answer: string;
   sections: Record<Section, string>;
   themes: Record<'dark' | 'light' | 'auto', string>;
   languages: Record<Lang, string>;
@@ -129,6 +134,11 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
     sudo: 'Bien essayé. Cet incident sera signalé à l’administrateur (moi).',
     rm: 'Permission refusée : je tiens à mon portfolio.',
     exit: "Il n'y a nulle part où fuir : ce n'est qu'un navigateur.",
+    coffee: 'Café en préparation… Erreur 418 : je suis une théière.',
+    teapot: '418 I’m a teapot. Défini par la RFC 2324, publiée le 1er avril 1998.',
+    ping: '64 octets depuis grichard.eu : temps < 1 ms (ça tourne dans votre navigateur, c’est de la triche).',
+    vim: 'Ce n’est pas vim, mais vous avez quand même cherché à en sortir. Essayez :q',
+    answer: 'La réponse à la grande question. Reste à retrouver la question.',
     sections: {
       home: 'accueil',
       skills: 'compétences',
@@ -218,6 +228,11 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
     sudo: 'Nice try. This incident will be reported to the administrator (me).',
     rm: 'Permission denied: I am attached to my portfolio.',
     exit: 'There is nowhere to run: it is just a browser.',
+    coffee: 'Brewing coffee… Error 418: I am a teapot.',
+    teapot: '418 I’m a teapot. Defined by RFC 2324, published on 1 April 1998.',
+    ping: '64 bytes from grichard.eu: time < 1 ms (it runs in your browser, so that is cheating).',
+    vim: 'This is not vim, but you still tried to get out of it. Try :q',
+    answer: 'The answer to the big question. Now to find the question.',
     sections: {
       home: 'home',
       skills: 'skills',

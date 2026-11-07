@@ -1,0 +1,15 @@
+/* TEAM */
+Auteur : Guillaume Richard
+Site : https://grichard.eu
+Rôle : technicien informatique et systèmes numériques
+
+/* SITE */
+Dernière mise à jour : voir /root-access.xml
+Normes : HTML5, CSS, WCAG 2.2 AA
+Composants : Astro (statique), PHP 8.5 pour le formulaire de contact et deux outils, Preact pour les outils
+Polices : Bricolage Grotesque, Atkinson Hyperlegible Next, JetBrains Mono
+Hébergement : OVH mutualisé, déployé par FTP après chaque CI verte
+
+/* PETIT CLIN D'ŒIL */
+Si vous lisez ce fichier, vous êtes mon genre de visiteur.
+Il y a un code de 1986 qui fait quelque chose sur ce site.

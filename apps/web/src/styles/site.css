@@ -2148,14 +2148,69 @@ h2 i {
 }
 .about-avatar {
   width: min(14rem, 60%);
-  height: auto;
   border: 1px solid var(--line);
   border-radius: var(--radius-tile);
-  background: var(--band);
+  background: var(--raised);
+  overflow: hidden;
+}
+.about-avatar img {
+  width: 100%;
+  height: auto;
 }
 @media (max-width: 51.99rem) {
   .about-avatar {
     order: -1;
     width: 8rem;
   }
+}
+
+/* Avatar : T-shirt blanc en thème sombre, noir en thème clair (deux fichiers, un seul affiché ; l'image masquée n'est pas téléchargée) */
+.avatar-clair {
+  display: none;
+}
+:root[data-theme='light'] .avatar-sombre {
+  display: none;
+}
+:root[data-theme='light'] .avatar-clair {
+  display: block;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .avatar-sombre {
+    display: none;
+  }
+  :root:not([data-theme]) .avatar-clair {
+    display: block;
+  }
+}
+
+/* Clins d'œil (public/js/egg.js) : lignes de construction (code Konami) et sa petite annonce ; l'avatar de l'accueil se redresse au survol. */
+.egg-guides *:not(svg, svg *) {
+  outline: 1px dashed color-mix(in srgb, var(--accent) 50%, transparent);
+  outline-offset: -1px;
+}
+.egg-toast {
+  position: fixed;
+  z-index: var(--z-banner);
+  left: var(--gutter);
+  bottom: var(--space-4);
+  max-width: min(32rem, calc(100vw - 2 * var(--gutter)));
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--raised);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .band-peek-avatar {
+    transition: transform var(--duration-slow) var(--ease);
+  }
+  .band-peek-avatar:hover {
+    transform: rotate(-2deg) translateY(-0.25rem);
+  }
+}
+.egg-line {
+  font-family: var(--font-mono);
 }
