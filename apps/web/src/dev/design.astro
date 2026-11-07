@@ -8,6 +8,10 @@ import Eyebrow from '@grichard/ui/components/Eyebrow.astro';
 import Breadcrumb from '@grichard/ui/components/Breadcrumb.astro';
 import SectionNav from '@grichard/ui/components/SectionNav.astro';
 import CtaBand from '@grichard/ui/components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import ProjectCards from '../components/ProjectCards.astro';
+import { PORTFOLIO_DATA } from '../data/content';
 
 const colors = [
   'canvas',
@@ -131,6 +135,29 @@ const sizes = ['display', '2xl', 'xl', 'lg', 'base', 'sm', 'xs'];
           </Button>
         </Fragment>
       </CtaBand>
+    </section>
+
+    <section class="stack" aria-labelledby="releve">
+      <h2 id="releve">Édition relevé (ADR 0012)</h2>
+      <p class="prose">
+        Icônes dessinées au trait de 1,75 (jamais de texte visible pour les réseaux : le nom est
+        dans aria-label), lignes de registre à la place des cartes de liste, règle graduée en pied
+        d'en-tête, numéros en contour pour les parties numérotées.
+      </p>
+      <p class="row">
+        <Icon name="github" />
+        <Icon name="linkedin" />
+        <Icon name="mail" />
+        <Icon name="cv" />
+        <Icon name="rss" />
+        <Icon name="arrow" />
+      </p>
+      <SocialLinks lang="fr" cv rss />
+      <ProjectCards items={PORTFOLIO_DATA.fr.projects} lang="fr" limit={2} />
+      <div class="ruler" aria-hidden="true"></div>
+      <p class="hm-bignum" aria-hidden="true">
+        01
+      </p>
     </section>
 
     <section class="stack" aria-labelledby="identite">

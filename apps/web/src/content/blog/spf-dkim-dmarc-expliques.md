@@ -8,6 +8,16 @@ tags: ['SPF', 'DKIM', 'DMARC', 'DNS']
 
 Un e-mail se falsifie très facilement : le champ « From » n'est, à l'origine, qu'une simple déclaration. **SPF, DKIM et DMARC** sont trois mécanismes complémentaires, publiés dans le DNS de votre domaine, qui permettent aux serveurs destinataires de vérifier qu'un message vient bien de vous. Sans eux, vos mails finissent en spam, et n'importe qui peut usurper votre domaine.
 
+<figure class="diagram">
+<svg viewBox="0 0 760 250" role="img" aria-label="Vérifications faites à la réception d'un e-mail : SPF, DKIM puis DMARC, qui décide du sort du message" focusable="false">
+<g class="d-box"><rect x="8" y="88" width="150" height="74" rx="3"/><rect x="302" y="14" width="190" height="56" rx="3"/><rect x="302" y="97" width="190" height="56" rx="3"/><rect x="302" y="180" width="190" height="56" rx="3"/><rect class="d-out" x="592" y="88" width="160" height="74" rx="3"/></g>
+<g class="d-line"><path d="M158 125H230M230 42V208M230 42H302M230 125H302M230 208H302"/><path d="M492 42H540V125H592M492 125H592M492 208H540V125"/></g>
+<g class="d-title"><text x="24" y="120">Votre serveur</text><text x="318" y="38">SPF</text><text x="318" y="121">DKIM</text><text x="318" y="204">DMARC</text><text x="608" y="120">Décision</text></g>
+<g class="d-note"><text x="24" y="140">d'envoi</text><text x="8" y="188">TXT à la racine du domaine</text><text x="318" y="56">L'IP est-elle autorisée ?</text><text x="318" y="139">La signature est-elle valide ?</text><text x="318" y="222">Les domaines concordent-ils ?</text><text x="608" y="140">distribuer · quarantaine · rejet</text></g>
+</svg>
+<figcaption>Les trois contrôles, dans l'ordre où le serveur destinataire les applique : SPF et DKIM vérifient, DMARC décide.</figcaption>
+</figure>
+
 ## En une phrase chacun
 
 - **SPF** : la liste des serveurs autorisés à envoyer du courrier pour votre domaine.

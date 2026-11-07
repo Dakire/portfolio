@@ -9,6 +9,16 @@ tags: ['SPF', 'DKIM', 'DMARC', 'DNS']
 
 Email is very easy to forge: the "From" field is, by design, just a claim. **SPF, DKIM and DMARC** are three complementary mechanisms, published in your domain's DNS, that let receiving servers check that a message really comes from you. Without them, your emails end up in spam and anyone can spoof your domain.
 
+<figure class="diagram">
+<svg viewBox="0 0 760 250" role="img" aria-label="Checks made when an email arrives: SPF, DKIM, then DMARC, which decides what happens to the message" focusable="false">
+<g class="d-box"><rect x="8" y="88" width="150" height="74" rx="3"/><rect x="302" y="14" width="190" height="56" rx="3"/><rect x="302" y="97" width="190" height="56" rx="3"/><rect x="302" y="180" width="190" height="56" rx="3"/><rect class="d-out" x="592" y="88" width="160" height="74" rx="3"/></g>
+<g class="d-line"><path d="M158 125H230M230 42V208M230 42H302M230 125H302M230 208H302"/><path d="M492 42H540V125H592M492 125H592M492 208H540V125"/></g>
+<g class="d-title"><text x="24" y="120">Your sending</text><text x="318" y="38">SPF</text><text x="318" y="121">DKIM</text><text x="318" y="204">DMARC</text><text x="608" y="120">Decision</text></g>
+<g class="d-note"><text x="24" y="140">server</text><text x="8" y="188">TXT at the domain root</text><text x="318" y="56">Is the IP authorised?</text><text x="318" y="139">Is the signature valid?</text><text x="318" y="222">Do the domains align?</text><text x="608" y="140">deliver · quarantine · reject</text></g>
+</svg>
+<figcaption>The three checks, in the order the receiving server applies them: SPF and DKIM verify, DMARC decides.</figcaption>
+</figure>
+
 ## One sentence each
 
 - **SPF**: the list of servers allowed to send mail for your domain.

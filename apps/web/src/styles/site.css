@@ -2918,3 +2918,52 @@ h2 i {
   text-decoration-thickness: 2px;
   text-underline-offset: 0.22em;
 }
+.ledger-cards {
+  margin-top: var(--space-5);
+}
+
+/* Schéma d'article (SVG en ligne, sans style en ligne) : traits et textes aux tokens du site */
+.post-body .diagram {
+  margin: var(--space-6) 0;
+  padding-block: var(--space-5);
+  border-block: 1px solid var(--line);
+}
+.diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  fill: none;
+}
+.diagram .d-box rect {
+  fill: var(--surface);
+  stroke: var(--line-strong);
+  stroke-width: 1.2;
+}
+.diagram .d-box .d-out {
+  fill: var(--canvas);
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+.diagram .d-line path {
+  stroke: var(--line-strong);
+  stroke-width: 1.2;
+}
+.diagram text {
+  font-family: var(--font-mono);
+}
+.diagram .d-title text {
+  fill: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+.diagram .d-note text {
+  fill: var(--muted);
+  font-size: 12px;
+}
+.diagram figcaption {
+  margin-top: var(--space-3);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
