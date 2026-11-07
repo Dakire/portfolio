@@ -21,7 +21,7 @@ export const PRIVACY: Record<Lang, InfoPage> = {
   fr: {
     title: 'Politique de confidentialité',
     description:
-      'Quelles données ce site collecte, pourquoi, combien de temps, et comment exercer vos droits.',
+      'Quelles données ce site collecte (formulaire de contact, mesure d’audience), pourquoi, combien de temps elles sont gardées et comment exercer vos droits RGPD.',
     intro:
       'Ce site collecte le strict minimum. Voici, point par point, ce qui est traité, pourquoi, et ce que vous pouvez faire.',
     updated: '8 octobre 2026',
@@ -81,7 +81,7 @@ export const PRIVACY: Record<Lang, InfoPage> = {
   en: {
     title: 'Privacy policy',
     description:
-      'What data this site collects, why, for how long, and how to exercise your rights.',
+      'What data this site collects (contact form, audience measurement), why, how long it is kept, and how to exercise your GDPR rights.',
     intro:
       'This site collects the bare minimum. Here is, point by point, what is processed, why, and what you can do about it.',
     updated: '8 October 2026',

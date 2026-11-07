@@ -134,6 +134,10 @@ export interface PostLdInput {
   image: string;
   keywords: string[];
   crumbs: { name: string; path: string }[];
+  /** Rubrique (articleSection), nombre de mots et durée de lecture : mesurés sur le texte, jamais saisis. */
+  section?: string;
+  wordCount?: number;
+  minutes?: number;
 }
 
 export const postLd = (p: PostLdInput) => ({
@@ -152,6 +156,10 @@ export const postLd = (p: PostLdInput) => ({
       keywords: p.keywords.join(', '),
       author: person,
       publisher: person,
+      isPartOf: { '@id': `${SITE}${ROUTES[p.lang].blog}#blog` },
+      ...(p.section && { articleSection: p.section }),
+      ...(p.wordCount && { wordCount: p.wordCount }),
+      ...(p.minutes && { timeRequired: `PT${p.minutes}M` }),
     },
     breadcrumbLd(p.crumbs),
   ],

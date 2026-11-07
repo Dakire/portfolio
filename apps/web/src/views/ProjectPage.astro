@@ -31,7 +31,12 @@ const trail = crumbs(lang, [{ label: t.projectsTitle, path: routes.projects }], 
 const related = await resolveRelated(lang, PROJECT_RELATED[project.slug]);
 const domain = t.skills.find((s) => s.id === project.skill);
 const others = t.projects.filter((p) => p.slug !== project.slug).slice(0, 3);
-const description = shortDescription(project.desc);
+// Description de la page : le texte du projet ; trop courte, elle est complétée par ses outils (données du profil, rien d'ajouté).
+const description = shortDescription(
+  project.desc.length < 125
+    ? `${project.desc} ${lang === 'fr' ? 'Outils et technologies' : 'Tools and technologies'} : ${project.tags.join(', ')}.`
+    : project.desc,
+);
 const hasBlocks = Boolean(
   project.context || project.role || project.steps?.length || project.result,
 );

@@ -30,7 +30,7 @@ export const CATEGORY_TEXT: Record<
     en: {
       title: 'Business email: SPF, DKIM, DMARC and deliverability',
       description:
-        'Articles on business email: SPF, DKIM, DMARC, deliverability, reading headers and sending mail from devices.',
+        'Articles on business email for administrators: SPF, DKIM, DMARC, deliverability, reading email headers and sending mail from scanners and applications.',
       intro:
         'This section covers business email from the administrator’s side: why a message lands in spam, how to read its headers, how to set up SPF, DKIM and DMARC, and how to let scanners or applications send mail. The articles link to the site’s tools to check a domain or analyze a message.',
     },
