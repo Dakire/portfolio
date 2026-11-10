@@ -12,6 +12,7 @@
         error: 'The index could not be loaded. Reload the page or use the official documentation.',
         results: (n, q) => `${n} result${n > 1 ? 's' : ''}${q ? ` for “${q}”` : ''}`,
         none: (q) => `No results for “${q}”`,
+        approxNote: (n) => `${n} close match${n > 1 ? 'es' : ''} (not every word matches)`,
         noneHelp: 'Try fewer words, check the spelling, or pick another category.',
         didYouMean: 'Did you mean:',
         official: 'Official documentation',
@@ -34,6 +35,9 @@
           "L'index n'a pas pu être chargé. Rechargez la page ou utilisez la documentation officielle.",
         results: (n, q) => `${n} résultat${n > 1 ? 's' : ''}${q ? ` pour « ${q} »` : ''}`,
         none: (q) => `Aucun résultat pour « ${q} »`,
+        approx: 'Résultats approchants',
+        approxNote: (n) =>
+          `${n} résultat${n > 1 ? 's' : ''} approchant${n > 1 ? 's' : ''} (tous les mots ne correspondent pas)`,
         noneHelp: "Essayez moins de mots, vérifiez l'orthographe ou changez de catégorie.",
         didYouMean: 'Vouliez-vous dire :',
         official: 'Documentation officielle',
@@ -64,6 +68,21 @@
     fold(s)
       .split(/[\s\p{P}]+/u)
       .filter(Boolean);
+
+  // Mots vides (français et anglais) : « comment supprimer un utilisateur » cherche « supprimer utilisateur ».
+  const STOP = new Set(
+    (
+      'le la les un une des du de d l a au aux et ou en dans sur pour par avec sans ce ces son sa ses mon ma mes ' +
+      'comment quoi quel quelle quels quelles je tu il elle on nous vous ils veux voudrais faire fait ' +
+      'the an of to in on for with how do i want what is are my and or'
+    )
+      .split(' ')
+      .filter(Boolean),
+  );
+  const meaningful = (q) => {
+    const kept = words(q).filter((w) => !STOP.has(w) || w.length > 3);
+    return kept.length ? kept.join(' ') : q;
+  };
 
   // ---- État -----------------------------------------------------------------------------------
   let docs = []; // entrées enrichies : { ...entrée, _ref: meta, _i }
@@ -155,7 +174,8 @@
         terms: [],
       }));
     else {
-      found = engine.search(q).map((r) => {
+      const cleaned = meaningful(q);
+      found = engine.search(cleaned).map((r) => {
         const doc = docs[r.id];
         const name = fold(doc.name);
         let score = r.score;
@@ -166,6 +186,23 @@
         return { doc, terms: Object.keys(r.match), score };
       });
       found.sort((a, b) => b.score - a.score);
+      // Peu de résultats exacts (terme oublié, mot approximatif) : on complète avec les entrées qui contiennent au moins la
+      // moitié des mots, même mal orthographiés, placées après les résultats exacts.
+      if (found.length < 12 && words(cleaned).length > 0) {
+        const wanted = Math.max(1, Math.ceil(words(cleaned).length / 2));
+        const seen = new Set(found.map((f) => f.doc._i));
+        const extra = engine
+          .search(cleaned, { combineWith: 'OR', fuzzy: 0.3, prefix: true })
+          .filter((r) => !seen.has(r.id) && r.terms.length >= wanted)
+          .slice(0, 40)
+          .map((r) => ({
+            doc: docs[r.id],
+            terms: Object.keys(r.match),
+            score: r.score * 0.3,
+            approx: true,
+          }));
+        found = [...found, ...extra];
+      }
     }
     const key = multi ? (d) => d._ref.id : (d) => d.cat;
     return found.filter(({ doc }) => !cat || key(doc) === cat);
@@ -247,8 +284,9 @@
     return box;
   }
 
-  function item(doc, terms, n) {
+  function item(doc, terms, n, approx) {
     const li = el('li', 'ref-item');
+    if (approx) li.classList.add('ref-item-approx');
     const art = el('article');
     art.tabIndex = -1;
     if (doc.url) art.dataset.url = doc.url;
@@ -304,7 +342,7 @@
     const slice = current.slice(from, from + PAGE);
     list.querySelector('[data-ref-more]')?.remove();
     const nodes = slice.map((r, i) =>
-      item(r.doc, [...new Set([...words(query), ...r.terms])], from + i),
+      item(r.doc, [...new Set([...words(query), ...r.terms])], from + i, r.approx),
     );
     list.append(...nodes);
     shown += slice.length;
@@ -357,7 +395,10 @@
       list.append(box);
       return;
     }
-    status.textContent = q || cat ? T.results(current.length, q) : T.results(current.length, '');
+    const approxCount = current.filter((r) => r.approx).length;
+    status.textContent =
+      (q || cat ? T.results(current.length, q) : T.results(current.length, '')) +
+      (approxCount ? ` · ${T.approxNote(approxCount)}` : '');
     renderMore(false);
   }
 

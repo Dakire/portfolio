@@ -7,9 +7,9 @@ meta:
   title: 'GAM : commandes et aide-mémoire Google Workspace (GAM7)'
   h1: 'GAM : aide-mémoire des commandes Google Workspace'
   description: 'Aide-mémoire GAM7 : les commandes GAM pour Google Workspace (utilisateurs, groupes, Gmail, Drive, agendas), avec exemples concrets et recherche en français.'
-  intro: "Cherchez une commande GAM en français ou en anglais (« déléguer », « absence », « transfer drive ») : les commandes courantes ont un exemple concret à copier, toutes renvoient vers la page d'origine du wiki GAM, seule source qui fait foi."
+  intro: "Cherchez une commande GAM en français ou en anglais (« déléguer », « absence », « transfer drive ») : chaque commande a un exemple à copier (écrit à la main pour les plus courantes), toutes renvoient vers la page d'origine du wiki GAM, seule source qui fait foi."
   card: 'Commandes GAM7 pour administrer Google Workspace : utilisateurs, groupes, Drive, Gmail, calendriers, appareils.'
-  notice: "Index non officiel, généré depuis le wiki GAM ; les exemples concrets (adresses en example.com) et les descriptions en français sont ajoutés par mes soins. Les syntaxes sont abrégées : ouvrez la page du wiki pour la définition complète, et testez d'abord sur un utilisateur ou une unité d'organisation de test."
+  notice: "Index non officiel, généré depuis le wiki GAM ; les exemples (adresses en example.com) et les descriptions en français sont ajoutés par mes soins : écrits à la main pour les commandes courantes, construits à partir de la syntaxe du wiki pour les autres (forme minimale, valeurs fictives ; un paramètre inconnu reste écrit <Comme ceci>). Les syntaxes sont abrégées : ouvrez la page du wiki pour la définition complète, et testez d'abord sur un utilisateur ou une unité d'organisation de test."
   docs:
     label: Wiki GAM
     url: https://github.com/GAM-team/GAM/wiki

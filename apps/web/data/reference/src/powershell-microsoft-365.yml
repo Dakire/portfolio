@@ -6,7 +6,7 @@ meta:
   h1: PowerShell Microsoft 365
   description: 'PowerShell cheatsheet for Microsoft 365: Exchange Online, Graph, Entra ID, Teams, SharePoint, with module, permissions, example and common pitfall.'
   intro: 'Cmdlets of the current modules (Exchange Online, Microsoft Graph PowerShell, Teams, SharePoint Online). MSOnline and AzureAD are deprecated: use Microsoft Graph PowerShell.'
-  card: 'Exchange Online, Microsoft Graph, Entra ID, Teams, SharePoint, Intune, Defender/Purview: cmdlet, module, permissions, example, pitfall.'
+  card: 'Exchange Online, Microsoft Graph, Entra ID, Teams, SharePoint, Intune, Defender/Purview: cmdlet, module, permissions, example, pitfall, plus ready-to-use export scripts.'
   notice: 'MSOnline and AzureAD (Msol* and *-AzureAD* cmdlets) are deprecated and no longer receive fixes: migrate to Microsoft Graph PowerShell (Mg*). Test with -WhatIf first when it exists.'
   docBase: https://learn.microsoft.com/powershell/module/
   docs:
@@ -22,6 +22,8 @@ meta:
   cats:
     - id: exchange
       label: Exchange Online
+    - id: scripts
+      label: Ready-to-use scripts
     - id: graph
       label: Graph and Entra ID
     - id: teams
@@ -598,3 +600,1201 @@ entries:
     perms: User.ReadWrite.All; Password / User Administrator role
     pitfall: An account synced from on-premises AD is reset on the AD side, not in Entra ID.
     doc: microsoft.graph.users/update-mguser
+  - name: Get-MailboxPermission
+    cat: exchange
+    syn: Get-MailboxPermission -Identity <mailbox>
+    desc: Lists who has access to a mailbox (Full Access, read and manage).
+    ex:
+      - Get-MailboxPermission -Identity shared@contoso.com | Where-Object { $_.User -ne 'NT AUTHORITY\SELF' -and -not $_.IsInherited } | Select-Object User,AccessRights
+      - Get-MailboxPermission -User bob@contoso.com | Select-Object Identity,AccessRights
+    tags:
+      - delegation
+      - accès
+      - fullaccess
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: Hide inherited rights and NT AUTHORITY\SELF, or the list is very noisy.
+    doc: exchange/get-mailboxpermission
+  - name: Remove-MailboxPermission
+    cat: exchange
+    syn: Remove-MailboxPermission -Identity <mailbox> -User <user> -AccessRights FullAccess
+    desc: Removes a Full Access right from a mailbox.
+    ex:
+      - Remove-MailboxPermission -Identity shared@contoso.com -User bob@contoso.com -AccessRights FullAccess -Confirm:$false
+    tags:
+      - delegation
+      - accès
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: Removal can take several minutes to propagate to Outlook.
+    doc: exchange/remove-mailboxpermission
+  - name: Get-RecipientPermission
+    cat: exchange
+    syn: Get-RecipientPermission -Identity <mailbox>
+    desc: Lists the Send As rights on a mailbox or group.
+    ex:
+      - Get-RecipientPermission -Identity shared@contoso.com | Where-Object { $_.Trustee -ne "NT AUTHORITY\SELF" } | Select-Object Trustee,AccessRights
+      - Get-RecipientPermission -Trustee bob@contoso.com
+    tags:
+      - sendas
+      - delegation
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: Send As and Send on Behalf (GrantSendOnBehalfTo) are two different rights.
+    doc: exchange/get-recipientpermission
+  - name: Remove-RecipientPermission
+    cat: exchange
+    syn: Remove-RecipientPermission -Identity <mailbox> -Trustee <user> -AccessRights SendAs
+    desc: Removes a Send As right.
+    ex:
+      - Remove-RecipientPermission -Identity shared@contoso.com -Trustee bob@contoso.com -AccessRights SendAs -Confirm:$false
+    tags:
+      - sendas
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: Remember to also remove Send on Behalf with Set-Mailbox -GrantSendOnBehalfTo.
+    doc: exchange/remove-recipientpermission
+  - name: Set-Mailbox -GrantSendOnBehalfTo
+    cat: exchange
+    syn: Set-Mailbox -Identity <mailbox> -GrantSendOnBehalfTo @{Add="<user>"}
+    desc: Grants (or removes) Send on Behalf on a mailbox.
+    ex:
+      - Set-Mailbox -Identity shared@contoso.com -GrantSendOnBehalfTo @{Add="bob@contoso.com"}
+      - Set-Mailbox -Identity shared@contoso.com -GrantSendOnBehalfTo @{Remove="bob@contoso.com"}
+    tags:
+      - delegation
+      - sendonbehalf
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: Without @{Add=…}/@{Remove=…}, the whole list is replaced.
+    doc: exchange/set-mailbox
+  - name: Set-Mailbox -EmailAddresses
+    cat: exchange
+    syn: Set-Mailbox -Identity <mailbox> -EmailAddresses @{Add="<alias>"}
+    desc: Adds, removes or replaces a mailbox's aliases (secondary email addresses).
+    ex:
+      - Set-Mailbox -Identity user@contoso.com -EmailAddresses @{Add="contact@contoso.com"}
+      - Set-Mailbox -Identity user@contoso.com -EmailAddresses @{Remove="ancien@contoso.com"}
+      - Set-Mailbox -Identity user@contoso.com -WindowsEmailAddress nouveau@contoso.com
+    tags:
+      - alias
+      - proxyaddresses
+      - smtp
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: On an account synced from on-premises AD, manage aliases in AD (proxyAddresses).
+    doc: exchange/set-mailbox
+  - name: Set-Mailbox -Type
+    cat: exchange
+    syn: Set-Mailbox -Identity <mailbox> -Type Shared|Regular|Room|Equipment
+    desc: Converts a mailbox (e.g. user to shared mailbox when someone leaves).
+    ex:
+      - Set-Mailbox -Identity ancien.salarie@contoso.com -Type Shared
+    tags:
+      - partagée
+      - shared
+      - départ
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: A shared mailbox over 50 GB or with an archive requires an Exchange Online Plan 2 license.
+    doc: exchange/set-mailbox
+  - name: Set-Mailbox -ProhibitSendQuota
+    cat: exchange
+    syn: Set-Mailbox -Identity <mailbox> -ProhibitSendQuota <size> -ProhibitSendReceiveQuota <size> -IssueWarningQuota <size>
+    desc: Sets a mailbox's quotas (warning, prohibit send, prohibit send and receive).
+    ex:
+      - Set-Mailbox -Identity user@contoso.com -IssueWarningQuota 44GB -ProhibitSendQuota 49GB -ProhibitSendReceiveQuota 50GB
+    tags:
+      - quota
+      - taille
+      - stockage
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: 'Values must respect the license limit (50 GB or 100 GB): IssueWarning < ProhibitSend < ProhibitSendReceive.'
+    doc: exchange/set-mailbox
+  - name: Get-MailboxFolderStatistics
+    cat: exchange
+    syn: Get-MailboxFolderStatistics -Identity <mailbox>
+    desc: Size and item count of each folder in a mailbox (find what fills it).
+    ex:
+      - Get-MailboxFolderStatistics -Identity user@contoso.com | Sort-Object FolderSize -Descending | Select-Object -First 10 FolderPath,ItemsInFolder,FolderSize
+      - Get-MailboxFolderStatistics -Identity user@contoso.com -FolderScope RecoverableItems
+    tags:
+      - taille
+      - dossier
+      - quota
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: 'FolderSize is text ("1.2 GB (1,288,490,188 bytes)"): extract the bytes to sort or compute.'
+    doc: exchange/get-mailboxfolderstatistics
+  - name: Get-MailboxFolderPermission
+    cat: exchange
+    syn: Get-MailboxFolderPermission -Identity <mailbox>:\<folder>
+    desc: Lists the permissions on a mailbox folder (calendar, inbox).
+    ex:
+      - Get-MailboxFolderPermission -Identity user@contoso.com:\Calendrier
+      - Get-MailboxFolderPermission -Identity user@contoso.com:\Calendar
+    tags:
+      - calendrier
+      - calendar
+      - permissions
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: "The folder name depends on the mailbox language: \\Calendrier in French, \\Calendar in English."
+    doc: exchange/get-mailboxfolderpermission
+  - name: Set-MailboxFolderPermission
+    cat: exchange
+    syn: Set-MailboxFolderPermission -Identity <mailbox>:\<folder> -User <user> -AccessRights <right>
+    desc: Changes an existing user's permission on a folder (e.g. Reviewer to Editor).
+    ex:
+      - Set-MailboxFolderPermission -Identity user@contoso.com:\Calendrier -User bob@contoso.com -AccessRights Editor
+      - Set-MailboxFolderPermission -Identity user@contoso.com:\Calendrier -User Default -AccessRights LimitedDetails
+    tags:
+      - calendrier
+      - permissions
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: Set changes an existing permission; for a new user use Add-MailboxFolderPermission.
+    doc: exchange/set-mailboxfolderpermission
+  - name: Remove-MailboxFolderPermission
+    cat: exchange
+    syn: Remove-MailboxFolderPermission -Identity <mailbox>:\<folder> -User <user>
+    desc: Removes a user's permission on a mailbox folder.
+    ex:
+      - Remove-MailboxFolderPermission -Identity user@contoso.com:\Calendrier -User bob@contoso.com -Confirm:$false
+    tags:
+      - calendrier
+      - permissions
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: '"Default" and "Anonymous" entries cannot be removed: lower their right with Set-.'
+    doc: exchange/remove-mailboxfolderpermission
+  - name: Get-InboxRule
+    cat: exchange
+    syn: Get-InboxRule -Mailbox <mailbox>
+    desc: Lists inbox rules (spot a hidden forwarding after a compromise).
+    ex:
+      - Get-InboxRule -Mailbox user@contoso.com | Select-Object Name,Enabled,ForwardTo,ForwardAsAttachmentTo,RedirectTo,DeleteMessage
+      - Get-InboxRule -Mailbox user@contoso.com -IncludeHidden | Where-Object { $_.ForwardTo -or $_.RedirectTo }
+    tags:
+      - règle
+      - redirection
+      - sécurité
+      - transfert
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: 'Attackers often create hidden rules: add -IncludeHidden.'
+    doc: exchange/get-inboxrule
+  - name: Remove-InboxRule
+    cat: exchange
+    syn: Remove-InboxRule -Identity <rule> -Mailbox <mailbox>
+    desc: Deletes an inbox rule.
+    ex:
+      - Remove-InboxRule -Identity "Transfert externe" -Mailbox user@contoso.com -Confirm:$false
+    tags:
+      - règle
+      - sécurité
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: Identify the rule by its Identity (RuleIdentity) if several share a name.
+    doc: exchange/remove-inboxrule
+  - name: Get-Recipient
+    cat: exchange
+    syn: Get-Recipient -Identity <address>
+    desc: Finds which object (mailbox, group, contact) an address belongs to, aliases included.
+    ex:
+      - Get-Recipient -Identity contact@contoso.com | Format-List RecipientTypeDetails,PrimarySmtpAddress,EmailAddresses
+      - Get-Recipient -ResultSize Unlimited -Filter "EmailAddresses -eq 'smtp:contact@contoso.com'"
+    tags:
+      - alias
+      - adresse
+      - propriétaire
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: 'Useful when "the address is already in use": it may belong to a group or contact.'
+    doc: exchange/get-recipient
+  - name: Get-User
+    cat: exchange
+    syn: Get-User [-Identity <id>] [-ResultSize Unlimited]
+    desc: "Reads a user's directory attributes: first name, last name, department, title, manager."
+    ex:
+      - Get-User -Identity user@contoso.com | Format-List FirstName,LastName,DisplayName,Department,Title,Manager,Phone
+      - Get-User -ResultSize Unlimited | Select-Object FirstName,LastName,UserPrincipalName,Department
+    tags:
+      - prénom
+      - nom
+      - annuaire
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: 'First and last names are not in Get-Mailbox: you need Get-User (or Get-MgUser) to export them.'
+    doc: exchange/get-user
+  - name: Set-User
+    cat: exchange
+    syn: Set-User -Identity <id> [-FirstName] [-LastName] [-Department] [-Title]
+    desc: Changes a user's first name, last name, department or title.
+    ex:
+      - Set-User -Identity user@contoso.com -FirstName Alice -LastName Martin -Department Comptabilité -Title "Responsable comptable"
+    tags:
+      - prénom
+      - nom
+      - annuaire
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: On an account synced from on-premises AD, the change is made in AD.
+    doc: exchange/set-user
+  - name: Get-CASMailbox
+    cat: exchange
+    syn: Get-CASMailbox -Identity <mailbox>
+    desc: Shows a mailbox's enabled protocols (IMAP, POP, ActiveSync, MAPI, EWS, OWA).
+    ex:
+      - Get-CASMailbox -Identity user@contoso.com | Format-List ImapEnabled,PopEnabled,ActiveSyncEnabled,MAPIEnabled,OWAEnabled
+      - Get-CASMailbox -ResultSize Unlimited -Filter "ImapEnabled -eq $true" | Select-Object PrimarySmtpAddress
+    tags:
+      - imap
+      - pop
+      - activesync
+      - protocole
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: Disabling basic authentication is also done tenant-wide (Authentication Policy / Security Defaults).
+    doc: exchange/get-casmailbox
+  - name: Set-CASMailbox
+    cat: exchange
+    syn: Set-CASMailbox -Identity <mailbox> -ImapEnabled <bool> -PopEnabled <bool>
+    desc: Turns IMAP, POP, ActiveSync… on or off for a mailbox.
+    ex:
+      - Set-CASMailbox -Identity user@contoso.com -ImapEnabled $false -PopEnabled $false
+      - Set-CASMailbox -Identity user@contoso.com -ActiveSyncEnabled $false
+    tags:
+      - imap
+      - pop
+      - sécurité
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: 'An application that reads the mailbox over IMAP/POP will stop working: check first.'
+    doc: exchange/set-casmailbox
+  - name: Set-MailboxRegionalConfiguration
+    cat: exchange
+    syn: Set-MailboxRegionalConfiguration -Identity <mailbox> -Language <culture> -TimeZone <time zone>
+    desc: Sets a mailbox's language, time zone and date format.
+    ex:
+      - Set-MailboxRegionalConfiguration -Identity user@contoso.com -Language fr-FR -TimeZone "Romance Standard Time" -LocalizeDefaultFolderName
+    tags:
+      - langue
+      - fuseau
+      - timezone
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: Without -LocalizeDefaultFolderName, folders (Inbox, Sent Items) keep their English names.
+    doc: exchange/set-mailboxregionalconfiguration
+  - name: Get-DistributionGroup
+    cat: exchange
+    syn: Get-DistributionGroup [-Identity <group>] [-ResultSize Unlimited]
+    desc: Lists distribution groups (mailing lists) and their owners.
+    ex:
+      - Get-DistributionGroup -ResultSize Unlimited | Select-Object DisplayName,PrimarySmtpAddress,ManagedBy,RequireSenderAuthenticationEnabled
+      - Get-DistributionGroup -Identity equipe-compta@contoso.com | Format-List
+    tags:
+      - liste de diffusion
+      - groupe
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: Microsoft 365 groups are returned by Get-UnifiedGroup, not Get-DistributionGroup.
+    doc: exchange/get-distributiongroup
+  - name: New-DistributionGroup
+    cat: exchange
+    syn: New-DistributionGroup -Name <name> -PrimarySmtpAddress <address> [-Members <list>]
+    desc: Creates a distribution group (mailing list).
+    ex:
+      - New-DistributionGroup -Name "Equipe Compta" -PrimarySmtpAddress equipe-compta@contoso.com -Members alice.martin@contoso.com,bob.durand@contoso.com
+    tags:
+      - liste de diffusion
+      - groupe
+      - créer
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: 'By default only internal senders can write to the group: -RequireSenderAuthenticationEnabled $false to open it.'
+    doc: exchange/new-distributiongroup
+  - name: Remove-DistributionGroupMember
+    cat: exchange
+    syn: Remove-DistributionGroupMember -Identity <group> -Member <user>
+    desc: Removes a member from a distribution group.
+    ex:
+      - Remove-DistributionGroupMember -Identity equipe-compta@contoso.com -Member ancien.salarie@contoso.com -Confirm:$false
+    tags:
+      - liste de diffusion
+      - membre
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: A group synced from on-premises AD is changed in AD.
+    doc: exchange/remove-distributiongroupmember
+  - name: Get-UnifiedGroup
+    cat: exchange
+    syn: Get-UnifiedGroup [-Identity <group>] [-ResultSize Unlimited]
+    desc: Lists Microsoft 365 groups (Teams teams, Outlook groups, sites).
+    ex:
+      - Get-UnifiedGroup -ResultSize Unlimited | Select-Object DisplayName,PrimarySmtpAddress,AccessType,ManagedBy
+      - Get-UnifiedGroupLinks -Identity equipe-projet@contoso.com -LinkType Members
+    tags:
+      - groupe m365
+      - teams
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: Members are read with Get-UnifiedGroupLinks -LinkType Members.
+    doc: exchange/get-unifiedgroup
+  - name: Add-UnifiedGroupLinks
+    cat: exchange
+    syn: Add-UnifiedGroupLinks -Identity <group> -LinkType Members -Links <utilisateurs>
+    desc: Adds members or owners to a Microsoft 365 group.
+    ex:
+      - Add-UnifiedGroupLinks -Identity equipe-projet@contoso.com -LinkType Members -Links alice.martin@contoso.com,bob.durand@contoso.com
+      - Add-UnifiedGroupLinks -Identity equipe-projet@contoso.com -LinkType Owners -Links alice.martin@contoso.com
+    tags:
+      - groupe m365
+      - membre
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: An owner must first be a member of the group.
+    doc: exchange/add-unifiedgrouplinks
+  - name: New-MailContact
+    cat: exchange
+    syn: New-MailContact -Name <name> -ExternalEmailAddress <address>
+    desc: Creates an external mail contact (visible in the directory, usable in groups).
+    ex:
+      - New-MailContact -Name "Cabinet comptable" -ExternalEmailAddress contact@cabinet.example.net
+    tags:
+      - contact
+      - externe
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: 'A contact has no mailbox: it only receives messages forwarded to its external address.'
+    doc: exchange/new-mailcontact
+  - name: Undo-SoftDeletedMailbox
+    cat: exchange
+    syn: Undo-SoftDeletedMailbox -SoftDeletedObject <mailbox> -WindowsLiveID <upn> -Password <password>
+    desc: Restores a mailbox deleted less than 30 days ago (account deleted in Entra ID).
+    ex:
+      - Get-Mailbox -SoftDeletedMailbox | Select-Object DisplayName,PrimarySmtpAddress,WhenSoftDeleted
+      - $pwd = Read-Host -AsSecureString; Undo-SoftDeletedMailbox -SoftDeletedObject user@contoso.com -WindowsLiveID user@contoso.com -Password $pwd
+    tags:
+      - restaurer
+      - supprimée
+      - récupérer
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: 'Simpler: restore the user in Entra ID (recycle bin, 30 days): the mailbox comes back with it.'
+    doc: exchange/undo-softdeletedmailbox
+  - name: Get-MobileDevice
+    cat: exchange
+    syn: Get-MobileDevice [-Mailbox <mailbox>]
+    desc: Lists the mobile devices synced (ActiveSync) with a mailbox.
+    ex:
+      - Get-MobileDevice -Mailbox user@contoso.com | Select-Object DeviceModel,DeviceOS,FirstSyncTime,DeviceAccessState
+      - Get-MobileDevice -ResultSize Unlimited | Select-Object UserDisplayName,DeviceModel,DeviceOS
+    tags:
+      - mobile
+      - activesync
+      - appareil
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: 'For remote wipe: Clear-MobileDevice (or Intune for enrolled devices).'
+    doc: exchange/get-mobiledevice
+  - name: Remove-MobileDevice
+    cat: exchange
+    syn: Remove-MobileDevice -Identity <device>
+    desc: Removes a mobile device's sync relationship (loss, replacement).
+    ex:
+      - Get-MobileDevice -Mailbox user@contoso.com | Remove-MobileDevice -Confirm:$false
+    tags:
+      - mobile
+      - activesync
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: The device will resync if it reconnects with valid credentials.
+    doc: exchange/remove-mobiledevice
+  - name: Get-AcceptedDomain
+    cat: exchange
+    syn: Get-AcceptedDomain
+    desc: Lists the tenant's accepted (mail) domains.
+    ex:
+      - Get-AcceptedDomain | Select-Object DomainName,DomainType,Default
+    tags:
+      - domaine
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: DomainType InternalRelay means a domain shared with another mail system (migration in progress).
+    doc: exchange/get-accepteddomain
+  - name: Get-DkimSigningConfig
+    cat: exchange
+    syn: Get-DkimSigningConfig -Identity <domain>
+    desc: Shows a domain's DKIM signing state and the CNAME records to publish.
+    ex:
+      - Get-DkimSigningConfig -Identity contoso.com | Format-List Domain,Enabled,Selector1CNAME,Selector2CNAME
+      - Set-DkimSigningConfig -Identity contoso.com -Enabled $true
+    tags:
+      - dkim
+      - spf
+      - dmarc
+      - délivrabilité
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: Publish the two CNAME records (selector1 and selector2) in DNS first; enabling fails otherwise.
+    doc: exchange/get-dkimsigningconfig
+  - name: New-DkimSigningConfig
+    cat: exchange
+    syn: New-DkimSigningConfig -DomainName <domain> -Enabled $true
+    desc: Creates the DKIM configuration for a custom domain.
+    ex:
+      - New-DkimSigningConfig -DomainName contoso.com -KeySize 2048 -Enabled $false
+      - Get-DkimSigningConfig -Identity contoso.com | Format-List Selector1CNAME,Selector2CNAME
+    tags:
+      - dkim
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: Create it disabled, publish the CNAMEs, then enable with Set-DkimSigningConfig -Enabled $true.
+    doc: exchange/new-dkimsigningconfig
+  - name: Get-HostedOutboundSpamFilterPolicy
+    cat: exchange
+    syn: Get-HostedOutboundSpamFilterPolicy
+    desc: Checks the outbound spam policy, in particular automatic forwarding to external recipients.
+    ex:
+      - Get-HostedOutboundSpamFilterPolicy | Format-List Name,AutoForwardingMode,RecipientLimitPerHour
+      - Set-HostedOutboundSpamFilterPolicy -Identity Default -AutoForwardingMode Off
+    tags:
+      - transfert
+      - forwarding
+      - spam
+      - sécurité
+    module: ExchangeOnlineManagement
+    perms: Exchange Administrator or the matching management role
+    pitfall: 'AutoForwardingMode Automatic (the default) blocks external forwarding: the #1 cause of a forward "not working".'
+    doc: exchange/get-hostedoutboundspamfilterpolicy
+  - name: Get-TransportRule
+    cat: exchange
+    syn: Get-TransportRule
+    desc: Lists mail flow rules (disclaimers, redirections, blocks).
+    ex:
+      - Get-TransportRule | Select-Object Name,State,Priority,Mode
+      - Get-TransportRule -Identity "Avertissement externe" | Format-List
+    tags:
+      - règle de flux
+      - bandeau
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: 'Order (Priority) matters: a "stop processing" rule can prevent later ones.'
+    doc: exchange/get-transportrule
+  - name: Get-InboundConnector
+    cat: exchange
+    syn: Get-InboundConnector | Get-OutboundConnector
+    desc: Lists inbound and outbound mail connectors (relays, partners, on-premises server).
+    ex:
+      - Get-InboundConnector | Format-List Name,Enabled,SenderDomains,ConnectorType
+      - Get-OutboundConnector | Format-List Name,Enabled,RecipientDomains,SmartHosts
+    tags:
+      - connecteur
+      - relais
+      - smtp
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: A poorly restricted connector (SenderIPAddresses) can open a relay; check the allowed addresses.
+    doc: exchange/get-inboundconnector
+  - name: Get-MessageTraceDetailV2
+    cat: exchange
+    syn: Get-MessageTraceDetailV2 -MessageTraceId <id> -RecipientAddress <address>
+    desc: Step-by-step journey of a message found with Get-MessageTraceV2.
+    ex:
+      - $t = Get-MessageTraceV2 -SenderAddress expediteur@example.net -StartDate (Get-Date).AddDays(-2) -EndDate (Get-Date); Get-MessageTraceDetailV2 -MessageTraceId $t[0].MessageTraceId -RecipientAddress user@contoso.com
+    tags:
+      - traçage
+      - message
+      - délivrabilité
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: Limited to the last 10 days; beyond that, Start-HistoricalSearch.
+    doc: exchange/get-messagetracedetailv2
+  - name: Release-QuarantineMessage
+    cat: security
+    syn: Release-QuarantineMessage -Identity <id> -ReleaseToAll
+    desc: Releases a message from quarantine (false positive).
+    ex:
+      - Get-QuarantineMessage -RecipientAddress user@contoso.com -StartReceivedDate (Get-Date).AddDays(-3) | Release-QuarantineMessage -ReleaseToAll
+    tags:
+      - quarantaine
+      - faux positif
+    module: ExchangeOnlineManagement
+    perms: Security Administrator or Quarantine Administrator role
+    pitfall: A high-confidence phishing message can only be released by an administrator.
+    doc: exchange/release-quarantinemessage
+  - name: Get-AntiPhishPolicy
+    cat: security
+    syn: Get-AntiPhishPolicy
+    desc: Shows the anti-phishing policies (impersonation, protected users).
+    ex:
+      - Get-AntiPhishPolicy | Select-Object Name,Enabled,EnableMailboxIntelligence,EnableSpoofIntelligence,PhishThresholdLevel
+    tags:
+      - hameçonnage
+      - phishing
+      - defender
+    module: ExchangeOnlineManagement
+    perms: Security Reader role or higher
+    pitfall: 'The default policy applies to everyone: create a dedicated one for executives.'
+    doc: exchange/get-antiphishpolicy
+  - name: Get-SafeAttachmentPolicy
+    cat: security
+    syn: Get-SafeAttachmentPolicy
+    desc: Shows Defender for Office 365 Safe Attachments policies.
+    ex:
+      - Get-SafeAttachmentPolicy | Select-Object Name,Enable,Action,Redirect
+    tags:
+      - pièces jointes
+      - defender
+    module: ExchangeOnlineManagement
+    perms: Security Reader role or higher
+    pitfall: Only available with a Defender for Office 365 license (Plan 1 or 2).
+    doc: exchange/get-safeattachmentpolicy
+  - name: Remove-MgUser
+    cat: graph
+    syn: Remove-MgUser -UserId <id>
+    desc: Deletes an Entra ID user (kept 30 days in the recycle bin).
+    ex:
+      - Remove-MgUser -UserId ancien.salarie@contoso.com
+      - Get-MgDirectoryDeletedItemAsUser | Select-Object Id,DisplayName,DeletedDateTime
+    tags:
+      - supprimer
+      - départ
+    module: Microsoft.Graph.Users
+    perms: User.ReadWrite.All; User Administrator role
+    pitfall: 'The mailbox and OneDrive go with the account: transfer what is needed first.'
+    doc: microsoft.graph.users/remove-mguser
+  - name: Update-MgUser -AccountEnabled
+    cat: graph
+    syn: Update-MgUser -UserId <id> -AccountEnabled:$false
+    desc: Blocks (or re-enables) a user's sign-in without deleting the account.
+    ex:
+      - Update-MgUser -UserId ancien.salarie@contoso.com -AccountEnabled:$false
+      - Revoke-MgUserSignInSession -UserId ancien.salarie@contoso.com
+    tags:
+      - bloquer
+      - départ
+      - sécurité
+    module: Microsoft.Graph.Users
+    perms: User.ReadWrite.All
+    pitfall: 'Open sessions stay valid for a while: also revoke them with Revoke-MgUserSignInSession.'
+    doc: microsoft.graph.users/update-mguser
+  - name: Get-MgUserMemberOf
+    cat: graph
+    syn: Get-MgUserMemberOf -UserId <id>
+    desc: Lists the groups and directory roles a user is a member of.
+    ex:
+      - Get-MgUserMemberOf -UserId user@contoso.com -All | ForEach-Object { $_.AdditionalProperties.displayName }
+    tags:
+      - groupe
+      - appartenance
+    module: Microsoft.Graph.Users
+    perms: GroupMember.Read.All or Directory.Read.All
+    pitfall: The name is in AdditionalProperties.displayName, not a direct property.
+    doc: microsoft.graph.users/get-mgusermemberof
+  - name: Get-MgUserLicenseDetail
+    cat: graph
+    syn: Get-MgUserLicenseDetail -UserId <id>
+    desc: Lists the licenses and service plans assigned to a user.
+    ex:
+      - Get-MgUserLicenseDetail -UserId user@contoso.com | Select-Object SkuPartNumber
+      - Get-MgUserLicenseDetail -UserId user@contoso.com | Select-Object -ExpandProperty ServicePlans | Where-Object ProvisioningStatus -eq "Disabled"
+    tags:
+      - licence
+    module: Microsoft.Graph.Users
+    perms: User.Read.All
+    pitfall: SkuPartNumber (e.g. SPE_E3) is not the marketing name; cross-check with Get-MgSubscribedSku.
+    doc: microsoft.graph.users/get-mguserlicensedetail
+  - name: Get-MgUserManager
+    cat: graph
+    syn: Get-MgUserManager -UserId <id>
+    desc: Shows a user's manager.
+    ex:
+      - Get-MgUserManager -UserId user@contoso.com | Select-Object -ExpandProperty AdditionalProperties
+      - Set-MgUserManagerByRef -UserId user@contoso.com -BodyParameter @{ "@odata.id" = "https://graph.microsoft.com/v1.0/users/chef@contoso.com" }
+    tags:
+      - manager
+      - hiérarchie
+    module: Microsoft.Graph.Users
+    perms: User.Read.All
+    pitfall: 'Returns a 404 error if no manager is set: this is not a fault.'
+    doc: microsoft.graph.users/get-mgusermanager
+  - name: Get-MgGroupMember
+    cat: graph
+    syn: Get-MgGroupMember -GroupId <id> [-All]
+    desc: Lists the members of an Entra ID / Microsoft 365 group.
+    ex:
+      - Get-MgGroupMember -GroupId (Get-MgGroup -Filter "displayName eq 'Equipe Compta'").Id -All | ForEach-Object { $_.AdditionalProperties.userPrincipalName }
+    tags:
+      - groupe
+      - membre
+    module: Microsoft.Graph.Groups
+    perms: GroupMember.Read.All
+    pitfall: Without -All, only 100 members are returned.
+    doc: microsoft.graph.groups/get-mggroupmember
+  - name: New-MgGroup
+    cat: graph
+    syn: New-MgGroup -DisplayName <name> -MailNickname <alias> -MailEnabled:$false -SecurityEnabled:$true
+    desc: Creates a security group (or a Microsoft 365 group with GroupTypes).
+    ex:
+      - New-MgGroup -DisplayName "Acces Compta" -MailNickname acces-compta -MailEnabled:$false -SecurityEnabled:$true
+      - New-MgGroup -DisplayName "Equipe Projet" -MailNickname equipe-projet -MailEnabled:$true -SecurityEnabled:$false -GroupTypes "Unified"
+    tags:
+      - groupe
+      - créer
+    module: Microsoft.Graph.Groups
+    perms: Group.ReadWrite.All
+    pitfall: MailNickname is required, even for a security group without mail.
+    doc: microsoft.graph.groups/new-mggroup
+  - name: Remove-MgGroupMemberByRef
+    cat: graph
+    syn: Remove-MgGroupMemberByRef -GroupId <id> -DirectoryObjectId <userId>
+    desc: Removes a member from an Entra ID group.
+    ex:
+      - Remove-MgGroupMemberByRef -GroupId $groupId -DirectoryObjectId (Get-MgUser -UserId ancien.salarie@contoso.com).Id
+    tags:
+      - groupe
+      - membre
+    module: Microsoft.Graph.Groups
+    perms: GroupMember.ReadWrite.All
+    pitfall: You need the user's ID (GUID), not the address.
+    doc: microsoft.graph.groups/remove-mggroupmemberbyref
+  - name: Get-MgReportAuthenticationMethodUserRegistrationDetail
+    cat: graph
+    syn: Get-MgReportAuthenticationMethodUserRegistrationDetail [-All]
+    desc: Each user's MFA registration state (who has no strong authentication method).
+    ex:
+      - Get-MgReportAuthenticationMethodUserRegistrationDetail -All | Where-Object { -not $_.IsMfaRegistered } | Select-Object UserPrincipalName,UserDisplayName
+      - Get-MgReportAuthenticationMethodUserRegistrationDetail -All | Select-Object UserPrincipalName,IsMfaRegistered,MethodsRegistered
+    tags:
+      - mfa
+      - authentification
+      - sécurité
+    module: Microsoft.Graph.Reports
+    perms: AuditLog.Read.All; Reports Reader or Security Reader role
+    pitfall: Requires Entra ID P1/P2 for some report fields.
+    doc: microsoft.graph.reports/get-mgreportauthenticationmethoduserregistrationdetail
+  - name: Get-MgAuditLogDirectoryAudit
+    cat: graph
+    syn: Get-MgAuditLogDirectoryAudit [-Filter <odata>] [-Top <n>]
+    desc: 'Directory audit log: who created, changed or deleted what.'
+    ex:
+      - Get-MgAuditLogDirectoryAudit -Filter "activityDisplayName eq 'Add member to role'" -Top 20 | Select-Object ActivityDateTime,ActivityDisplayName,Result
+      - Get-MgAuditLogDirectoryAudit -Top 50 | Select-Object ActivityDateTime,ActivityDisplayName,@{n="By";e={$_.InitiatedBy.User.UserPrincipalName}}
+    tags:
+      - audit
+      - journal
+    module: Microsoft.Graph.Reports
+    perms: AuditLog.Read.All; Reports Reader role
+    pitfall: 'Kept 30 days (7 on free Entra ID): export what needs to last.'
+    doc: microsoft.graph.reports/get-mgauditlogdirectoryaudit
+  - name: Get-MgDomain
+    cat: graph
+    syn: Get-MgDomain
+    desc: Lists the tenant's domains (verified, default) and their status.
+    ex:
+      - Get-MgDomain | Select-Object Id,IsDefault,IsVerified,AuthenticationType
+      - Get-MgDomainVerificationDnsRecord -DomainId contoso.com
+    tags:
+      - domaine
+      - dns
+    module: Microsoft.Graph.Identity.DirectoryManagement
+    perms: Domain.Read.All
+    pitfall: Get-MgDomainVerificationDnsRecord gives the TXT record to publish to verify a domain.
+    doc: microsoft.graph.identity.directorymanagement/get-mgdomain
+  - name: Get-MgOrganization
+    cat: graph
+    syn: Get-MgOrganization
+    desc: Tenant information (name, ID, technical contacts, sync).
+    ex:
+      - Get-MgOrganization | Select-Object DisplayName,Id,OnPremisesSyncEnabled,TechnicalNotificationMails
+    tags:
+      - tenant
+    module: Microsoft.Graph.Identity.DirectoryManagement
+    perms: Organization.Read.All
+    pitfall: 'OnPremisesSyncEnabled True: accounts are mostly managed in on-premises AD.'
+    doc: microsoft.graph.identity.directorymanagement/get-mgorganization
+  - name: Get-MgDevice
+    cat: graph
+    syn: Get-MgDevice [-All]
+    desc: Lists the devices registered in Entra ID (joined, hybrid, registered).
+    ex:
+      - Get-MgDevice -All | Select-Object DisplayName,OperatingSystem,OperatingSystemVersion,TrustType,ApproximateLastSignInDateTime
+    tags:
+      - appareil
+      - inventaire
+    module: Microsoft.Graph.Identity.DirectoryManagement
+    perms: Device.Read.All
+    pitfall: 'Inactive devices pile up: filter on ApproximateLastSignInDateTime to clean up.'
+    doc: microsoft.graph.identity.directorymanagement/get-mgdevice
+  - name: Get-MgDirectoryRoleMember
+    cat: graph
+    syn: Get-MgDirectoryRoleMember -DirectoryRoleId <id>
+    desc: Lists the members of an admin role (who is a Global Administrator, etc.).
+    ex:
+      - $r = Get-MgDirectoryRole -Filter "displayName eq 'Global Administrator'"; Get-MgDirectoryRoleMember -DirectoryRoleId $r.Id | ForEach-Object { $_.AdditionalProperties.userPrincipalName }
+    tags:
+      - admin
+      - rôle
+      - sécurité
+    module: Microsoft.Graph.Identity.DirectoryManagement
+    perms: RoleManagement.Read.Directory
+    pitfall: 'A role only appears if it has already been activated: otherwise Get-MgDirectoryRole does not return it.'
+    doc: microsoft.graph.identity.directorymanagement/get-mgdirectoryrolemember
+  - name: Get-MgApplication
+    cat: graph
+    syn: Get-MgApplication [-All]
+    desc: Lists app registrations (and their expiring secrets).
+    ex:
+      - Get-MgApplication -All | Select-Object DisplayName,AppId,@{n="Expire";e={($_.PasswordCredentials.EndDateTime | Sort-Object | Select-Object -First 1)}}
+    tags:
+      - application
+      - secret
+      - expiration
+    module: Microsoft.Graph.Applications
+    perms: Application.Read.All
+    pitfall: 'An expired secret silently breaks the app: watch EndDateTime.'
+    doc: microsoft.graph.applications/get-mgapplication
+  - name: Get-TeamUser
+    cat: teams
+    syn: Get-TeamUser -GroupId <id>
+    desc: Lists a Teams team's members and owners.
+    ex:
+      - Get-TeamUser -GroupId (Get-Team -DisplayName "Equipe Projet").GroupId | Select-Object User,Name,Role
+    tags:
+      - teams
+      - membre
+    module: MicrosoftTeams
+    perms: Teams Administrator role
+    pitfall: A team is identified by its GroupId (GUID), not its name.
+    doc: teams/get-teamuser
+  - name: Remove-TeamUser
+    cat: teams
+    syn: Remove-TeamUser -GroupId <id> -User <user>
+    desc: Removes a member from a Teams team.
+    ex:
+      - Remove-TeamUser -GroupId $groupId -User ancien.salarie@contoso.com
+    tags:
+      - teams
+      - membre
+    module: MicrosoftTeams
+    perms: Teams Administrator role
+    pitfall: An owner must be removed with -Role Owner first if they are the last one.
+    doc: teams/remove-teamuser
+  - name: Get-TeamChannel
+    cat: teams
+    syn: Get-TeamChannel -GroupId <id>
+    desc: Lists a team's channels (standard, private, shared).
+    ex:
+      - Get-TeamChannel -GroupId $groupId | Select-Object DisplayName,MembershipType
+    tags:
+      - teams
+      - canal
+    module: MicrosoftTeams
+    perms: Teams Administrator role
+    pitfall: 'Private channels have their own member list: Get-TeamChannelUser.'
+    doc: teams/get-teamchannel
+  - name: Set-Team
+    cat: teams
+    syn: Set-Team -GroupId <id> [-DisplayName] [-Visibility] [-AllowGuestCreateUpdateChannels]
+    desc: Changes a team’s settings (name, visibility, member and guest rights).
+    ex:
+      - Set-Team -GroupId $groupId -DisplayName "Equipe Projet 2026" -Visibility Private
+    tags:
+      - teams
+      - réglages
+    module: MicrosoftTeams
+    perms: Teams Administrator role
+    pitfall: 'The team name is the Microsoft 365 group name: propagation can take time.'
+    doc: teams/set-team
+  - name: New-SPOSite
+    cat: sharepoint
+    syn: New-SPOSite -Url <url> -Owner <owner> -StorageQuota <Mo> -Title <title> -Template <template>
+    desc: Creates a SharePoint site.
+    ex:
+      - New-SPOSite -Url https://contoso.sharepoint.com/sites/projets -Owner admin@contoso.com -StorageQuota 1024 -Title "Projets" -Template "STS#3"
+    tags:
+      - site
+      - créer
+    module: Microsoft.Online.SharePoint.PowerShell
+    perms: SharePoint Administrator role
+    pitfall: STS#3 creates a team site without a Microsoft 365 group; for a site with a group, use the UI or PnP.
+    doc: sharepoint-online/new-sposite
+  - name: Remove-SPOSite
+    cat: sharepoint
+    syn: Remove-SPOSite -Identity <url>
+    desc: Moves a SharePoint site to the tenant recycle bin (restorable for 93 days).
+    ex:
+      - Remove-SPOSite -Identity https://contoso.sharepoint.com/sites/ancien -Confirm:$false
+      - Get-SPODeletedSite | Select-Object Url,DeletionTime
+    tags:
+      - site
+      - supprimer
+    module: Microsoft.Online.SharePoint.PowerShell
+    perms: SharePoint Administrator role
+    pitfall: 'Remove-SPODeletedSite deletes permanently: only run it knowingly.'
+    doc: sharepoint-online/remove-sposite
+  - name: Get-SPOExternalUser
+    cat: sharepoint
+    syn: Get-SPOExternalUser [-PageSize <n>]
+    desc: Lists the SharePoint tenant's external (guest) users.
+    ex:
+      - Get-SPOExternalUser -PageSize 50 | Select-Object DisplayName,Email,InvitedBy,WhenCreated
+    tags:
+      - externe
+      - invité
+      - partage
+    module: Microsoft.Online.SharePoint.PowerShell
+    perms: SharePoint Administrator role
+    pitfall: Loop on -Position to list them all (50 per page maximum).
+    doc: sharepoint-online/get-spoexternaluser
+  - name: Invoke-MgWipeDeviceManagementManagedDevice
+    cat: intune
+    syn: Invoke-MgWipeDeviceManagementManagedDevice -ManagedDeviceId <id>
+    desc: Remotely wipes an Intune-managed device (loss, theft, recycling).
+    ex:
+      - Invoke-MgWipeDeviceManagementManagedDevice -ManagedDeviceId $deviceId -KeepEnrollmentData:$false -KeepUserData:$false
+    tags:
+      - effacer
+      - perte
+      - vol
+    module: Microsoft.Graph.DeviceManagement.Actions
+    perms: DeviceManagementManagedDevices.PrivilegedOperations.All; Intune Administrator role
+    pitfall: Irreversible. On a personal device, prefer "Retire" (Invoke-MgRetire…) which only removes company data.
+    doc: microsoft.graph.devicemanagement.actions/invoke-mgwipedevicemanagementmanageddevice
+  - name: Get-MgDeviceManagementDeviceCompliancePolicy
+    cat: intune
+    syn: Get-MgDeviceManagementDeviceCompliancePolicy
+    desc: Lists the Intune compliance policies.
+    ex:
+      - Get-MgDeviceManagementDeviceCompliancePolicy | Select-Object DisplayName,CreatedDateTime,LastModifiedDateTime
+    tags:
+      - conformité
+      - intune
+    module: Microsoft.Graph.DeviceManagement
+    perms: DeviceManagementConfiguration.Read.All
+    pitfall: A device with no assigned compliance policy is treated as compliant by default (tenant setting).
+    doc: microsoft.graph.devicemanagement/get-mgdevicemanagementdevicecompliancepolicy
+  - name: 'Script: export every Exchange Online mailbox (name, address, size, aliases, forwarding)'
+    cat: scripts
+    syn: .\Export-BoitesExchange.ps1
+    desc: 'Exports every mailbox to CSV: first name, last name, primary address, type, size and item count, quotas, aliases, forwarding (mailbox and rules), archive, last logon.'
+    ex:
+      - |-
+        # Prerequisite : Install-Module ExchangeOnlineManagement -Scope CurrentUser
+        Connect-ExchangeOnline -ShowBanner:$false
+
+        $IncludeInboxRules = $true   # $false to go faster (rules are read mailbox by mailbox)
+
+        function ConvertTo-Mb($size) {
+            if (-not $size) { return $null }
+            $m = [regex]::Match("$size", '\(([\d\s,.\u00A0\u202F]+) bytes\)')
+            if ($m.Success) { [math]::Round([decimal]($m.Groups[1].Value -replace '[^\d]', '') / 1MB, 1) }
+        }
+
+        # First name, last name, department and title come from Get-User (not in Get-Mailbox)
+        $users = @{}
+        Get-User -ResultSize Unlimited | ForEach-Object { $users[$_.UserPrincipalName] = $_ }
+
+        $props = 'DisplayName','PrimarySmtpAddress','UserPrincipalName','EmailAddresses','RecipientTypeDetails',
+                 'ForwardingAddress','ForwardingSmtpAddress','DeliverToMailboxAndForward','GrantSendOnBehalfTo',
+                 'ProhibitSendQuota','ProhibitSendReceiveQuota','IssueWarningQuota','ArchiveStatus',
+                 'LitigationHoldEnabled','HiddenFromAddressListsEnabled','WhenCreated'
+        $mailboxes = Get-EXOMailbox -ResultSize Unlimited -Properties $props
+        $i = 0
+        $rows = foreach ($mb in $mailboxes) {
+            $i++; Write-Progress -Activity 'Exporting mailboxes' -Status $mb.PrimarySmtpAddress -PercentComplete ($i / $mailboxes.Count * 100)
+            $u     = $users[$mb.UserPrincipalName]
+            $stats = Get-EXOMailboxStatistics -Identity $mb.UserPrincipalName -ErrorAction SilentlyContinue
+            $rules = if ($IncludeInboxRules) {
+                Get-InboxRule -Mailbox $mb.UserPrincipalName -ErrorAction SilentlyContinue |
+                    Where-Object { $_.ForwardTo -or $_.ForwardAsAttachmentTo -or $_.RedirectTo }
+            }
+            [pscustomobject]@{
+                FirstName             = $u.FirstName
+                LastName                = $u.LastName
+                DisplayName         = $mb.DisplayName
+                Department            = $u.Department
+                Title           = $u.Title
+                PrimaryAddress  = $mb.PrimarySmtpAddress
+                UPN                = $mb.UserPrincipalName
+                Type               = $mb.RecipientTypeDetails
+                SizeMB           = ConvertTo-Mb $stats.TotalItemSize
+                ItemCount         = $stats.ItemCount
+                LastLogon  = $stats.LastLogonTime
+                WarningQuota        = "$($mb.IssueWarningQuota)"
+                ProhibitSendQuota = "$($mb.ProhibitSendQuota)"
+                ProhibitSendReceiveQuota         = "$($mb.ProhibitSendReceiveQuota)"
+                Alias              = ($mb.EmailAddresses | Where-Object { $_ -clike 'smtp:*' } | ForEach-Object { $_.Substring(5) }) -join ';'
+                MailboxForwarding     = (@($mb.ForwardingAddress, $mb.ForwardingSmtpAddress) | Where-Object { $_ }) -join ';'
+                KeepCopy     = $mb.DeliverToMailboxAndForward
+                RuleForwarding    = ($rules | ForEach-Object { "$($_.Name) -> " + (@($_.ForwardTo + $_.ForwardAsAttachmentTo + $_.RedirectTo) -join ',') }) -join ' | '
+                SendOnBehalfOf  = ($mb.GrantSendOnBehalfTo -join ';')
+                Archive            = $mb.ArchiveStatus
+                LitigationHold = $mb.LitigationHoldEnabled
+                HiddenFromAddressList    = $mb.HiddenFromAddressListsEnabled
+                Created              = $mb.WhenCreated
+            }
+        }
+        $rows | Sort-Object LastName, FirstName | Export-Csv .\exchange-mailboxes-export.csv -NoTypeInformation -Encoding UTF8 -Delimiter ';'
+        Write-Host "$($rows.Count) mailboxes exported to exchange-mailboxes-export.csv"
+    tags:
+      - export
+      - csv
+      - taille
+      - alias
+      - transfert
+      - boîtes
+      - inventaire
+      - utilisateurs
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: 'Slow on a large tenant (one statistics request per mailbox): run it off-peak. The CSV opens in Excel with the ";" separator.'
+    url: https://learn.microsoft.com/powershell/module/exchange/get-exomailbox
+  - name: 'Script: export mailbox sizes, largest first'
+    cat: scripts
+    syn: .\Export-TailleBoites.ps1
+    desc: Ranks mailboxes by size (GB), with quota and percentage used, to spot those about to fill up.
+    ex:
+      - |-
+        Connect-ExchangeOnline -ShowBanner:$false
+        function ConvertTo-Bytes($s) {
+            $m = [regex]::Match("$s", '\(([\d\s,.\u00A0\u202F]+) bytes\)')
+            if ($m.Success) { [decimal]($m.Groups[1].Value -replace '[^\d]', '') } else { 0 }
+        }
+        Get-EXOMailbox -ResultSize Unlimited -Properties ProhibitSendReceiveQuota | ForEach-Object {
+            $s     = Get-EXOMailboxStatistics -Identity $_.UserPrincipalName
+            $used  = ConvertTo-Bytes $s.TotalItemSize
+            $quota = ConvertTo-Bytes $_.ProhibitSendReceiveQuota
+            [pscustomobject]@{
+                Address  = $_.PrimarySmtpAddress
+                SizeGB = [math]::Round($used / 1GB, 2)
+                QuotaGB  = [math]::Round($quota / 1GB, 0)
+                UsedPct  = if ($quota) { [math]::Round($used / $quota * 100, 1) } else { $null }
+                Items = $s.ItemCount
+            }
+        } | Sort-Object SizeGB -Descending | Export-Csv .\mailbox-sizes.csv -NoTypeInformation -Encoding UTF8 -Delimiter ';'
+    tags:
+      - taille
+      - quota
+      - export
+      - boîtes pleines
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: 'The quota comes from ProhibitSendReceiveQuota: for a mailbox with an archive, add Get-EXOMailboxStatistics -Archive.'
+    url: https://learn.microsoft.com/powershell/module/exchange/get-exomailboxstatistics
+  - name: 'Script: list every mail forward (mailboxes and rules)'
+    cat: scripts
+    syn: .\Export-Transferts.ps1
+    desc: 'Forwarding audit: forwards set on the mailbox and inbox rules that redirect to outside recipients.'
+    ex:
+      - |-
+        Connect-ExchangeOnline -ShowBanner:$false
+        $domaines = (Get-AcceptedDomain).DomainName
+        $mailboxes = Get-EXOMailbox -ResultSize Unlimited -Properties ForwardingAddress,ForwardingSmtpAddress,DeliverToMailboxAndForward
+        $res = foreach ($mb in $mailboxes) {
+            if ($mb.ForwardingAddress -or $mb.ForwardingSmtpAddress) {
+                [pscustomobject]@{ Mailbox = $mb.PrimarySmtpAddress; Source = 'Mailbox'; To = (@($mb.ForwardingAddress, $mb.ForwardingSmtpAddress) | Where-Object { $_ }) -join ';'; Copy = $mb.DeliverToMailboxAndForward }
+            }
+            Get-InboxRule -Mailbox $mb.UserPrincipalName -ErrorAction SilentlyContinue |
+                Where-Object { $_.ForwardTo -or $_.ForwardAsAttachmentTo -or $_.RedirectTo } | ForEach-Object {
+                    [pscustomobject]@{ Mailbox = $mb.PrimarySmtpAddress; Source = "Rule: $($_.Name)"; To = (@($_.ForwardTo + $_.ForwardAsAttachmentTo + $_.RedirectTo) -join ','); Copy = $null }
+                }
+        }
+        $res | Export-Csv .\forwards.csv -NoTypeInformation -Encoding UTF8 -Delimiter ';'
+        $res | Format-Table -AutoSize
+    tags:
+      - transfert
+      - redirection
+      - sécurité
+      - audit
+      - règles
+      - forwarding
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: 'Run it regularly: a redirection to the outside is the classic sign of a compromised account.'
+    url: https://learn.microsoft.com/powershell/module/exchange/get-inboxrule
+  - name: 'Script: audit delegations (Full Access, Send As, Send on Behalf)'
+    cat: scripts
+    syn: .\Export-Delegations.ps1
+    desc: Lists, for each mailbox, who can open it, send as it or on its behalf.
+    ex:
+      - |-
+        Connect-ExchangeOnline -ShowBanner:$false
+        $res = foreach ($mb in Get-EXOMailbox -ResultSize Unlimited -Properties GrantSendOnBehalfTo) {
+            Get-EXOMailboxPermission -Identity $mb.UserPrincipalName |
+                Where-Object { $_.User -ne 'NT AUTHORITY\SELF' -and -not $_.IsInherited -and -not $_.Deny } |
+                ForEach-Object { [pscustomobject]@{ Mailbox = $mb.PrimarySmtpAddress; Right = 'Full Access'; User = $_.User } }
+            Get-EXORecipientPermission -Identity $mb.UserPrincipalName |
+                Where-Object { $_.Trustee -ne 'NT AUTHORITY\SELF' } |
+                ForEach-Object { [pscustomobject]@{ Mailbox = $mb.PrimarySmtpAddress; Right = 'Send As'; User = $_.Trustee } }
+            foreach ($d in $mb.GrantSendOnBehalfTo) {
+                [pscustomobject]@{ Mailbox = $mb.PrimarySmtpAddress; Right = 'Send on Behalf'; User = $d }
+            }
+        }
+        $res | Export-Csv .\delegations.csv -NoTypeInformation -Encoding UTF8 -Delimiter ';'
+    tags:
+      - délégation
+      - accès
+      - sendas
+      - fullaccess
+      - audit
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: 'A shared mailbox with no clear owner is a risk: spot those whose access is old.'
+    url: https://learn.microsoft.com/powershell/module/exchange/get-exomailboxpermission
+  - name: 'Script: export Entra ID users (licenses, last sign-in)'
+    cat: scripts
+    syn: .\Export-UtilisateursEntra.ps1
+    desc: Exports users with department, title, manager, licenses, last sign-in and enabled state.
+    ex:
+      - |-
+        Connect-MgGraph -Scopes 'User.Read.All','AuditLog.Read.All','Organization.Read.All'
+        $sku = @{}; Get-MgSubscribedSku | ForEach-Object { $sku[$_.SkuId] = $_.SkuPartNumber }
+        $props = 'Id','DisplayName','GivenName','Surname','UserPrincipalName','Mail','Department','JobTitle','AccountEnabled','CreatedDateTime','UserType','AssignedLicenses','SignInActivity'
+        Get-MgUser -All -Property $props -ExpandProperty Manager | ForEach-Object {
+            [pscustomobject]@{
+                FirstName            = $_.GivenName
+                LastName               = $_.Surname
+                UPN               = $_.UserPrincipalName
+                Mail              = $_.Mail
+                Department           = $_.Department
+                Title          = $_.JobTitle
+                Manager           = $_.Manager.AdditionalProperties.userPrincipalName
+                Enabled             = $_.AccountEnabled
+                Type              = $_.UserType
+                Licenses          = ($_.AssignedLicenses | ForEach-Object { $sku[$_.SkuId] }) -join ';'
+                LastLogon = $_.SignInActivity.LastSignInDateTime
+                Created              = $_.CreatedDateTime
+            }
+        } | Export-Csv .\entra-users.csv -NoTypeInformation -Encoding UTF8 -Delimiter ';'
+    tags:
+      - export
+      - licence
+      - dernière connexion
+      - utilisateurs
+      - entra
+    module: Microsoft.Graph.Users
+    perms: User.Read.All, AuditLog.Read.All
+    pitfall: SignInActivity requires an Entra ID P1 license; without it the column stays empty.
+    url: https://learn.microsoft.com/powershell/module/microsoft.graph.users/get-mguser
+  - name: 'Script: accounts inactive for more than 90 days'
+    cat: scripts
+    syn: .\Export-ComptesInactifs.ps1
+    desc: Finds accounts with no sign-in for 90 days (candidates for disabling or license removal).
+    ex:
+      - |-
+        Connect-MgGraph -Scopes 'User.Read.All','AuditLog.Read.All'
+        $limite = (Get-Date).AddDays(-90)
+        Get-MgUser -All -Filter "accountEnabled eq true and userType eq 'Member'" -Property DisplayName,UserPrincipalName,SignInActivity,AssignedLicenses |
+            Where-Object { $_.SignInActivity.LastSignInDateTime -lt $limite -or -not $_.SignInActivity.LastSignInDateTime } |
+            Select-Object DisplayName, UserPrincipalName,
+                @{n='LastLogon'; e={ $_.SignInActivity.LastSignInDateTime }},
+                @{n='LicenseCount'; e={ $_.AssignedLicenses.Count }} |
+            Sort-Object LastLogon | Export-Csv .\inactive-accounts.csv -NoTypeInformation -Encoding UTF8 -Delimiter ';'
+    tags:
+      - inactif
+      - licence
+      - nettoyage
+      - dernière connexion
+    module: Microsoft.Graph.Users
+    perms: User.Read.All, AuditLog.Read.All
+    pitfall: 'Service and shared-mailbox accounts have no regular sign-in: exclude them before acting.'
+    url: https://learn.microsoft.com/powershell/module/microsoft.graph.users/get-mguser
+  - name: 'Script: users with no MFA method registered'
+    cat: scripts
+    syn: .\Export-SansMfa.ps1
+    desc: Lists enabled users who have not registered multifactor authentication.
+    ex:
+      - |-
+        Connect-MgGraph -Scopes 'AuditLog.Read.All','User.Read.All'
+        $actifs = Get-MgUser -All -Filter 'accountEnabled eq true' -Property UserPrincipalName | Select-Object -ExpandProperty UserPrincipalName
+        Get-MgReportAuthenticationMethodUserRegistrationDetail -All |
+            Where-Object { $_.UserPrincipalName -in $actifs -and -not $_.IsMfaRegistered } |
+            Select-Object UserDisplayName, UserPrincipalName, DefaultMfaMethod |
+            Export-Csv .\no-mfa.csv -NoTypeInformation -Encoding UTF8 -Delimiter ';'
+    tags:
+      - mfa
+      - sécurité
+      - authentification
+    module: Microsoft.Graph.Reports
+    perms: AuditLog.Read.All, User.Read.All
+    pitfall: 'Guests and service accounts also appear: filter on UserType and exclusions.'
+    url: https://learn.microsoft.com/powershell/module/microsoft.graph.reports/get-mgreportauthenticationmethoduserregistrationdetail
+  - name: 'Script: members of every distribution group (export)'
+    cat: scripts
+    syn: .\Export-MembresGroupes.ps1
+    desc: Exports, for each distribution group, the list of its members.
+    ex:
+      - |-
+        Connect-ExchangeOnline -ShowBanner:$false
+        Get-DistributionGroup -ResultSize Unlimited | ForEach-Object {
+            $g = $_
+            Get-DistributionGroupMember -Identity $g.PrimarySmtpAddress -ResultSize Unlimited | ForEach-Object {
+                [pscustomobject]@{ Group = $g.DisplayName; GroupAddress = $g.PrimarySmtpAddress; Member = $_.DisplayName; MemberAddress = $_.PrimarySmtpAddress; Type = $_.RecipientType }
+            }
+        } | Export-Csv .\group-members.csv -NoTypeInformation -Encoding UTF8 -Delimiter ';'
+    tags:
+      - groupe
+      - membre
+      - liste de diffusion
+      - export
+    module: ExchangeOnlineManagement
+    perms: Exchange 'View-Only Recipients' role or Exchange Administrator
+    pitfall: Microsoft 365 groups are read with Get-UnifiedGroup / Get-UnifiedGroupLinks.
+    url: https://learn.microsoft.com/powershell/module/exchange/get-distributiongroupmember
+  - name: 'Script: create users from a CSV file (Graph)'
+    cat: scripts
+    syn: .\Import-Utilisateurs.ps1
+    desc: Creates Microsoft 365 accounts from a CSV (first name, last name, address, department) and assigns a license.
+    ex:
+      - |-
+        # new-users.csv : FirstName;LastName;UPN;Service;Password
+        Connect-MgGraph -Scopes 'User.ReadWrite.All','Organization.Read.All'
+        $sku = (Get-MgSubscribedSku | Where-Object SkuPartNumber -eq 'O365_BUSINESS_PREMIUM').SkuId
+        Import-Csv .\new-users.csv -Delimiter ';' | ForEach-Object {
+            $user = New-MgUser -DisplayName "$($_.FirstName) $($_.LastName)" -GivenName $_.FirstName -Surname $_.LastName `
+                -UserPrincipalName $_.UPN -MailNickname ($_.UPN.Split('@')[0]) -Department $_.Department -UsageLocation FR `
+                -AccountEnabled -PasswordProfile @{ Password = $_.Password; ForceChangePasswordNextSignIn = $true }
+            Set-MgUserLicense -UserId $user.Id -AddLicenses @(@{ SkuId = $sku }) -RemoveLicenses @() | Out-Null
+            Write-Host "Created: $($_.UPN)"
+        }
+    tags:
+      - créer
+      - csv
+      - licence
+      - arrivée
+      - onboarding
+    module: Microsoft.Graph.Users
+    perms: User.ReadWrite.All, Organization.Read.All
+    pitfall: 'UsageLocation is required before assigning a license. Do not store plain-text passwords: generate them on the fly.'
+    url: https://learn.microsoft.com/powershell/module/microsoft.graph.users/new-mguser
+  - name: 'Script: leaver procedure (block, revoke, shared mailbox, licenses)'
+    cat: scripts
+    syn: .\Depart-Utilisateur.ps1 -Utilisateur <upn>
+    desc: 'Leaver procedure: blocks sign-in, revokes sessions, converts the mailbox to shared, removes licenses.'
+    ex:
+      - |-
+        param([Parameter(Mandatory)][string]$User)
+        Connect-MgGraph -Scopes 'User.ReadWrite.All'
+        Connect-ExchangeOnline -ShowBanner:$false
+
+        Update-MgUser -UserId $User -AccountEnabled:$false                       # 1. block sign-in
+        Revoke-MgUserSignInSession -UserId $User | Out-Null                      # 2. cut open sessions
+        Set-Mailbox -Identity $User -Type Shared                                 # 3. shared mailbox (keeps the mail)
+        Set-Mailbox -Identity $User -HiddenFromAddressListsEnabled $true         # 4. hide from the address list
+        $lic = (Get-MgUserLicenseDetail -UserId $User).SkuId                     # 5. remove licenses
+        if ($lic) { Set-MgUserLicense -UserId $User -AddLicenses @() -RemoveLicenses $lic | Out-Null }
+        Write-Host "Leaver handled for $User"
+    tags:
+      - départ
+      - offboarding
+      - licence
+      - partagée
+      - bloquer
+    module: ExchangeOnlineManagement + Microsoft.Graph
+    perms: Exchange Administrator + User Administrator
+    pitfall: 'Remove licenses last: a shared mailbox keeps its content without a license up to 50 GB, not beyond. Test on a test account first.'
+    url: https://learn.microsoft.com/microsoft-365/admin/add-users/remove-former-employee

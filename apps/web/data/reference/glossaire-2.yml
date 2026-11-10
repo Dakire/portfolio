@@ -1,0 +1,188 @@
+# Suite du glossaire (voir glossaire.yml pour le principe) : recherche tolérante, on tape ce qu'on a en tête et non le terme exact.
+# Même format : chaque groupe associe des mots français (fr) aux mots des commandes (en).
+- fr: [dossier, dossiers, répertoire, arborescence]
+  en: [folder, folders, drivefolderpath, filetree, tree]
+- fr: [corbeille, poubelle]
+  en: [trash, untrash, drivetrash, emptydrivefolders]
+- fr: [définitivement, irréversible, purger]
+  en: [purge, obliterate, delete, wipe]
+- fr: [étiquette, étiquettes, libellé, dossier gmail]
+  en: [label, labels, labelsettings]
+- fr: [filtre, filtres, règle, règles, tri automatique]
+  en: [filter, filters, inboxrule, transportrule, rule]
+- fr: [calendrier partagé, salle, salle de réunion, ressource, matériel]
+  en: [resource, resources, roommailbox, equipmentmailbox, building, feature]
+- fr: [événement, événements, réunion, rendez-vous]
+  en: [event, events, addevent, updateevent, deleteevent, calendarevent]
+- fr: [invité, externe, partenaire]
+  en: [guestuser, external, externalinoutlook, mailcontact]
+- fr: [élève, élèves, étudiant, classe, cours, prof, enseignant]
+  en: [course, courses, student, students, teacher, guardian, classroom]
+- fr: [stockage, quota, espace disque, taille, volume]
+  en:
+    [
+      quota,
+      storage,
+      diskusage,
+      size,
+      totalitemsize,
+      mailboxstatistics,
+      prohibitsendquota,
+      filecounts,
+    ]
+- fr: [dernière connexion, dernier accès, inactif, inactifs, comptes dormants]
+  en: [lastlogintime, lastlogontime, lastsignin, lastlogin, inactive, lastuseractiontime]
+- fr: [vérification en deux étapes, codes de secours, 2sv]
+  en: [2sv, backupcodes, verificationcodes, turnoff2sv, authenticationmethod]
+- fr: [mot de passe d'application, application tierce, jeton, autorisation d'application]
+  en: [asp, asps, token, tokens, oauth, applicationspecificpasswords, consent]
+- fr: [révoquer, retirer l'accès, couper l'accès]
+  en: [revoke, delete, remove, block, blockcredential, revokesignin]
+- fr: [sécurité, compte compromis, piratage, hameçonnage, phishing]
+  en: [security, alert, alerts, phishing, compromised, signout, revoke, trash, messagetrace]
+- fr: [transfert de fichiers, transférer les fichiers, reprendre les fichiers]
+  en: [transfer, ownership, datatransfer, claim, drive]
+- fr: [copier, dupliquer, copie]
+  en: [copy, clone, duplicate]
+- fr: [déplacer, mettre dans, ranger]
+  en: [move, moveevent, movemailbox, moveitems]
+- fr: [renommer le fichier, nom du fichier]
+  en: [newfilename, name, rename, displayname]
+- fr: [télécharger, récupérer, exporter le fichier]
+  en: [download, get, export, save]
+- fr: [envoyer, envoi, écrire un mail]
+  en: [send, sendemail, sendas, sendmail, send-mailmessage]
+- fr: [brouillon]
+  en: [draft, drafts]
+- fr: [recherche, rechercher, retrouver, trouver, chercher]
+  en: [query, search, find, filter, where, get, messagetrace]
+- fr: [période, entre deux dates, depuis, avant, après]
+  en: [after, before, startdate, enddate, start, end, date, days]
+- fr: [compter, nombre de, combien]
+  en: [count, countonly, counts, measure, filecounts]
+- fr: [sans doublon, doublons]
+  en: [dedup, duplicate, duplicates, unique]
+- fr: [vider, nettoyer, purger les données]
+  en: [empty, clear, wipe, purge]
+- fr: [effacer à distance, perdu, volé, vol, perte, réinitialiser l'appareil]
+  en: [wipe, accountwipe, account_wipe, block, disable, deprovision, remotewipe]
+- fr: [désactiver, bloquer l'appareil, retirer du parc]
+  en: [disable, block, deprovision, deprov, retire]
+- fr: [parc, inventaire, matériel, liste du matériel]
+  en: [cros, devices, mobile, inventory, print, get-computerinfo]
+- fr: [version, mise à jour de gam, quelle version]
+  en: [version, update, check, gam]
+- fr: [connexion à gam, autoriser gam, oauth, installer gam]
+  en: [oauth, create, project, config, install, setup, connect]
+- fr: [fichier de config, paramètres de gam, options]
+  en: [config, gam.cfg, option, setting, settings]
+- fr: [boucle, pour chaque ligne, depuis un fichier, liste d'utilisateurs]
+  en: [csv, loop, batch, tbatch, file, multiprocess]
+- fr: [sortie, enregistrer dans un fichier, vers un fichier, résultat dans un fichier]
+  en: [redirect, todrive, csv, stdout]
+- fr: [google sheets, feuille de calcul, tableur]
+  en: [sheet, sheets, gsheet, spreadsheet, todrive]
+- fr: [google chat, discussion, espace de discussion]
+  en: [chat, chatspace, chatmessage, chatmember]
+- fr: [visioconférence, google meet, réunion en ligne]
+  en: [meet, meetspace, conference, meetconference]
+- fr: [contacts, carnet d'adresses, annuaire]
+  en: [contact, contacts, contactgroup, directory, people, gal, addressbook]
+- fr: [tâches, to-do, liste de tâches]
+  en: [task, tasks, tasklist]
+- fr: [conservation légale, litige, archivage légal, ediscovery]
+  en: [vault, hold, vaultmatter, vaulthold, vaultexport, ediscovery, litigationhold]
+- fr: [sso, authentification unique, fournisseur d'identité]
+  en: [sso, saml, inboundssoprofile, identity, federation]
+- fr: [administrateur, droits d'administration, rôle d'administration]
+  en: [admin, admins, adminrole, role, roles, privileges, roleassignment]
+- fr: [client, revendeur, abonnement]
+  en: [customer, reseller, resoldcustomer, resoldsubscription, subscription]
+- fr: [langue]
+  en: [language, locale, culture]
+- fr: [fuseau horaire, heure]
+  en: [timezone, time, calsettings]
+- fr: [anciens, ancien salarié, ex-employé, comptes archivés]
+  en: [archived, deleted, suspended, undelete, offboard, deprovision]
+# --- Exchange et Microsoft 365 (PowerShell) ---
+- fr: [taille de la boîte, espace utilisé, quota de boîte, boîte pleine]
+  en:
+    [
+      mailboxstatistics,
+      totalitemsize,
+      prohibitsendquota,
+      prohibitsendreceivequota,
+      issuewarningquota,
+      quota,
+      itemcount,
+    ]
+- fr: [transfert automatique, redirection de boîte, forwarding]
+  en:
+    [
+      forwardingaddress,
+      forwardingsmtpaddress,
+      delivertomailboxandforward,
+      inboxrule,
+      forwardto,
+      redirectto,
+    ]
+- fr: [alias de messagerie, adresses e-mail, smtp]
+  en: [emailaddresses, proxyaddresses, primarysmtpaddress, alias, windowsemailaddress]
+- fr: [boîte partagée, boîte de service]
+  en: [sharedmailbox, shared, mailbox]
+- fr: [droits sur une boîte, accès à la boîte, contrôle total, envoyer en tant que]
+  en:
+    [mailboxpermission, recipientpermission, fullaccess, sendas, sendonbehalf, grantsendonbehalfto]
+- fr: [liste de distribution, liste de diffusion, groupe de distribution]
+  en:
+    [
+      distributiongroup,
+      distributiongroupmember,
+      dynamicdistributiongroup,
+      unifiedgroup,
+      mailcontact,
+    ]
+- fr: [groupe microsoft 365, équipe teams, team]
+  en: [unifiedgroup, team, teams, mggroup, microsoftteams]
+- fr: [licences microsoft 365, attribuer une licence, retirer une licence]
+  en: [mgusellicense, assignedlicenses, set-mguserlicense, subscribedsku, license, licenses]
+- fr: [connexion à microsoft 365, se connecter, authentification]
+  en: [connect-exchangeonline, connect-mggraph, connect-azuread, connect, connection]
+- fr: [traçage de message, suivi de message, où est passé le mail]
+  en: [messagetrace, get-messagetrace, messagetracedetail, trace, historicalsearch]
+- fr: [anti-spam, quarantaine, courrier indésirable, indésirable]
+  en: [quarantine, spam, junk, antispam, hostedcontentfilter, malwarefilter, phish]
+- fr: [accès conditionnel, authentification multifacteur]
+  en: [conditionalaccess, mfa, authenticationmethod, strongauthentication, perusermfastate]
+- fr: [journal d'audit, activité des utilisateurs, qui a fait quoi]
+  en:
+    [
+      auditlog,
+      unifiedauditlog,
+      search-unifiedauditlog,
+      signinlogs,
+      mgauditlogsignin,
+      searchadminauditlog,
+    ]
+- fr: [export de tous les utilisateurs, liste des boîtes, inventaire exchange, rapport de boîtes]
+  en: [get-mailbox, get-user, get-recipient, export-csv, mailboxstatistics, export, report]
+- fr: [boîte mail supprimée, récupérer une boîte, boîte désactivée]
+  en: [softdeletedmailbox, undo-softdeletedmailbox, inactivemailbox, restore, connectedmailbox]
+- fr: [permissions du calendrier, partager un calendrier]
+  en: [mailboxfolderpermission, calendarprocessing, calendarpermission, calendar]
+- fr: [contacts de messagerie, contact externe]
+  en: [mailcontact, mailuser, contact, new-mailcontact]
+- fr: [archivage, archive en ligne, boîte d'archive]
+  en: [archive, enable-mailbox, archivemailbox, retention, retentionpolicy]
+- fr: [conservation, rétention]
+  en: [retention, retentionpolicy, litigationhold, litigationholdenabled, inplacehold]
+- fr: [domaine accepté, domaines acceptés, domaine du tenant]
+  en: [accepteddomain, domain, mgdomain, get-accepteddomain, verifieddomain]
+- fr: [connecteur, relais smtp, relais de messagerie]
+  en: [connector, inboundconnector, outboundconnector, smtp, relay, receiveconnector]
+- fr: [règle de flux de messagerie, règle de transport, bandeau, avertissement externe]
+  en: [transportrule, mailflowrule, disclaimer, externaltag]
+- fr: [voir, consulter, regarder, afficher les, quels sont]
+  en: [show, print, info, get, list]
+- fr: [utilisateur inactif, comptes inactifs, plus connecté]
+  en: [lastlogintime, lastlogon, signin, inactive, suspended, issuspended]

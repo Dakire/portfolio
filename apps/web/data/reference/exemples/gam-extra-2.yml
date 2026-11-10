@@ -1,0 +1,379 @@
+# Suite de gam-extra.yml : Drive, agendas, appareils et Chrome, rapports et sécurité. Même format (voir l'en-tête de gam-extra.yml).
+
+# ---------------------------------------------------------------- Drive
+'gam <UserTypeEntity> print|show filelist':
+  fr: Lister les fichiers Drive d'un utilisateur (nom, type, propriétaire), avec filtre par requête.
+  en: List a user's Drive files (name, type, owner), with a query filter.
+  ex:
+    - gam user alice.martin@example.com show filelist fields id,name,mimetype,owners.emailaddress
+    - gam user alice.martin@example.com print filelist query "mimeType='application/pdf'" fields id,name,size
+'gam <UserTypeEntity> show fileinfo':
+  fr: Afficher le détail d'un fichier Drive (propriétaire, taille, dates, partage).
+  en: Show the details of a Drive file (owner, size, dates, sharing).
+  ex:
+    - gam user alice.martin@example.com show fileinfo id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW
+'gam <UserTypeEntity> print filecounts':
+  fr: Compter les fichiers Drive par type (pour estimer un volume avant un transfert).
+  en: Count Drive files by type (to estimate a volume before a transfer).
+  ex:
+    - gam user alice.martin@example.com print filecounts
+'gam <UserTypeEntity> print filesharecounts':
+  fr: Compter les fichiers partagés (en interne, en externe, publics).
+  en: Count shared files (internal, external, public).
+  ex:
+    - gam user alice.martin@example.com print filesharecounts
+'gam <UserTypeEntity> print filetree':
+  fr: Exporter l'arborescence de dossiers et fichiers d'un Drive.
+  en: Export the folder and file tree of a Drive.
+  ex:
+    - gam user alice.martin@example.com print filetree
+'gam <UserTypeEntity> show drivesettings':
+  fr: Afficher les réglages et le quota de stockage du Drive d'un utilisateur.
+  en: Show the settings and storage quota of a user's Drive.
+  ex:
+    - gam user alice.martin@example.com show drivesettings
+'gam <UserTypeEntity> empty drivetrash':
+  fr: Vider la corbeille Drive d'un utilisateur.
+  en: Empty a user's Drive trash.
+  ex:
+    - gam user alice.martin@example.com empty drivetrash
+'gam <UserTypeEntity> print emptydrivefolders':
+  fr: Lister les dossiers Drive vides.
+  en: List empty Drive folders.
+  ex:
+    - gam user alice.martin@example.com print emptydrivefolders
+'gam <UserTypeEntity> delete emptydrivefolders':
+  fr: Supprimer les dossiers Drive vides.
+  en: Delete empty Drive folders.
+  ex:
+    - gam user alice.martin@example.com delete emptydrivefolders
+'gam <UserTypeEntity> copy drivefile':
+  fr: Copier un fichier Drive, éventuellement vers un autre dossier.
+  en: Copy a Drive file, optionally to another folder.
+  ex:
+    - gam user alice.martin@example.com copy drivefile id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW newfilename "Copie du rapport"
+'gam <UserTypeEntity> update drivefile':
+  fr: Renommer ou modifier un fichier Drive (nom, description, étoile).
+  en: Rename or modify a Drive file (name, description, star).
+  ex:
+    - gam user alice.martin@example.com update drivefile id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW newfilename "Rapport 2026"
+'gam <UserTypeEntity> move drivefile':
+  fr: Déplacer un fichier Drive vers un autre dossier.
+  en: Move a Drive file to another folder.
+  ex:
+    - gam user alice.martin@example.com move drivefile id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW parentid 1FoLdErId0123456789AbCdEfGhIjKlM
+'gam <UserTypeEntity> transfer ownership':
+  fr: Transférer la propriété d'un fichier ou d'un dossier à un autre utilisateur.
+  en: Transfer ownership of a file or folder to another user.
+  ex:
+    - gam user ancien.salarie@example.com transfer ownership id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW bob.durand@example.com
+'gam <UserTypeEntity> create|add drivefolderpath':
+  fr: Créer une arborescence de dossiers d'un coup.
+  en: Create a folder tree in one go.
+  ex:
+    - gam user alice.martin@example.com create drivefolderpath fullpath "/Projets/2026/Factures"
+'gam <UserTypeEntity> create|add drivefile':
+  fr: Envoyer un fichier local vers Drive.
+  en: Upload a local file to Drive.
+  ex:
+    - gam user alice.martin@example.com create drivefile localfile ./rapport.pdf drivefilename "Rapport.pdf"
+'gam <UserTypeEntity> get drivefile':
+  fr: Télécharger un fichier Drive (avec conversion possible en PDF ou Office).
+  en: Download a Drive file (with optional conversion to PDF or Office).
+  ex:
+    - gam user alice.martin@example.com get drivefile id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW format pdf targetfolder ./export
+'gam <UserTypeEntity> trash drivefile':
+  fr: Mettre un fichier Drive à la corbeille.
+  en: Move a Drive file to the trash.
+  ex:
+    - gam user alice.martin@example.com trash drivefile id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW
+'gam <UserTypeEntity> untrash drivefile':
+  fr: Sortir un fichier Drive de la corbeille.
+  en: Restore a Drive file from the trash.
+  ex:
+    - gam user alice.martin@example.com untrash drivefile id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW
+'gam <UserTypeEntity> purge drivefile':
+  fr: Supprimer définitivement un fichier Drive (sans passer par la corbeille).
+  en: Permanently delete a Drive file (bypassing the trash).
+  ex:
+    - gam user alice.martin@example.com purge drivefile id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW
+'gam <UserTypeEntity> collect orphans':
+  fr: Rassembler les fichiers orphelins (sans dossier parent) dans un dossier.
+  en: Collect orphan files (no parent folder) into a folder.
+  ex:
+    - gam user alice.martin@example.com collect orphans
+'gam <UserTypeEntity> add drivefileacl':
+  fr: Partager un fichier ou un dossier avec un utilisateur, un groupe ou un domaine.
+  en: Share a file or folder with a user, a group or a domain.
+  ex:
+    - gam user alice.martin@example.com add drivefileacl id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW user bob.durand@example.com role writer
+    - gam user alice.martin@example.com add drivefileacl id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW domain example.com role reader
+'gam <UserTypeEntity> update drivefileacl':
+  fr: Changer le rôle d'un partage existant (lecteur, commentateur, éditeur).
+  en: Change the role of an existing share (reader, commenter, editor).
+  ex:
+    - gam user alice.martin@example.com update drivefileacl id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW bob.durand@example.com role reader
+'gam <UserTypeEntity> delete drivefileacl':
+  fr: Retirer un partage.
+  en: Remove a share.
+  ex:
+    - gam user alice.martin@example.com delete drivefileacl id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW bob.durand@example.com
+'gam <UserTypeEntity> show drivefileacls':
+  fr: Afficher qui a accès à un fichier.
+  en: Show who has access to a file.
+  ex:
+    - gam user alice.martin@example.com show drivefileacls id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW
+'gam <UserTypeEntity> print drivefileacls':
+  fr: Exporter les partages d'un fichier (audit de partage externe).
+  en: Export a file's shares (external sharing audit).
+  ex:
+    - gam user alice.martin@example.com print drivefileacls id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW
+'gam <UserTypeEntity> show filerevisions':
+  fr: Afficher l'historique des versions d'un fichier.
+  en: Show a file's version history.
+  ex:
+    - gam user alice.martin@example.com show filerevisions id:1A2b3C4d5E6f7G8h9I0jKlMnOpQrStUvW
+'gam <UserTypeEntity> create shareddrive':
+  fr: Créer un lecteur partagé.
+  en: Create a shared drive.
+  ex:
+    - gam user admin@example.com create shareddrive "Projets"
+'gam <UserTypeEntity> update shareddrive':
+  fr: Modifier un lecteur partagé (nom, restrictions de partage).
+  en: Change a shared drive (name, sharing restrictions).
+  ex:
+    - gam user admin@example.com update shareddrive 0AExampleSharedDriveId name "Projets 2026"
+'gam <UserTypeEntity> delete shareddrive':
+  fr: Supprimer un lecteur partagé vide.
+  en: Delete an empty shared drive.
+  ex:
+    - gam user admin@example.com delete shareddrive 0AExampleSharedDriveId
+'gam <UserTypeEntity> show shareddrives':
+  fr: Afficher les lecteurs partagés accessibles à un utilisateur.
+  en: Show the shared drives a user can access.
+  ex:
+    - gam user alice.martin@example.com show shareddrives
+'gam <UserTypeEntity> print shareddrives':
+  fr: Exporter les lecteurs partagés d'un utilisateur.
+  en: Export a user's shared drives.
+  ex:
+    - gam user alice.martin@example.com print shareddrives
+'gam <UserTypeEntity> print shareddriveacls':
+  fr: Exporter les membres et droits d'un lecteur partagé.
+  en: Export a shared drive's members and permissions.
+  ex:
+    - gam user admin@example.com print shareddriveacls
+'gam print shareddrives':
+  fr: Lister tous les lecteurs partagés de l'organisation (droits d'administrateur).
+  en: List every shared drive in the organization (admin rights).
+  ex:
+    - gam print shareddrives
+    - gam print shareddrives query "name contains 'Projets'"
+
+# ---------------------------------------------------------------- Agendas
+'gam calendar <CalendarEntity> showacl':
+  fr: Afficher qui a accès à un agenda.
+  en: Show who has access to a calendar.
+  ex:
+    - gam calendar planning@example.com showacl
+'gam calendar <CalendarEntity> printacl':
+  fr: Exporter les accès d'un agenda.
+  en: Export a calendar's access rules.
+  ex:
+    - gam calendar planning@example.com printacl
+'gam calendar <CalendarEntity> addevent':
+  fr: Ajouter un événement à un agenda, avec participants.
+  en: Add an event to a calendar, with attendees.
+  ex:
+    - gam calendar planning@example.com addevent summary "Réunion d'équipe" start 2026-02-10T09:00:00+01:00 end 2026-02-10T10:00:00+01:00 attendee alice.martin@example.com
+'gam calendar <CalendarEntity> deleteevent':
+  fr: Supprimer des événements d'un agenda (par recherche ou identifiant).
+  en: Delete events from a calendar (by search or ID).
+  ex:
+    - gam calendar planning@example.com deleteevent query "Réunion d'équipe" doit
+'gam calendar <CalendarEntity> printevents':
+  fr: Exporter les événements d'un agenda sur une période.
+  en: Export a calendar's events over a period.
+  ex:
+    - gam calendar planning@example.com printevents after 2026-02-01 before 2026-03-01 fields id,summary,start,end,attendees
+'gam calendar <CalendarEntity> wipe':
+  fr: Vider un agenda de tous ses événements.
+  en: Remove every event from a calendar.
+  ex:
+    - gam calendar planning@example.com wipe
+'gam <UserTypeEntity> add event':
+  fr: Ajouter un événement à l'agenda d'un utilisateur.
+  en: Add an event to a user's calendar.
+  ex:
+    - gam user alice.martin@example.com add event primary summary "Rendez-vous" start 2026-02-10T14:00:00+01:00 end 2026-02-10T15:00:00+01:00
+'gam <UserTypeEntity> delete events':
+  fr: Supprimer des événements de l'agenda d'un utilisateur (ex. après un départ).
+  en: Delete events from a user's calendar (e.g. after a departure).
+  ex:
+    - gam user alice.martin@example.com delete events primary query "Réunion annulée" doit
+'gam <UserTypeEntity> print events':
+  fr: Exporter les événements de l'agenda d'un utilisateur.
+  en: Export the events of a user's calendar.
+  ex:
+    - gam user alice.martin@example.com print events primary after 2026-02-01 fields id,summary,start,end
+'gam <UserTypeEntity> create calendar':
+  fr: Créer un agenda secondaire pour un utilisateur.
+  en: Create a secondary calendar for a user.
+  ex:
+    - gam user alice.martin@example.com create calendar summary "Projet Alpha" description "Planning du projet"
+'gam <UserTypeEntity> delete calendars':
+  fr: Supprimer un agenda secondaire.
+  en: Delete a secondary calendar.
+  ex:
+    - gam user alice.martin@example.com delete calendars projet-alpha@group.calendar.google.com
+'gam <UserTypeEntity> print calendars':
+  fr: Lister les agendas auxquels un utilisateur est abonné.
+  en: List the calendars a user is subscribed to.
+  ex:
+    - gam user alice.martin@example.com print calendars
+'gam <UserTypeEntity> show calendaracls':
+  fr: Afficher les accès d'un agenda d'utilisateur.
+  en: Show the access rules of a user's calendar.
+  ex:
+    - gam user alice.martin@example.com show calendaracls primary
+'gam <UserTypeEntity> add calendaracls':
+  fr: Donner accès à un agenda (lecture, édition).
+  en: Give access to a calendar (read, edit).
+  ex:
+    - gam user alice.martin@example.com add calendaracls primary reader bob.durand@example.com
+'gam <UserTypeEntity> delete calendaracls':
+  fr: Retirer un accès à un agenda.
+  en: Remove access to a calendar.
+  ex:
+    - gam user alice.martin@example.com delete calendaracls primary bob.durand@example.com
+'gam <UserTypeEntity> show calsettings':
+  fr: Afficher les réglages d'agenda (fuseau, langue, format de date).
+  en: Show calendar settings (time zone, language, date format).
+  ex:
+    - gam user alice.martin@example.com show calsettings
+
+# ---------------------------------------------------------------- Appareils et Chrome
+'gam <CrOSTypeEntity> update <CrOSAttribute>+':
+  fr: Modifier un Chromebook (unité d'organisation, notes, étiquette, utilisateur).
+  en: Change a Chromebook (organizational unit, notes, asset tag, user).
+  ex:
+    - gam cros_sn 5CD0123ABC update ou "/Ecoles" notes "Salle 12" assetid PC-0042
+'gam <CrOSTypeEntity> update action':
+  fr: Désactiver, réactiver ou retirer un Chromebook du parc (perte, vol, fin de vie).
+  en: Disable, re-enable or deprovision a Chromebook (loss, theft, end of life).
+  ex:
+    - gam cros_sn 5CD0123ABC update action disable
+    - gam cros_sn 5CD0123ABC update action reenable
+'gam <CrOSTypeEntity> info':
+  fr: Afficher la fiche d'un Chromebook.
+  en: Show a Chromebook's record.
+  ex:
+    - gam cros_sn 5CD0123ABC info
+'gam print crosactivity':
+  fr: Exporter l'activité des Chromebooks (utilisateurs récents, dernière synchronisation).
+  en: Export Chromebook activity (recent users, last sync).
+  ex:
+    - gam print crosactivity recentusers
+'gam update mobile':
+  fr: Agir sur un appareil mobile géré (approuver, bloquer, effacer).
+  en: Act on a managed mobile device (approve, block, wipe).
+  ex:
+    - gam update mobile query:"email:alice.martin@example.com" action block
+    - gam update mobile query:"email:alice.martin@example.com" action account_wipe
+'gam info mobile':
+  fr: Afficher la fiche d'un appareil mobile.
+  en: Show a mobile device's record.
+  ex:
+    - gam info mobile query:"email:alice.martin@example.com"
+'gam print devices':
+  fr: Exporter les appareils gérés par la gestion des terminaux (ordinateurs, mobiles).
+  en: Export the devices managed by endpoint management (computers, mobiles).
+  ex:
+    - gam print devices
+'gam print browsers':
+  fr: Exporter les navigateurs Chrome gérés de l'organisation.
+  en: Export the organization's managed Chrome browsers.
+  ex:
+    - gam print browsers
+'gam print chromeversions':
+  fr: Lister les versions de Chrome déployées dans le parc.
+  en: List the Chrome versions deployed across the fleet.
+  ex:
+    - gam print chromeversions
+'gam print chromepolicies':
+  fr: Exporter les stratégies Chrome appliquées à une unité d'organisation.
+  en: Export the Chrome policies applied to an organizational unit.
+  ex:
+    - gam print chromepolicies ou "/Ecoles"
+'gam print printers':
+  fr: Lister les imprimantes enregistrées dans la console d'administration.
+  en: List the printers registered in the admin console.
+  ex:
+    - gam print printers
+
+# ---------------------------------------------------------------- Rapports et sécurité
+'gam report users':
+  fr: Rapport d'utilisation par utilisateur (dernière connexion, validation en deux étapes, stockage).
+  en: Per-user usage report (last sign-in, 2-step verification, storage).
+  ex:
+    - gam report users parameters accounts:last_login_time,accounts:is_2sv_enrolled
+'gam report usage user':
+  fr: Rapport d'utilisation par utilisateur sur une période (ex. nombre d'e-mails envoyés).
+  en: Per-user usage report over a period (e.g. number of emails sent).
+  ex:
+    - gam report usage user startdate 2026-01-01 enddate 2026-01-31 parameters gmail:num_emails_sent
+'gam report customers':
+  fr: Rapport d'utilisation à l'échelle du domaine.
+  en: Domain-wide usage report.
+  ex:
+    - gam report customers
+'gam print alerts':
+  fr: Lister les alertes de sécurité du centre d'alertes.
+  en: List the security alerts from the alert center.
+  ex:
+    - gam print alerts
+'gam show alerts':
+  fr: Afficher les alertes de sécurité.
+  en: Show the security alerts.
+  ex:
+    - gam show alerts
+'gam create datatransfer':
+  fr: Transférer les données (Drive, agendas) d'un utilisateur à un autre avant de supprimer son compte.
+  en: Transfer a user's data (Drive, calendars) to another user before deleting their account.
+  ex:
+    - gam create datatransfer ancien.salarie@example.com gdrive,calendar bob.durand@example.com privacy_level shared,private
+'gam print datatransfers':
+  fr: Suivre les transferts de données en cours ou terminés.
+  en: Track data transfers in progress or completed.
+  ex:
+    - gam print datatransfers
+'gam info datatransfer':
+  fr: Afficher l'état d'un transfert de données.
+  en: Show the status of a data transfer.
+  ex:
+    - gam info datatransfer 123456789012345678
+'gam create vaultmatter':
+  fr: Créer un dossier Vault (conservation et recherche légales).
+  en: Create a Vault matter (legal hold and search).
+  ex:
+    - gam create vaultmatter name "Litige 2026" description "Demande de la direction"
+'gam create vaulthold':
+  fr: Placer des boîtes mail en conservation légale dans un dossier Vault.
+  en: Place mailboxes on legal hold in a Vault matter.
+  ex:
+    - gam create vaulthold matter "Litige 2026" name "Conservation compta" corpus mail accounts alice.martin@example.com
+'gam create vaultexport':
+  fr: Exporter des données Vault (messages) d'un dossier.
+  en: Export Vault data (messages) from a matter.
+  ex:
+    - gam create vaultexport matter "Litige 2026" name "Export compta" corpus mail accounts alice.martin@example.com
+'gam print vaultmatters':
+  fr: Lister les dossiers Vault.
+  en: List the Vault matters.
+  ex:
+    - gam print vaultmatters
+'gam print vaultholds':
+  fr: Lister les conservations Vault d'un dossier.
+  en: List a matter's Vault holds.
+  ex:
+    - gam print vaultholds matters "Litige 2026"

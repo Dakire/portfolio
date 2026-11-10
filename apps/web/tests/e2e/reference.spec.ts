@@ -34,8 +34,12 @@ test.describe('Référence : recherche', () => {
     await box.fill('bitlocker status');
     await expect(results(page).first()).toBeVisible();
     const n1 = await results(page).count();
-    await box.fill('bitlocker zzzzxqj');
+    await box.fill('zzzzxqj');
     await expect(page.locator('.ref-empty')).toBeVisible();
+    // un mot qui ne correspond à rien : les résultats exacts disparaissent, seuls restent les approchants (signalés)
+    await box.fill('bitlocker zzzzxqj');
+    await expect(results(page).first()).toBeVisible();
+    await expect(page.locator('.ref-item-approx').first()).toBeVisible();
     expect(n1).toBeGreaterThan(0);
   });
 

@@ -1,5 +1,6 @@
 // Génération des index de la section « Référence » : lit data/reference/src/*.yml, valide, écrit public/data/reference/*.json.
 // Tourne uniquement en local (jamais en production) ; les JSON générés sont commités. Voir « pnpm reference:build ».
+import { describe, syntheticExamples } from './auto-examples.mjs';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -156,8 +157,14 @@ const tokens = (s) =>
 
 /** Glossaire français -> mots des commandes : [{ fr: string[], en: string[] }]. */
 export function readGlossary() {
-  if (!existsSync(GLOSSARY_FILE)) return [];
-  const list = parse(readFileSync(GLOSSARY_FILE, 'utf-8')) ?? [];
+  // glossaire.yml puis glossaire-2.yml… (un même format, découpé pour rester lisible)
+  const dir = dirname(GLOSSARY_FILE);
+  const files = existsSync(dir)
+    ? readdirSync(dir)
+        .filter((f) => /^glossaire.*\.yml$/.test(f))
+        .sort()
+    : [];
+  const list = files.flatMap((f) => parse(readFileSync(join(dir, f), 'utf-8')) ?? []);
   return list.map((g, i) => {
     if (!Array.isArray(g?.fr) || !Array.isArray(g?.en) || !g.fr.length || !g.en.length)
       throw new Error(`glossaire.yml : groupe n°${i + 1} sans listes « fr » et « en »`);
@@ -213,6 +220,62 @@ export function applyExamples(refId, entries, examples) {
   return entries;
 }
 
+/**
+ * Commandes GAM sans exemple écrit à la main : un exemple minimal (et un avec une option courante) construit depuis la syntaxe
+ * du wiki, et une description « verbe + objet » dans la langue de la page. Déterministe et idempotent.
+ */
+function withAutoExamples(entries, curated, lang) {
+  return entries.map((e) => {
+    if (!e.name.startsWith('gam ') || e.id in curated) return e;
+    const synth = syntheticExamples(e.syn);
+    const ex = [...synth, ...(e.ex ?? []).filter((v) => !synth.includes(v.trim()))];
+    const desc = describe(e.syn || e.name, lang === 'fr' ? 'fr' : 'en') ?? e.desc;
+    return { ...e, ...(desc && { desc }), ...(ex.length && { ex }) };
+  });
+}
+
+/** Fichier d'exemples partagé par les versions française et anglaise de GAM : clé = début de la syntaxe (« gam print users »). */
+export function readExtraExamples(refId) {
+  if (!refId.startsWith('gam')) return {};
+  // gam-extra.yml, gam-extra-2.yml… : un même format, découpé pour rester lisible
+  const files = readdirSync(EXAMPLES_DIR)
+    .filter((f) => /^gam-extra.*\.yml$/.test(f))
+    .sort();
+  return Object.assign(
+    {},
+    ...files.map((f) => parse(readFileSync(join(EXAMPLES_DIR, f), 'utf-8')) ?? {}),
+  );
+}
+
+/** « gam <UserTypeEntity> add delegate » correspond à « gam <UserTypeEntity> add delegate|delegates … » (premier résultat). */
+function matchesSyntax(syn, key) {
+  const s = String(syn ?? '').split(/\s+/);
+  const k = key.split(/\s+/);
+  return k.length <= s.length && k.every((w, i) => s[i] === w || s[i].split('|').includes(w));
+}
+
+/** Exemples écrits à la main (gam-extra.yml) : description dans la langue de la page, exemples en tête, entrée marquée « common ». */
+export function applyExtraExamples(refId, entries, extra, lang, curated = {}) {
+  const missing = [];
+  for (const [key, x] of Object.entries(extra)) {
+    const e = entries.find((en) => !(en.id in curated) && matchesSyntax(en.syn, key));
+    if (!e) {
+      missing.push(key);
+      continue;
+    }
+    const desc = lang === 'fr' ? x.fr : x.en;
+    if (desc) e.desc = text(desc);
+    const ex = asList(x.ex).map((v) => v.trim());
+    if (ex.length) e.ex = [...ex, ...(e.ex ?? []).filter((v) => !ex.includes(v.trim()))];
+    e.common = true;
+  }
+  if (missing.length)
+    throw new Error(
+      `exemples/gam-extra.yml : aucune commande de ${refId}.json ne commence par : ${missing.join(' ; ')}`,
+    );
+  return entries;
+}
+
 /** Entrées publiées : champs de recherche français « kwn » et « kw » recalculés (les références anglaises n'en ont pas). */
 const withKeywords = (meta, entries, glossary) =>
   entries.map(({ kw: _kw, kwn: _kwn, ...e }) => {
@@ -236,7 +299,19 @@ export function computeOutputs() {
       // Les entrées viennent du dernier « reference:gam » ; les textes de la page (titre, description…) de la source YAML.
       const generated = JSON.parse(readFileSync(existing, 'utf-8'));
       const merged = { ...generated.meta, ...built.meta, count: generated.meta.count };
-      const entries = applyExamples(merged.id, generated.entries, readExamples(merged.id));
+      const examples = readExamples(merged.id);
+      const extra = readExtraExamples(merged.id);
+      const entries = applyExamples(
+        merged.id,
+        applyExtraExamples(
+          merged.id,
+          withAutoExamples(generated.entries, examples, merged.lang),
+          extra,
+          merged.lang,
+          examples,
+        ),
+        examples,
+      );
       outputs[`${built.meta.id}.json`] = serialize({
         meta: merged,
         entries: withKeywords(merged, entries, glossary),

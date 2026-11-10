@@ -586,6 +586,7 @@ a.tile,
   --danger: var(--tone-danger);
   --ok: var(--tone-ok);
   --warn: var(--tone-warn);
+  --selection: color-mix(in srgb, var(--band-accent) 16%, transparent);
   --canvas: var(--band);
   --accent-strong: var(--band-accent);
   --accent-ink: var(--band);

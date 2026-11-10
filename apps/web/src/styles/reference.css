@@ -239,9 +239,12 @@
   color: var(--link);
 }
 
+.ref-item-approx {
+  opacity: 0.92;
+}
 .ref-item mark {
   background: var(--selection);
-  color: inherit;
+  color: var(--ink);
   border-radius: 2px;
   padding: 0 1px;
 }

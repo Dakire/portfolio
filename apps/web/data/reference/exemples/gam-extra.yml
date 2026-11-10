@@ -1,0 +1,525 @@
+# Exemples écrits à la main pour les commandes GAM7 courantes, partagés par la version française (fr) et anglaise (en).
+# Clé = début de la syntaxe du wiki (« gam print users ») ; la première commande qui commence ainsi reçoit l'exemple.
+# Les adresses sont fictives (example.com). Les commandes qui modifient ou suppriment sont à tester sur un compte ou une unité d'organisation de test.
+# Une commande déjà présente dans gam.yml / gam-commands.yml (exemples historiques) n'est pas reprise ici.
+
+# ---------------------------------------------------------------- Utilisateurs
+'gam print users issuspended':
+  fr: Lister seulement les comptes suspendus (ou, avec « false », les comptes actifs).
+  en: List only suspended accounts (or active ones with "false").
+  ex:
+    - gam print users issuspended true fields primaryemail,name,orgunitpath,suspensionreason
+'gam print users countonly':
+  fr: Compter les utilisateurs sans les lister.
+  en: Count users without listing them.
+  ex:
+    - gam print users countonly
+    - gam print users query "orgUnitPath='/Comptabilite'" countonly
+'gam print usercountsbyorgunit':
+  fr: Nombre d'utilisateurs par unité d'organisation.
+  en: Number of users per organizational unit.
+  ex:
+    - gam print usercountsbyorgunit
+'gam <UserTypeEntity> update users':
+  fr: Modifier plusieurs comptes d'un coup (unité d'organisation, mot de passe, suspension) à partir d'une sélection.
+  en: Change several accounts at once (organizational unit, password, suspension) from a selection.
+  ex:
+    - gam ou "/Anciens" update users suspended on
+    - gam group equipe-compta@example.com update users org "/Comptabilite"
+'gam check suspended':
+  fr: Vérifier si un compte est suspendu (code de retour utilisable dans un script).
+  en: Check whether an account is suspended (return code usable in a script).
+  ex:
+    - gam check suspended alice.martin@example.com
+'gam create guestuser':
+  fr: Inviter un utilisateur invité (compte Google externe) dans l'organisation.
+  en: Invite a guest user (external Google account) into the organization.
+  ex:
+    - gam create guestuser partenaire@example.net
+'gam info users <UserTypeEntity>':
+  fr: Afficher la fiche de plusieurs utilisateurs choisis par groupe ou unité d'organisation.
+  en: Show the record of several users chosen by group or organizational unit.
+  ex:
+    - gam ou "/Comptabilite" info users
+'gam <UserTypeEntity> show count':
+  fr: Compter les éléments (utilisateurs sélectionnés) avant d'agir en masse.
+  en: Count the selected items before acting in bulk.
+  ex:
+    - gam ou "/Comptabilite" show count
+'gam <UserTypeEntity> waitformailbox':
+  fr: Attendre que la boîte mail d'un nouveau compte soit prête avant de configurer sa messagerie.
+  en: Wait until a new account's mailbox is ready before configuring its mail settings.
+  ex:
+    - gam user alice.martin@example.com waitformailbox
+'gam <UserTypeEntity> show asps':
+  fr: Lister les mots de passe d'application d'un utilisateur.
+  en: List a user's app-specific passwords.
+  ex:
+    - gam user alice.martin@example.com show asps
+'gam <UserTypeEntity> delete asps':
+  fr: Supprimer les mots de passe d'application (utile après un incident de sécurité).
+  en: Delete app-specific passwords (useful after a security incident).
+  ex:
+    - gam user alice.martin@example.com delete asps all
+'gam <UserTypeEntity> update backupcodes':
+  fr: Générer de nouveaux codes de secours de la validation en deux étapes.
+  en: Generate new 2-step verification backup codes.
+  ex:
+    - gam user alice.martin@example.com update backupcodes
+'gam <UserTypeEntity> show backupcodes':
+  fr: Afficher les codes de secours de la validation en deux étapes.
+  en: Show the 2-step verification backup codes.
+  ex:
+    - gam user alice.martin@example.com show backupcodes
+'gam <UserTypeEntity> delete token':
+  fr: Révoquer l'accès d'une application tierce (jeton OAuth) à un compte.
+  en: Revoke a third-party application's access (OAuth token) to an account.
+  ex:
+    - gam user alice.martin@example.com delete token clientid 1234567890.apps.googleusercontent.com
+'gam <UserTypeEntity> show tokens':
+  fr: Lister les applications autorisées par un utilisateur (jetons OAuth).
+  en: List the applications a user has authorized (OAuth tokens).
+  ex:
+    - gam user alice.martin@example.com show tokens
+'gam print tokens':
+  fr: Inventaire de toutes les applications tierces autorisées dans le domaine.
+  en: Inventory of every third-party app authorized in the domain.
+  ex:
+    - gam all users print tokens
+    - gam redirect csv ./apps-autorisees.csv all users print tokens
+'gam <UserTypeEntity> show peopleprofile':
+  fr: Afficher le profil public (annuaire) d'un utilisateur.
+  en: Show a user's public (directory) profile.
+  ex:
+    - gam user alice.martin@example.com show peopleprofile
+'gam <UserTypeEntity> profile':
+  fr: Rendre le profil d'un utilisateur visible (ou non) dans l'annuaire du domaine.
+  en: Make a user's profile visible (or not) in the domain directory.
+  ex:
+    - gam user alice.martin@example.com profile shared
+    - gam user alice.martin@example.com profile unshared
+'gam create alias':
+  fr: Ajouter une adresse e-mail secondaire (alias) à un utilisateur ou à un groupe.
+  en: Add a secondary email address (alias) to a user or group.
+  ex:
+    - gam create alias contact@example.com user alice.martin@example.com
+    - gam create alias compta@example.com group equipe-compta@example.com
+'gam delete alias':
+  fr: Supprimer un alias.
+  en: Delete an alias.
+  ex:
+    - gam delete alias contact@example.com
+'gam info alias':
+  fr: Savoir à quel utilisateur ou groupe appartient un alias.
+  en: Find out which user or group owns an alias.
+  ex:
+    - gam info alias contact@example.com
+'gam update alias':
+  fr: Déplacer un alias vers un autre utilisateur ou groupe.
+  en: Move an alias to another user or group.
+  ex:
+    - gam update alias contact@example.com user bob.durand@example.com
+'gam print addresses':
+  fr: Exporter toutes les adresses du domaine (principales, alias, groupes) avec leur cible.
+  en: Export every address in the domain (primary, aliases, groups) with its target.
+  ex:
+    - gam print addresses
+    - gam redirect csv ./adresses.csv print addresses
+'gam create contact':
+  fr: Créer un contact dans le carnet d'adresses de l'organisation (contacts de domaine).
+  en: Create a contact in the organization's address book (domain contacts).
+  ex:
+    - gam user alice.martin@example.com create contact givenname Jean familyname Dupont email jean.dupont@example.net
+'gam print contacts':
+  fr: Exporter les contacts d'un utilisateur.
+  en: Export a user's contacts.
+  ex:
+    - gam user alice.martin@example.com print contacts
+
+# ---------------------------------------------------------------- Groupes
+'gam update group':
+  fr: Modifier un groupe (nom, description, règles de publication, visibilité).
+  en: Change a group (name, description, posting rules, visibility).
+  ex:
+    - gam update group equipe-compta@example.com name "Equipe Compta" description "Liste de la comptabilité"
+    - gam update group equipe-compta@example.com whoCanPostMessage ALL_IN_DOMAIN_CAN_POST allowExternalMembers false
+'gam update groups':
+  fr: Modifier les membres d'un groupe (ajouter, retirer, synchroniser) à partir d'adresses ou d'un fichier.
+  en: Change a group's members (add, remove, sync) from addresses or a file.
+  ex:
+    - gam update group equipe-compta@example.com add member alice.martin@example.com bob.durand@example.com
+    - gam update group equipe-compta@example.com sync members file membres.txt
+    - gam update group equipe-compta@example.com remove member ancien.salarie@example.com
+'gam print groups':
+  fr: Exporter la liste des groupes du domaine, avec nombre de membres et réglages.
+  en: Export the domain's groups with member counts and settings.
+  ex:
+    - gam print groups fields email,name,description,directMembersCount
+    - gam print groups members managers owners
+'gam show group-members':
+  fr: Afficher les membres d'un groupe (rôle et type) à l'écran.
+  en: Show a group's members (role and type) on screen.
+  ex:
+    - gam show group-members group equipe-compta@example.com
+'gam info member':
+  fr: Savoir si un utilisateur est membre d'un groupe, et avec quel rôle.
+  en: Find out whether a user is a member of a group, and with which role.
+  ex:
+    - gam info member alice.martin@example.com equipe-compta@example.com
+'gam show grouptree':
+  fr: Afficher l'arborescence d'un groupe (groupes imbriqués).
+  en: Show a group's tree (nested groups).
+  ex:
+    - gam show grouptree equipe-compta@example.com
+'gam <UserTypeEntity> delete group':
+  fr: Retirer un ou plusieurs utilisateurs d'un groupe.
+  en: Remove one or more users from a group.
+  ex:
+    - gam user ancien.salarie@example.com delete group equipe-compta@example.com
+    - gam user ancien.salarie@example.com delete groups
+'gam <UserTypeEntity> sync group':
+  fr: Faire correspondre l'appartenance de groupes d'un utilisateur à une liste exacte.
+  en: Make a user's group memberships match an exact list.
+  ex:
+    - gam user alice.martin@example.com sync groups equipe-compta@example.com direction@example.com
+'gam <UserTypeEntity> check group':
+  fr: Vérifier qu'un utilisateur est bien membre d'un groupe.
+  en: Check that a user is a member of a group.
+  ex:
+    - gam user alice.martin@example.com check groups equipe-compta@example.com
+'gam <UserTypeEntity> print groupslist':
+  fr: Lister les groupes d'un utilisateur en une cellule (pratique pour un inventaire).
+  en: List a user's groups in a single cell (handy for an inventory).
+  ex:
+    - gam user alice.martin@example.com print groupslist
+'gam create cigroup':
+  fr: Créer un groupe Cloud Identity (groupes de sécurité).
+  en: Create a Cloud Identity group (security groups).
+  ex:
+    - gam create cigroup securite-it@example.com name "Securite IT" security
+'gam print cigroups':
+  fr: Exporter les groupes Cloud Identity du domaine.
+  en: Export the domain's Cloud Identity groups.
+  ex:
+    - gam print cigroups
+'gam print cigroup-members':
+  fr: Exporter les membres des groupes Cloud Identity.
+  en: Export the members of Cloud Identity groups.
+  ex:
+    - gam print cigroup-members group securite-it@example.com
+
+# ---------------------------------------------------------------- Gmail : réglages
+'gam <UserTypeEntity> show filters':
+  fr: Afficher les filtres Gmail d'un utilisateur (règles de tri, redirections).
+  en: Show a user's Gmail filters (sorting rules, redirections).
+  ex:
+    - gam user alice.martin@example.com show filters
+'gam <UserTypeEntity> print filters':
+  fr: Exporter les filtres Gmail de tous les utilisateurs (repérer les redirections cachées).
+  en: Export every user's Gmail filters (spot hidden redirections).
+  ex:
+    - gam all users print filters
+    - gam redirect csv ./filtres.csv ou "/Comptabilite" print filters
+'gam <UserTypeEntity> delete filters':
+  fr: Supprimer les filtres Gmail d'un utilisateur (par identifiant).
+  en: Delete a user's Gmail filters (by ID).
+  ex:
+    - gam user alice.martin@example.com delete filters ANe1Bm3abcdef
+'gam <UserTypeEntity> show labels':
+  fr: Afficher les étiquettes Gmail d'un utilisateur.
+  en: Show a user's Gmail labels.
+  ex:
+    - gam user alice.martin@example.com show labels
+'gam <UserTypeEntity> delete label':
+  fr: Supprimer une étiquette Gmail.
+  en: Delete a Gmail label.
+  ex:
+    - gam user alice.martin@example.com delete label "Factures"
+'gam <UserTypeEntity> update label':
+  fr: Renommer une étiquette Gmail.
+  en: Rename a Gmail label.
+  ex:
+    - gam user alice.martin@example.com update label "Factures" newname "Factures 2026"
+'gam <UserTypeEntity> show forwardingaddress':
+  fr: Lister les adresses de transfert autorisées d'un utilisateur.
+  en: List a user's allowed forwarding addresses.
+  ex:
+    - gam user alice.martin@example.com show forwardingaddresses
+'gam <UserTypeEntity> delete forwardingaddress':
+  fr: Supprimer une adresse de transfert autorisée.
+  en: Delete an allowed forwarding address.
+  ex:
+    - gam user alice.martin@example.com delete forwardingaddress externe@example.net
+'gam <UserTypeEntity> print forward':
+  fr: Exporter l'état du transfert automatique de tous les utilisateurs (audit des fuites de messagerie).
+  en: Export every user's auto-forwarding state (mail leak audit).
+  ex:
+    - gam all users print forward
+    - gam redirect csv ./transferts.csv all users print forward
+'gam <UserTypeEntity> print forwardingaddress':
+  fr: Exporter les adresses de transfert autorisées.
+  en: Export the allowed forwarding addresses.
+  ex:
+    - gam all users print forwardingaddresses
+'gam <UserTypeEntity> show vacation':
+  fr: Afficher la réponse d'absence d'un utilisateur.
+  en: Show a user's vacation (out-of-office) reply.
+  ex:
+    - gam user alice.martin@example.com show vacation
+'gam <UserTypeEntity> print vacation':
+  fr: Exporter les réponses d'absence actives de tous les utilisateurs.
+  en: Export every user's active vacation replies.
+  ex:
+    - gam all users print vacation
+'gam <UserTypeEntity> update delegate':
+  fr: Modifier une délégation de boîte mail existante.
+  en: Change an existing mailbox delegation.
+  ex:
+    - gam user alice.martin@example.com update delegate bob.durand@example.com
+'gam <UserTypeEntity> update sendas':
+  fr: Modifier un alias d'expédition (nom affiché, signature, adresse de réponse).
+  en: Change a send-as alias (display name, signature, reply-to).
+  ex:
+    - gam user alice.martin@example.com update sendas contact@example.com name "Service Contact" replyto contact@example.com
+'gam <UserTypeEntity> delete sendas':
+  fr: Supprimer un alias d'expédition.
+  en: Delete a send-as alias.
+  ex:
+    - gam user alice.martin@example.com delete sendas contact@example.com
+'gam <UserTypeEntity> signature':
+  fr: Définir la signature de messagerie d'un utilisateur (texte ou HTML).
+  en: Set a user's email signature (text or HTML).
+  ex:
+    - gam user alice.martin@example.com signature "Alice Martin<br>Comptabilite" html
+    - gam ou "/Comptabilite" signature file signature-compta.html html replace name "~~displayName~~"
+'gam <UserTypeEntity> pop':
+  fr: Activer ou désactiver POP pour un utilisateur.
+  en: Turn POP on or off for a user.
+  ex:
+    - gam user alice.martin@example.com pop off
+'gam <UserTypeEntity> print imap':
+  fr: Inventaire de l'état d'IMAP (pour fermer les accès hérités).
+  en: Inventory of the IMAP state (to close legacy access).
+  ex:
+    - gam all users print imap
+'gam <UserTypeEntity> language':
+  fr: Changer la langue de l'interface Gmail d'un utilisateur.
+  en: Change a user's Gmail interface language.
+  ex:
+    - gam user alice.martin@example.com language fr
+'gam <UserTypeEntity> show messages':
+  fr: Afficher des messages d'une boîte mail selon une recherche Gmail.
+  en: Show messages of a mailbox matching a Gmail search.
+  ex:
+    - gam user alice.martin@example.com show messages query "from:facture@example.net after:2026/01/01" showsnippet
+'gam <UserTypeEntity> print messages':
+  fr: Exporter des messages selon une recherche (utile pour retrouver un e-mail malveillant).
+  en: Export messages matching a search (useful to find a malicious email).
+  ex:
+    - gam all users print messages query "subject:'Facture urgente'" headers From,To,Subject,Date
+'gam <UserTypeEntity> trash messages':
+  fr: Mettre à la corbeille des messages correspondant à une recherche (ex. hameçonnage reçu par plusieurs personnes).
+  en: Move messages matching a search to the trash (e.g. phishing received by several people).
+  ex:
+    - gam ou "/Comptabilite" trash messages query "from:phishing@example.net" doit
+'gam <UserTypeEntity> untrash messages':
+  fr: Sortir des messages de la corbeille.
+  en: Restore messages from the trash.
+  ex:
+    - gam user alice.martin@example.com untrash messages query "in:trash subject:rapport" doit
+'gam <UserTypeEntity> modify messages':
+  fr: Ajouter ou retirer des étiquettes sur des messages (marquer comme lu, archiver).
+  en: Add or remove labels on messages (mark as read, archive).
+  ex:
+    - gam user alice.martin@example.com modify messages query "label:newsletters is:unread" removelabel UNREAD
+'gam <UserTypeEntity> archive messages':
+  fr: Archiver des messages (les retirer de la boîte de réception).
+  en: Archive messages (remove them from the inbox).
+  ex:
+    - gam user alice.martin@example.com archive messages query "label:newsletters" doit
+'gam <UserTypeEntity> draft message':
+  fr: Créer un brouillon dans la boîte d'un utilisateur.
+  en: Create a draft in a user's mailbox.
+  ex:
+    - gam user alice.martin@example.com draft message subject "Rappel" textmessage "Bonjour, ceci est un rappel." to bob.durand@example.com
+'gam <UserTypeEntity> insert message':
+  fr: Insérer un message directement dans une boîte (sans passer par l'envoi).
+  en: Insert a message straight into a mailbox (bypassing delivery).
+  ex:
+    - gam user alice.martin@example.com insert message subject "Information" textmessage "Message déposé par l'administrateur." labels INBOX,UNREAD
+'gam <UserTypeEntity> sendemail':
+  fr: Envoyer un e-mail au nom d'un utilisateur.
+  en: Send an email on behalf of a user.
+  ex:
+    - gam user alice.martin@example.com sendemail recipient bob.durand@example.com subject "Bonjour" message "Ceci est un test."
+    - gam user it-support@example.com sendemail recipient bob.durand@example.com subject "Mot de passe réinitialisé" message "Votre mot de passe temporaire est valable 24 h."
+'gam sendemail':
+  fr: Envoyer un e-mail depuis un compte de service ou le compte administrateur.
+  en: Send an email from a service account or the admin account.
+  ex:
+    - gam sendemail to bob.durand@example.com from admin@example.com subject "Maintenance" message "Coupure prévue samedi."
+'gam <UserTypeEntity> show smimes':
+  fr: Afficher les certificats S/MIME d'un utilisateur.
+  en: Show a user's S/MIME certificates.
+  ex:
+    - gam user alice.martin@example.com show smimes
+'gam <UserTypeEntity> show gmailprofile':
+  fr: Afficher le profil Gmail (adresse, nombre de messages, historique).
+  en: Show the Gmail profile (address, message count, history).
+  ex:
+    - gam user alice.martin@example.com show gmailprofile
+'gam <UserTypeEntity> show threads':
+  fr: Afficher des conversations Gmail selon une recherche.
+  en: Show Gmail threads matching a search.
+  ex:
+    - gam user alice.martin@example.com show threads query "subject:contrat" showsnippet
+
+# ---------------------------------------------------------------- Unités d'organisation
+'gam info org':
+  fr: Afficher une unité d'organisation (sous-unités, utilisateurs).
+  en: Show an organizational unit (sub-units, users).
+  ex:
+    - gam info org "/Comptabilite"
+    - gam info org "/Comptabilite" nousers
+'gam update org':
+  fr: Modifier une unité d'organisation (nom, description, parent) ou y déplacer des utilisateurs.
+  en: Change an organizational unit (name, description, parent) or move users into it.
+  ex:
+    - gam update org "/Comptabilite" name "Finance"
+    - gam update org "/Anciens" add users alice.martin@example.com bob.durand@example.com
+'gam delete org':
+  fr: Supprimer une unité d'organisation vide.
+  en: Delete an empty organizational unit.
+  ex:
+    - gam delete org "/Test"
+'gam show orgtree':
+  fr: Afficher l'arborescence complète des unités d'organisation.
+  en: Show the full organizational unit tree.
+  ex:
+    - gam show orgtree
+'gam check org':
+  fr: Vérifier qu'une unité d'organisation existe et qu'elle est cohérente.
+  en: Check that an organizational unit exists and is consistent.
+  ex:
+    - gam check org "/Comptabilite"
+
+# ---------------------------------------------------------------- Licences
+'gam show licenses':
+  fr: Afficher le nombre de licences utilisées et disponibles par offre.
+  en: Show the number of licenses used and available per product.
+  ex:
+    - gam show licenses
+'gam <UserTypeEntity> update license':
+  fr: Faire passer des utilisateurs d'une licence à une autre.
+  en: Move users from one license to another.
+  ex:
+    - gam user alice.martin@example.com update license 1010020027 from 1010020020
+'gam <UserTypeEntity> delete license':
+  fr: Retirer une licence à un utilisateur (départ, changement d'offre).
+  en: Remove a license from a user (leaver, plan change).
+  ex:
+    - gam user ancien.salarie@example.com delete license 1010020020
+'gam <UserTypeEntity> sync license':
+  fr: Faire correspondre les licences d'un groupe d'utilisateurs à une offre donnée.
+  en: Make the licenses of a set of users match a given product.
+  ex:
+    - gam ou "/Comptabilite" sync license 1010020020
+
+# ---------------------------------------------------------------- Administration
+'gam print admins':
+  fr: Lister les administrateurs du domaine et leurs rôles (audit des droits).
+  en: List the domain's administrators and their roles (permission audit).
+  ex:
+    - gam print admins
+    - gam print admins role "Super Admin"
+'gam create admin':
+  fr: Donner un rôle d'administration à un utilisateur.
+  en: Give a user an administrator role.
+  ex:
+    - gam create admin alice.martin@example.com "Help Desk Admin" org_unit "/Comptabilite"
+'gam delete admin':
+  fr: Retirer une attribution de rôle d'administration (identifiant visible avec « print admins »).
+  en: Remove an administrator role assignment (ID shown by "print admins").
+  ex:
+    - gam delete admin 12345678901234567
+'gam print adminroles':
+  fr: Lister les rôles d'administration disponibles.
+  en: List the available administrator roles.
+  ex:
+    - gam print adminroles
+'gam show adminroles':
+  fr: Afficher les rôles d'administration et leurs privilèges.
+  en: Show the administrator roles and their privileges.
+  ex:
+    - gam show adminroles privileges
+'gam create adminrole':
+  fr: Créer un rôle d'administration personnalisé.
+  en: Create a custom administrator role.
+  ex:
+    - gam create adminrole "Support N1" description "Réinitialiser les mots de passe" privileges "USERS_RETRIEVE,USERS_UPDATE"
+'gam print domains':
+  fr: Lister les domaines et alias de domaine du compte.
+  en: List the account's domains and domain aliases.
+  ex:
+    - gam print domains
+'gam create domain':
+  fr: Ajouter un domaine secondaire au compte Google Workspace.
+  en: Add a secondary domain to the Google Workspace account.
+  ex:
+    - gam create domain example.org
+'gam create domainalias':
+  fr: Ajouter un alias de domaine.
+  en: Add a domain alias.
+  ex:
+    - gam create domainalias example.net example.com
+'gam info customer':
+  fr: Afficher les informations du client Google Workspace (identifiant client, contact).
+  en: Show the Google Workspace customer information (customer ID, contact).
+  ex:
+    - gam info customer
+'gam info instance':
+  fr: Afficher la configuration de l'instance GAM (domaine, identifiant client, version).
+  en: Show the GAM instance setup (domain, customer ID, version).
+  ex:
+    - gam info instance
+'gam create verify':
+  fr: Demander l'enregistrement DNS de vérification d'un domaine.
+  en: Request the DNS verification record for a domain.
+  ex:
+    - gam create verify example.org
+'gam update verify':
+  fr: Lancer la vérification d'un domaine une fois l'enregistrement DNS ajouté.
+  en: Run a domain's verification once the DNS record has been added.
+  ex:
+    - gam update verify example.org cname
+'gam create schema':
+  fr: Créer un schéma de champs personnalisés utilisateur (ex. matricule, service).
+  en: Create a custom user schema (e.g. employee ID, department).
+  ex:
+    - gam create schema InfosRH field Matricule type string indexed endfield field Service type string endfield
+'gam print schemas':
+  fr: Lister les schémas de champs personnalisés.
+  en: List the custom user schemas.
+  ex:
+    - gam print schemas
+'gam delete schema':
+  fr: Supprimer un schéma de champs personnalisés.
+  en: Delete a custom user schema.
+  ex:
+    - gam delete schema InfosRH
+'gam print policies':
+  fr: Exporter les politiques Cloud Identity (partage externe, services).
+  en: Export the Cloud Identity policies (external sharing, services).
+  ex:
+    - gam print policies
+    - gam print policies filter "setting.type.matches('settings/drive_and_docs.external_sharing')"
+'gam show allowlisteddomains':
+  fr: Afficher les domaines autorisés pour le partage ou les connexions.
+  en: Show the allowlisted domains.
+  ex:
+    - gam show allowlisteddomains
+'gam print privileges':
+  fr: Lister tous les privilèges d'administration (utile pour construire un rôle sur mesure).
+  en: List every administrator privilege (useful to build a custom role).
+  ex:
+    - gam print privileges

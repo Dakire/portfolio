@@ -6,9 +6,9 @@ meta:
   title: 'GAM commands: Google Workspace cheatsheet (GAM7)'
   h1: 'GAM: Google Workspace command cheatsheet'
   description: 'GAM7 cheatsheet: the GAM commands for Google Workspace (users, groups, Gmail, Drive, calendars), with concrete examples and instant search.'
-  intro: "Search a GAM command ('delegate', 'vacation', 'transfer drive'): the common commands have a concrete example to copy, and every entry links to the original GAM wiki page, the only source of truth."
+  intro: "Search a GAM command ('delegate', 'vacation', 'transfer drive'): every command has an example to copy (hand-written for the common ones), and every entry links to the original GAM wiki page, the only source of truth."
   card: 'GAM7 commands to administer Google Workspace: users, groups, Drive, Gmail, calendars, devices.'
-  notice: 'Unofficial index, generated from the GAM wiki; the concrete examples (addresses at example.com) and the descriptions are added by me. Syntaxes are abbreviated: open the wiki page for the full, up-to-date definition, and test on a test user or organizational unit first.'
+  notice: 'Unofficial index, generated from the GAM wiki; the examples (addresses at example.com) and the descriptions are added by me: hand-written for the common commands, built from the wiki syntax for the others (minimal form, fictitious values; an unknown parameter stays written <Like this>). Syntaxes are abbreviated: open the wiki page for the full, up-to-date definition, and test on a test user or organizational unit first.'
   docs:
     label: GAM wiki
     url: https://github.com/GAM-team/GAM/wiki

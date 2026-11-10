@@ -1,4 +1,5 @@
 ---
+import { tone } from '../lib/tones';
 // Page d'une cheatsheet : introduction, blocs statiques (« Connexion »…), recherche, liste complète en HTML, liens associés, source et licence.
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
@@ -86,7 +87,7 @@ const pageToc = [
   scripts={['/js/libs/minisearch.js', '/js/reference.js']}
 >
   <PageHero title={ref.h1} lead={ref.intro} crumbs={trail} />
-  <div class="container section stack-lg">
+  <div class="container section stack-lg ref-intro">
     <nav class="page-toc" aria-label={lang === 'fr' ? 'Sur cette page' : 'On this page'}>
       <ul role="list">
         {pageToc.map((item) => (
@@ -96,14 +97,20 @@ const pageToc = [
         ))}
       </ul>
     </nav>
-    {!ref.topAfter && <RefTop lang={lang} reference={ref} id="ref-top-title" />}
-    <ReferenceSearch lang={lang} ref={ref} cats={ref.cats} />
-    {ref.notice && (
-      <p class="ref-notice" role="note">
-        {ref.notice}
-      </p>
-    )}
-    {ref.topAfter && <RefTop lang={lang} reference={ref} id="ref-top-title-after" />}
+  </div>
+  <div class={`band band-${tone(ref.id.length)}`}>
+    <div class="container stack-lg hm-section">
+      {!ref.topAfter && <RefTop lang={lang} reference={ref} id="ref-top-title" />}
+      <ReferenceSearch lang={lang} ref={ref} cats={ref.cats} />
+      {ref.notice && (
+        <p class="ref-notice" role="note">
+          {ref.notice}
+        </p>
+      )}
+      {ref.topAfter && <RefTop lang={lang} reference={ref} id="ref-top-title-after" />}
+    </div>
+  </div>
+  <div class="container section stack-lg">
     {entries.length > 0 && (
       <section class="stack" aria-labelledby="ref-all-title">
         <h2 id="ref-all-title">{ui.allTitle}</h2>

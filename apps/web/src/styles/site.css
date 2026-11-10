@@ -2976,3 +2976,35 @@ h2 i {
   font-size: var(--text-sm);
   font-weight: 600;
 }
+
+/* Cheatsheets : un bandeau de couleur par aide-mémoire */
+.ref-band {
+  display: grid;
+  gap: var(--space-4) var(--space-7);
+  align-items: center;
+  padding-block: var(--space-7);
+}
+@media (min-width: 48rem) {
+  .ref-band {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+.ref-band h3 {
+  font-size: var(--text-2xl);
+}
+.ref-band-text > p {
+  max-width: 46rem;
+  margin-top: var(--space-2);
+  color: var(--body);
+}
+.ref-band-link {
+  justify-self: start;
+}
+.ref-band-title {
+  color: inherit;
+  text-decoration: none;
+}
+.ref-band-title:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}

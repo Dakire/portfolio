@@ -1,6 +1,6 @@
 ---
+import { tone } from '../lib/tones';
 // Accueil « Cheatsheets » : la liste des cheatsheets. Pas de recherche globale (trop de résultats mélangés) : chaque cheatsheet a la sienne.
-import Card from '@grichard/ui/components/Card.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import '../styles/reference.css';
@@ -42,22 +42,27 @@ const ld = cheatsheetsHubLd(
   ld={ld}
 >
   <PageHero title={ui.hubH1} lead={ui.hubIntro} crumbs={trail} />
-  <div class="container section stack-lg">
-    <section class="stack" aria-labelledby="ref-cards-title">
-      <h2 id="ref-cards-title">{ui.cards}</h2>
-      <ul class="cards" role="list">
-        {refs.map((r) => (
-          <li>
-            <Card href={refPath(r)}>
-              <h3>{r.h1}</h3>
-              <p>{r.card}</p>
-              <p class="meta ref-card-count">
-                {r.count} {ui.entries} · {ui.open} →
-              </p>
-            </Card>
-          </li>
-        ))}
-      </ul>
+  <h2 class="visually-hidden" id="ref-cards-title">
+    {ui.cards}
+  </h2>
+  {refs.map((r, i) => (
+    <section class={`band band-${tone(i)}`} aria-labelledby={`ref-${r.id}-title`}>
+      <div class="container ref-band">
+        <div class="ref-band-text">
+          <h3 id={`ref-${r.id}-title`}>
+            <a class="ref-band-title" href={refPath(r)}>
+              {r.h1}
+            </a>
+          </h3>
+          <p>{r.card}</p>
+        </div>
+        <a class="btn ref-band-link" href={refPath(r)}>
+          {r.count} {ui.entries} · {ui.open}
+          <span class="arrow" aria-hidden="true">
+            →
+          </span>
+        </a>
+      </div>
     </section>
-  </div>
+  ))}
 </Base>
