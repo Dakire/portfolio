@@ -583,6 +583,41 @@ a.tile,
   --raised: color-mix(in srgb, var(--band-ink) 10%, var(--band));
   --line-strong: var(--band-muted);
   --focus: var(--band-accent);
+  --danger: var(--tone-danger);
+  --ok: var(--tone-ok);
+  --warn: var(--tone-warn);
+  --canvas: var(--band);
+  --accent-strong: var(--band-accent);
+  --accent-ink: var(--band);
+}
+/* Teintes : une couleur par section (jetons --tone-* de tokens.css) */
+.band-petrole,
+.band-olive,
+.band-prune,
+.band-ocre,
+.band-ardoise {
+  --band-ink: var(--tone-ink);
+  --band-muted: color-mix(in srgb, var(--band-ink) 84%, var(--band));
+}
+.band-petrole {
+  --band: var(--tone-petrole);
+  --band-accent: var(--tone-petrole-accent);
+}
+.band-olive {
+  --band: var(--tone-olive);
+  --band-accent: var(--tone-olive-accent);
+}
+.band-prune {
+  --band: var(--tone-prune);
+  --band-accent: var(--tone-prune-accent);
+}
+.band-ocre {
+  --band: var(--tone-ocre);
+  --band-accent: var(--tone-ocre-accent);
+}
+.band-ardoise {
+  --band: var(--tone-ardoise);
+  --band-accent: var(--tone-ardoise-accent);
 }
 /* Bord de signal : le haut (ou le bas) de la bande suit une trace de mesure, dessinée en ambre */
 .band-edge {

@@ -52,7 +52,7 @@ const trail = crumbs(lang, [], { label: text.career.title, path: routes.career }
   <PageHero path={text.career.title} title={text.career.title} crumbs={trail}>
     <p class="lead">{t.experienceIntro}</p>
   </PageHero>
-  <div class="container stack-lg section">
+  <div class="container section">
     <section class="stack" aria-labelledby="experiences">
       <h2 id="experiences">{t.experienceTitle}</h2>
       <ExperienceList
@@ -62,48 +62,55 @@ const trail = crumbs(lang, [], { label: text.career.title, path: routes.career }
         dutiesLabel={fr ? 'Missions, entre autres :' : 'Duties include:'}
       />
     </section>
-    <section class="stack" aria-labelledby="education">
+  </div>
+  <section class="band band-olive" aria-labelledby="education">
+    <div class="container stack hm-section">
       <h2 id="education">{t.educationTitle}</h2>
-      <ol class="timeline">
+      <ol class="jobs">
         {t.education.map((e) => (
-          <li class="stack">
-            <h3>{e.title}</h3>
-            <p class="meta">
-              {e.school} · {e.date}
-            </p>
-            {e.points && e.points.length > 0 && (
-              <ul class="points">
-                {e.points.map((point) => (
-                  <li>{point}</li>
-                ))}
-              </ul>
-            )}
-            {e.skills && e.skills.length > 0 && (
-              <ul class="row skill-tags" role="list" aria-label={skillsLabel}>
-                {e.skills.map((skill) => (
-                  <li>
-                    <span class="tag">{skill}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-            {e.projects && e.projects.length > 0 && (
-              <p class="meta">
-                {fr ? 'Réalisations liées : ' : 'Related projects: '}
-                {e.projects.map((slug, i) => (
-                  <>
-                    {i > 0 && ' · '}
-                    <a href={projectPath(lang, slug)}>{projectTitle(slug)}</a>
-                  </>
-                ))}
-              </p>
-            )}
+          <li class="job">
+            <div class="job-when">
+              <p class="job-date">{e.date}</p>
+              <p class="job-where">{e.school}</p>
+            </div>
+            <div class="job-what">
+              <h3>{e.title}</h3>
+              {e.points && e.points.length > 0 && (
+                <ul class="points">
+                  {e.points.map((point) => (
+                    <li>{point}</li>
+                  ))}
+                </ul>
+              )}
+              {e.skills && e.skills.length > 0 && (
+                <ul class="row skill-tags" role="list" aria-label={skillsLabel}>
+                  {e.skills.map((skill) => (
+                    <li>
+                      <span class="tag">{skill}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {e.projects && e.projects.length > 0 && (
+                <p class="meta">
+                  {fr ? 'Réalisations liées : ' : 'Related projects: '}
+                  {e.projects.map((slug, i) => (
+                    <>
+                      {i > 0 && ' · '}
+                      <a href={projectPath(lang, slug)}>{projectTitle(slug)}</a>
+                    </>
+                  ))}
+                </p>
+              )}
+            </div>
           </li>
         ))}
       </ol>
       <p class="prose">{t.languagesInfo}</p>
-    </section>
-    <section class="stack" aria-labelledby="cv">
+    </div>
+  </section>
+  <section class="band band-ardoise" aria-labelledby="cv">
+    <div class="container stack hm-section">
       <h2 id="cv">{text.career.cvTitle}</h2>
       <p class="prose">{text.career.cvText}</p>
       <ul class="row" role="list">
@@ -115,7 +122,9 @@ const trail = crumbs(lang, [], { label: text.career.title, path: routes.career }
           </li>
         ))}
       </ul>
-    </section>
+    </div>
+  </section>
+  <div class="container section">
     <CtaBand title={text.contactBand.title}>
       <p>{text.contactBand.text}</p>
       <Fragment slot="actions">

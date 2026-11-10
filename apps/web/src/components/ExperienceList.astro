@@ -19,29 +19,32 @@ const {
 const Heading = `h${level}` as 'h2' | 'h3';
 ---
 
-<ol class="timeline">
+<ol class="jobs">
   {items.map((job) => (
-    <li class="stack">
-      <Heading>{job.role}</Heading>
-      <p class="meta">
-        {job.company}
-        {job.contract && ` · ${job.contract}`} · {job.date}
-      </p>
-      <p class="meta">{dutiesLabel}</p>
-      <ul class="points">
-        {job.points.map((point) => (
-          <li>{point}</li>
-        ))}
-      </ul>
-      {job.skills && job.skills.length > 0 && (
-        <ul class="row skill-tags" role="list" aria-label={skillsLabel}>
-          {job.skills.map((skill) => (
-            <li>
-              <span class="tag">{skill}</span>
-            </li>
+    <li class="job">
+      <div class="job-when">
+        <p class="job-date">{job.date}</p>
+        <p class="job-where">{job.company}</p>
+        {job.contract && <p class="job-contract">{job.contract}</p>}
+      </div>
+      <div class="job-what">
+        <Heading>{job.role}</Heading>
+        <p class="job-duties">{dutiesLabel}</p>
+        <ul class="points">
+          {job.points.map((point) => (
+            <li>{point}</li>
           ))}
         </ul>
-      )}
+        {job.skills && job.skills.length > 0 && (
+          <ul class="row skill-tags" role="list" aria-label={skillsLabel}>
+            {job.skills.map((skill) => (
+              <li>
+                <span class="tag">{skill}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </li>
   ))}
 </ol>

@@ -2841,3 +2841,138 @@ h2 i {
   font-size: var(--text-xs);
   line-height: 1.5;
 }
+
+/* ---------- Blog : un bandeau de couleur par mois, articles en lignes lisibles ---------- */
+.post-month {
+  display: grid;
+  gap: var(--space-5);
+  padding-block: var(--space-7);
+}
+.post-month-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+}
+.post-month-head h2 {
+  font-size: var(--text-2xl);
+  text-transform: capitalize;
+}
+.post-rows {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.post-row {
+  display: grid;
+  gap: var(--space-2) var(--space-6);
+  padding-block: var(--space-5);
+  border-top: 1px solid var(--line);
+  color: inherit;
+  text-decoration: none;
+}
+@media (min-width: 48rem) {
+  .post-row {
+    grid-template-columns: 13rem minmax(0, 1fr);
+  }
+}
+.post-row-meta {
+  display: grid;
+  align-content: start;
+  gap: var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+.post-row-meta time {
+  color: var(--ink);
+  font-weight: 600;
+}
+.post-row-body {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 46rem;
+}
+.post-row-body h3 {
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+}
+.post-row-body p {
+  color: var(--body);
+}
+.post-row:hover h3,
+.post-row:focus-visible h3 {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* ---------- Parcours : une fiche par poste (dates à gauche, missions à droite) ---------- */
+.jobs {
+  margin-top: var(--space-5) !important;
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.job {
+  display: grid;
+  gap: var(--space-3) var(--space-7);
+  padding-block: var(--space-6);
+  border-top: 1px solid var(--line);
+}
+.job:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+@media (min-width: 56rem) {
+  .job {
+    grid-template-columns: 14rem minmax(0, 1fr);
+  }
+  .job-when {
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+  }
+}
+.job-when {
+  display: grid;
+  gap: var(--space-1);
+}
+.job-date {
+  color: var(--accent);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+}
+.job-where {
+  color: var(--ink);
+  font-weight: 600;
+}
+.job-contract {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+.job-what {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 46rem;
+}
+.job-what h3 {
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+}
+.job-what .points {
+  max-width: none;
+  padding-left: 1.1rem;
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+}
+.job-what .points > li + li {
+  margin-top: var(--space-3);
+}
+.job-duties {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}

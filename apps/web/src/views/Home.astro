@@ -77,7 +77,7 @@ const labels = fr
       allTools: `Tout le catalogue (${TOOLS.length} outils)`,
       allProjects: `Les ${t.projects.length} réalisations`,
       contact: 'Contact',
-      contactTitle: 'Une question, une mission ?',
+      contactTitle: 'Une question ?',
       contactText:
         'Le formulaire est le plus direct. Mes profils et mes CV sont aussi à portée de clic.',
     }
@@ -98,7 +98,7 @@ const labels = fr
       allTools: `Full catalogue (${TOOLS.length} tools)`,
       allProjects: `All ${t.projects.length} projects`,
       contact: 'Contact',
-      contactTitle: 'A question, a project?',
+      contactTitle: 'A question?',
       contactText: 'The form is the most direct way. My profiles and résumés are one click away.',
     };
 ---
@@ -136,7 +136,7 @@ const labels = fr
     </div>
   </header>
 
-  <section class="band hm-band" aria-labelledby="projects-title">
+  <section class="band band-petrole hm-band" aria-labelledby="projects-title">
     <div class="container hm-band-in">
       <div class="hm-top">
         <div>
@@ -175,145 +175,149 @@ const labels = fr
     </div>
   </section>
 
-  <section class="container hm-section" aria-labelledby="profile-title">
-    <div class="hm-top">
-      <div>
-        <p class="label">{labels.portfolio}</p>
-        <h2 id="profile-title" class="hm-h2">
-          {labels.profile}
-        </h2>
+  <section class="band band-olive" aria-labelledby="profile-title">
+    <div class="container hm-section">
+      <div class="hm-top">
+        <div>
+          <p class="label">{labels.portfolio}</p>
+          <h2 id="profile-title" class="hm-h2">
+            {labels.profile}
+          </h2>
+        </div>
+        <span class="hm-bignum" aria-hidden="true">
+          02
+        </span>
       </div>
-      <span class="hm-bignum" aria-hidden="true">
-        02
-      </span>
+      <div class="hm-profile">
+        <div>
+          <h3 class="hm-h3">{labels.expertise}</h3>
+          <ul class="hm-def" role="list">
+            {t.skills.map((skill) => (
+              <li>
+                <a href={`${routes.skills}#${skill.id}`}>
+                  <b>{skill.category}</b>
+                  <span>{skill.short}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <blockquote class="hm-statement">
+          <p>{statement.main}</p>
+          <p class="hm-statement-sub">{statement.sub}</p>
+        </blockquote>
+      </div>
+      <h3 class="hm-h3 hm-h3-spaced">{labels.career}</h3>
+      <CareerTimeline lang={lang} />
+      <p class="hm-more">
+        <a href={routes.career}>{labels.careerMore}</a>
+      </p>
     </div>
-    <div class="hm-profile">
-      <div>
-        <h3 class="hm-h3">{labels.expertise}</h3>
-        <ul class="hm-def" role="list">
-          {t.skills.map((skill) => (
+  </section>
+
+  <section class="band band-prune" aria-labelledby="reading-title">
+    <div class="container hm-section">
+      <div class="hm-top">
+        <div>
+          <p class="label">{labels.writing}</p>
+          <h2 id="reading-title" class="hm-h2">
+            {labels.blog}
+          </h2>
+        </div>
+        <span class="hm-bignum" aria-hidden="true">
+          03
+        </span>
+      </div>
+      <div class="hm-duo">
+        {lead && (
+          <article class="hm-lead">
+            <p class="label led">
+              {CATEGORIES[lead.data.category]?.[lang]} ·{' '}
+              <time datetime={isoDate(lead.data.date)}>{longFmt.format(lead.data.date)}</time>
+            </p>
+            <h3>
+              <a href={postPath(lang, lead.slug)}>{lead.data.title}</a>
+            </h3>
+            <p>{lead.data.summary ?? lead.data.description}</p>
+            <p class="hm-more">
+              <a href={routes.blog}>{labels.allPosts}</a>
+            </p>
+          </article>
+        )}
+        <ul class="ledger-list" role="list">
+          {reading.map((post) => (
             <li>
-              <a href={`${routes.skills}#${skill.id}`}>
-                <b>{skill.category}</b>
-                <span>{skill.short}</span>
+              <a class="ledger-row" href={postPath(lang, post.slug)}>
+                <span class="ledger-meta label">
+                  <time datetime={isoDate(post.data.date)}>{dayFmt.format(post.data.date)}</time>
+                  {' · '}
+                  {CATEGORIES[post.data.category]?.[lang]}
+                </span>
+                <span class="ledger-title">{post.data.title}</span>
+                <span class="ledger-arrow" aria-hidden="true">
+                  <Icon name="arrow" size={18} />
+                </span>
               </a>
             </li>
           ))}
         </ul>
       </div>
-      <blockquote class="hm-statement">
-        <p>{statement.main}</p>
-        <p class="hm-statement-sub">{statement.sub}</p>
-      </blockquote>
     </div>
-    <h3 class="hm-h3 hm-h3-spaced">{labels.career}</h3>
-    <CareerTimeline lang={lang} />
-    <p class="hm-more">
-      <a href={routes.career}>{labels.careerMore}</a>
-    </p>
   </section>
 
-  <div class="ruler" aria-hidden="true"></div>
-
-  <section class="container hm-section" aria-labelledby="reading-title">
-    <div class="hm-top">
-      <div>
-        <p class="label">{labels.writing}</p>
-        <h2 id="reading-title" class="hm-h2">
-          {labels.blog}
-        </h2>
+  <section class="band band-ocre" aria-labelledby="tools-title">
+    <div class="container hm-section hm-tools">
+      <div class="hm-top">
+        <div>
+          <p class="label">{labels.building}</p>
+          <h2 id="tools-title" class="hm-h2">
+            {labels.tools}
+          </h2>
+        </div>
+        <span class="hm-bignum" aria-hidden="true">
+          04
+        </span>
       </div>
-      <span class="hm-bignum" aria-hidden="true">
-        03
-      </span>
-    </div>
-    <div class="hm-duo">
-      {lead && (
-        <article class="hm-lead">
-          <p class="label led">
-            {CATEGORIES[lead.data.category]?.[lang]} ·{' '}
-            <time datetime={isoDate(lead.data.date)}>{longFmt.format(lead.data.date)}</time>
-          </p>
-          <h3>
-            <a href={postPath(lang, lead.slug)}>{lead.data.title}</a>
-          </h3>
-          <p>{lead.data.summary ?? lead.data.description}</p>
-          <p class="hm-more">
-            <a href={routes.blog}>{labels.allPosts}</a>
-          </p>
-        </article>
-      )}
       <ul class="ledger-list" role="list">
-        {reading.map((post) => (
+        {homeTools.map((tool) => (
           <li>
-            <a class="ledger-row" href={postPath(lang, post.slug)}>
-              <span class="ledger-meta label">
-                <time datetime={isoDate(post.data.date)}>{dayFmt.format(post.data.date)}</time>
-                {' · '}
-                {CATEGORIES[post.data.category]?.[lang]}
+            <a class="ledger-row" href={tool.href}>
+              <span class="ledger-meta label led">{labels.tool}</span>
+              <span class="ledger-title">
+                {tool.name}
+                <span class="ledger-sub">{tool.card}</span>
               </span>
-              <span class="ledger-title">{post.data.title}</span>
               <span class="ledger-arrow" aria-hidden="true">
                 <Icon name="arrow" size={18} />
               </span>
             </a>
           </li>
         ))}
-      </ul>
-    </div>
-  </section>
-
-  <section class="container hm-section hm-tools" aria-labelledby="tools-title">
-    <div class="hm-top">
-      <div>
-        <p class="label">{labels.building}</p>
-        <h2 id="tools-title" class="hm-h2">
-          {labels.tools}
-        </h2>
-      </div>
-      <span class="hm-bignum" aria-hidden="true">
-        04
-      </span>
-    </div>
-    <ul class="ledger-list" role="list">
-      {homeTools.map((tool) => (
         <li>
-          <a class="ledger-row" href={tool.href}>
-            <span class="ledger-meta label led">{labels.tool}</span>
+          <a class="ledger-row" href={withBase(demo.href)}>
+            <span class="ledger-meta label">{labels.cheat}</span>
             <span class="ledger-title">
-              {tool.name}
-              <span class="ledger-sub">{tool.card}</span>
+              {demo.title}
+              <span class="ledger-sub">{demo.desc}</span>
             </span>
             <span class="ledger-arrow" aria-hidden="true">
               <Icon name="arrow" size={18} />
             </span>
           </a>
         </li>
-      ))}
-      <li>
-        <a class="ledger-row" href={withBase(demo.href)}>
-          <span class="ledger-meta label">{labels.cheat}</span>
-          <span class="ledger-title">
-            {demo.title}
-            <span class="ledger-sub">{demo.desc}</span>
-          </span>
-          <span class="ledger-arrow" aria-hidden="true">
-            <Icon name="arrow" size={18} />
-          </span>
-        </a>
-      </li>
-    </ul>
-    <p class="hm-more">
-      <a href={routes.tools}>{labels.allTools}</a>
-      {cheatsheets && (
-        <>
-          {' · '}
-          <a href={cheatsheets.href}>{`${t.nav.cheatsheets} (${refsFor(lang).length})`}</a>
-        </>
-      )}
-    </p>
-    <div class="hm-terminal">
-      <Terminal lang={lang} />
+      </ul>
+      <p class="hm-more">
+        <a href={routes.tools}>{labels.allTools}</a>
+        {cheatsheets && (
+          <>
+            {' · '}
+            <a href={cheatsheets.href}>{`${t.nav.cheatsheets} (${refsFor(lang).length})`}</a>
+          </>
+        )}
+      </p>
+      <div class="hm-terminal">
+        <Terminal lang={lang} />
+      </div>
     </div>
   </section>
 

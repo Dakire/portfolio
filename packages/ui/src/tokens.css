@@ -98,6 +98,22 @@
   --band-ink: #f6efe3;
   --band-muted: #c4b9a8;
   --band-accent: #ff6a3d;
+
+  /* Teintes des bandeaux de section (identiques dans les deux thèmes : fond profond, texte crème, accent clair). Texte et accent >= 4,5:1. */
+  --tone-ink: #f6efe3;
+  --tone-danger: #ffc2b8;
+  --tone-ok: #a9f0cb;
+  --tone-warn: #fbdc8f;
+  --tone-petrole: #1d4a57;
+  --tone-petrole-accent: #9fe0d0;
+  --tone-olive: #3d5426;
+  --tone-olive-accent: #d3e58a;
+  --tone-prune: #5b2947;
+  --tone-prune-accent: #ffb3d1;
+  --tone-ocre: #6b4200;
+  --tone-ocre-accent: #ffd27a;
+  --tone-ardoise: #2e3b5c;
+  --tone-ardoise-accent: #b9c8ff;
 }
 
 /* Thème clair */

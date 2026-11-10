@@ -1,4 +1,5 @@
 ---
+import { tone } from '../lib/tones';
 // Pages « À propos », « Compétences », « Réalisations » et « Contact » : un même gabarit, le contenu change selon `page`.
 import Button from '@grichard/ui/components/Button.astro';
 import CtaBand from '@grichard/ui/components/CtaBand.astro';
@@ -134,6 +135,99 @@ const domains = [...new Set(t.projects.map((p) => p.skill))].map((id) => ({
     {page === 'projects' && <p class="lead">{t.projectsIntro}</p>}
     {page === 'contact' && <p class="lead">{labels.contactLead}</p>}
   </PageHero>
+  {page === 'skills' || page === 'projects' ? (
+    <>
+      {page === 'skills' &&
+        skillBlocks.map(({ skill, projects, related }, i) => (
+          <section
+            class={`band band-${tone(i)}`}
+            id={skill.id}
+            aria-labelledby={`${skill.id}-title`}
+          >
+            <div class="container stack hm-section">
+              <h2 id={`${skill.id}-title`}>{skill.category}</h2>
+              <p class="prose">{skill.items}</p>
+              {(projects.length > 0 || hasRelated(related)) && (
+                <div class="proofs">
+                  <p class="meta">{text.skills.proofs}</p>
+                  {projects.length > 0 && (
+                    <div>
+                      <h3>{text.skills.projects}</h3>
+                      <ul class="link-list">
+                        {projects.map((p) => (
+                          <li>
+                            <a href={projectPath(lang, p.slug)}>{p.title}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {related.posts.length > 0 && (
+                    <div>
+                      <h3>{text.skills.posts}</h3>
+                      <ul class="link-list">
+                        {related.posts.map((l) => (
+                          <li>
+                            <a href={l.href}>{l.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {related.tools.length > 0 && (
+                    <div>
+                      <h3>{text.skills.tools}</h3>
+                      <ul class="link-list">
+                        {related.tools.map((l) => (
+                          <li>
+                            <a href={l.href}>{l.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {related.refs.length > 0 && (
+                    <div>
+                      <h3>{text.skills.cheatsheets}</h3>
+                      <ul class="link-list">
+                        {related.refs.map((l) => (
+                          <li>
+                            <a href={l.href}>{l.label}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </section>
+        ))}
+      {page === 'projects' && (
+        <>
+          <div class="container section-nav-wrap">
+            <nav aria-label={labels.jump} class="section-nav">
+              <ul>
+                {domains.map((d) => (
+                  <li>
+                    <a href={`#${d.id}`}>{d.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+          {domains.map((d, i) => (
+            <section class={`band band-${tone(i)}`} id={d.id} aria-labelledby={`${d.id}-title`}>
+              <div class="container stack hm-section">
+                <h2 id={`${d.id}-title`}>{d.label}</h2>
+                <ProjectCards items={d.items} lang={lang} level={3} />
+              </div>
+            </section>
+          ))}
+        </>
+      )}
+    </>
+  ) : null}
   <div class="container stack-lg section">
     {page === 'about' && (
       <>
@@ -193,85 +287,6 @@ const domains = [...new Set(t.projects.map((p) => p.skill))].map((id) => ({
             ))}
           </ul>
         </section>
-      </>
-    )}
-    {page === 'skills' &&
-      skillBlocks.map(({ skill, projects, related }) => (
-        <section class="stack" id={skill.id} aria-labelledby={`${skill.id}-title`}>
-          <h2 id={`${skill.id}-title`}>{skill.category}</h2>
-          <p class="prose">{skill.items}</p>
-          {(projects.length > 0 || hasRelated(related)) && (
-            <div class="proofs">
-              <p class="meta">{text.skills.proofs}</p>
-              {projects.length > 0 && (
-                <div>
-                  <h3>{text.skills.projects}</h3>
-                  <ul class="link-list">
-                    {projects.map((p) => (
-                      <li>
-                        <a href={projectPath(lang, p.slug)}>{p.title}</a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {related.posts.length > 0 && (
-                <div>
-                  <h3>{text.skills.posts}</h3>
-                  <ul class="link-list">
-                    {related.posts.map((l) => (
-                      <li>
-                        <a href={l.href}>{l.label}</a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {related.tools.length > 0 && (
-                <div>
-                  <h3>{text.skills.tools}</h3>
-                  <ul class="link-list">
-                    {related.tools.map((l) => (
-                      <li>
-                        <a href={l.href}>{l.label}</a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {related.refs.length > 0 && (
-                <div>
-                  <h3>{text.skills.cheatsheets}</h3>
-                  <ul class="link-list">
-                    {related.refs.map((l) => (
-                      <li>
-                        <a href={l.href}>{l.label}</a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
-        </section>
-      ))}
-    {page === 'projects' && (
-      <>
-        <nav aria-label={labels.jump} class="section-nav">
-          <ul>
-            {domains.map((d) => (
-              <li>
-                <a href={`#${d.id}`}>{d.label}</a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        {domains.map((d) => (
-          <section class="stack" id={d.id} aria-labelledby={`${d.id}-title`}>
-            <h2 id={`${d.id}-title`}>{d.label}</h2>
-            <ProjectCards items={d.items} lang={lang} level={3} />
-          </section>
-        ))}
       </>
     )}
     {page === 'contact' && (

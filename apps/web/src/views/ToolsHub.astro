@@ -8,6 +8,7 @@ import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
 import { HUB, TOOL_GROUPS } from '../tools/hub';
 import { TOOLS, toolPath, toolUi } from '../tools/registry';
 import { breadcrumbLd } from '../lib/seo';
+import { tone } from '../lib/tones';
 
 interface Props {
   lang: Lang;
@@ -44,7 +45,7 @@ const ld = {
   ld={ld}
 >
   <PageHero path="~/tools" title={hub.h1} lead={hub.intro} />
-  <div class="container section stack-lg">
+  <div class="container section stack-lg tools-top">
     <nav class="tool-groups-nav" aria-label={hub.groupsLabel}>
       <ul role="list">
         {TOOL_GROUPS.map((group, i) => (
@@ -60,9 +61,10 @@ const ld = {
         ))}
       </ul>
     </nav>
-
-    {TOOL_GROUPS.map((group) => (
-      <section class="tool-group" id={group.id} aria-labelledby={`${group.id}-title`}>
+  </div>
+  {TOOL_GROUPS.map((group, i) => (
+    <section class={`band band-${tone(i)}`} id={group.id} aria-labelledby={`${group.id}-title`}>
+      <div class="container hm-section stack tool-group">
         <SectionHead
           id={`${group.id}-title`}
           eyebrow={lang === 'fr' ? 'Outils' : 'Tools'}
@@ -70,9 +72,10 @@ const ld = {
         />
         <p class="section-intro">{group[lang].text}</p>
         <ToolCards lang={lang} headingLevel={3} ids={group.tools} />
-      </section>
-    ))}
-
+      </div>
+    </section>
+  ))}
+  <div class="container section stack-lg">
     <section class="tool-section" aria-labelledby="privacy-title">
       <h2 id="privacy-title">{hub.privacyTitle}</h2>
       <p>

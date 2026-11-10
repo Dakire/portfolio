@@ -86,7 +86,7 @@ const BASE_DATA: Record<Lang, Omit<Portfolio, keyof ProfileText>> = {
     meta: {
       title: 'Guillaume Richard | Technicien IT, réseau et sécurité',
       description:
-        'Portfolio de Guillaume Richard, technicien informatique : réseau, sécurité (Stormshield), Microsoft 365, Google Workspace, DNS et formation IA et RGPD.',
+        'Portfolio de Guillaume Richard, technicien informatique : réseau, sécurité (Stormshield), Microsoft 365, Google Workspace, DNS.',
     },
     ui: {
       skip: 'Aller au contenu principal',

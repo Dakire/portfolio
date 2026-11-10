@@ -3,7 +3,7 @@
 // Les faits (dates, structures, technologies) viennent du CV ; seul le ton est travaillé. Les textes de contact et légaux sont dans content.ts.
 import type { Lang } from '../lib/i18n';
 
-export type SkillId = 'network' | 'security' | 'messaging' | 'training' | 'dev' | 'support';
+export type SkillId = 'network' | 'security' | 'messaging' | 'dev' | 'support';
 
 export interface Skill {
   id: SkillId;
@@ -97,7 +97,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
       greeting: 'Bonjour, je suis',
       role: 'Technicien Informatique & Systèmes Numériques',
       pitch:
-        "Je m'occupe des réseaux, des postes de travail et de la messagerie (Microsoft 365, Google Workspace) : je les installe, je les dépanne et j'accompagne les personnes qui s'en servent. Je forme aussi à l'IA, à Microsoft 365 et au RGPD.",
+        "Je m'occupe des réseaux, des postes de travail et de la messagerie (Microsoft 365, Google Workspace) : je les installe, je les dépanne et j'accompagne les personnes qui s'en servent.",
       cvBtn: 'Télécharger mon CV',
       contactBtn: 'Me contacter',
       projectsBtn: 'Voir mes réalisations',
@@ -120,7 +120,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
     ],
     skillsTitle: "Domaines d'expertise",
     skillsIntro:
-      'Six domaines, du réseau à la formation. Chacun renvoie vers ce qui le prouve : réalisations, articles, outils et cheatsheets.',
+      'Cinq domaines, du réseau au support. Chacun renvoie vers ce qui le prouve : réalisations, articles, outils et cheatsheets.',
     skills: [
       {
         id: 'network',
@@ -142,13 +142,6 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         items:
           'Mise en place et administration de Microsoft 365 et de Google Workspace (avec GAM, en ligne de commande) au quotidien : migrations depuis IMAP (OVH, Gandi, IONOS, Orange…), Gmail et Outlook, analyse SMTP, délivrabilité, zones DNS (MX, SPF, DKIM, DMARC) et maintien en conditions opérationnelles (MCO).',
         short: 'Microsoft 365, Google Workspace, DNS, délivrabilité',
-      },
-      {
-        id: 'training',
-        category: 'Formation IA, Google Workspace, M365 & RGPD',
-        items:
-          "Je forme et j'accompagne les utilisateurs à l'intelligence artificielle, à Google Workspace, à Microsoft 365 et aux bonnes pratiques du RGPD. Cet accompagnement prolonge le support au quotidien : prise en main des outils et réponses aux questions des utilisateurs.",
-        short: 'IA, Google Workspace, Microsoft 365, RGPD : former et accompagner',
       },
       {
         id: 'dev',
@@ -364,7 +357,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
       greeting: 'Hello, I am',
       role: 'IT & Digital Systems Technician',
       pitch:
-        'I look after networks, workstations and email (Microsoft 365, Google Workspace): I set them up, fix them when they break, and support the people who use them. I also train people in AI, Microsoft 365 and GDPR.',
+        'I look after networks, workstations and email (Microsoft 365, Google Workspace): I set them up, fix them when they break, and support the people who use them.',
       cvBtn: 'Download my resume',
       contactBtn: 'Contact me',
       projectsBtn: 'See my work',
@@ -387,7 +380,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
     ],
     skillsTitle: 'Core expertise',
     skillsIntro:
-      'Six areas, from networking to training. Each one links to what backs it up: projects, articles, tools and cheatsheets.',
+      'Five areas, from networking to support. Each one links to what backs it up: projects, articles, tools and cheatsheets.',
     skills: [
       {
         id: 'network',
@@ -409,13 +402,6 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         items:
           'Setting up and administering Microsoft 365 and Google Workspace (with GAM, on the command line) day to day: migrations from IMAP (OVH, Gandi, IONOS, Orange…), Gmail and Outlook, SMTP analysis, deliverability, DNS zones (MX, SPF, DKIM, DMARC) and operational maintenance.',
         short: 'Microsoft 365, Google Workspace, DNS, deliverability',
-      },
-      {
-        id: 'training',
-        category: 'AI, Google Workspace, M365 & GDPR training',
-        items:
-          "I train and support users in artificial intelligence, Google Workspace, Microsoft 365 and GDPR best practices. This support extends day-to-day helpdesk work: getting started with the tools and answering users' questions.",
-        short: 'AI, Google Workspace, Microsoft 365, GDPR: training and support',
       },
       {
         id: 'dev',

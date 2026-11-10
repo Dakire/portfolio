@@ -255,7 +255,7 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
       proofs: 'Pour le voir en pratique',
     },
     contactBand: {
-      title: 'Un projet, une question ?',
+      title: 'Une question ?',
       text: 'Écrivez-moi : je lis chaque message et je réponds personnellement.',
     },
   },
@@ -399,7 +399,7 @@ export const SITE_TEXT: Record<Lang, SiteText> = {
       proofs: 'See it in practice',
     },
     contactBand: {
-      title: 'A project, a question?',
+      title: 'A question?',
       text: 'Write to me: I read every message and answer personally.',
     },
   },

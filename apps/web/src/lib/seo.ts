@@ -45,9 +45,7 @@ const KNOWS_ABOUT = [
   'PowerShell',
   'Stormshield SNS',
   'Sécurité informatique',
-  'Formation Microsoft 365',
   'Intelligence artificielle',
-  'RGPD',
 ];
 
 const PERSON_DESCRIPTION: Record<Lang, string> = {
