@@ -20,7 +20,7 @@ Le FTP s'ouvre dans le dossier personnel de l'hébergement :
 └── private/            configuration, secrets, état — créé À LA MAIN, jamais livré, jamais écrasé
 ```
 
-`private/` n'est référencé par aucune commande de transfert : ni upload, ni suppression, ni sauvegarde.
+`private/` n'est référencé par aucune commande de transfert : ni upload, ni suppression.
 
 ## Mise en place unique (à faire par le propriétaire)
 
@@ -44,16 +44,15 @@ Le FTP s'ouvre dans le dossier personnel de l'hébergement :
 La disposition ci-dessus suppose que le FTP s'ouvre dans le dossier personnel (par ex. `/home/grichay/`) et que seul `www/` est public. Si, chez vous, tout doit être placé **dans `www/`**, `app/` et `private/` se retrouvent exposés au web : il faut alors
 
 1. créer `www/app/` et `www/private/`, chacun avec un fichier `.htaccess` contenant uniquement `Require all denied` ;
-2. définir la variable GitHub `FTP_APP_PREFIX` = `www/` : le code PHP est alors déposé dans `www/app/…`, et la suppression finale ainsi que la sauvegarde ignorent `app/` et `private/` ;
+2. définir la variable GitHub `FTP_APP_PREFIX` = `www/` : le code PHP est alors déposé dans `www/app/…`, et la suppression finale ignore `app/` et `private/` ;
 3. ne jamais déposer de fichier sensible hors de `private/`.
 
 ## Déroulé d'une livraison automatique
 
 1. Push sur `main` → **CI** (formatage, lint, typecheck, tests, e2e, axe, PHP, audits).
 2. CI verte → **Déploiement** (`workflow_run`) : construction du site, contrat des URL sur le build, `composer install --no-dev`, assemblage contrôlé (`scripts/deploy/assemble.mjs` refuse la page de style, un secret, une carte de source, une base de données, un build en sous-dossier ou en noindex).
-3. **Sauvegarde** de `www/` et `app/api/` (artefact `sauvegarde-avant-deploiement`, 30 jours).
-4. **Transfert** (`scripts/deploy/deploy.sh`), puis **contrat des URL vérifié sur https://grichard.eu**.
-5. **Tag** `deploy-production-AAAAMMJJ-HHMMSS` (point de retour arrière).
+3. **Transfert** (`scripts/deploy/deploy.sh`), puis **contrat des URL vérifié sur https://grichard.eu**.
+4. **Tag** `deploy-production-AAAAMMJJ-HHMMSS` (point de retour arrière).
 
 Une CI rouge ne livre rien. Un seul déploiement tourne à la fois ; si plusieurs pushes s'enchaînent, seule la dernière livraison en attente part.
 
@@ -67,7 +66,7 @@ Un visiteur ne doit jamais voir une page qui référence un fichier pas encore a
 
 - **Régression** : `git revert` du commit fautif, puis push sur `main` : la CI verte relivre l'état corrigé.
 - **Urgence** (la CI ne peut pas passer) : lancer le workflow à la main en production avec `ref` = le **tag précédent** (`deploy-production-…`). La construction est reproductible : le même tag redonne le même site.
-- **Secours** : télécharger l'artefact `sauvegarde-avant-deploiement` (contenu public et code seulement, sans `private/` ni `espace/`) et remettre les fichiers par FTP.
+- Pas de sauvegarde du site en ligne à chaque livraison : tout le contenu public et le code sont dans git, et un tag redonne le même site.
 - Le tag `pre-refonte` marque l'état en production avant la refonte UX/UI et les outils SEO (9 octobre 2026).
 
 ## Ce que le workflow ne fait jamais
@@ -77,8 +76,8 @@ Toucher au DNS ; lire ou écrire `private/` ; livrer un commit dont la CI n'est 
 ## Limites connues
 
 - Le transfert FTP n'est pas atomique : l'ordre ci-dessus limite la fenêtre d'incohérence à quelques secondes.
-- Sans préproduction, le seul filet est la vérification locale avant push, la CI, la sauvegarde et le retour arrière par tag.
-- Le dépôt est public : les artefacts (livraison, sauvegarde) sont téléchargeables par quiconque a accès au dépôt. Ils ne contiennent que du contenu public et du code, jamais de secret.
+- Sans préproduction, le seul filet est la vérification locale avant push, la CI et le retour arrière par tag.
+- Le dépôt est public : les artefacts (livraison) sont téléchargeables par quiconque a accès au dépôt. Ils ne contiennent que du contenu public et du code, jamais de secret.
 
 ## SFTP (hébergement qui n'ouvre que le port 22)
 
