@@ -3,7 +3,7 @@ export const ICS_SPLIT = {
   fr: {
     ui: {
       meta: {
-        title: 'Découper un fichier ICS (calendrier) en plusieurs fichiers | Guillaume Richard',
+        title: 'Découper un fichier ICS (agenda Google, Outlook) en ligne | Guillaume Richard',
         description:
           "Découpez un gros fichier .ics en plusieurs : par nombre d'événements, taille, année ou mois. Les séries récurrentes restent entières. Gratuit.",
         appDescription:
@@ -124,7 +124,7 @@ export const ICS_SPLIT = {
   en: {
     ui: {
       meta: {
-        title: 'Split an ICS (calendar) file into several files | Guillaume Richard',
+        title: 'ICS Splitter: Split a Google Calendar .ics File Online | Guillaume Richard',
         description:
           'Split a large .ics file into several: by number of events, by size, by year, by month or one per file. Recurring series stay whole. Free.',
         appDescription:

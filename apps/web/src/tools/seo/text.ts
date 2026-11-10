@@ -5,9 +5,9 @@ import type { CheckCategory } from './checks';
 const fr = {
   ui: {
     meta: {
-      title: 'Rapport SEO gratuit : audit technique d’une page | Guillaume Richard',
+      title: 'Rapport SEO gratuit : audit de page en ligne, export PDF | Guillaume Richard',
       description:
-        'Audit SEO gratuit d’une page : title, meta description, canonical, Hn, images, liens cassés, Open Graph, JSON-LD, HTTPS et en-têtes de sécurité.',
+        'Rapport d’audit SEO gratuit : title, meta description, canonical, Hn, liens cassés, Open Graph, JSON-LD, HTTPS et sécurité. Export PDF et JSON.',
       appDescription:
         'Audit SEO technique gratuit : plus de 30 contrôles classés par priorité (critique, important, info), avec recommandation pour chacun, export JSON et impression.',
     },
@@ -113,6 +113,18 @@ const fr = {
       how: 'Chaque contrôle a une gravité : critique (bloque l’indexation ou la sécurité), important (pénalise le classement ou l’expérience), info (bonne pratique). Le score sur 100 pondère les contrôles par gravité ; un point « à améliorer » compte pour moitié. Commencez par les points critiques, puis importants. Le rapport s’exporte en JSON ou s’imprime (enregistrement en PDF depuis la fenêtre d’impression).',
       faq: [
         [
+          'Comment obtenir un rapport d’audit SEO en PDF ?',
+          'Lancez l’analyse puis cliquez sur « Imprimer ou enregistrer en PDF » : le rapport (score, points à corriger par priorité, correction) s’exporte tel quel. L’export JSON sert à le traiter dans un script.',
+        ],
+        [
+          'Ce rapport SEO est-il vraiment gratuit ?',
+          'Oui, sans inscription ni carte bancaire : 12 analyses par heure, sans conservation de l’adresse ni du rapport.',
+        ],
+        [
+          'Que faire en premier avec le rapport ?',
+          'Corrigez les points « critique » (page non indexable, erreur serveur, canonical ou robots incorrects), puis les points « important » (title, meta description, h1), puis le reste. Détail : checklist d’audit SEO dans l’article lié.',
+        ],
+        [
           'Le rapport analyse-t-il tout mon site ?',
           'Non : une page par analyse, celle dont vous donnez l’adresse (après redirections). Pour vérifier l’ensemble des pages déclarées, utilisez le vérificateur de sitemap.',
         ],
@@ -131,16 +143,16 @@ const fr = {
       ],
     },
     related: 'Voir aussi',
-    relatedLinks: [],
+    relatedLinks: ['rapport-audit-seo-checklist-modele', 'sitemap-xml-erreurs-search-console'],
   },
 };
 
 const en: typeof fr = {
   ui: {
     meta: {
-      title: 'Free SEO report: technical audit of a page | Guillaume Richard',
+      title: 'Free SEO Report: Full On-Page SEO Audit with PDF Export | Guillaume Richard',
       description:
-        'Free SEO audit of a page: title, meta description, canonical, headings, images, broken links, Open Graph, JSON-LD, HTTPS and security headers.',
+        'Free SEO page report: title, meta description, canonical, headings, broken links, Open Graph, JSON-LD, HTTPS and security headers. PDF and JSON export.',
       appDescription:
         'Free technical SEO audit: over 30 checks ranked by priority (critical, important, info), each with a recommendation, JSON export and print.',
     },
@@ -237,6 +249,18 @@ const en: typeof fr = {
       how: 'Each check has a severity: critical (blocks indexing or security), important (hurts ranking or experience), info (good practice). The score out of 100 weights checks by severity; an item “to improve” counts for half. Start with critical items, then important ones. The report can be exported as JSON or printed (save as PDF from the print dialog).',
       faq: [
         [
+          'How do I get an SEO audit report as a PDF?',
+          'Run the analysis, then click “Print or save as PDF”: the report (score, points to fix by priority, fix for each) is exported as is. The JSON export is for processing it in a script.',
+        ],
+        [
+          'Is this SEO report really free?',
+          'Yes, with no sign-up or credit card: 12 analyses per hour, with no storage of the address or the report.',
+        ],
+        [
+          'What should I fix first?',
+          'Fix the “critical” points first (non-indexable page, server error, wrong canonical or robots), then the “important” ones (title, meta description, h1), then the rest. Details: the SEO audit checklist in the linked article.',
+        ],
+        [
           'Does the report analyse my whole site?',
           'No: one page per analysis, the one whose address you give (after redirects). To check every declared page, use the sitemap checker.',
         ],
@@ -255,7 +279,7 @@ const en: typeof fr = {
       ],
     },
     related: 'See also',
-    relatedLinks: [],
+    relatedLinks: ['seo-audit-report-checklist-template', 'sitemap-xml-errors-search-console'],
   },
 };
 

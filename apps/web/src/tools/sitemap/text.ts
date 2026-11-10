@@ -4,9 +4,9 @@ import { SEO_TOOL } from '../seo/text';
 const fr = {
   ui: {
     meta: {
-      title: 'Vérificateur de sitemap.xml gratuit : erreurs et robots.txt | Guillaume Richard',
+      title: 'Test de sitemap.xml gratuit : détecter les erreurs | Guillaume Richard',
       description:
-        'Vérifiez un sitemap.xml en ligne : robots.txt, syntaxe XML, index, limite de 50 000 URL, doublons, lastmod, URL bloquées et pages testées.',
+        'Testez un sitemap.xml en ligne : robots.txt, syntaxe XML, index, limite de 50 000 URL, doublons, lastmod, URL bloquées. Pour les erreurs de la Search Console.',
       appDescription:
         'Outil gratuit de vérification de sitemap.xml : fichiers, URL déclarées, cohérence avec robots.txt et statut d’un échantillon de pages.',
     },
@@ -89,6 +89,14 @@ const fr = {
       how: 'Saisissez simplement le domaine : l’outil lit robots.txt pour trouver le sitemap déclaré, puis essaie /sitemap.xml. Vous pouvez aussi donner l’adresse exacte d’un sitemap ou d’un index. Les points sont classés par gravité ; corrigez d’abord les critiques (sitemap introuvable, XML invalide, URL bloquées ou en erreur), puis les importants. Le rapport s’exporte en JSON ou s’imprime.',
       faq: [
         [
+          'Que signifie « Impossible de récupérer le sitemap » dans la Search Console ?',
+          'Google n’a pas pu lire le fichier : adresse fausse, 404 ou 403, redirection, blocage par robots.txt ou page HTML renvoyée à la place du XML. Testez l’adresse ici, puis suivez la procédure de l’article lié.',
+        ],
+        [
+          'Comment tester un sitemap.xml gratuitement ?',
+          'Saisissez le domaine ou l’adresse du sitemap : l’outil valide la syntaxe XML, compte les URL (limite de 50 000), repère doublons et URL bloquées, et teste un échantillon de pages.',
+        ],
+        [
           'Pourquoi <priority> et <changefreq> sont-ils signalés ?',
           'Google a confirmé ignorer ces deux balises. Elles ne sont pas une erreur, mais n’apportent rien : seule une date <lastmod> fiable est utilisée.',
         ],
@@ -107,16 +115,16 @@ const fr = {
       ],
     },
     related: 'Voir aussi',
-    relatedLinks: [],
+    relatedLinks: ['sitemap-xml-erreurs-search-console', 'rapport-audit-seo-checklist-modele'],
   },
 };
 
 const en: typeof fr = {
   ui: {
     meta: {
-      title: 'Free sitemap.xml checker: errors, robots.txt, URLs | Guillaume Richard',
+      title: 'Free Sitemap Checker: Test an XML Sitemap, Find Errors | Guillaume Richard',
       description:
-        'Check a sitemap.xml online: robots.txt discovery, XML syntax, indexes, 50,000-URL limit, duplicates, lastmod, blocked URLs and tested pages.',
+        'Check a sitemap.xml online: robots.txt, XML syntax, indexes, 50,000-URL limit, duplicates, lastmod and blocked URLs. Fix Search Console sitemap errors.',
       appDescription:
         'Free sitemap.xml checker: files, declared URLs, consistency with robots.txt and the status of a sample of pages.',
     },
@@ -199,6 +207,14 @@ const en: typeof fr = {
       how: 'Just enter the domain: the tool reads robots.txt to find the declared sitemap, then tries /sitemap.xml. You can also give the exact address of a sitemap or an index. Items are ranked by severity; fix critical ones first (sitemap not found, invalid XML, blocked or failing URLs), then important ones. The report can be exported as JSON or printed.',
       faq: [
         [
+          'What does “Couldn’t fetch” mean for a sitemap in Search Console?',
+          'Google could not read the file: wrong address, 404 or 403, redirect, robots.txt block, or an HTML page returned instead of XML. Test the address here, then follow the procedure in the linked article.',
+        ],
+        [
+          'How do I test a sitemap.xml for free?',
+          'Enter the domain or the sitemap address: the tool validates the XML syntax, counts URLs (50,000 limit), spots duplicates and blocked URLs, and tests a sample of pages.',
+        ],
+        [
           'Why are <priority> and <changefreq> flagged?',
           'Google has confirmed it ignores both tags. They are not an error, but add nothing: only a reliable <lastmod> date is used.',
         ],
@@ -217,7 +233,7 @@ const en: typeof fr = {
       ],
     },
     related: 'See also',
-    relatedLinks: [],
+    relatedLinks: ['sitemap-xml-errors-search-console', 'seo-audit-report-checklist-template'],
   },
 };
 

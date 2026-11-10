@@ -27,6 +27,7 @@ const blog = defineCollection({
       'migration',
       'securite',
       'poste-de-travail',
+      'web',
       'actualites',
       'ia',
     ]),

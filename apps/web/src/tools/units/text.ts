@@ -3,7 +3,7 @@ export const UNITS_TOOL = {
   fr: {
     ui: {
       meta: {
-        title: 'Convertisseur Go/Gio, Mbit/s, hexadécimal, binaire | Guillaume Richard',
+        title: 'Convertisseur Go en Gio, Mo en Mio, Mbit/s, hexadécimal | Guillaume Richard',
         description:
           "Convertissez Go et Gio, bits et octets, Mbit/s et Mo/s, calculez un temps de transfert et passez du décimal à l'hexadécimal ou au binaire.",
         appDescription:
@@ -153,7 +153,7 @@ export const UNITS_TOOL = {
   en: {
     ui: {
       meta: {
-        title: 'GB/GiB, Mbit/s, hexadecimal, binary converter | Guillaume Richard',
+        title: 'GB to GiB Converter: GB, MB, Mbit/s, Hex and Binary | Guillaume Richard',
         description:
           'Convert GB and GiB, bits and bytes, Mbit/s and MB/s, compute a transfer time and convert decimal to hexadecimal, binary or octal.',
         appDescription:

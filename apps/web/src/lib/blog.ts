@@ -10,6 +10,7 @@ export const CATEGORIES: Record<string, Record<Lang, string>> = {
   migration: { fr: 'Migration', en: 'Migration' },
   securite: { fr: 'Sécurité', en: 'Security' },
   'poste-de-travail': { fr: 'Poste de travail', en: 'Workstation' },
+  web: { fr: 'Web et SEO', en: 'Web and SEO' },
   actualites: { fr: 'Actualités', en: 'News' },
   ia: { fr: 'IA', en: 'AI' },
 };
@@ -81,6 +82,22 @@ export const CATEGORY_TEXT: Record<
         'Articles on security for a small organization: baseline settings, authentication, Windows logs, vulnerabilities and patches.',
       intro:
         'Security settings for a small organization (accounts, authentication, logs), and a breakdown of the vulnerabilities and patches that matter: what is exploited, what is urgent, what to do.',
+    },
+  },
+  web: {
+    fr: {
+      title: 'Web et SEO : rapport d’audit, sitemap, indexation',
+      description:
+        'Articles sur le référencement technique : rapport d’audit SEO, sitemap.xml et ses erreurs, indexation, balises et données structurées.',
+      intro:
+        'Référencement technique d’un site : comment lire un rapport d’audit SEO, quoi corriger en premier, pourquoi un sitemap.xml est refusé et comment vérifier l’indexation. Chaque article renvoie vers l’outil gratuit correspondant.',
+    },
+    en: {
+      title: 'Web and SEO: audit reports, sitemaps, indexing',
+      description:
+        'Articles on technical SEO: SEO audit reports, sitemap.xml and its errors, indexing, tags and structured data.',
+      intro:
+        'Technical SEO for a website: how to read an SEO audit report, what to fix first, why a sitemap.xml is rejected and how to check indexing. Each article links to the matching free tool.',
     },
   },
   'poste-de-travail': {

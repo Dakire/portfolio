@@ -145,6 +145,7 @@ export const CATEGORY_RELATED: Record<string, Related> = {
   migration: { tools: ['dns', 'propagation'], refs: ['powershell-m365', 'gam'] },
   securite: { tools: ['password'], refs: ['evenements-windows', 'active-directory'] },
   ia: { tools: ['password', 'json'], refs: ['windows-11', 'powershell-m365'] },
+  web: { tools: ['seo', 'sitemap'] },
   'poste-de-travail': { refs: ['windows-11', 'bios-uefi', 'active-directory'] },
 };
 

@@ -102,3 +102,19 @@ Une page pilier par grand sujet, qui rassemble articles, outil et cheatsheet, r�
 3. **Demander l'indexation** des pages modifiées le 6 novembre 2026 (Inspection d'URL) : `/cheatsheets/gam/`, `/blog/fin-support-windows-10-passer-a-windows-11/`, `/blog/exchange-online-smtp-auth-basic-fin-2026/`.
 4. **Suivi de position** : le plus simple et gratuit est la Search Console elle-même (Performances > Requêtes, filtrer par page, comparer sur 28 jours). Pour un suivi quotidien des requêtes de ce tableau, un outil tiers (par exemple un service de suivi de position payant) est nécessaire : à choisir par Guillaume. **M'envoyer un export CSV** des requêtes (Performances > Exporter) dans un mois permet de remplacer les « à vérifier » par des chiffres réels et de réviser ce plan.
 5. **Signaux Web essentiels** : consulter le rapport de la Search Console une fois qu'il a assez de données.
+
+## 4. Données Search Console (3 mois au 10 novembre 2026) et actions
+
+Constat : **beaucoup d'impressions, presque aucun clic**, avec des positions moyennes entre 20 et 90 sur la plupart des requêtes. Le référencement est donc surtout un problème de **pertinence de la page et d'autorité**, pas d'indexation.
+
+| Groupe de requêtes (impressions)                                                                      | Page                                     | Action                                                                                                                                  |
+| ----------------------------------------------------------------------------------------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| rapport seo, seo rapport, rapport audit seo/site web (pdf), full seo report, seo page report (≈2 000) | `/outils/seo/`, `/en/tools/seo/`         | titre « Rapport SEO gratuit : audit de page, export PDF » ; FAQ PDF et gratuité ; article « Rapport d'audit SEO : checklist » (FR + EN) |
+| sitemap errors, sitemap checker, test sitemap (≈550)                                                  | `/outils/sitemap/`, `/en/tools/sitemap/` | titre orienté « test / erreurs » ; FAQ « Impossible de récupérer » ; article « Erreurs de sitemap.xml » (FR + EN)                       |
+| spf dkim dmarc (≈300 en variantes)                                                                    | article SPF, DKIM et DMARC               | déjà en ligne : liens depuis les nouveaux articles et les outils ; à surveiller                                                         |
+| migration gmail / g suite vers office 365 (≈300)                                                      | article de migration                     | à renforcer : variantes de vocabulaire (Gmail, G Suite, Office 365) dans les titres de section                                          |
+| ics splitter, gb en gio, calcul vlsm / cidr                                                           | outils                                   | titres reformulés sur la requête réelle (« ICS Splitter », « GB to GiB Converter », « Calculatrice CIDR et VLSM »)                      |
+
+**Visibilité dans les réponses d'IA** (pages les plus citées) : surtout les pages **anglaises** (fin de support Windows 10, ICS splitter, dépannage DNS, convertisseur d'unités). Conséquence : garder les versions anglaises aussi complètes que les françaises, avec réponse courte en tête, dates (`updated`) et FAQ.
+
+**Ce que le code ne peut pas faire** : obtenir des liens entrants (backlinks). Pistes : partager les outils sur LinkedIn et GitHub (README), les proposer à des annuaires d'outils, répondre à des questions sur les forums en citant l'outil. Sans liens, les positions 30 à 60 évolueront lentement.

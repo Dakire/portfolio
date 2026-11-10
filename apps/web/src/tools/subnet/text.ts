@@ -3,7 +3,7 @@ export const SUBNET = {
   fr: {
     ui: {
       meta: {
-        title: 'Calculatrice réseau IPv4 / IPv6 : CIDR, masque, VLSM | Guillaume Richard',
+        title: 'Calculatrice CIDR et VLSM IPv4 / IPv6 : masque, sous-réseaux | Guillaume Richard',
         description:
           "Calculatrice IP en ligne : réseau, broadcast, masque, plage d'hôtes d'un CIDR IPv4 ou IPv6, découpage en sous-réseaux et VLSM. Gratuit.",
         appDescription:
@@ -173,7 +173,7 @@ export const SUBNET = {
   en: {
     ui: {
       meta: {
-        title: 'IPv4 / IPv6 subnet calculator: CIDR, mask, subnets, VLSM | Guillaume Richard',
+        title: 'Subnet Calculator IPv4 / IPv6: CIDR, Mask, VLSM, Hosts | Guillaume Richard',
         description:
           'Calculate network, broadcast, mask, host range and address count for an IPv4 or IPv6 CIDR. Split into subnets, plan a VLSM, check whether an IP is inside. Free.',
         appDescription:

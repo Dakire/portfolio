@@ -22,7 +22,7 @@ export async function GET() {
     link('Portfolio in English', ROUTES.en.home, 'same content in English'),
     link('À propos', ROUTES.fr.about, 'parcours et formation'),
     link('Parcours', ROUTES.fr.career, 'expériences, formation, CV'),
-    link('Compétences', ROUTES.fr.skills, 'six domaines d’expertise et leurs preuves'),
+    link('Compétences', ROUTES.fr.skills, 'cinq domaines d’expertise et leurs preuves'),
     link('Réalisations', ROUTES.fr.projects, 'projets techniques, une page par réalisation'),
     link('Career', ROUTES.en.career, 'experience, education, resume'),
     link('Projects', ROUTES.en.projects, 'technical projects, one page each'),
