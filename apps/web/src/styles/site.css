@@ -207,19 +207,18 @@
 /* Grand écran : icône seule (la place manque dans l'en-tête) ; le libellé reste lu par les lecteurs d'écran */
 /* Grand écran : menu en pastille (un seul contour autour des liens, la page courante sur fond relevé) */
 @media (min-width: 76rem) {
-  .site-nav ul {
+  .site-nav > ul {
     width: fit-content;
     padding: 0.2rem;
     border: 1px solid var(--line);
     border-radius: 999px;
     background: var(--surface);
   }
-  .site-nav a {
+  .site-nav > ul > li > a {
     min-height: 2.5rem;
-    padding: 0 var(--space-3);
     border-radius: 999px;
   }
-  .site-nav a[aria-current] {
+  .site-nav > ul > li > a[aria-current] {
     background: var(--raised);
     box-shadow: none;
   }
@@ -1067,132 +1066,6 @@ html[data-terminal-max] {
   color: var(--muted);
 }
 
-/* ---------- Curseur (/js/cursor.js) ----------
-   La flèche remplace le curseur du système pendant qu'elle est affichée (classe has-custom-cursor posée par le script).
-   Pointe de la flèche = point de clic ; le halo la suit avec un léger retard. Seuls transform et opacity changent. */
-.has-custom-cursor,
-.has-custom-cursor * {
-  cursor: none !important;
-}
-.cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: var(--z-cursor);
-  width: 0;
-  height: 0;
-  pointer-events: none;
-  opacity: 0;
-  will-change: transform;
-  transition: opacity var(--duration-fast) var(--ease);
-}
-.cursor.is-visible {
-  opacity: 1;
-}
-.cursor > * {
-  position: absolute;
-}
-.cursor-halo {
-  top: 0;
-  left: 0;
-  will-change: transform;
-}
-.cursor-ring {
-  position: absolute;
-  top: -14px;
-  left: -14px;
-  width: 28px;
-  height: 28px;
-  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--accent) 6%, transparent);
-  transform: scale(0.6);
-  transition:
-    transform 180ms var(--ease),
-    background-color 180ms var(--ease),
-    border-color 180ms var(--ease),
-    opacity 180ms var(--ease);
-}
-.cursor-arrow,
-.cursor-beam {
-  max-width: none; /* le conteneur fait 0 px de large : sans cela, svg { max-width: 100% } l'écraserait */
-  fill: var(--accent);
-  stroke: var(--canvas);
-  stroke-linejoin: round;
-  stroke-width: 1.5;
-  filter: drop-shadow(0 1px 1.5px color-mix(in srgb, var(--ink) 35%, transparent));
-  transform-origin: 1px 1px;
-  transition:
-    transform 180ms var(--ease),
-    opacity 180ms var(--ease);
-}
-.cursor-arrow {
-  top: -1px;
-  left: -1px;
-  width: 16px;
-  height: 20px;
-}
-.cursor-beam {
-  top: -10px;
-  left: -5px;
-  width: 10px;
-  height: 20px;
-  opacity: 0;
-  transform-origin: 5px 10px;
-}
-.cursor[data-state='link'] .cursor-arrow {
-  transform: scale(1.12) rotate(-6deg);
-}
-.cursor[data-state='link'] .cursor-ring {
-  transform: scale(1.35);
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
-}
-.cursor[data-state='text'] .cursor-arrow,
-.cursor[data-state='text'] .cursor-ring {
-  opacity: 0;
-}
-.cursor[data-state='text'] .cursor-beam {
-  opacity: 1;
-}
-.cursor[data-pressed] .cursor-arrow {
-  transform: scale(0.85);
-}
-.cursor[data-pressed] .cursor-ring {
-  transform: scale(0.45);
-}
-.cursor[data-state='link'][data-pressed] .cursor-ring {
-  transform: scale(1);
-}
-@media print {
-  .cursor {
-    display: none;
-  }
-}
-
-/* Interrupteur (role="switch") : libellé constant, état montré par la pastille et annoncé par aria-checked */
-.switch-button {
-  gap: var(--space-2);
-  text-decoration: none;
-}
-.switch-button::after {
-  content: '';
-  width: 2rem;
-  height: 1.125rem;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  background:
-    radial-gradient(circle at 0.55rem 50%, var(--muted) 0.35rem, transparent 0.4rem) no-repeat,
-    var(--surface);
-  transition: background-position var(--duration-fast) var(--ease);
-}
-.switch-button[aria-checked='true']::after {
-  border-color: var(--accent-strong);
-  background:
-    radial-gradient(circle at 1.45rem 50%, var(--accent-ink) 0.35rem, transparent 0.4rem) no-repeat,
-    var(--accent-strong);
-}
-
 /* Ancres de l'accueil : la section visée ne passe pas sous l'en-tête collant */
 .sections > section {
   scroll-margin-top: calc(var(--space-8) + var(--space-3));
@@ -1337,6 +1210,13 @@ input[data-filter-table]:focus-visible {
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
   }
+  .js .subnav ul {
+    display: block;
+    width: auto;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
   .js .subnav a {
     font-size: var(--text-sm);
   }
@@ -1366,7 +1246,7 @@ input[data-filter-table]:focus-visible {
   }
   .subnav ul {
     display: grid;
-    gap: 0 var(--space-4);
+    gap: 0;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -1375,13 +1255,15 @@ input[data-filter-table]:focus-visible {
     display: flex;
     align-items: center;
     min-height: var(--target);
-    padding: 0 var(--space-3);
+    padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-sm);
     color: var(--body);
     font-size: var(--text-sm);
+    line-height: var(--leading-snug);
     text-decoration: none;
   }
-  .subnav a:hover {
+  .subnav a:hover,
+  .subnav a:focus-visible {
     background: var(--raised);
     color: var(--ink);
   }

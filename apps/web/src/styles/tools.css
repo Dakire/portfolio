@@ -983,7 +983,6 @@ legend {
   .no-print,
   .tool-section,
   .consent,
-  .cursor,
   section[aria-labelledby='what-title'] {
     display: none !important;
   }

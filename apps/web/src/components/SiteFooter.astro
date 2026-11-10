@@ -86,18 +86,6 @@ const resources = resourceLinks(lang).filter((link) => link.key !== 'resources')
           <a href={ROUTES[lang].accessibility}>{ui.footerLinks.accessibility}</a>
         </li>
         <li>
-          <button
-            type="button"
-            class="link-button switch-button"
-            role="switch"
-            aria-checked="true"
-            hidden
-            data-cursor-toggle
-          >
-            {ui.cursor}
-          </button>
-        </li>
-        <li>
           <button type="button" class="link-button" data-consent-open>
             {ui.cookies}
           </button>

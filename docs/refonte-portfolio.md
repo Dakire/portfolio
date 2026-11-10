@@ -16,7 +16,7 @@ Ce document couvre la phase 0 (audit) et la phase 1 (proposition). La phase 2 ne
 | Données             | `apps/web/src/data/content.ts` (FR/EN : 6 domaines de compétences, 4 expériences, 8 projets, 2 formations, mentions légales) ; `pages.ts` (confidentialité, accessibilité)                                                     |
 | Design system       | `packages/ui` : tokens, `base.css`, `components.css`, 7 composants Astro (Button, Card, Eyebrow, Kbd, SkipLink, Tag, ThemeSwitch). Les composants propres au site (en-tête, pied, cartes…) sont dans `apps/web/src/components` |
 | Navigation          | 7 liens à plat dans l'en-tête (À propos, Compétences, Projets, Blog, Outils, Contact, Référence) + langue + thème ; pied de page sur une ligne ; fil d'Ariane seulement sur le blog et les outils                              |
-| Scripts             | `nav.js` (menu mobile), `theme.js`, `consent.js`, `cursor.js`, `reference.js`, `table-filter.js`                                                                                                                               |
+| Scripts             | `nav.js` (menu mobile), `theme.js`, `consent.js`, `reference.js`, `table-filter.js`                                                                                                                                            |
 | ADR                 | 0001 à 0008 ; l'identité visuelle est décrite par l'ADR 0005                                                                                                                                                                   |
 
 ### 1.2 Identité visuelle à conserver (état réel)
