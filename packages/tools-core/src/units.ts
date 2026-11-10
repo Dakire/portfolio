@@ -98,6 +98,12 @@ export function transferSeconds(bytes: number, bps: number, efficiency = 100): n
   return usable > 0 ? (bytes * 8) / usable : Infinity;
 }
 
+/** Débit nominal (bit/s) nécessaire pour transférer `bytes` octets en `seconds` secondes, avec un rendement utile de `efficiency` % (1 à 100). */
+export function requiredBitsPerSecond(bytes: number, seconds: number, efficiency = 100): number {
+  const usable = seconds * (efficiency / 100);
+  return usable > 0 ? (bytes * 8) / usable : Infinity;
+}
+
 /** Décompose une durée en jours, heures, minutes, secondes (et millisecondes sous une seconde). */
 export function durationParts(
   seconds: number,

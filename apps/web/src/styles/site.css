@@ -2640,7 +2640,7 @@ h2 i {
   display: none;
 }
 .page-hero {
-  padding-block: var(--space-7) 0;
+  padding-block: var(--space-7);
 }
 .page-hero h1 {
   margin-top: var(--space-5);
@@ -2662,8 +2662,16 @@ h2 i {
     repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 0.5rem) bottom / 100%
       0.3125rem no-repeat;
 }
-.page-hero + .section {
-  padding-top: var(--space-7);
+/* Le bas de l'en-tête fournit tout l'espace avant le contenu (section, bandeau ou liste de catégories) : rien ne s'additionne */
+.page-hero + .section,
+.page-hero + .blog-page {
+  padding-top: 0;
+}
+.page-hero:has(+ .section-nav-wrap) {
+  padding-bottom: var(--space-5);
+}
+.section-nav-wrap {
+  padding-bottom: var(--space-7);
 }
 .breadcrumb {
   font-family: var(--font-sans);
@@ -3007,4 +3015,9 @@ h2 i {
 .ref-band-title:hover {
   text-decoration: underline;
   text-underline-offset: 0.2em;
+}
+
+/* Titre d'un bandeau de section : de l'air avant la liste ou le texte qui suit (le filet des lignes ne le touche plus) */
+.band .hm-section.stack > h2 {
+  margin-bottom: var(--space-4);
 }

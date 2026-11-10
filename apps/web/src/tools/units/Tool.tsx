@@ -9,6 +9,7 @@ import {
   parseInteger,
   parseNumber,
   plain,
+  requiredBitsPerSecond,
   toBitsPerSecond,
   toBytes,
   transferSeconds,
@@ -26,7 +27,7 @@ import { UNITS_TOOL } from './text';
 type Ui = (typeof UNITS_TOOL)['fr']['ui'];
 
 const PREFIX = 'units';
-const TAB_IDS = ['data', 'transfer', 'base'] as const;
+const TAB_IDS = ['transfer', 'bandwidth', 'data', 'base'] as const;
 type TabId = (typeof TAB_IDS)[number];
 
 const formatValue = (value: number, lang: Lang): string => {
@@ -292,6 +293,147 @@ function TransferTab({ lang, ui }: { lang: Lang; ui: Ui }) {
   );
 }
 
+/** Bande passante nécessaire pour transférer une taille donnée dans un temps donné (inverse du temps de téléchargement). */
+function BandwidthTab({ lang, ui }: { lang: Lang; ui: Ui }) {
+  const t = ui.bandwidth;
+  const labels: Record<string, string> = ui.labels;
+  const [size, setSize] = useState('200');
+  const [sizeUnit, setSizeUnit] = useState('GB');
+  const [hours, setHours] = useState('8');
+  const [minutes, setMinutes] = useState('0');
+  const [secs, setSecs] = useState('0');
+  const [efficiency, setEfficiency] = useState('90');
+
+  const sizeP = useMemo(() => parseNumber(size), [size]);
+  const hP = useMemo(() => parseNumber(hours), [hours]);
+  const mP = useMemo(() => parseNumber(minutes), [minutes]);
+  const sP = useMemo(() => parseNumber(secs), [secs]);
+  const effP = useMemo(() => parseNumber(efficiency), [efficiency]);
+
+  const effError =
+    'error' in effP
+      ? numberError(ui, effP)
+      : effP.value < 1 || effP.value > 100
+        ? ui.errors.efficiency
+        : undefined;
+
+  const total =
+    'error' in hP || 'error' in mP || 'error' in sP
+      ? null
+      : hP.value * 3600 + mP.value * 60 + sP.value;
+  const durationError = total !== null && total <= 0 ? t.zeroDuration : undefined;
+
+  const result = useMemo(() => {
+    if ('error' in sizeP || 'error' in effP || total === null || total <= 0) return null;
+    if (effP.value < 1 || effP.value > 100) return null;
+    const bps = requiredBitsPerSecond(toBytes(sizeP.value, sizeUnit), total, effP.value);
+    if (!Number.isFinite(bps)) return null;
+    return { bps, rows: convertRate(bps, 'bit/s') };
+  }, [sizeP, effP, total, sizeUnit]);
+
+  const best = result
+    ? ([...result.rows].reverse().find((r) => r.value >= 1 && r.id.endsWith('bit/s')) ??
+      result.rows[0])
+    : null;
+
+  return (
+    <div class="stack">
+      <div class="form-row form-row-unit">
+        <Field
+          id="units-bw-size"
+          label={t.size}
+          value={size}
+          onInput={(e) => setSize(e.currentTarget.value)}
+          inputMode="decimal"
+          autoComplete="off"
+          spellcheck={false}
+          error={numberError(ui, sizeP)}
+        />
+        <UnitSelect<DataUnit>
+          id="units-bw-size-unit"
+          label={ui.common.unit}
+          value={sizeUnit}
+          onChange={setSizeUnit}
+          units={DATA_UNITS.filter((u) => u.id !== 'bit')}
+          labels={labels}
+        />
+        <Field
+          id="units-bw-hours"
+          label={t.hours}
+          value={hours}
+          onInput={(e) => setHours(e.currentTarget.value)}
+          inputMode="decimal"
+          autoComplete="off"
+          spellcheck={false}
+          error={numberError(ui, hP)}
+        />
+        <Field
+          id="units-bw-minutes"
+          label={t.minutes}
+          value={minutes}
+          onInput={(e) => setMinutes(e.currentTarget.value)}
+          inputMode="decimal"
+          autoComplete="off"
+          spellcheck={false}
+          error={numberError(ui, mP)}
+        />
+        <Field
+          id="units-bw-seconds"
+          label={t.seconds}
+          value={secs}
+          onInput={(e) => setSecs(e.currentTarget.value)}
+          inputMode="decimal"
+          autoComplete="off"
+          spellcheck={false}
+          error={durationError ?? numberError(ui, sP)}
+        />
+        <Field
+          id="units-bw-eff"
+          label={ui.transfer.efficiency}
+          value={efficiency}
+          onInput={(e) => setEfficiency(e.currentTarget.value)}
+          inputMode="decimal"
+          autoComplete="off"
+          spellcheck={false}
+          hint={ui.transfer.efficiencyHint}
+          error={effError}
+        />
+      </div>
+
+      <p role="status" class="visually-hidden">
+        {best ? `${t.result} : ${formatValue(best.value, lang)} ${labels[best.id] ?? best.id}` : ''}
+      </p>
+      <div>
+        {result && best && (
+          <div class="stack">
+            <div class="result-box">
+              <p class="note">{t.result}</p>
+              <p class="result-value mono">
+                {formatValue(best.value, lang)} {labels[best.id] ?? best.id}
+              </p>
+              <p>{t.explain}</p>
+            </div>
+            <div>
+              <h3>{ui.transfer.converted}</h3>
+              <dl class="kv">
+                {result.rows.map((r) => (
+                  <Row
+                    key={r.id}
+                    ui={ui}
+                    label={labels[r.id] ?? r.id}
+                    value={formatValue(r.value, lang)}
+                    copy={plain(r.value)}
+                  />
+                ))}
+              </dl>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function BaseTab({ ui }: { ui: Ui }) {
   const b = ui.base;
   const [value, setValue] = useState('255');
@@ -360,7 +502,7 @@ function BaseTab({ ui }: { ui: Ui }) {
 /** Conversions d'unités informatiques : tailles, débits et durée de transfert, bases numériques. Calcul local. */
 export default function UnitConverter({ lang }: { lang: Lang }) {
   const ui = UNITS_TOOL[lang].ui;
-  const [tab, setTab] = useState<TabId>('data');
+  const [tab, setTab] = useState<TabId>('transfer');
   const tabs = TAB_IDS.map((id) => ({ id, label: ui.tabs[id] }));
 
   return (
@@ -380,8 +522,9 @@ export default function UnitConverter({ lang }: { lang: Lang }) {
         tabIndex={0}
         class="tabpanel"
       >
-        {tab === 'data' && <DataTab lang={lang} ui={ui} />}
         {tab === 'transfer' && <TransferTab lang={lang} ui={ui} />}
+        {tab === 'bandwidth' && <BandwidthTab lang={lang} ui={ui} />}
+        {tab === 'data' && <DataTab lang={lang} ui={ui} />}
         {tab === 'base' && <BaseTab ui={ui} />}
       </div>
     </div>

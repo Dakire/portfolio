@@ -99,7 +99,7 @@
   --band-muted: #c4b9a8;
   --band-accent: #ff6a3d;
 
-  /* Bandeaux de section : trois tons chauds proches (anthracite, brun, rouille) qui alternent, un seul accent terracotta clair (identiques dans les deux thèmes). Texte et accent >= 4,5:1. */
+  /* Bandeaux de section : trois tons chauds proches qui alternent, un seul accent. Sombres en thème sombre (anthracite, brun, rouille), clairs en thème clair (sable, terre cuite pâle). Texte et accent >= 4,5:1. */
   --tone-ink: #f6efe3;
   --tone-danger: #ffc2b8;
   --tone-ok: #a9f0cb;
@@ -137,6 +137,20 @@
   --danger: #b42318;
   --focus: #9c2a08;
   --selection: rgb(168 42 8 / 0.18);
+  --tone-ink: #1b1612;
+  --tone-danger: #9b2318;
+  --tone-ok: #085c3d;
+  --tone-warn: #6b4700;
+  --tone-petrole: #e9e2d2;
+  --tone-petrole-accent: #9c2a08;
+  --tone-olive: #e0d3bc;
+  --tone-olive-accent: #9c2a08;
+  --tone-prune: #e9e2d2;
+  --tone-prune-accent: #9c2a08;
+  --tone-ocre: #e8d2c2;
+  --tone-ocre-accent: #9c2a08;
+  --tone-ardoise: #e0d3bc;
+  --tone-ardoise-accent: #9c2a08;
   --band: #211a14;
   --band-ink: #f6efe3;
   --band-muted: #c4b9a8;
@@ -168,6 +182,20 @@
     --danger: #b42318;
     --focus: #9c2a08;
     --selection: rgb(168 42 8 / 0.18);
+    --tone-ink: #1b1612;
+    --tone-danger: #9b2318;
+    --tone-ok: #085c3d;
+    --tone-warn: #6b4700;
+    --tone-petrole: #e9e2d2;
+    --tone-petrole-accent: #9c2a08;
+    --tone-olive: #e0d3bc;
+    --tone-olive-accent: #9c2a08;
+    --tone-prune: #e9e2d2;
+    --tone-prune-accent: #9c2a08;
+    --tone-ocre: #e8d2c2;
+    --tone-ocre-accent: #9c2a08;
+    --tone-ardoise: #e0d3bc;
+    --tone-ardoise-accent: #9c2a08;
     --band: #211a14;
     --band-ink: #f6efe3;
     --band-muted: #c4b9a8;

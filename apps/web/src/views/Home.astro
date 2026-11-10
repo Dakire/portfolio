@@ -45,7 +45,7 @@ const featured = t.projects.filter((p) => p.featured);
 const skillName = (id: string) => t.skills.find((s) => s.id === id)?.category ?? '';
 const cheatsheets = resourceLinks(lang).find((l) => l.key === 'cheatsheets');
 // Outils mis en avant : ceux qui répondent aux questions les plus fréquentes en support
-const homeTools = ['dns', 'email-headers', 'propagation', 'subnet', 'seo'].flatMap((id) => {
+const homeTools = ['units', 'dns', 'seo', 'email-headers', 'subnet'].flatMap((id) => {
   const tool = findTool(id);
   return tool ? [{ ...toolUi(tool, lang), href: toolPath(tool, lang) }] : [];
 });

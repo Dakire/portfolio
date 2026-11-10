@@ -9,6 +9,7 @@ import {
   plain,
   toBitsPerSecond,
   toBytes,
+  requiredBitsPerSecond,
   transferSeconds,
 } from '../src/units.js';
 
@@ -75,6 +76,24 @@ describe('débits', () => {
   it('Gbit/s ↔ Mbit/s ↔ kbit/s', () => {
     expect(get(convertRate(1, 'Gbit/s'), 'Mbit/s')).toBe(1000);
     expect(get(convertRate(1, 'Mbit/s'), 'kbit/s')).toBe(1000);
+  });
+});
+
+describe('bande passante nécessaire', () => {
+  it('10 Go en 80 s = 1 Gbit/s ; avec 80 % de rendement = 1,25 Gbit/s', () => {
+    const bytes = toBytes(10, 'GB');
+    expect(requiredBitsPerSecond(bytes, 80)).toBe(1e9);
+    expect(requiredBitsPerSecond(bytes, 80, 80)).toBe(1.25e9);
+  });
+
+  it('est l’inverse de transferSeconds', () => {
+    const bytes = toBytes(50, 'GB');
+    const bps = requiredBitsPerSecond(bytes, 600, 90);
+    expect(transferSeconds(bytes, bps, 90)).toBeCloseTo(600, 6);
+  });
+
+  it('une durée nulle donne un débit infini, jamais NaN', () => {
+    expect(requiredBitsPerSecond(1000, 0)).toBe(Infinity);
   });
 });
 

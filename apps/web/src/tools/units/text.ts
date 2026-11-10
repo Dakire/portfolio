@@ -3,23 +3,24 @@ export const UNITS_TOOL = {
   fr: {
     ui: {
       meta: {
-        title: 'Convertisseur Go en Gio, Mo en Mio, Mbit/s, hexadécimal | Guillaume Richard',
+        title: 'Calcul du temps de téléchargement : taille, débit et durée | Guillaume Richard',
         description:
-          "Convertissez Go et Gio, bits et octets, Mbit/s et Mo/s, calculez un temps de transfert et passez du décimal à l'hexadécimal ou au binaire.",
+          "Calculez le temps de téléchargement d'un fichier selon sa taille et votre débit, ou la bande passante nécessaire pour le charger en un temps donné. Gratuit.",
         appDescription:
-          'Convertisseur gratuit de tailles (SI et binaires), de débits réseau, de temps de transfert et de bases numériques (décimal, hexadécimal, binaire, octal).',
+          'Calculateur gratuit du temps de téléchargement et de la bande passante nécessaire, avec conversion des tailles (Go/Gio), des débits (Mbit/s, Mo/s) et des bases numériques.',
       },
-      name: 'Convertisseur d’unités informatiques',
-      card: 'Octets, Go/Gio, Mbit/s, temps de transfert, hexadécimal, binaire et octal.',
+      name: 'Temps de téléchargement et unités',
+      card: 'Temps de téléchargement d’un fichier, bande passante nécessaire, conversions Go/Gio, Mbit/s, hexadécimal et binaire.',
       keywords:
-        'convertisseur octet go gio mo mio mbit debit temps de transfert telechargement hexadecimal binaire octal decimal base bit byte',
-      h1: 'Convertisseur d’unités informatiques',
+        'calcul temps de telechargement bande passante necessaire duree transfert fichier debit mbit convertisseur octet go gio mo mio hexadecimal binaire octal decimal base bit byte',
+      h1: 'Calculateur de temps de téléchargement',
       intro:
-        "Trois conversions courantes en administration et en support : une taille dans toutes les unités (en distinguant le Go, puissance de 1000, du Gio, puissance de 1024), le temps qu'il faut pour transférer des données à un débit donné, et un nombre entier d'une base à l'autre (décimal, hexadécimal, binaire, octal).",
+        "Combien de temps pour télécharger ou copier un fichier ? Saisissez sa taille et votre débit : la durée s'affiche aussitôt. Dans l'autre sens, indiquez la taille et le temps que vous voulez y consacrer pour connaître la bande passante nécessaire. L'outil convertit aussi les tailles (Go, Gio) et les bases numériques.",
       tabs: {
         label: 'Type de conversion',
+        transfer: 'Temps de téléchargement',
+        bandwidth: 'Bande passante nécessaire',
         data: 'Tailles',
-        transfer: 'Débit et durée',
         base: 'Bases numériques',
       },
       labels: {
@@ -83,6 +84,16 @@ export const UNITS_TOOL = {
         tooLong: 'plus de 100 ans',
         converted: 'Le débit dans toutes les unités',
       },
+      bandwidth: {
+        size: 'Taille des données',
+        hours: 'Heures',
+        minutes: 'Minutes',
+        seconds: 'Secondes',
+        result: 'Bande passante nécessaire',
+        explain:
+          'Débit nominal minimal pour transférer ces données dans le temps indiqué, avec le rendement utile choisi.',
+        zeroDuration: 'Indiquez une durée supérieure à zéro.',
+      },
       base: {
         input: 'Nombre entier',
         from: 'Base de la saisie',
@@ -117,7 +128,7 @@ export const UNITS_TOOL = {
             "Un octet, un kilo-octet (1000 octets) et un kibioctet (1024 octets) ne sont pas la même chose. L'outil affiche la valeur dans les douze unités, du bit au pébioctet, avec la norme de chacune.",
           ],
           [
-            'Débits et durée de transfert',
+            'Temps de téléchargement',
             "Combien de temps pour copier 50 Go à 1 Gbit/s ? Entrez la quantité, le débit et le rendement utile : la durée s'affiche en jours, heures, minutes et secondes, et le débit est converti dans toutes les unités (Mbit/s, Mo/s…).",
           ],
           [
@@ -130,8 +141,28 @@ export const UNITS_TOOL = {
           ],
         ],
         howTitle: 'Comment l’utiliser',
-        how: "Choisissez l'onglet, saisissez la valeur et l'unité : le résultat est immédiat et chaque ligne se copie. Pour une durée de transfert, gardez un rendement de 90 à 95 % afin d'approcher la réalité d'un réseau local : l'estimation reste théorique, car elle ne tient compte ni de la latence, ni des petits fichiers, ni de la charge du réseau, du disque ou du processeur. Les tailles utilisent des nombres à virgule flottante (15 chiffres significatifs), de quoi couvrir jusqu'à plusieurs exaoctets.",
+        how: "Choisissez l'onglet (temps de téléchargement, bande passante nécessaire, tailles ou bases), saisissez la valeur et l'unité : le résultat est immédiat et chaque ligne se copie. Pour une durée de transfert, gardez un rendement de 90 à 95 % afin d'approcher la réalité d'un réseau local : l'estimation reste théorique, car elle ne tient compte ni de la latence, ni des petits fichiers, ni de la charge du réseau, du disque ou du processeur. Les tailles utilisent des nombres à virgule flottante (15 chiffres significatifs), de quoi couvrir jusqu'à plusieurs exaoctets.",
         faq: [
+          [
+            'Combien de temps pour télécharger 50 Go à 100 Mbit/s ?',
+            '1 h 6 min 40 s en théorie : 50 Go font 400 000 Mbit, divisés par 100 Mbit/s, soit 4 000 s. Avec un rendement réel de 90 %, comptez environ 1 h 14 min.',
+          ],
+          [
+            'Combien de temps pour télécharger 10 Go à 1 Gbit/s ?',
+            '1 min 20 s en théorie, environ 1 min 29 s avec un rendement de 90 %. Un To à 1 Gbit/s prend 2 h 13 min 20 s en théorie (environ 2 h 28 min à 90 %).',
+          ],
+          [
+            'Comment calculer le temps de téléchargement d’un fichier ?',
+            'Durée (s) = taille (octets) × 8 ÷ (débit (bit/s) × rendement). Exemple : 2 Go (2 × 10⁹ octets) à 50 Mbit/s : 16 × 10⁹ ÷ 50 × 10⁶ = 320 s, soit 5 min 20 s. L’outil fait ce calcul et gère les unités (Go ou Gio, Mbit/s ou Mo/s).',
+          ],
+          [
+            'Comment calculer la bande passante nécessaire ?',
+            'Bande passante (bit/s) = taille (octets) × 8 ÷ (durée (s) × rendement). Exemple : sauvegarder 200 Go en 8 heures demande environ 55,6 Mbit/s en théorie, 61,7 Mbit/s à 90 % de rendement. Utilisez l’onglet « Bande passante nécessaire ».',
+          ],
+          [
+            'Pourquoi mon téléchargement est-il plus lent que le débit annoncé ?',
+            'Le débit annoncé est un maximum théorique, en bits : les en-têtes réseau, le Wi-Fi, la charge du serveur distant, la latence, le disque et le nombre de petits fichiers réduisent le débit utile. Comptez 85 à 95 % sur un réseau câblé, moins en Wi-Fi ou sur une liaison partagée.',
+          ],
           [
             'Quelle différence entre Go et Gio ?',
             "Le gigaoctet (Go) vaut 1 000 000 000 octets, le gibioctet (Gio) vaut 1 073 741 824 octets (1024³). Windows affiche des Gio mais les appelle « Go », d'où les capacités de disque apparemment plus faibles que celles de l'emballage.",
@@ -153,23 +184,24 @@ export const UNITS_TOOL = {
   en: {
     ui: {
       meta: {
-        title: 'GB to GiB Converter: GB, MB, Mbit/s, Hex and Binary | Guillaume Richard',
+        title: 'Download Time Calculator: File Size, Speed and Bandwidth | Guillaume Richard',
         description:
-          'Convert GB and GiB, bits and bytes, Mbit/s and MB/s, compute a transfer time and convert decimal to hexadecimal, binary or octal.',
+          'Calculate how long a file takes to download from its size and your speed, or the bandwidth needed to transfer it in a given time. Also converts GB to GiB. Free.',
         appDescription:
-          'Free converter for data sizes (SI and binary), network rates, transfer times and number bases (decimal, hexadecimal, binary, octal).',
+          'Free download time and required-bandwidth calculator, with conversion of sizes (GB/GiB), rates (Mbit/s, MB/s) and number bases.',
       },
-      name: 'IT unit converter',
-      card: 'Bytes, GB/GiB, Mbit/s, transfer time, hexadecimal, binary and octal.',
+      name: 'Download time and units',
+      card: 'File download time, bandwidth needed, GB to GiB, Mbit/s, hexadecimal and binary conversions.',
       keywords:
-        'converter byte gb gib mb mib mbit rate transfer time download hexadecimal binary octal decimal base bit',
-      h1: 'IT unit converter',
+        'download time calculator bandwidth needed transfer time file size speed mbit converter byte gb to gib mb mib hexadecimal binary octal decimal base bit',
+      h1: 'Download time calculator',
       intro:
-        'Three conversions common in administration and support: a size in every unit (telling the GB, a power of 1000, from the GiB, a power of 1024), the time needed to transfer data at a given rate, and an integer from one base to another (decimal, hexadecimal, binary, octal).',
+        'How long does it take to download or copy a file? Enter its size and your speed: the duration appears right away. The other way round, enter the size and the time you can spend to get the bandwidth needed. The tool also converts sizes (GB, GiB) and number bases.',
       tabs: {
         label: 'Conversion type',
+        transfer: 'Download time',
+        bandwidth: 'Bandwidth needed',
         data: 'Sizes',
-        transfer: 'Rate and duration',
         base: 'Number bases',
       },
       labels: {
@@ -233,6 +265,16 @@ export const UNITS_TOOL = {
         tooLong: 'more than 100 years',
         converted: 'The rate in every unit',
       },
+      bandwidth: {
+        size: 'Amount of data',
+        hours: 'Hours',
+        minutes: 'Minutes',
+        seconds: 'Seconds',
+        result: 'Bandwidth needed',
+        explain:
+          'Minimum nominal rate to transfer this data in the given time, with the chosen useful throughput.',
+        zeroDuration: 'Enter a duration greater than zero.',
+      },
       base: {
         input: 'Integer',
         from: 'Base of the input',
@@ -267,7 +309,7 @@ export const UNITS_TOOL = {
             'A byte, a kilobyte (1,000 bytes) and a kibibyte (1,024 bytes) are not the same thing. The tool shows the value in twelve units, from the bit to the pebibyte, with the standard of each.',
           ],
           [
-            'Rates and transfer time',
+            'Download time',
             'How long to copy 50 GB at 1 Gbit/s? Enter the amount, the rate and the useful throughput: the duration is shown in days, hours, minutes and seconds, and the rate is converted into every unit (Mbit/s, MB/s…).',
           ],
           [
@@ -280,8 +322,28 @@ export const UNITS_TOOL = {
           ],
         ],
         howTitle: 'How to use it',
-        how: 'Pick the tab, enter the value and the unit: the result is immediate and each line can be copied. For a transfer time, keep a useful throughput of 90 to 95% to get close to a local network in practice: the estimate stays theoretical, as it ignores latency, small files and the load on the network, disk or processor. Sizes use floating-point numbers (15 significant digits), enough to cover several exabytes.',
+        how: 'Pick the tab (download time, bandwidth needed, sizes or bases), enter the value and the unit: the result is immediate and each line can be copied. For a transfer time, keep a useful throughput of 90 to 95% to get close to a local network in practice: the estimate stays theoretical, as it ignores latency, small files and the load on the network, disk or processor. Sizes use floating-point numbers (15 significant digits), enough to cover several exabytes.',
         faq: [
+          [
+            'How long to download 50 GB at 100 Mbit/s?',
+            '1 h 6 min 40 s in theory: 50 GB is 400,000 Mbit, divided by 100 Mbit/s, that is 4,000 s. With a real-world 90% efficiency, expect about 1 h 14 min.',
+          ],
+          [
+            'How long to download 10 GB at 1 Gbit/s?',
+            '1 min 20 s in theory, about 1 min 29 s at 90% efficiency. One TB at 1 Gbit/s takes 2 h 13 min 20 s in theory (about 2 h 28 min at 90%).',
+          ],
+          [
+            'How do I calculate the download time of a file?',
+            'Time (s) = size (bytes) × 8 ÷ (rate (bit/s) × efficiency). Example: 2 GB (2 × 10⁹ bytes) at 50 Mbit/s: 16 × 10⁹ ÷ 50 × 10⁶ = 320 s, that is 5 min 20 s. The tool does this calculation and handles units (GB or GiB, Mbit/s or MB/s).',
+          ],
+          [
+            'How do I calculate the bandwidth I need?',
+            'Bandwidth (bit/s) = size (bytes) × 8 ÷ (time (s) × efficiency). Example: backing up 200 GB in 8 hours needs about 55.6 Mbit/s in theory, 61.7 Mbit/s at 90% efficiency. Use the “Bandwidth needed” tab.',
+          ],
+          [
+            'Why is my download slower than the advertised speed?',
+            'The advertised speed is a theoretical maximum, in bits: network headers, Wi-Fi, the remote server load, latency, the disk and many small files reduce the useful rate. Expect 85 to 95% on a wired network, less on Wi-Fi or a shared link.',
+          ],
           [
             'What is the difference between GB and GiB?',
             'The gigabyte (GB) is 1,000,000,000 bytes, the gibibyte (GiB) is 1,073,741,824 bytes (1024³). Windows displays GiB but calls them “GB”, hence disk capacities that seem lower than on the box.',

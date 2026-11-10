@@ -13,6 +13,15 @@ async function ready(page: Page, path: string) {
 test.describe('convertisseur d’unités', () => {
   test('convertit une taille, un débit et une base', async ({ page }) => {
     await ready(page, '/outils/convertisseur-unites/');
+    // l'onglet « Temps de téléchargement » est affiché en premier : 50 Go à 1 Gbit/s = 6 min 40 s en théorie
+    await expect(page.getByText('Durée estimée', { exact: true })).toBeVisible();
+    await expect(page.locator('.result-value')).toHaveText('6 min 40 s');
+
+    await page.getByRole('tab', { name: 'Bande passante nécessaire' }).click();
+    // 200 Go en 8 h avec 90 % de rendement ≈ 61,7 Mbit/s
+    await expect(page.locator('.result-value')).toHaveText(/^61[,.]7\d* Mbit\/s$/);
+
+    await page.getByRole('tab', { name: 'Tailles' }).click();
     await page.getByLabel('Valeur').fill('500');
     await expect(page.getByRole('term').filter({ hasText: 'Gio' })).toBeVisible();
     await expect(
@@ -22,9 +31,6 @@ test.describe('convertisseur d’unités', () => {
         .first(),
     ).toBeVisible(); // 500 Go ≈ 465,66 Gio
 
-    await page.getByRole('tab', { name: 'Débit et durée' }).click();
-    await expect(page.getByText('Durée estimée', { exact: true })).toBeVisible();
-
     await page.getByRole('tab', { name: 'Bases numériques' }).click();
     await page.getByLabel('Nombre entier').fill('255');
     await expect(page.locator('dd.mono').filter({ hasText: /^FF$/ })).toBeVisible();
@@ -32,19 +38,20 @@ test.describe('convertisseur d’unités', () => {
 
   test('signale une saisie invalide', async ({ page }) => {
     await ready(page, '/outils/convertisseur-unites/');
+    await page.getByRole('tab', { name: 'Tailles' }).click();
     await page.getByLabel('Valeur').fill('abc');
     await expect(page.getByText('Saisissez un nombre')).toBeVisible();
   });
 
   test('les onglets se parcourent aux flèches', async ({ page }) => {
     await ready(page, '/outils/convertisseur-unites/');
-    await page.getByRole('tab', { name: 'Tailles' }).focus();
+    await page.getByRole('tab', { name: 'Temps de téléchargement' }).focus();
     await page.keyboard.press('ArrowRight');
-    await expect(page.getByRole('tab', { name: 'Débit et durée' })).toHaveAttribute(
+    await expect(page.getByRole('tab', { name: 'Bande passante nécessaire' })).toHaveAttribute(
       'aria-selected',
       'true',
     );
-    await expect(page.getByRole('tab', { name: 'Débit et durée' })).toBeFocused();
+    await expect(page.getByRole('tab', { name: 'Bande passante nécessaire' })).toBeFocused();
   });
 
   test('respecte WCAG 2.2 AA une fois utilisé (deux thèmes)', async ({ page }) => {
