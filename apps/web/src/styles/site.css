@@ -205,22 +205,30 @@
   display: none;
 }
 /* Grand écran : icône seule (la place manque dans l'en-tête) ; le libellé reste lu par les lecteurs d'écran */
-/* Grand écran : menu en pastille (un seul contour autour des liens, la page courante sur fond relevé) */
+/* Grand écran : menu en simples liens (ni boîte ni pilule). La page courante est soulignée à l'accent, le survol aussi, en plus pâle. */
 @media (min-width: 76rem) {
   .site-nav > ul {
-    width: fit-content;
-    padding: 0.2rem;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    background: var(--surface);
+    gap: 0 var(--space-4);
   }
   .site-nav > ul > li > a {
-    min-height: 2.5rem;
-    border-radius: 999px;
+    padding-inline: 0;
+    border-radius: 0;
+    color: var(--ink);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.55em;
+    transition: text-decoration-color var(--duration) var(--ease);
+  }
+  .site-nav > ul > li > a:hover {
+    background: none;
+    text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent);
   }
   .site-nav > ul > li > a[aria-current] {
-    background: var(--raised);
+    background: none;
     box-shadow: none;
+    text-decoration-color: var(--accent);
   }
 }
 @media (min-width: 76rem) {
