@@ -2501,9 +2501,6 @@ h2 i {
   font-weight: 400;
   letter-spacing: 0;
 }
-.hm-tools {
-  padding-top: 0;
-}
 .hm-terminal {
   margin-top: var(--space-7);
 }
