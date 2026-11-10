@@ -1,4 +1,5 @@
 ---
+import Shape from '../components/Shape.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import SectionHead from '../components/SectionHead.astro';
@@ -64,6 +65,7 @@ const ld = {
   </div>
   {TOOL_GROUPS.map((group, i) => (
     <section class={`band band-${tone(i)}`} id={group.id} aria-labelledby={`${group.id}-title`}>
+      {i === 0 && <Shape variant="blob" />}
       <div class="container hm-section stack tool-group">
         <SectionHead
           id={`${group.id}-title`}

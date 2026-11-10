@@ -1243,9 +1243,10 @@ input[data-filter-table]:focus-visible {
     z-index: var(--z-overlay);
     width: min(38rem, 92vw);
     padding: var(--space-4);
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-md);
-    background: var(--surface);
+    border: 0;
+    border-top: 2px solid var(--accent);
+    border-radius: 0;
+    background: var(--canvas);
     box-shadow: var(--shadow-lg);
   }
   .subnav ul {
@@ -1259,17 +1260,23 @@ input[data-filter-table]:focus-visible {
     display: flex;
     align-items: center;
     min-height: var(--target);
-    padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-sm);
-    color: var(--body);
+    padding: var(--space-2) 0;
+    border-radius: 0;
+    color: var(--ink);
     font-size: var(--text-sm);
+    font-weight: 500;
     line-height: var(--leading-snug);
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.35em;
+    transition: text-decoration-color var(--duration) var(--ease);
   }
   .subnav a:hover,
   .subnav a:focus-visible {
-    background: var(--raised);
+    background: none;
     color: var(--ink);
+    text-decoration-color: color-mix(in srgb, var(--accent) 70%, transparent);
   }
   .subnav-groups {
     display: grid;
@@ -1278,11 +1285,12 @@ input[data-filter-table]:focus-visible {
   }
   .subnav-title {
     margin: 0 0 var(--space-1);
-    padding-inline: var(--space-3);
+    padding: 0 0 var(--space-1);
+    border-bottom: 1px solid var(--line);
     color: var(--accent);
     font-family: var(--font-sans);
     font-size: var(--text-sm);
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0.01em;
   }
 }
@@ -3033,4 +3041,75 @@ h2 i {
 /* Blog : de l'air entre un titre de zone (Tags, outils liés) et ce qui le suit */
 .blog-page .stack > h2 {
   margin-bottom: var(--space-4);
+}
+
+/* ---------- Cartes colorées : sur le fond de page, deux tons, formes douces ---------- */
+body {
+  position: relative;
+}
+.page-bg {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-below);
+  overflow: hidden;
+  pointer-events: none;
+}
+.page-blob {
+  position: absolute;
+  display: block;
+  max-width: none;
+  fill: var(--accent);
+  opacity: 0.07;
+}
+.page-blob-top {
+  top: -9rem;
+  right: -10rem;
+  width: clamp(22rem, 48vw, 44rem);
+}
+.page-blob-bottom {
+  bottom: 14rem;
+  left: -12rem;
+  width: clamp(20rem, 40vw, 36rem);
+}
+@media print {
+  .page-bg {
+    display: none;
+  }
+}
+@media (forced-colors: active) {
+  .page-bg,
+  .band-shape {
+    display: none;
+  }
+}
+/* Dans une carte, la section garde un rythme plus serré que sur le fond de page */
+.band .hm-section,
+.band .hm-band-in,
+.band .post-month {
+  padding-block: clamp(2.25rem, 1.5rem + 3vw, 4rem);
+}
+.band .ref-band {
+  padding-block: var(--space-6);
+}
+/* Contact : une carte d'accent (même forme que les autres), pas un aplat pleine largeur */
+.hm-contact {
+  width: min(100% - 2 * var(--gutter), var(--container));
+  margin: var(--space-7) auto var(--space-8);
+  border-radius: 1.75rem;
+}
+.hm-contact > .container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding-inline: clamp(1.25rem, 0.5rem + 3.5vw, 3.5rem);
+}
+.hm-contact .band-shape {
+  fill: var(--accent-ink);
+  opacity: 0.1;
+}
+.hm-contact-in {
+  padding-block: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+}
+.hm-cta {
+  font-size: clamp(2.75rem, 1rem + 6.5vw, 6rem);
 }

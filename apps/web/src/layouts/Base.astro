@@ -104,7 +104,14 @@ const allScripts = [...scripts, '/js/nav.js', '/js/search.js', '/js/consent.js',
     {ld && <script type="application/ld+json" set:html={jsonForScript(ld)} />}
   </head>
   <body>
-    <div class="page-rails" aria-hidden="true"></div>
+    <div class="page-bg" aria-hidden="true">
+      <svg class="page-blob page-blob-top" viewBox="0 0 400 400" focusable="false">
+        <path d="M318 62c52 40 76 111 52 172s-92 92-158 104-143-4-176-60S-4 164 36 108 126 12 195 8s71 14 123 54Z" />
+      </svg>
+      <svg class="page-blob page-blob-bottom" viewBox="0 0 400 400" focusable="false">
+        <path d="M70 90C140 20 270 10 340 80s60 170 10 230-150 80-225 50S0 160 70 90Z" />
+      </svg>
+    </div>
     <SkipLink label={ui.skip} />
     <SiteHeader lang={lang} path={path} otherHref={otherHref} />
     <main id="contenu" tabindex="-1">

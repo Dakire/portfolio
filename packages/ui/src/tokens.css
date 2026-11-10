@@ -99,7 +99,7 @@
   --band-muted: #c4b9a8;
   --band-accent: #ff6a3d;
 
-  /* Bandeaux de section : trois tons chauds proches qui alternent, un seul accent. Plus pastel : bruns doux en thème sombre, sable et pêche pâles en thème clair. Texte et accent >= 4,5:1. */
+  /* Bandeaux de section : trois tons chauds proches qui alternent, un seul accent. Deux tons seulement, plus pastel : bruns doux en thème sombre, sable et pêche pâles en thème clair. Texte et accent >= 4,5:1. */
   --tone-ink: #f6efe3;
   --tone-danger: #ffc2b8;
   --tone-ok: #a9f0cb;
@@ -110,7 +110,7 @@
   --tone-olive-accent: #ffb090;
   --tone-prune: #38322b;
   --tone-prune-accent: #ffb090;
-  --tone-ocre: #5c3d2e;
+  --tone-ocre: #4a3a2d;
   --tone-ocre-accent: #ffb090;
   --tone-ardoise: #4a3a2d;
   --tone-ardoise-accent: #ffb090;
@@ -147,7 +147,7 @@
   --tone-olive-accent: #98270a;
   --tone-prune: #eee3cd;
   --tone-prune-accent: #98270a;
-  --tone-ocre: #eed4c8;
+  --tone-ocre: #f2ddca;
   --tone-ocre-accent: #98270a;
   --tone-ardoise: #f2ddca;
   --tone-ardoise-accent: #98270a;
@@ -192,7 +192,7 @@
     --tone-olive-accent: #98270a;
     --tone-prune: #eee3cd;
     --tone-prune-accent: #98270a;
-    --tone-ocre: #eed4c8;
+    --tone-ocre: #f2ddca;
     --tone-ocre-accent: #98270a;
     --tone-ardoise: #f2ddca;
     --tone-ardoise-accent: #98270a;

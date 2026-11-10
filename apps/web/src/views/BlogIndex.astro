@@ -1,4 +1,5 @@
 ---
+import Shape from '../components/Shape.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import { PORTFOLIO_DATA } from '../data/content';
@@ -184,6 +185,7 @@ const toolsTitle = lang === 'fr' ? 'Outils et aide-mémoire liés' : 'Related to
   {posts.length > 0 ? (
     months.map((month, i) => (
       <section class={`band band-${tone(i)}`} aria-labelledby={`m-${month.key}`}>
+        {i === 0 && <Shape variant="wave" />}
         <div class="container post-month">
           <header class="post-month-head">
             <h2 id={`m-${month.key}`}>{month.label}</h2>

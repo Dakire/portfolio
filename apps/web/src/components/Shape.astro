@@ -1,0 +1,29 @@
+---
+// Forme décorative d'une carte colorée (.band) : un blob dans un coin ou une vague en bas, très discrète, rognée par la carte.
+// Purement décorative (aria-hidden) ; la couleur vient de la carte (--band-accent) et reste sous le texte.
+interface Props {
+  variant?: 'blob' | 'wave';
+}
+const { variant = 'blob' } = Astro.props;
+---
+
+{variant === 'wave' ? (
+  <svg
+    class="band-shape band-shape-wave"
+    viewBox="0 0 1440 120"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M0 70C180 10 330 10 520 60S900 120 1100 60 1340 20 1440 50V120H0Z" />
+  </svg>
+) : (
+  <svg
+    class="band-shape band-shape-blob"
+    viewBox="0 0 400 400"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M318 62c52 40 76 111 52 172s-92 92-158 104-143-4-176-60S-4 164 36 108 126 12 195 8s71 14 123 54Z" />
+  </svg>
+)}

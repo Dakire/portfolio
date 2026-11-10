@@ -1,4 +1,5 @@
 ---
+import Shape from '../components/Shape.astro';
 import { tone } from '../lib/tones';
 // Pages « À propos », « Compétences », « Réalisations » et « Contact » : un même gabarit, le contenu change selon `page`.
 import Button from '@grichard/ui/components/Button.astro';
@@ -147,6 +148,7 @@ const domains = t.skills
             id={skill.id}
             aria-labelledby={`${skill.id}-title`}
           >
+            {i === 0 && <Shape variant="blob" />}
             <div class="container stack hm-section">
               <h2 id={`${skill.id}-title`}>{skill.category}</h2>
               <p class="prose">{skill.items}</p>
@@ -221,6 +223,7 @@ const domains = t.skills
           </div>
           {domains.map((d, i) => (
             <section class={`band band-${tone(i)}`} id={d.id} aria-labelledby={`${d.id}-title`}>
+              {i === 0 && <Shape variant="blob" />}
               <div class="container stack hm-section">
                 <h2 id={`${d.id}-title`}>{d.label}</h2>
                 <ProjectCards items={d.items} lang={lang} level={3} />

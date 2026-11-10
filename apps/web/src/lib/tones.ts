@@ -1,3 +1,3 @@
-// Teintes des bandeaux de section (classes .band-* de packages/ui) : une couleur par section, en cycle.
-export const TONES = ['petrole', 'olive', 'prune', 'ocre', 'ardoise'] as const;
+// Tons des cartes colorées (classes .band-* de packages/ui) : deux tons qui alternent, pas plus.
+export const TONES = ['petrole', 'olive'] as const;
 export const tone = (i: number) => TONES[i % TONES.length];

@@ -1,4 +1,5 @@
 ---
+import Shape from '../components/Shape.astro';
 import { tone } from '../lib/tones';
 // Accueil « Cheatsheets » : la liste des cheatsheets. Pas de recherche globale (trop de résultats mélangés) : chaque cheatsheet a la sienne.
 import Base from '../layouts/Base.astro';
@@ -47,6 +48,7 @@ const ld = cheatsheetsHubLd(
   </h2>
   {refs.map((r, i) => (
     <section class={`band band-${tone(i)}`} aria-labelledby={`ref-${r.id}-title`}>
+      {i === 0 && <Shape variant="blob" />}
       <div class="container ref-band">
         <div class="ref-band-text">
           <h3 id={`ref-${r.id}-title`}>

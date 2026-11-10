@@ -1,4 +1,5 @@
 ---
+import Shape from '../components/Shape.astro';
 import Base from '../layouts/Base.astro';
 import AvatarPortrait from '../components/AvatarPortrait.astro';
 import CareerTimeline from '../components/CareerTimeline.astro';
@@ -137,6 +138,7 @@ const labels = fr
   </header>
 
   <section class="band band-petrole hm-band" aria-labelledby="projects-title">
+    <Shape variant="blob" />
     <div class="container hm-band-in">
       <div class="hm-top">
         <div>
@@ -175,7 +177,7 @@ const labels = fr
     </div>
   </section>
 
-  <section class="band band-olive" aria-labelledby="profile-title">
+  <section aria-labelledby="profile-title">
     <div class="container hm-section">
       <div class="hm-top">
         <div>
@@ -215,7 +217,8 @@ const labels = fr
     </div>
   </section>
 
-  <section class="band band-prune" aria-labelledby="reading-title">
+  <section class="band band-olive" aria-labelledby="reading-title">
+    <Shape variant="wave" />
     <div class="container hm-section">
       <div class="hm-top">
         <div>
@@ -265,7 +268,7 @@ const labels = fr
     </div>
   </section>
 
-  <section class="band band-ocre" aria-labelledby="tools-title">
+  <section aria-labelledby="tools-title">
     <div class="container hm-section hm-tools">
       <div class="hm-top">
         <div>
@@ -322,6 +325,7 @@ const labels = fr
   </section>
 
   <section class="hm-contact" id="contact" aria-labelledby="contact-title">
+    <Shape variant="blob" />
     <div class="container hm-contact-in">
       <p class="label">{labels.contact}</p>
       <h2 id="contact-title" class="hm-cta">
