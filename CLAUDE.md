@@ -34,34 +34,51 @@ Ne jamais introduire de dépendance d'exécution Node, ni d'appel à un service 
 | Contrat sur le nouveau site        | `CONTRACT_DIST=apps/web/dist pnpm test:contract` (après `pnpm --filter @grichard/web build`)      |
 | Sitemap en ligne (GET, chaque URL) | `pnpm --filter @grichard/web sitemap:check` (référence : `/root-access.xml`, voir docs/seo.md)    |
 
-Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. `/root-access.xml` (liste d'URL, référence déclarée dans `robots.txt` ; `/sitemap.xml` et `/sitemap-0.xml` en restent des copies identiques) est produit par `postbuild.mjs` : voir [docs/seo.md](docs/seo.md). Identité visuelle : [ADR 0012](docs/adr/0012-edition-releve.md) (composition des pages, portfolio d'abord ; conventions d'interface ci-dessous), suite de l'[ADR 0011](docs/adr/0011-identite-atelier.md) et de l'[ADR 0010](docs/adr/0010-identite-fiche-technique.md). Portail Symfony (`apps/portal`, voir [docs/portail.md](docs/portail.md)) : `composer install`, `composer test|cs|stan` dans `apps/portal`. Déploiement : [docs/deploiement.md](docs/deploiement.md) (production automatique après CI verte sur `main` ; à la main : retour arrière, portail).
+Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. `/root-access.xml` (liste d'URL, référence déclarée dans `robots.txt` ; `/sitemap.xml` et `/sitemap-0.xml` en restent des copies identiques) est produit par `postbuild.mjs` : voir [docs/seo.md](docs/seo.md). Identité visuelle : [ADR 0013](docs/adr/0013-cartes-colorees.md) (cartes colorées en deux tons, formes douces, menu en liens simples), [ADR 0012](docs/adr/0012-edition-releve.md) (structure des pages, portfolio d'abord ; conventions d'interface ci-dessous), suite de l'[ADR 0011](docs/adr/0011-identite-atelier.md) et de l'[ADR 0010](docs/adr/0010-identite-fiche-technique.md). Portail Symfony (`apps/portal`, voir [docs/portail.md](docs/portail.md)) : `composer install`, `composer test|cs|stan` dans `apps/portal`. Déploiement : [docs/deploiement.md](docs/deploiement.md) (production automatique après CI verte sur `main` ; à la main : retour arrière, portail).
 
 ## Architecture cible
 
 Site portfolio (ADR 0009, [docs/refonte-portfolio.md](docs/refonte-portfolio.md)) : menu à plat À propos · Parcours · Compétences · Réalisations · Blog · Outils · Cheatsheets (+ bouton Contact ; survol d'« Outils » : chaque outil par catégorie) ; la page `/ressources/` reste en ligne mais hors du menu. Aucune mention de la ville (Laval) sur le site : ne pas la réintroduire. Contenu du profil dans `apps/web/src/data/profile.ts` (FR et EN, parité vérifiée), liens compétences/réalisations vers articles, outils et cheatsheets dans `data/related.ts`, textes de structure dans `data/site-text.ts`. Une page par réalisation (`/projets/<slug>/`) ; blocs `context`, `role`, `steps`, `result` facultatifs et masqués s'ils sont vides (ne rien inventer). Toute URL renommée : entrée dans `REDIRECTS` (`scripts/lib/htaccess.mjs`) et dans `redirects` de `tests/contract/contract.json`. Le contrat de l'ancien site (`pnpm test:contract` sans `CONTRACT_DIST`) tourne aussi en CI : le lancer avant de pousser.
 
-`apps/web` (Astro, statique, FR/EN) · `apps/api` (PHP : `contact.php` et `tools.php`, les outils serveur rapport SEO et vérificateur de sitemap, avec la couche `Net/` protégée contre la SSRF, voir ADR 0007) · `apps/portal` (Symfony, espace client) · `apps/web/data/reference` + `public/data/reference` (aide-mémoire `/cheatsheets/` : sources YAML, JSON générés commités, recherche MiniSearch côté client, voir [docs/reference.md](docs/reference.md) et ADR 0008) · `packages/ui` (tokens CSS, composants) · `packages/tools-core` (logique pure des outils, TS) · `packages/config` · `packages/content-schema`. Décisions : [docs/adr/](docs/adr/).
+`apps/web` (Astro, statique, FR/EN) · `apps/api` (PHP : `contact.php` et `tools.php`, les outils serveur rapport SEO et vérificateur de sitemap, avec la couche `Net/` protégée contre la SSRF, voir ADR 0007) · `apps/portal` (Symfony, espace client) · `apps/web/data/reference` + `public/data/reference` (aide-mémoire `/cheatsheets/` : sources YAML, JSON générés commités, recherche MiniSearch côté client tolérante, exemples GAM générés et écrits à la main, glossaire FR, voir [docs/reference.md](docs/reference.md) et ADR 0008) · `packages/ui` (tokens CSS, composants) · `packages/tools-core` (logique pure des outils, TS) · `packages/config` · `packages/content-schema`. Décisions : [docs/adr/](docs/adr/).
 
 ## Conventions
 
 - **Commits** : Conventional Commits (`type(portée): sujet`, en français), vérifiés par le hook `commit-msg`. Atomiques : un commit, un changement cohérent.
 - **Git : push direct sur `main`, pas de PR, pas de préproduction.** Chaque push sur `main` part en production dès que la CI est verte (workflow `Déploiement`). Commits atomiques et fréquents, un `git push origin main` après chaque étape cohérente et terminée. Chaque commit laisse le site fonctionnel ; une fonctionnalité inachevée reste masquée (pas d'entrée dans le registre, pas de lien).
 - **Avant chaque push** (il n'y a pas de filet en aval) : `pnpm verify` (s'arrête au premier échec ; ne jamais se fier à un filtre de sortie, seulement au code de retour), qui couvre `pnpm format:check` ; lint, typecheck, tests et e2e de ce qui est touché (`pnpm --filter @grichard/web lint|check|test|build|test:e2e`) ; `composer test|cs|stan` et `php -l` sur les fichiers PHP modifiés ; `CONTRACT_DIST=apps/web/dist pnpm test:contract` ; rendu vérifié en 1440/768/375 px, au clavier, thèmes clair et sombre ; `git diff --staged` relu (aucun secret ni donnée personnelle). Une vérification échoue : on corrige avant de pousser.
-- **Régression en production** : `git revert` du commit fautif et push immédiat (la CI verte relivre), puis analyse. Retour arrière d'urgence : workflow `Déploiement` à la main avec `ref` = tag `deploy-production-…` précédent. Tag `pre-refonte` : état d'avant la refonte UX/outils SEO.
+- **Régression en production** : `git revert` du commit fautif et push immédiat (la CI verte relivre), puis analyse. Retour arrière d'urgence : workflow `Déploiement` à la main avec `ref` = tag `deploy-production-…` précédent. Tag `pre-refonte` : état d'avant la refonte UX/outils SEO. Le déploiement ne sauvegarde plus le site (tout est dans git, le tag redonne le même site).
 - **TypeScript strict** côté JS. **PHP** : `declare(strict_types=1)`, PER-CS, PHPStan niveau max, PHPUnit.
 - Prettier pour tout sauf `legacy/`. Pas de couleur écrite en dur : utiliser les tokens de `packages/ui/src/tokens.css`. Jamais de `<style>` ni de script en ligne (CSP) ; les scripts sont des fichiers externes. Pas d'attribut `style=""` écrit à la main (seule la coloration syntaxique Shiki en génère : voir ADR 0005).
 - Une dépendance ajoutée doit être justifiée (poids, maintenance, sécurité, compatibilité OVH).
 
-## Conventions d'interface (ADR 0012)
+## Cheatsheets : maintenance
+
+- Le JSON de chaque référence est **commité** : après un changement de source YAML, de glossaire ou d'exemple, `pnpm --filter @grichard/web reference:build` et commit des deux (un test échoue sinon).
+- GAM : entrées du wiki (`gam.json`) ; exemples écrits à la main dans `data/reference/exemples/gam-extra*.yml` (clé = début de la syntaxe, `fr` et `en` pour les descriptions) ; exemples minimaux et descriptions « verbe + objet » générés par `scripts/reference/auto-examples.mjs`. Une clé qui ne correspond à aucune commande fait échouer le build.
+- Glossaire français → commandes : `data/reference/glossaire*.yml` ; un mot de `en` court (moins de 5 lettres) doit être un mot entier (ex. « output » ne doit pas matcher « ou »).
+- Les scripts PowerShell M365 sont des exemples non exécutés sur un tenant réel : les annoncer comme tels.
+
+## Conventions d'interface (ADR 0012 et 0013)
 
 - **Réseaux sociaux** : icônes seules, sans texte visible (`SocialLinks.astro`, `Icon.astro`) ; le nom est dans `aria-label`. Seuls les deux CV portent le code de langue (FR, EN).
 - **Listes** : lignes de registre (`.ledger-row`, `.lrow`, composants `ProjectCards`, `ToolCards`, `SkillCards`) ; cartes seulement pour les articles du blog (avec mini description) et les résultats de cheatsheets. Liens du texte : encre, soulignement d'accent de 2 px.
 - **Bandeau de cookies** : premier dans le DOM (ordre de Tab), affiché en bas par CSS (`order`, `position: sticky`). Ne jamais rembourrer `body` pour lui faire de la place.
 - **SVG de page** : pas de `<title>` (il collisionne avec le titre de page, `dist.test.ts`) ni de `style=""` ; traits et remplissages par classes et tokens.
-- **`.band`** redéfinit `--accent` (ambre vif) : ne pas l'utiliser pour un aplat d'accent (contraste en thème clair) ; voir `.hm-contact`.
+- **Cartes colorées** (`.band`, ADR 0013) : une section colorée est une carte arrondie sur le fond de page (pas un bandeau pleine largeur), en **deux tons seulement** (`tone(i)` de `src/lib/tones.ts`, jetons `--tone-*`). `.band` redéfinit `--ink`, `--accent`, `--surface`, `--danger`… : ne pas y poser de couleur en dur. Pour un aplat d'accent, `.hm-contact`. Pas de carte partout : les sections de l'accueil Profil et Outils restent sur le fond de page.
+- **Formes** : `Shape.astro` (blob ou vague, décoratif, `aria-hidden`) sur la première carte d'une page et quelques autres, jamais sur toutes ; blobs de fond de page dans `Base.astro` (`.page-bg`).
+- **Espacement** : le bas de `.page-hero` fournit tout l'espace avant le contenu ; une règle d'espacement ne doit pas supposer ce que contient la section voisine (carte ou fond). Vérifier une page nouvelle ou modifiée en 1440 et 375 px, deux thèmes.
+- **Menu** : liens nus, soulignement d'accent (page courante, survol) ; ni pilule ni boîte. Sous-menu Outils au même style. Pas de curseur animé.
+- **Libellés** : texte courant en sourdine, pas de capitales espacées en chasse fixe (sauf code et terminal).
 - **Formulaire de contact** hydraté à l'approche de l'écran (`client:visible`) : les tests e2e défilent jusqu'à lui.
 - **Profil** : les missions des expériences sont des exemples, pas une liste exhaustive (libellé « Missions, entre autres »). Le dépôt `MSG-EML-To-PDF-With-Attachments` est privé : ne pas le lier avant que Guillaume le passe en public.
 - **Avatar** : `public/img/guillaume-*.svg` ; après toute modification, régénérer `favicon.svg`, `favicon.ico`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` et `apple-touch-icon.png`.
+
+## Pièges d'outillage (Windows)
+
+- Git Bash : `composer` n'est pas dans le `PATH` ; ajouter le dossier PHP de winget et passer `COMPOSER_BIN` (voir la note de mémoire sur la chaîne PHP) pour que `pnpm verify` aille jusqu'au bout.
+- Un serveur `astro dev` ou `astro preview` oublié bloque `pnpm verify` (port ou verrou de fichier `.astro`) : l'arrêter (`astro preview stop`) avant de relancer.
+- Hook `commit-msg` : sujet de la forme `type(portée): sujet`, sans parenthèses supplémentaires dans le sujet.
 
 ## Sécurité (toujours)
 
