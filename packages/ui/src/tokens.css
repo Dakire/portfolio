@@ -74,91 +74,90 @@
   --gutter: clamp(1rem, 0.5rem + 2.5vw, 2rem);
   --target: 2.75rem; /* cible tactile minimale : 44 px */
 
-  /* Couleurs : thème sombre (défaut). « Baie de nuit » : graphite légèrement bleuté, lignes de construction à peine visibles,
-     un seul signal ambre (voyant), un vert d'eau pour les liaisons. Les bandes (--band-*) sont plus claires que le fond. */
-  --canvas: #101316;
-  --surface: #161a1e;
-  --raised: #1d2227;
-  --line: #262c32;
-  --line-strong: #7b8792;
-  --guide: #1c2126;
-  --ink: #eef1f3;
-  --body: #c9d0d6;
-  --muted: #98a2ab;
-  --accent: #f5a524;
-  --accent-strong: #f5a524;
-  --accent-ink: #1a1203;
-  --accent-alt: #7fd3c1;
-  --link: #f8c46c;
+  /* Couleurs : thème sombre (défaut). « Encre » : noir chaud, papier et terracotta, un seul signal vermillon, un vert olive pour les liaisons. Les bandes (--band-*) sont plus claires que le fond. */
+  --canvas: #14110e;
+  --surface: #1b1713;
+  --raised: #241f1a;
+  --line: #36302a;
+  --line-strong: #8c8378;
+  --guide: #1d1915;
+  --ink: #f4ede1;
+  --body: #d6cdbf;
+  --muted: #a89f92;
+  --accent: #ff6a3d;
+  --accent-strong: #ff6a3d;
+  --accent-ink: #1a0802;
+  --accent-alt: #c9d97a;
+  --link: #ff9d7d;
   --ok: #6fe0a6;
   --warn: #f2c14e;
   --danger: #ff8f80;
-  --focus: #ffd385;
-  --selection: rgb(245 165 36 / 0.28);
-  --band: #1f252b;
-  --band-ink: #f4f6f7;
-  --band-muted: #b2bcc5;
-  --band-accent: #f5a524;
+  --focus: #ffc4af;
+  --selection: rgb(255 106 61 / 0.3);
+  --band: #2a221b;
+  --band-ink: #f6efe3;
+  --band-muted: #c4b9a8;
+  --band-accent: #ff6a3d;
 }
 
 /* Thème clair */
 :root[data-theme='light'] {
-  --canvas: #f3f4f5;
-  --surface: #fbfbfc;
-  --raised: #e8eaed;
-  --line: #dcdfe3;
-  --line-strong: #7a828b;
-  --guide: #e4e7ea;
-  --ink: #121518;
-  --body: #30363c;
-  --muted: #59616a;
-  --accent: #a34a00;
-  --accent-strong: #a34a00;
+  --canvas: #f2ece0;
+  --surface: #faf6ec;
+  --raised: #e7dfce;
+  --line: #d6cbb4;
+  --line-strong: #766c58;
+  --guide: #e6dfcf;
+  --ink: #1b1612;
+  --body: #3a332b;
+  --muted: #62594d;
+  --accent: #a82a08;
+  --accent-strong: #a82a08;
   --accent-ink: #ffffff;
-  --accent-alt: #0d6b61;
-  --link: #8c3f00;
+  --accent-alt: #44601a;
+  --link: #9c2a08;
   --ok: #0a6c48;
   --warn: #7f5600;
   --danger: #b42318;
-  --focus: #8c3f00;
-  --selection: rgb(163 74 0 / 0.2);
-  --band: #15191d;
-  --band-ink: #f3f4f5;
-  --band-muted: #aab3bc;
-  --band-accent: #f5a524;
-  --shadow-sm: 0 1px 2px rgb(20 23 26 / 0.07);
-  --shadow-card: 0 1px 2px rgb(20 23 26 / 0.05), 0 8px 24px -12px rgb(20 23 26 / 0.14);
-  --shadow-lg: 0 2px 4px rgb(20 23 26 / 0.06), 0 22px 48px -18px rgb(20 23 26 / 0.24);
+  --focus: #9c2a08;
+  --selection: rgb(168 42 8 / 0.18);
+  --band: #211a14;
+  --band-ink: #f6efe3;
+  --band-muted: #c4b9a8;
+  --band-accent: #ff6a3d;
+  --shadow-sm: 0 1px 2px rgb(27 22 18 / 0.08);
+  --shadow-card: 0 1px 2px rgb(27 22 18 / 0.06), 0 8px 24px -12px rgb(27 22 18 / 0.16);
+  --shadow-lg: 0 2px 4px rgb(27 22 18 / 0.07), 0 22px 48px -18px rgb(27 22 18 / 0.26);
 }
 
 /* Sans JavaScript : le thème suit le système (avec JavaScript, data-theme est toujours posé et prime). */
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
-    --canvas: #f3f4f5;
-    --surface: #fbfbfc;
-    --raised: #e8eaed;
-    --line: #dcdfe3;
-    --line-strong: #7a828b;
-    --guide: #e4e7ea;
-    --ink: #121518;
-    --body: #30363c;
-    --muted: #59616a;
-    --accent: #a34a00;
-    --accent-strong: #a34a00;
+    --canvas: #f2ece0;
+    --surface: #faf6ec;
+    --raised: #e7dfce;
+    --line: #d6cbb4;
+    --line-strong: #766c58;
+    --guide: #e6dfcf;
+    --ink: #1b1612;
+    --body: #3a332b;
+    --muted: #62594d;
+    --accent: #a82a08;
+    --accent-strong: #a82a08;
     --accent-ink: #ffffff;
-    --accent-alt: #0d6b61;
-    --link: #8c3f00;
+    --accent-alt: #44601a;
+    --link: #9c2a08;
     --ok: #0a6c48;
     --warn: #7f5600;
     --danger: #b42318;
-    --focus: #8c3f00;
-    --selection: rgb(163 74 0 / 0.2);
-    --band: #15191d;
-    --band-ink: #f3f4f5;
-    --band-muted: #aab3bc;
-    --band-accent: #f5a524;
-    --shadow-sm: 0 1px 2px rgb(20 23 26 / 0.07);
-    --shadow-card: 0 1px 2px rgb(20 23 26 / 0.05), 0 8px 24px -12px rgb(20 23 26 / 0.14);
-    --shadow-lg: 0 2px 4px rgb(20 23 26 / 0.06), 0 22px 48px -18px rgb(20 23 26 / 0.24);
+    --focus: #9c2a08;
+    --selection: rgb(168 42 8 / 0.18);
+    --band: #211a14;
+    --band-ink: #f6efe3;
+    --band-muted: #c4b9a8;
+    --band-accent: #ff6a3d;
+    --shadow-sm: 0 1px 2px rgb(27 22 18 / 0.08);
+    --shadow-card: 0 1px 2px rgb(27 22 18 / 0.06), 0 8px 24px -12px rgb(27 22 18 / 0.16);
+    --shadow-lg: 0 2px 4px rgb(27 22 18 / 0.07), 0 22px 48px -18px rgb(27 22 18 / 0.26);
   }
 }

@@ -127,14 +127,13 @@
   font-size: var(--text-lg);
 }
 
-/* Libellé technique (police à chasse fixe, capitales espacées) : numéros de section, catégories, métadonnées */
+/* Libellé : petite ligne de texte courant, en sourdine (catégories, dates, métadonnées) */
 .label {
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
   font-weight: 500;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }
 /* Voyant : petit carré allumé devant un libellé (décoratif) */
 .led::before {
@@ -145,7 +144,7 @@
   margin-right: 0.6em;
   vertical-align: 0.08em;
   background: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+  border-radius: 50%;
 }
 
 /* Étiquettes (pastilles teintées) et raccourcis clavier */
@@ -154,10 +153,10 @@
   align-items: center;
   padding: 0.0625rem 0.5rem;
   border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
+  border-radius: 999px;
   background: var(--canvas);
   color: var(--body);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   font-weight: 450;
   line-height: 1.7;
@@ -531,11 +530,10 @@
   align-items: center;
   gap: var(--space-4);
   color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
   font-weight: 600;
   letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 .rule-label::before,
 .rule-label::after {

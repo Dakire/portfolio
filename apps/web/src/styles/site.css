@@ -439,7 +439,6 @@
   font-size: var(--text-sm);
   font-weight: 650;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 .footer-title a {
   color: inherit;
@@ -953,10 +952,9 @@ html[data-terminal-max] {
 }
 .post-aside #further-title {
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  letter-spacing: 0.01em;
 }
 .post-body {
   max-width: var(--measure);
@@ -1096,11 +1094,10 @@ html[data-terminal-max] {
 }
 .facts dt {
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
   font-weight: 500;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }
 .facts dd {
   margin: 0;
@@ -1204,11 +1201,10 @@ input[data-filter-table]:focus-visible {
     margin: var(--space-2) 0 0;
     padding-inline: var(--space-2);
     color: var(--muted);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
     font-weight: 500;
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
+    letter-spacing: 0.01em;
   }
   .js .subnav ul {
     display: block;
@@ -1276,11 +1272,10 @@ input[data-filter-table]:focus-visible {
     margin: 0 0 var(--space-1);
     padding-inline: var(--space-3);
     color: var(--accent);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
     font-weight: 500;
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
+    letter-spacing: 0.01em;
   }
 }
 
@@ -1449,11 +1444,10 @@ input[data-filter-table]:focus-visible {
 /* Sommaire d'article : index discret (numéros en chasse fixe), lien souligné seulement au survol ou au focus */
 .toc #toc-title {
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
   font-weight: 500;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }
 .toc ol[role='list'] {
   padding-left: 2.25rem;
@@ -1579,10 +1573,9 @@ h2 i {
 }
 .spec-sheet dt {
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  letter-spacing: 0.01em;
 }
 .spec-sheet dd {
   margin: 0;
@@ -1690,11 +1683,10 @@ h2 i {
 }
 .project-aside h2 {
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
   font-weight: 500;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }
 .project-aside .facts {
   border-radius: 0;
@@ -1711,11 +1703,10 @@ h2 i {
 }
 .project-aside .proofs h3 {
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
   font-weight: 500;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }
 .project-aside .link-list a {
   color: var(--ink);
@@ -2675,10 +2666,9 @@ h2 i {
   padding-top: var(--space-7);
 }
 .breadcrumb {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
   letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 .section-head h2 {
   font-stretch: 82%;
