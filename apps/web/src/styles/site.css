@@ -1086,7 +1086,7 @@ html[data-terminal-max] {
   padding: var(--space-3) var(--space-4);
 }
 .facts > div + div {
-  border-top: 1px dashed var(--line);
+  border-top: 1px solid var(--line);
 }
 @media (min-width: 40rem) {
   .facts > div {
@@ -1489,6 +1489,7 @@ h2 i {
   overflow: hidden;
 }
 .footer-signature {
+  display: none;
   margin: 0;
   padding: var(--space-5) var(--gutter) var(--space-6);
   user-select: none;
@@ -1982,6 +1983,7 @@ h2 i {
 /* ---------- Accueil, version portfolio (ADR 0012) ----------
    Ordre de lecture : portrait et nom, réalisations, profil, blog, outils, contact. */
 .ruler {
+  display: none;
   height: 0.625rem;
   background:
     repeating-linear-gradient(90deg, var(--line-strong) 0 1px, transparent 1px 4rem) bottom / 100%
@@ -2049,12 +2051,7 @@ h2 i {
   position: relative;
   overflow: hidden;
   aspect-ratio: 1 / 1;
-  border: 1px solid var(--line);
-  border-bottom: 0;
-  background:
-    repeating-linear-gradient(0deg, transparent 0 1.99rem, var(--guide) 1.99rem 2rem),
-    repeating-linear-gradient(90deg, transparent 0 1.99rem, var(--guide) 1.99rem 2rem),
-    var(--raised);
+  background: var(--raised);
 }
 .portrait-disc {
   position: absolute;
@@ -2073,6 +2070,7 @@ h2 i {
   height: auto;
 }
 .portrait-notes {
+  display: none;
   position: absolute;
   inset: 0;
   width: 100%;
@@ -2098,7 +2096,7 @@ h2 i {
   font-weight: 700;
 }
 .portrait figcaption {
-  display: flex;
+  display: none;
   justify-content: space-between;
   gap: var(--space-3);
   padding-top: var(--space-3);
@@ -2147,8 +2145,7 @@ h2 i {
 }
 .hm-name span + span {
   margin-left: 0.5em;
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--ink);
+  color: var(--accent);
 }
 .hm-role {
   margin-top: var(--space-4);
@@ -2180,7 +2177,6 @@ h2 i {
   gap: var(--space-5);
   margin-bottom: var(--space-7);
   padding-bottom: var(--space-4);
-  border-bottom: 1px solid var(--line);
 }
 .hm-top .label {
   margin-bottom: var(--space-2);
@@ -2189,7 +2185,9 @@ h2 i {
   font-size: clamp(1.875rem, 1.2rem + 2.6vw, 3.25rem);
   font-stretch: 82%;
 }
+/* Chiffres de section en contour : retirés (décor, sans information) */
 .hm-bignum {
+  display: none;
   color: transparent;
   font-family: var(--font-display);
   font-size: clamp(4.5rem, 2rem + 9vw, 11.875rem);
@@ -2517,7 +2515,8 @@ h2 i {
   padding-block: var(--space-section);
 }
 .hm-contact-in::after {
-  content: '';
+  content: none;
+  display: none;
   position: absolute;
   top: 50%;
   right: -8%;
@@ -2582,13 +2581,12 @@ h2 i {
   content: counter(part, decimal-leading-zero);
   display: block;
   margin-bottom: var(--space-3);
-  color: transparent;
-  font-size: clamp(3.5rem, 2rem + 4vw, 6rem);
+  color: var(--accent);
+  font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
   font-stretch: 75%;
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 0.8;
-  -webkit-text-stroke: 1.5px var(--accent);
 }
 .author {
   display: grid;
@@ -2663,8 +2661,8 @@ h2 i {
   text-wrap: balance;
 }
 .page-hero::after {
-  content: '';
-  display: block;
+  content: none;
+  display: none;
   height: 0.625rem;
   margin-top: var(--space-7);
   background:
