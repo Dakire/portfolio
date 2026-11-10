@@ -123,18 +123,18 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
       'Cinq domaines, du réseau au support. Chacun renvoie vers ce qui le prouve : réalisations, articles, outils et cheatsheets.',
     skills: [
       {
+        id: 'support',
+        category: 'Support & Projets IT',
+        items:
+          'Support utilisateur de bout en bout (N1 à N3) : gestion des appels et des tickets HelpDesk, escalade auprès des éditeurs (N4), déploiement de logiciels métiers et accompagnement technique.',
+        short: 'Support N1 à N3, escalade éditeurs, logiciels métiers',
+      },
+      {
         id: 'network',
         category: 'Réseau & Systèmes',
         items:
           'Windows Server (Active Directory, serveur de fichiers, DNS, DHCP, bureau à distance, MDT et WDS pour la masterisation de PC) et Linux. Réseaux LAN/WLAN, VPN, FTP/SFTP. Un homelab me sert à tester configurations et services avant de les déployer.',
         short: 'Windows Server, Linux, réseaux LAN/WLAN, VPN',
-      },
-      {
-        id: 'security',
-        category: 'Sécurité IT',
-        items:
-          'Pare-feu Stormshield SNS, VPN, sécurité des identités sur Microsoft 365 et Google Workspace, authentification des e-mails (SPF, DKIM, DMARC).',
-        short: 'Stormshield SNS, VPN, identités, SPF, DKIM, DMARC',
       },
       {
         id: 'messaging',
@@ -151,11 +151,11 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         short: 'C#, Python, PowerShell, PHP, sites web',
       },
       {
-        id: 'support',
-        category: 'Support & Projets IT',
+        id: 'security',
+        category: 'Sécurité IT',
         items:
-          'Support utilisateur de bout en bout (N1 à N3) : gestion des appels et des tickets HelpDesk, escalade auprès des éditeurs (N4), déploiement de logiciels métiers et accompagnement technique.',
-        short: 'Support N1 à N3, escalade éditeurs, logiciels métiers',
+          'Pare-feu Stormshield SNS, VPN, sécurité des identités sur Microsoft 365 et Google Workspace, authentification des e-mails (SPF, DKIM, DMARC).',
+        short: 'Stormshield SNS, VPN, identités, SPF, DKIM, DMARC',
       },
     ],
     experienceTitle: 'Parcours professionnel',
@@ -383,18 +383,18 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
       'Five areas, from networking to support. Each one links to what backs it up: projects, articles, tools and cheatsheets.',
     skills: [
       {
+        id: 'support',
+        category: 'IT Support & Projects',
+        items:
+          'End-to-end user support (L1 to L3): call and helpdesk ticket handling, escalation to software vendors (L4), business application deployment and technical guidance.',
+        short: 'L1 to L3 support, vendor escalation, business software',
+      },
+      {
         id: 'network',
         category: 'Networks & Systems',
         items:
           'Windows Server (Active Directory, file server, DNS, DHCP, remote desktop, MDT and WDS to image PCs) and Linux. LAN/WLAN networks, VPN, FTP/SFTP. A homelab lets me test configurations and services before deploying them.',
         short: 'Windows Server, Linux, LAN/WLAN networks, VPN',
-      },
-      {
-        id: 'security',
-        category: 'IT Security',
-        items:
-          'Stormshield SNS firewalls, VPN, identity security on Microsoft 365 and Google Workspace, email authentication (SPF, DKIM, DMARC).',
-        short: 'Stormshield SNS, VPN, identities, SPF, DKIM, DMARC',
       },
       {
         id: 'messaging',
@@ -411,11 +411,11 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         short: 'C#, Python, PowerShell, PHP, websites',
       },
       {
-        id: 'support',
-        category: 'IT Support & Projects',
+        id: 'security',
+        category: 'IT Security',
         items:
-          'End-to-end user support (L1 to L3): call and helpdesk ticket handling, escalation to software vendors (L4), business application deployment and technical guidance.',
-        short: 'L1 to L3 support, vendor escalation, business software',
+          'Stormshield SNS firewalls, VPN, identity security on Microsoft 365 and Google Workspace, email authentication (SPF, DKIM, DMARC).',
+        short: 'Stormshield SNS, VPN, identities, SPF, DKIM, DMARC',
       },
     ],
     experienceTitle: 'Career',

@@ -114,11 +114,14 @@ const skillBlocks =
         })),
       )
     : [];
-const domains = [...new Set(t.projects.map((p) => p.skill))].map((id) => ({
-  id,
-  label: t.skills.find((s) => s.id === id)?.category ?? id,
-  items: t.projects.filter((p) => p.skill === id),
-}));
+// Mêmes domaines, dans le même ordre que la page Compétences (ceux qui n'ont aucune réalisation sont omis)
+const domains = t.skills
+  .filter((skill) => t.projects.some((p) => p.skill === skill.id))
+  .map((skill) => ({
+    id: skill.id,
+    label: skill.category,
+    items: t.projects.filter((p) => p.skill === skill.id),
+  }));
 ---
 
 <Base

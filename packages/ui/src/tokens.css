@@ -99,21 +99,21 @@
   --band-muted: #c4b9a8;
   --band-accent: #ff6a3d;
 
-  /* Bandeaux de section : trois tons chauds proches qui alternent, un seul accent. Sombres en thème sombre (anthracite, brun, rouille), clairs en thème clair (sable, terre cuite pâle). Texte et accent >= 4,5:1. */
+  /* Bandeaux de section : trois tons chauds proches qui alternent, un seul accent. Plus pastel : bruns doux en thème sombre, sable et pêche pâles en thème clair. Texte et accent >= 4,5:1. */
   --tone-ink: #f6efe3;
   --tone-danger: #ffc2b8;
   --tone-ok: #a9f0cb;
   --tone-warn: #fbdc8f;
-  --tone-petrole: #2a2622;
-  --tone-petrole-accent: #ffa583;
-  --tone-olive: #3d2b1f;
-  --tone-olive-accent: #ffa583;
-  --tone-prune: #2a2622;
-  --tone-prune-accent: #ffa583;
-  --tone-ocre: #4f2a1c;
-  --tone-ocre-accent: #ffa583;
-  --tone-ardoise: #3d2b1f;
-  --tone-ardoise-accent: #ffa583;
+  --tone-petrole: #38322b;
+  --tone-petrole-accent: #ffb090;
+  --tone-olive: #4a3a2d;
+  --tone-olive-accent: #ffb090;
+  --tone-prune: #38322b;
+  --tone-prune-accent: #ffb090;
+  --tone-ocre: #5c3d2e;
+  --tone-ocre-accent: #ffb090;
+  --tone-ardoise: #4a3a2d;
+  --tone-ardoise-accent: #ffb090;
 }
 
 /* Thème clair */
@@ -141,16 +141,16 @@
   --tone-danger: #9b2318;
   --tone-ok: #085c3d;
   --tone-warn: #6b4700;
-  --tone-petrole: #e9e2d2;
-  --tone-petrole-accent: #9c2a08;
-  --tone-olive: #e0d3bc;
-  --tone-olive-accent: #9c2a08;
-  --tone-prune: #e9e2d2;
-  --tone-prune-accent: #9c2a08;
-  --tone-ocre: #e8d2c2;
-  --tone-ocre-accent: #9c2a08;
-  --tone-ardoise: #e0d3bc;
-  --tone-ardoise-accent: #9c2a08;
+  --tone-petrole: #eee3cd;
+  --tone-petrole-accent: #98270a;
+  --tone-olive: #f2ddca;
+  --tone-olive-accent: #98270a;
+  --tone-prune: #eee3cd;
+  --tone-prune-accent: #98270a;
+  --tone-ocre: #eed4c8;
+  --tone-ocre-accent: #98270a;
+  --tone-ardoise: #f2ddca;
+  --tone-ardoise-accent: #98270a;
   --band: #211a14;
   --band-ink: #f6efe3;
   --band-muted: #c4b9a8;
@@ -186,16 +186,16 @@
     --tone-danger: #9b2318;
     --tone-ok: #085c3d;
     --tone-warn: #6b4700;
-    --tone-petrole: #e9e2d2;
-    --tone-petrole-accent: #9c2a08;
-    --tone-olive: #e0d3bc;
-    --tone-olive-accent: #9c2a08;
-    --tone-prune: #e9e2d2;
-    --tone-prune-accent: #9c2a08;
-    --tone-ocre: #e8d2c2;
-    --tone-ocre-accent: #9c2a08;
-    --tone-ardoise: #e0d3bc;
-    --tone-ardoise-accent: #9c2a08;
+    --tone-petrole: #eee3cd;
+    --tone-petrole-accent: #98270a;
+    --tone-olive: #f2ddca;
+    --tone-olive-accent: #98270a;
+    --tone-prune: #eee3cd;
+    --tone-prune-accent: #98270a;
+    --tone-ocre: #eed4c8;
+    --tone-ocre-accent: #98270a;
+    --tone-ardoise: #f2ddca;
+    --tone-ardoise-accent: #98270a;
     --band: #211a14;
     --band-ink: #f6efe3;
     --band-muted: #c4b9a8;

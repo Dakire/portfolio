@@ -3029,3 +3029,8 @@ h2 i {
 .band .hm-section.stack > h2 {
   margin-bottom: var(--space-4);
 }
+
+/* Blog : de l'air entre un titre de zone (Tags, outils liés) et ce qui le suit */
+.blog-page .stack > h2 {
+  margin-bottom: var(--space-4);
+}
