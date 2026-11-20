@@ -127,7 +127,7 @@ const chamfer = (x: number, y: number, w: number, h: number, c: number): string 
   `M${fmt(x + c)} ${fmt(y)}H${fmt(x + w - c)}L${fmt(x + w)} ${fmt(y + c)}V${fmt(y + h - c)}L${fmt(x + w - c)} ${fmt(y + h)}H${fmt(x + c)}L${fmt(x)} ${fmt(y + h - c)}V${fmt(y + c)}z`;
 
 const diamond = (x: number, y: number): string => {
-  const h = 0.7;
+  const h = 0.76;
   return `M${fmt(x + 0.5)} ${fmt(y + 0.5 - h)}L${fmt(x + 0.5 + h)} ${fmt(y + 0.5)}L${fmt(x + 0.5)} ${fmt(y + 0.5 + h)}L${fmt(x + 0.5 - h)} ${fmt(y + 0.5)}z`;
 };
 
