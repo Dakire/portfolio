@@ -8,7 +8,6 @@ export const MODULE_STYLES = [
   'soft',
   'rounded',
   'dots',
-  'diamond',
   'leaf',
   'vbars',
   'hbars',
@@ -126,11 +125,6 @@ const circle = (cx: number, cy: number, r: number): string =>
 const chamfer = (x: number, y: number, w: number, h: number, c: number): string =>
   `M${fmt(x + c)} ${fmt(y)}H${fmt(x + w - c)}L${fmt(x + w)} ${fmt(y + c)}V${fmt(y + h - c)}L${fmt(x + w - c)} ${fmt(y + h)}H${fmt(x + c)}L${fmt(x)} ${fmt(y + h - c)}V${fmt(y + c)}z`;
 
-const diamond = (x: number, y: number): string => {
-  const h = 0.76;
-  return `M${fmt(x + 0.5)} ${fmt(y + 0.5 - h)}L${fmt(x + 0.5 + h)} ${fmt(y + 0.5)}L${fmt(x + 0.5)} ${fmt(y + 0.5 + h)}L${fmt(x + 0.5 - h)} ${fmt(y + 0.5)}z`;
-};
-
 type Dark = (row: number, col: number) => boolean;
 
 /** Chemin de tous les modules de données, dans la forme choisie. */
@@ -177,7 +171,6 @@ function modulesPath(dark: Dark, size: number, style: ModuleStyle): string {
     for (let c = 0; c < size; c++) {
       if (!dark(r, c)) continue;
       if (style === 'dots') path += circle(c + 0.5, r + 0.5, 0.5);
-      else if (style === 'diamond') path += diamond(c, r);
       else if (style === 'soft') path += rect(c, r, 1, 1, uniform(0.22));
       else if (style === 'leaf') path += rect(c, r, 1, 1, { tl: 0.34, tr: 0, br: 0.34, bl: 0 });
       else {
