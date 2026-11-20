@@ -75,7 +75,8 @@ describe('rendu SVG', () => {
   if (!built.ok) throw new Error('matrice');
   const options = {
     moduleStyle: 'square',
-    finderStyle: 'square',
+    finderOuter: 'square',
+    finderInner: 'square',
     foreground: '#000000',
     background: '#ffffff',
     margin: 4,
@@ -93,13 +94,25 @@ describe('rendu SVG', () => {
     expect(() =>
       renderSvg(built.matrix, {
         ...options,
-        logo: { href: 'https://exemple.fr/x.png', ratio: 0.2, padding: 1, plate: true },
+        logo: {
+          href: 'https://exemple.fr/x.png',
+          ratio: 0.2,
+          padding: 1,
+          plate: true,
+          shape: 'rounded',
+        },
       }),
     ).toThrow();
     expect(() =>
       renderSvg(built.matrix, {
         ...options,
-        logo: { href: 'data:image/svg+xml;base64,AAAA', ratio: 0.2, padding: 1, plate: true },
+        logo: {
+          href: 'data:image/svg+xml;base64,AAAA',
+          ratio: 0.2,
+          padding: 1,
+          plate: true,
+          shape: 'rounded',
+        },
       }),
     ).toThrow();
   });
@@ -107,7 +120,7 @@ describe('rendu SVG', () => {
     expect(renderSvg(built.matrix, { ...options, background: null })).not.toContain('<rect width');
   });
   it('la boîte du logo est centrée sur la grille', () => {
-    const box = logoBox(29, { href: '', ratio: 0.2, padding: 1, plate: true });
+    const box = logoBox(29, { href: '', ratio: 0.2, padding: 1, plate: true, shape: 'rounded' });
     expect(box.start * 2 + box.side).toBe(29);
   });
 });

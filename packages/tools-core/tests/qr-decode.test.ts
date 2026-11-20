@@ -16,16 +16,19 @@ import {
 } from '../src/qr/payloads';
 import { PRESETS } from '../src/qr/presets';
 import {
+  FINDER_INNER_STYLES,
+  FINDER_OUTER_STYLES,
+  LOGO_SHAPES,
+  MODULE_STYLES,
   renderSvg,
-  type FinderStyle,
-  type ModuleStyle,
   type RenderOptions,
 } from '../src/qr/render';
 import { decodeJsQr, decodeZxing, pngDataUrl, rasterize } from './helpers/qr-decode';
 
 const base: RenderOptions = {
   moduleStyle: 'square',
-  finderStyle: 'square',
+  finderOuter: 'square',
+  finderInner: 'square',
   foreground: '#000000',
   background: '#ffffff',
   margin: 4,
@@ -120,41 +123,48 @@ describe('préréglages', () => {
   });
 });
 
-describe('matrice de styles', () => {
-  const modules: ModuleStyle[] = ['square', 'rounded', 'dots'];
-  const finders: FinderStyle[] = ['square', 'rounded', 'dot'];
-  const levels: ErrorLevel[] = ['L', 'M', 'Q', 'H'];
+describe('formes du corps, tous niveaux de correction', () => {
   const text = 'https://grichard.eu/outils/generateur-qr-code/?ref=test';
-  const cases = modules.flatMap((m) =>
-    finders.flatMap((f) => levels.map((l) => [m, f, l] as const)),
-  );
+  const levels: ErrorLevel[] = ['L', 'M', 'Q', 'H'];
+  const cases = MODULE_STYLES.flatMap((m) => levels.map((l) => [m, l] as const));
 
-  it.each(cases)('modules %s, repères %s, niveau %s', async (moduleStyle, finderStyle, level) => {
+  it.each(cases)('modules %s, niveau %s', async (moduleStyle, level) => {
+    await expectDecodes(text, level, { ...base, moduleStyle }, `${moduleStyle}/${level}`);
+  });
+});
+
+describe('contour et centre des repères', () => {
+  const text = 'https://grichard.eu/outils/generateur-qr-code/?ref=test';
+  const cases = FINDER_OUTER_STYLES.flatMap((o) => FINDER_INNER_STYLES.map((i) => [o, i] as const));
+
+  it.each(cases)('contour %s, centre %s', async (finderOuter, finderInner) => {
     await expectDecodes(
       text,
-      level,
-      { ...base, moduleStyle, finderStyle },
-      `${moduleStyle}/${finderStyle}/${level}`,
+      'M',
+      { ...base, finderOuter, finderInner },
+      `${finderOuter}/${finderInner}`,
     );
   });
+});
 
-  it.each(modules.flatMap((m) => finders.map((f) => [m, f] as const)))(
-    'dégradé, modules %s, repères %s',
-    async (moduleStyle, finderStyle) => {
-      await expectDecodes(
-        text,
-        'M',
-        {
-          ...base,
-          moduleStyle,
-          finderStyle,
-          foreground: '#0b5d3b',
-          gradient: { to: '#1d3557', angle: 45 },
-        },
-        `dégradé ${moduleStyle}/${finderStyle}`,
-      );
-    },
-  );
+describe('dégradé et fond', () => {
+  const text = 'https://grichard.eu/outils/generateur-qr-code/?ref=test';
+
+  it.each(MODULE_STYLES)('dégradé, modules %s', async (moduleStyle) => {
+    await expectDecodes(
+      text,
+      'M',
+      {
+        ...base,
+        moduleStyle,
+        finderOuter: 'rounded',
+        finderInner: 'circle',
+        foreground: '#0b5d3b',
+        gradient: { to: '#1d3557', angle: 45 },
+      },
+      `dégradé ${moduleStyle}`,
+    );
+  });
 
   it('fond transparent (posé sur du blanc)', async () => {
     await expectDecodes(text, 'M', { ...base, background: null }, 'fond transparent');
@@ -163,38 +173,38 @@ describe('matrice de styles', () => {
 
 describe('avec logo (niveau H imposé)', () => {
   const logo = pngDataUrl(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#d62828"/><text x="5" y="7" font-size="6" text-anchor="middle" fill="#fff">G</text></svg>',
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" fill="#d62828"/><text x="5" y="7" font-size="6" text-anchor="middle" fill="#fff">G</text></svg>',
   );
   const text = 'https://grichard.eu/outils/generateur-qr-code/?ref=logo';
-  const cases = (['square', 'rounded', 'dots'] as const).flatMap((m) =>
-    [0.18, 0.28].map((ratio) => [m, ratio] as const),
-  );
+  const cases = MODULE_STYLES.flatMap((m) => LOGO_SHAPES.map((s) => [m, s] as const));
 
-  it.each(cases)('modules %s, logo à %s du côté', async (moduleStyle, ratio) => {
+  it.each(cases)('modules %s, logo %s à 22 % du côté', async (moduleStyle, shape) => {
     await expectDecodes(
       text,
       'H',
       {
         ...base,
         moduleStyle,
-        finderStyle: 'rounded',
-        logo: { href: logo, ratio, padding: 1, plate: true },
+        finderOuter: 'rounded',
+        finderInner: 'rounded',
+        logo: { href: logo, ratio: 0.22, padding: 1, plate: true, shape },
       },
-      `logo ${moduleStyle}/${ratio}`,
+      `logo ${moduleStyle}/${shape}`,
     );
   });
 
-  it('logo sur dégradé avec points et repères ronds', async () => {
+  it('logo à 28 % sur dégradé, points et repères ronds', async () => {
     await expectDecodes(
       text,
       'H',
       {
         ...base,
         moduleStyle: 'dots',
-        finderStyle: 'dot',
+        finderOuter: 'circle',
+        finderInner: 'circle',
         foreground: '#0b5d3b',
         gradient: { to: '#1d3557', angle: 90 },
-        logo: { href: logo, ratio: 0.22, padding: 1, plate: true },
+        logo: { href: logo, ratio: 0.28, padding: 1, plate: true, shape: 'rounded' },
       },
       'logo + dégradé',
     );
