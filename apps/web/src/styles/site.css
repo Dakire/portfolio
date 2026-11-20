@@ -589,9 +589,6 @@ html:has(.consent) {
 }
 
 /* ---------- Pages ---------- */
-.page-hero {
-  padding-block: var(--space-7) var(--space-6);
-}
 .page-hero > * + *,
 .page-hero > .container > * + * {
   margin-top: var(--space-4);
@@ -618,9 +615,6 @@ html:has(.consent) {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
-}
-.section-head {
-  margin-bottom: var(--space-5);
 }
 .meta {
   color: var(--muted);
