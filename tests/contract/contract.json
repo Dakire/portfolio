@@ -211,11 +211,13 @@
     },
     {
       "path": "/outils/generateur-qr-code/",
-      "type": "text/html"
+      "type": "text/html",
+      "since": "web"
     },
     {
       "path": "/en/tools/qr-code-generator/",
-      "type": "text/html"
+      "type": "text/html",
+      "since": "web"
     },
     {
       "path": "/outils/formateur-json/",
@@ -272,7 +274,8 @@
     {
       "path": "/ai-catalog.json",
       "type": "application/json",
-      "kind": "json"
+      "kind": "json",
+      "since": "web"
     },
     {
       "path": "/.well-known/ai-catalog.json",
