@@ -76,7 +76,7 @@ export const TOOL_GROUPS = [
   },
   {
     id: 'network-data',
-    tools: ['units', 'subnet', 'json', 'encoder', 'password'],
+    tools: ['units', 'subnet', 'json', 'encoder', 'password', 'qr'],
     fr: {
       title: 'Réseau, données et sécurité',
       text: 'Les petits calculs et conversions du quotidien : sous-réseaux, JSON, encodages, unités, mots de passe.',

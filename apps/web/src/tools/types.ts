@@ -39,4 +39,5 @@ export type ToolIcon =
   | 'ruler'
   | 'globe'
   | 'search'
-  | 'sitemap';
+  | 'sitemap'
+  | 'qr';

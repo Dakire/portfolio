@@ -10,6 +10,7 @@ import {
   Network,
   Ruler,
   ListTree,
+  QrCode,
   ScanSearch,
   Scissors,
 } from 'lucide-preact';
@@ -28,4 +29,5 @@ export const TOOL_ICONS = {
   globe: Globe,
   search: ScanSearch,
   sitemap: ListTree,
+  qr: QrCode,
 } as const satisfies Record<ToolIcon, unknown>;

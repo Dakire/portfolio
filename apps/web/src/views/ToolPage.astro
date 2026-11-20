@@ -17,6 +17,7 @@ import IcsSplit from '../tools/ics-split/Tool';
 import JsonFormatter from '../tools/json/Tool';
 import PasswordGenerator from '../tools/password/Tool';
 import PropagationChecker from '../tools/propagation/Tool';
+import QrGenerator from '../tools/qr/Tool';
 import SubnetCalculator from '../tools/subnet/Tool';
 import UnitConverter from '../tools/units/Tool';
 import SeoTool from '../tools/seo/Tool';
@@ -40,6 +41,7 @@ const PRIVACY_NOTE = [
   'ics-compare',
   'seo',
   'sitemap',
+  'qr',
 ];
 const privacy = PRIVACY_NOTE.includes(tool.id) ? (ui.seo.privacy ?? ui.privacy) : undefined;
 const hub = HUB[lang];
@@ -119,6 +121,7 @@ const ld = {
       {toolId === 'units' && <UnitConverter client:load lang={lang} />}
       {toolId === 'seo' && <SeoTool client:load lang={lang} />}
       {toolId === 'sitemap' && <SitemapTool client:load lang={lang} />}
+      {toolId === 'qr' && <QrGenerator client:visible lang={lang} />}
     </div>
 
     <section aria-labelledby="what-title" class="stack">

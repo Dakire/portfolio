@@ -210,6 +210,14 @@
       "type": "text/html"
     },
     {
+      "path": "/outils/generateur-qr-code/",
+      "type": "text/html"
+    },
+    {
+      "path": "/en/tools/qr-code-generator/",
+      "type": "text/html"
+    },
+    {
       "path": "/outils/formateur-json/",
       "type": "text/html"
     },

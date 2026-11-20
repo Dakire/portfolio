@@ -11,6 +11,7 @@ import { ICS_SPLIT } from './ics-split/text';
 import { JSON_TOOL } from './json/text';
 import { PASSWORD } from './password/text';
 import { PROPAGATION } from './propagation/text';
+import { QR_TOOL } from './qr/text';
 import { SUBNET } from './subnet/text';
 import type { ToolIcon, ToolTexts } from './types';
 import { SEO_TOOL } from './seo/text';
@@ -88,6 +89,12 @@ export const TOOLS = [
   },
   { id: 'seo', slug: { fr: 'seo', en: 'seo' }, icon: 'search', text: SEO_TOOL },
   { id: 'sitemap', slug: { fr: 'sitemap', en: 'sitemap' }, icon: 'sitemap', text: SITEMAP_TOOL },
+  {
+    id: 'qr',
+    slug: { fr: 'generateur-qr-code', en: 'qr-code-generator' },
+    icon: 'qr',
+    text: QR_TOOL,
+  },
 ] as const satisfies readonly ToolDef[];
 
 export type ToolId = (typeof TOOLS)[number]['id'];
