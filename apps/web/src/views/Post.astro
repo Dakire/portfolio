@@ -28,6 +28,14 @@ import { postLd } from '../lib/seo';
 interface Props {
   post: Post;
 }
+
+// Marqueur de gravité (frontmatter « severity ») : symbole et mot, jamais la couleur seule.
+const SEVERITY_MARK = { critical: '▲', warning: '●', fixed: '✓' } as const;
+const SEVERITY_LABEL = {
+  critical: { fr: 'Critique', en: 'Critical' },
+  warning: { fr: 'Attention', en: 'Warning' },
+  fixed: { fr: 'Correctif disponible', en: 'Fix available' },
+} as const;
 const { post } = Astro.props;
 const lang: Lang = post.lang;
 const t = PORTFOLIO_DATA[lang].blog;
@@ -115,6 +123,12 @@ const crumbs = [
     <article>
       <header class="stack page-hero">
         <h1>{post.data.title}</h1>
+        {post.data.severity && (
+          <p class={`sev sev-${post.data.severity}`}>
+            <span aria-hidden="true">{SEVERITY_MARK[post.data.severity]}</span>
+            {SEVERITY_LABEL[post.data.severity][lang]}
+          </p>
+        )}
         <p class="lead">{post.data.summary ?? post.data.description}</p>
         <dl class="art-meta">
           <div>

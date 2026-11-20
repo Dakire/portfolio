@@ -17,6 +17,8 @@ const blog = defineCollection({
     draft: z.boolean().optional(),
     date: z.coerce.date(),
     updated: z.coerce.date().optional(),
+    /** Gravité d'une alerte de sécurité, affichée en tête de l'article (symbole et mot). */
+    severity: z.enum(['critical', 'warning', 'fixed']).optional(),
     /** Anglais seulement : slug de l'article français correspondant. */
     translationOf: z.string().optional(),
     /** Script autonome facultatif chargé par l'article (ex. filtre de tableau). */

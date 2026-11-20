@@ -574,7 +574,7 @@ a.tile,
   overflow: clip; /* les formes décoratives sont rognées par la carte */
   width: min(100% - 2 * var(--gutter), var(--container));
   margin: var(--space-6) auto;
-  border-radius: 1.75rem;
+  border-radius: var(--radius-card);
   background: var(--band);
   color: var(--band-muted);
   --ink: var(--band-ink);

@@ -43,3 +43,6 @@ legacy/dist
 .astro/
 apps/web/dist
 apps/web/dist-preprod
+
+# Captures avant/après de la v2.2 (volumineuses, locales)
+docs/screenshots/
