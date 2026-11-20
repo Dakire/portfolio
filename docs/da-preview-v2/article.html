@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Maquette v2 : article</title>
+    <link rel="stylesheet" href="mockup.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="site">
+        <a class="logo" href="#"><b>GR</b>Guillaume Richard</a>
+        <nav aria-label="Principal">
+          <a href="#">À propos</a><a href="#">Réalisations</a
+          ><a href="#" aria-current="page">Blog</a><a href="#">Outils</a>
+        </nav>
+        <button class="theme" type="button" id="theme">Thème</button>
+        <a class="btn" href="#">Contact</a>
+      </header>
+
+      <main>
+        <header class="article-head">
+          <span class="flag crit"
+            ><span aria-hidden="true">▶</span><span class="t">Drapeau rouge · Critique</span></span
+          >
+          <h1>Titre d'article de démonstration, sur deux ou trois lignes</h1>
+          <p class="lead">
+            Chapeau en deux phrases : qui est touché, quelle gravité, quelle action. Lisible sans le
+            reste de la page.
+          </p>
+          <dl class="meta-row">
+            <div>
+              <dt>PUBLIÉ</dt>
+              <dd class="num">20 nov. 2026</dd>
+            </div>
+            <div>
+              <dt>MIS À JOUR</dt>
+              <dd class="num">20 nov. 2026</dd>
+            </div>
+            <div>
+              <dt>LECTURE</dt>
+              <dd class="num">8 min</dd>
+            </div>
+            <div>
+              <dt>AUTEUR</dt>
+              <dd>Guillaume Richard</dd>
+            </div>
+          </dl>
+        </header>
+
+        <div class="layout">
+          <nav class="toc" aria-label="Sommaire">
+            <span class="mono">SOMMAIRE</span>
+            <ol>
+              <li><a href="#s1" aria-current="true">Ce qui est touché</a></li>
+              <li><a href="#s2">Chemin du décodage</a></li>
+              <li><a href="#s3">Versions</a></li>
+              <li><a href="#s4">Que faire</a></li>
+            </ol>
+          </nav>
+          <article class="prose">
+            <h2 id="s1">Ce qui est touché</h2>
+            <p>
+              Texte courant en 17 px, interligne 1,65, colonne limitée à 68 caractères. Un
+              paragraphe se comprend isolément. Un <a href="#">lien</a> est souligné d'un trait lime
+              épais.
+            </p>
+            <h2 id="s2">Chemin du décodage</h2>
+            <svg
+              class="diagram"
+              viewBox="0 0 560 110"
+              role="img"
+              aria-label="Schéma : entrée, décodeur, mémoire"
+            >
+              <rect class="box" x="10" y="35" width="120" height="44" />
+              <rect class="box" x="220" y="35" width="120" height="44" />
+              <rect class="box" x="430" y="35" width="120" height="44" />
+              <path class="path" d="M130 57H220" />
+              <path class="hot" d="M340 57H430" />
+              <text x="70" y="62" text-anchor="middle">entrée</text>
+              <text x="280" y="62" text-anchor="middle">décodeur</text>
+              <text x="490" y="62" text-anchor="middle">mémoire</text>
+            </svg>
+            <pre><code>java -XX:+PrintFlagsFinal -version | grep UseBASE64Intrinsics</code></pre>
+            <h2 id="s3">Versions</h2>
+            <div class="table-scroll" tabindex="0" role="region" aria-label="Tableau défilable">
+              <table>
+                <thead>
+                  <tr>
+                    <th>DISTRIBUTION</th>
+                    <th>ÉTAT</th>
+                    <th>SOURCE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Exemple</td>
+                    <td>à renseigner</td>
+                    <td>avis de l'éditeur</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h2 id="s4">Que faire</h2>
+            <p class="note">
+              <strong>Mise à jour.</strong> Encadré pour une correction ou une précision postérieure
+              à la publication, daté.
+            </p>
+            <p>
+              <span class="flag ok"
+                ><span aria-hidden="true">▶</span
+                ><span class="t">Drapeau vert · Correctif disponible</span></span
+              >
+              <span class="flag warn"
+                ><span aria-hidden="true">▶</span
+                ><span class="t">Drapeau jaune · Attention</span></span
+              >
+            </p>
+          </article>
+        </div>
+      </main>
+    </div>
+    <script>
+      document.getElementById('theme').addEventListener('click', () => {
+        const r = document.documentElement;
+        const dark = r.dataset.theme
+          ? r.dataset.theme === 'dark'
+          : matchMedia('(prefers-color-scheme: dark)').matches;
+        r.dataset.theme = dark ? 'light' : 'dark';
+      });
+    </script>
+  </body>
+</html>

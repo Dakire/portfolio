@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Maquette v2 : accueil</title>
+    <link rel="stylesheet" href="mockup.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="site">
+        <a class="logo" href="#"><b>GR</b>Guillaume Richard</a>
+        <nav aria-label="Principal">
+          <a href="#">À propos</a><a href="#">Parcours</a><a href="#">Compétences</a>
+          <a href="#">Réalisations</a><a href="#">Blog</a><a href="#">Outils</a>
+          <a href="#">Cheatsheets</a>
+        </nav>
+        <button class="theme" type="button" id="theme">Thème</button>
+        <a class="btn" href="#">Contact</a>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div>
+            <span class="tag">Technicien informatique &amp; systèmes numériques</span>
+            <h1>Guillaume<br />Richard</h1>
+            <p class="lead">
+              Texte d'accroche à reprendre de profile.ts. Les faits viennent du CV, rien n'est
+              ajouté ici.
+            </p>
+            <div class="actions">
+              <a class="btn" href="#">Voir les réalisations</a>
+              <a class="btn ghost" href="#">Mes outils</a>
+            </div>
+          </div>
+          <aside class="spec cut" aria-label="Domaines d'expertise">
+            <span class="mono">DOMAINES</span>
+            <dl>
+              <dt>01 · Support &amp; Projets IT</dt>
+              <dd>Support N1 à N3, escalade éditeurs, logiciels métiers</dd>
+              <dt>02 · Réseau &amp; Systèmes</dt>
+              <dd>Windows Server, Linux, réseaux LAN/WLAN, VPN</dd>
+              <dt>03 · Messagerie &amp; Cloud</dt>
+              <dd>Microsoft 365, Google Workspace, DNS, délivrabilité</dd>
+              <dt>04 · Développement &amp; Automatisation</dt>
+              <dd>C#, Python, PowerShell, PHP, sites web</dd>
+              <dt>05 · Sécurité IT</dt>
+              <dd>Stormshield SNS, VPN, identités, SPF, DKIM, DMARC</dd>
+            </dl>
+          </aside>
+        </section>
+
+        <section class="section" aria-labelledby="r">
+          <div class="section-head">
+            <h2 id="r">Réalisations</h2>
+            <span class="mono">12 PROJETS</span>
+          </div>
+          <ol class="grid-table">
+            <li>
+              <span class="pos">01</span>
+              <h3><a href="#">Homelab Proxmox, OPNsense et WireGuard</a></h3>
+              <span class="go" aria-hidden="true">→</span>
+            </li>
+            <li>
+              <span class="pos">02</span>
+              <h3><a href="#">Déploiement Windows Server (MDT, WDS)</a></h3>
+              <span class="go" aria-hidden="true">→</span>
+            </li>
+            <li>
+              <span class="pos">03</span>
+              <h3><a href="#">Migrations de comptes de messagerie</a></h3>
+              <span class="go" aria-hidden="true">→</span>
+            </li>
+            <li>
+              <span class="pos">04</span>
+              <h3><a href="#">Outil de conversion e-mail (C#)</a></h3>
+              <span class="go" aria-hidden="true">→</span>
+            </li>
+          </ol>
+        </section>
+
+        <section class="section" aria-labelledby="b">
+          <div class="section-head">
+            <h2 id="b">Blog</h2>
+            <span class="mono">NOTES D'EXPLOITATION</span>
+          </div>
+          <ul class="cards">
+            <li>
+              <a class="cut" href="#" style="text-decoration: none">
+                <span class="flag crit"
+                  ><span aria-hidden="true">▶</span
+                  ><span class="t">Drapeau rouge · Critique</span></span
+                >
+                <h3>Faille Apache HTTP/2 : passer en 2.4.71</h3>
+                <span class="mono foot">ACTUALITÉS · 12 NOV. 2026</span>
+              </a>
+            </li>
+            <li>
+              <a class="cut" href="#" style="text-decoration: none">
+                <span class="mono">MESSAGERIE</span>
+                <h3>Découper un fichier ICS trop gros pour Google Agenda</h3>
+                <span class="mono foot">20 NOV. 2026 · 5 MIN</span>
+              </a>
+            </li>
+            <li>
+              <a class="cut" href="#" style="text-decoration: none">
+                <span class="mono">DNS</span>
+                <h3>Masque de sous-réseau et CIDR expliqués : /24, /27</h3>
+                <span class="mono foot">28 OCT. 2026 · 8 MIN</span>
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section class="section" aria-labelledby="o">
+          <div class="section-head">
+            <h2 id="o">Outils</h2>
+            <span class="mono">GRATUITS · DANS LE NAVIGATEUR</span>
+          </div>
+          <ol class="grid-table">
+            <li>
+              <span class="pos">01</span>
+              <h3><a href="#">Découpeur de fichier ICS</a></h3>
+              <span class="go" aria-hidden="true">→</span>
+            </li>
+            <li>
+              <span class="pos">02</span>
+              <h3><a href="#">Analyseur d'en-têtes e-mail</a></h3>
+              <span class="go" aria-hidden="true">→</span>
+            </li>
+            <li>
+              <span class="pos">03</span>
+              <h3><a href="#">Calculateur réseau</a></h3>
+              <span class="go" aria-hidden="true">→</span>
+            </li>
+          </ol>
+        </section>
+
+        <section class="section">
+          <div class="contact">
+            <h2>Une question ?</h2>
+            <p>Écrivez-moi : je lis chaque message et je réponds personnellement.</p>
+            <a class="btn" href="#">Me contacter</a>
+          </div>
+        </section>
+      </main>
+      <footer class="foot-site mono">
+        <span>© 2026 Guillaume Richard</span><span>Maquette hors build</span>
+      </footer>
+    </div>
+    <script>
+      document.getElementById('theme').addEventListener('click', () => {
+        const r = document.documentElement;
+        const dark = r.dataset.theme
+          ? r.dataset.theme === 'dark'
+          : matchMedia('(prefers-color-scheme: dark)').matches;
+        r.dataset.theme = dark ? 'light' : 'dark';
+      });
+    </script>
+  </body>
+</html>

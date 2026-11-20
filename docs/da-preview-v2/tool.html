@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Maquette v2 : outil</title>
+    <link rel="stylesheet" href="mockup.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="site">
+        <a class="logo" href="#"><b>GR</b>Guillaume Richard</a>
+        <nav aria-label="Principal">
+          <a href="#">Blog</a><a href="#" aria-current="page">Outils</a><a href="#">Cheatsheets</a>
+        </nav>
+        <button class="theme" type="button" id="theme">Thème</button>
+        <a class="btn" href="#">Contact</a>
+      </header>
+      <main>
+        <header class="article-head">
+          <span class="tag">Outil gratuit · tout reste dans votre navigateur</span>
+          <h1>Découper un fichier ICS</h1>
+          <p class="lead">
+            Un export de calendrier trop gros pour être importé ? Déposez votre fichier .ics : il
+            est découpé en plusieurs fichiers prêts à importer.
+          </p>
+        </header>
+        <div class="tool">
+          <section class="panel cut" aria-labelledby="cfg">
+            <h2 id="cfg" style="font-size: 2.25rem">Configuration</h2>
+            <div class="field">
+              <span class="mono">1 · FICHIER</span>
+              <div class="drop">Déposez un fichier .ics ici ou choisissez un fichier</div>
+              <span class="hint"
+                >Export iCalendar de Google Agenda, Outlook, Apple Calendrier…</span
+              >
+            </div>
+            <div class="field">
+              <span class="mono">2 · DÉCOUPER</span>
+              <div class="seg" role="group" aria-label="Mode">
+                <span aria-current="true">Par taille</span><span>Par année</span
+                ><span>Par mois</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="kb">Taille maximale (Ko)</label>
+              <input
+                id="kb"
+                value="900"
+                style="
+                  min-height: 48px;
+                  padding: 0 0.9rem;
+                  background: var(--canvas);
+                  color: var(--ink);
+                  border: 2px solid var(--line-strong);
+                  font: 1rem var(--mono);
+                "
+              />
+              <span class="hint">Gardez une marge sous la limite de l'import.</span>
+            </div>
+            <p style="margin-top: 1.5rem"><a class="btn" href="#">Découper le fichier</a></p>
+          </section>
+          <section class="panel cut" aria-labelledby="res">
+            <h2 id="res" style="font-size: 2.25rem">Résultat</h2>
+            <p class="mono" style="margin-top: 0.75rem">EXEMPLE DE SORTIE</p>
+            <div class="out-row">
+              <span class="pos">01</span
+              ><span>calendrier-1.ics<br /><span class="mono">412 événements · 886 Ko</span></span
+              ><a href="#">Télécharger</a>
+            </div>
+            <div class="out-row">
+              <span class="pos">02</span
+              ><span>calendrier-2.ics<br /><span class="mono">398 événements · 871 Ko</span></span
+              ><a href="#">Télécharger</a>
+            </div>
+            <div class="out-row">
+              <span class="pos">03</span
+              ><span>calendrier-3.ics<br /><span class="mono">120 événements · 262 Ko</span></span
+              ><a href="#">Télécharger</a>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script>
+      document.getElementById('theme').addEventListener('click', () => {
+        const r = document.documentElement;
+        const dark = r.dataset.theme
+          ? r.dataset.theme === 'dark'
+          : matchMedia('(prefers-color-scheme: dark)').matches;
+        r.dataset.theme = dark ? 'light' : 'dark';
+      });
+    </script>
+  </body>
+</html>
