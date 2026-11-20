@@ -167,7 +167,7 @@ export const SUBNET = {
         ],
       },
       related: 'Voir aussi',
-      relatedLinks: [],
+      relatedLinks: ['calcul-masque-cidr-expliques'],
     },
   },
   en: {
@@ -337,7 +337,7 @@ export const SUBNET = {
         ],
       },
       related: 'See also',
-      relatedLinks: [],
+      relatedLinks: ['cidr-subnet-mask-explained'],
     },
   },
 };
