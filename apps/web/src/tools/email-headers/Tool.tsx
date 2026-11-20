@@ -4,7 +4,6 @@ import { Eraser, FileSearch } from 'lucide-preact';
 import type { ComponentChildren } from 'preact';
 import { useState } from 'preact/hooks';
 import type { Lang } from '../../lib/i18n';
-import { findTool, toolPath } from '../registry';
 import Button from '../ui/Button';
 import Field from '../ui/Field';
 import Finding, { SEVERITY } from '../ui/Finding';
@@ -71,15 +70,14 @@ type OkReport = HeadersAnalysis & { ok: true };
 const isOk = (report: HeadersAnalysis): report is OkReport => report.ok;
 
 /** Analyseur d'en-têtes d'e-mail : tout se fait dans le navigateur, rien n'est envoyé. */
-export default function EmailHeaders({ lang }: { lang: Lang }) {
+/** dnsPath : URL de l'outil DNS, calculée par la page (importer le registre ici embarquerait les textes des 12 outils). */
+export default function EmailHeaders({ lang, dnsPath }: { lang: Lang; dnsPath: string }) {
   const ui = EMAIL_HEADERS[lang].ui;
   const f = ui.form;
   const r = ui.result;
   const [raw, setRaw] = useState('');
   const [report, setReport] = useState<OkReport | null>(null);
   const [error, setError] = useState('');
-  const dnsTool = findTool('dns');
-  const dnsPath = dnsTool ? toolPath(dnsTool, lang) : '';
   const locale = lang === 'fr' ? 'fr-FR' : 'en-GB';
   const results: Record<string, string> = r.auth.results;
 

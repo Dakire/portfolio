@@ -107,7 +107,9 @@ const ld = {
     <div id="outil">
       {toolId === 'encoder' && <EncoderDecoder client:load lang={lang} />}
       {toolId === 'dns' && <DnsChecker client:load lang={lang} />}
-      {toolId === 'email-headers' && <EmailHeaders client:load lang={lang} />}
+      {toolId === 'email-headers' && (
+        <EmailHeaders client:load lang={lang} dnsPath={toolPath(findTool('dns')!, lang)} />
+      )}
       {toolId === 'ics-compare' && <IcsCompare client:load lang={lang} />}
       {toolId === 'ics-split' && <IcsSplit client:load lang={lang} />}
       {toolId === 'propagation' && <PropagationChecker client:load lang={lang} />}
