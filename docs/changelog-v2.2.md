@@ -11,7 +11,7 @@ Branche `v2.2-preprod` (depuis `main` 125a0dd). Rien n'est poussé ni déployé.
 
 ## Phase 2 : à faire (après validation)
 
-Prévu : mise à jour d'Astro (≥ 7.4.5) ; redirection `/ai-catalog.json` vers `/.well-known/` ; C1 et C2 (poids JS des outils) ; correction de la 404 ; `docs/seo-indexation-v2.2.md`.
+Fait : ai-catalog.json à la racine, robots d'entraînement refusés, `docs/seo-indexation-v2.2.md`. Reste : Astro ≥ 7.4.5, C1 et C2 (poids JS des outils), 404, redirections (port, QSA), CSS.
 
 ## Dépendances ajoutées ou supprimées
 
