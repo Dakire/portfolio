@@ -14,9 +14,15 @@
   },
   "devDependencies": {
     "@grichard/config": "workspace:*",
+    "@resvg/resvg-js": "2.6.2",
     "@types/node": "^22.0.0",
+    "jsqr": "1.4.0",
     "oxlint": "^1.86.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.11",
+    "zxing-wasm": "3.1.7"
+  },
+  "dependencies": {
+    "qrcode-generator": "2.0.4"
   }
 }
