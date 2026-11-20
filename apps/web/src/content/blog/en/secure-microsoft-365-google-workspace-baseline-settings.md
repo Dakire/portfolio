@@ -1,5 +1,6 @@
 ---
 title: 'Securing Microsoft 365 and Google Workspace: Baseline Settings'
+seoTitle: 'Securing Microsoft 365 and Google Workspace: the Basics'
 description: 'MFA, admin accounts, legacy authentication, auto-forwarding, external sharing, backup and offboarding: the essential measures for a small business.'
 date: 2026-10-03
 translationOf: 'securiser-microsoft-365-google-workspace-reglages-de-base'

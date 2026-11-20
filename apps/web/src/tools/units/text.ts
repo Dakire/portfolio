@@ -3,9 +3,9 @@ export const UNITS_TOOL = {
   fr: {
     ui: {
       meta: {
-        title: 'Calcul du temps de téléchargement : taille, débit et durée | Guillaume Richard',
+        title: 'Convertisseur Go/Gio, Mo/Go et temps de téléchargement | Guillaume Richard',
         description:
-          "Calculez le temps de téléchargement d'un fichier selon sa taille et votre débit, ou la bande passante nécessaire pour le charger en un temps donné. Gratuit.",
+          "Convertissez Go en Gio, Mo en Go, Mbit/s en Mo/s, ou calculez le temps de téléchargement d'un fichier et la bande passante nécessaire. Gratuit.",
         appDescription:
           'Calculateur gratuit du temps de téléchargement et de la bande passante nécessaire, avec conversion des tailles (Go/Gio), des débits (Mbit/s, Mo/s) et des bases numériques.',
       },
@@ -13,7 +13,7 @@ export const UNITS_TOOL = {
       card: 'Temps de téléchargement d’un fichier, bande passante nécessaire, conversions Go/Gio, Mbit/s, hexadécimal et binaire.',
       keywords:
         'calcul temps de telechargement bande passante necessaire duree transfert fichier debit mbit convertisseur octet go gio mo mio hexadecimal binaire octal decimal base bit byte',
-      h1: 'Calculateur de temps de téléchargement',
+      h1: 'Convertisseur Go en Gio et temps de téléchargement',
       intro:
         "Combien de temps pour télécharger ou copier un fichier ? Saisissez sa taille et votre débit : la durée s'affiche aussitôt. Dans l'autre sens, indiquez la taille et le temps que vous voulez y consacrer pour connaître la bande passante nécessaire. L'outil convertit aussi les tailles (Go, Gio) et les bases numériques.",
       tabs: {
@@ -184,9 +184,9 @@ export const UNITS_TOOL = {
   en: {
     ui: {
       meta: {
-        title: 'Download Time Calculator: File Size, Speed and Bandwidth | Guillaume Richard',
+        title: 'GB to GiB Converter and Download Time Calculator | Guillaume Richard',
         description:
-          'Calculate how long a file takes to download from its size and your speed, or the bandwidth needed to transfer it in a given time. Also converts GB to GiB. Free.',
+          'Convert GB to GiB, MB to GB and Mbit/s to MB/s, or calculate how long a file takes to download and the bandwidth you need. Free, in your browser.',
         appDescription:
           'Free download time and required-bandwidth calculator, with conversion of sizes (GB/GiB), rates (Mbit/s, MB/s) and number bases.',
       },
@@ -194,7 +194,7 @@ export const UNITS_TOOL = {
       card: 'File download time, bandwidth needed, GB to GiB, Mbit/s, hexadecimal and binary conversions.',
       keywords:
         'download time calculator bandwidth needed transfer time file size speed mbit converter byte gb to gib mb mib hexadecimal binary octal decimal base bit',
-      h1: 'Download time calculator',
+      h1: 'GB to GiB converter and download time calculator',
       intro:
         'How long does it take to download or copy a file? Enter its size and your speed: the duration appears right away. The other way round, enter the size and the time you can spend to get the bandwidth needed. The tool also converts sizes (GB, GiB) and number bases.',
       tabs: {

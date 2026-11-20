@@ -1,5 +1,6 @@
 ---
 title: 'Secure Boot: the 2011 Certificates Have Expired, How to Check'
+seoTitle: 'Secure Boot: 2011 Certificates Expired, How to Check'
 description: 'The 2011 Secure Boot certificates expired in June and October 2026: how to check a PC or server, update firmware, and handle Linux, dual-boot and VMs.'
 summary: 'The 2011 Secure Boot certificates expired in June and October 2026. What it changes, how to check a PC or server, firmware updates, and what to do about Linux, dual-boot and virtual machines.'
 date: 2026-10-28

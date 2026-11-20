@@ -183,8 +183,8 @@ export const blogLd = (
   })),
 });
 
-/** Titre de page : au-delà de 62 caractères, le suffixe « | Guillaume Richard » est retiré (Google tronquerait le titre). */
-export const fitTitle = (title: string, max = 62) => {
+/** Titre de page : au-delà de 60 caractères, le suffixe « | Guillaume Richard » est retiré (Google tronquerait le titre). */
+export const fitTitle = (title: string, max = 60) => {
   const bare = title.replace(/\s+\|\s+[^|]+$/, '');
   return title.length > max ? bare : title;
 };

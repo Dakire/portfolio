@@ -131,7 +131,7 @@ describe('site construit', () => {
         continue;
       const title = decode(attr(p.html, /<title>([^<]+)<\/title>/)[0] ?? '');
       const desc = decode(attr(p.html, /<meta name="description" content="([^"]*)"/)[0] ?? '');
-      expect(title.length, `${p.url} : title « ${title} »`).toBeLessThanOrEqual(62);
+      expect(title.length, `${p.url} : title « ${title} »`).toBeLessThanOrEqual(60);
       expect(desc.length, `${p.url} : description`).toBeLessThanOrEqual(160);
     }
   });

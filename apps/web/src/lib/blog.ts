@@ -102,7 +102,7 @@ export const CATEGORY_TEXT: Record<
   },
   'poste-de-travail': {
     fr: {
-      title: 'Windows en entreprise : fin de support, migration, Secure Boot',
+      title: 'Windows en entreprise : support, migration, Secure Boot',
       description:
         'Articles sur le parc de postes et de serveurs Windows : fins de support, migrations, Secure Boot et firmware, déploiement.',
       intro:
