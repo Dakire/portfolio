@@ -17,6 +17,7 @@ const styleguide = {
     'astro:config:setup': ({ command, injectRoute }) => {
       if (command === 'dev' || process.env.STYLEGUIDE === '1') {
         injectRoute({ pattern: '/design', entrypoint: './src/dev/design.astro' });
+        injectRoute({ pattern: '/qr-test', entrypoint: './src/dev/qr-test.astro' });
       }
     },
   },
@@ -71,7 +72,7 @@ function articleDates() {
 const LASTMOD = articleDates();
 
 // Pages absentes du sitemap : interne, erreur, et pages de tag du blog (noindex). Les catégories, elles, sont indexables.
-const EXCLUDED = ['/design/', '/404', '/blog/tag/', '/en/blog/tag/'];
+const EXCLUDED = ['/design/', '/qr-test/', '/404', '/blog/tag/', '/en/blog/tag/'];
 
 export default defineConfig({
   site: 'https://grichard.eu',

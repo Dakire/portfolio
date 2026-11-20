@@ -1,0 +1,236 @@
+---
+// Page d'essai des QR codes avec de vrais téléphones (iOS et Android) : uniquement en développement ou avec STYLEGUIDE=1, jamais en production.
+// Chaque code est produit par le même moteur que l'outil ; le texte encodé est affiché pour comparer avec ce que lit le téléphone.
+import { buildMatrix, type ErrorLevel } from '@grichard/tools-core/qr/matrix';
+import {
+  emailPayload,
+  eventPayload,
+  geoPayload,
+  smsPayload,
+  urlPayload,
+  vcardPayload,
+  whatsappPayload,
+  wifiPayload,
+} from '@grichard/tools-core/qr/payloads';
+import { PRESETS, type Appearance } from '@grichard/tools-core/qr/presets';
+import { renderSvg, type LogoShape, type RenderOptions } from '@grichard/tools-core/qr/render';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+
+// PNG rouge de 1 pixel : sert de logo d'essai (il remplit la boîte du logo).
+const LOGO =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/q842iQAAAABJRU5ErkJggg==';
+
+const text = (built: { ok: boolean; value?: string }): string =>
+  built.ok ? (built.value ?? '') : 'ERREUR';
+
+interface Sample {
+  label: string;
+  note: string;
+  payload: string;
+  level: ErrorLevel;
+  appearance?: Partial<Appearance>;
+  logo?: LogoShape;
+}
+
+const samples: Sample[] = [
+  {
+    label: 'Lien, minimaliste',
+    note: 'Référence : carrés noirs sur blanc.',
+    payload: text(urlPayload('https://grichard.eu/')),
+    level: 'M',
+    appearance: PRESETS.minimal,
+  },
+  {
+    label: 'Lien, professionnel',
+    note: 'Modules et repères arrondis.',
+    payload: text(urlPayload('https://grichard.eu/outils/')),
+    level: 'M',
+    appearance: PRESETS.pro,
+  },
+  {
+    label: 'Wi-Fi, moderne',
+    note: 'Points, repères ronds, dégradé. Réseau fictif : le téléphone doit proposer de s’y connecter.',
+    payload: text(
+      wifiPayload({
+        ssid: 'Reseau-Test',
+        password: 'motdepasse-test',
+        security: 'WPA',
+        hidden: false,
+      }),
+    ),
+    level: 'M',
+    appearance: PRESETS.modern,
+  },
+  {
+    label: 'Contact (vCard)',
+    note: 'Le téléphone doit proposer d’ajouter un contact.',
+    payload: text(
+      vcardPayload({
+        firstName: 'Camille',
+        lastName: 'Martin',
+        organization: 'Exemple SARL',
+        phone: '+33612345678',
+        email: 'camille@exemple.fr',
+        url: 'https://exemple.fr',
+        street: '1 rue de l’Exemple',
+        city: 'Paris',
+        region: '',
+        postalCode: '75000',
+        country: 'France',
+      }),
+    ),
+    level: 'M',
+    appearance: PRESETS.contrast,
+  },
+  {
+    label: 'SMS',
+    note: 'Doit ouvrir un message prérempli (numéro fictif).',
+    payload: text(smsPayload({ phone: '+33612345678', message: 'Bonjour, ceci est un essai' })),
+    level: 'M',
+    appearance: PRESETS.minimal,
+  },
+  {
+    label: 'WhatsApp',
+    note: 'Doit ouvrir WhatsApp avec le message.',
+    payload: text(whatsappPayload({ phone: '+33612345678', message: 'Bonjour 👋' })),
+    level: 'M',
+    appearance: PRESETS.pro,
+  },
+  {
+    label: 'Position',
+    note: 'Doit ouvrir l’application de cartes sur Paris.',
+    payload: text(geoPayload({ latitude: '48.8566', longitude: '2.3522' })),
+    level: 'M',
+    appearance: PRESETS.minimal,
+  },
+  {
+    label: 'E-mail',
+    note: 'Doit ouvrir un e-mail prérempli (accents et emoji dans le corps).',
+    payload: text(
+      emailPayload({ to: 'contact@exemple.fr', subject: 'Essai & test', body: 'Été à Évry 🚗' }),
+    ),
+    level: 'M',
+    appearance: PRESETS.minimal,
+  },
+  {
+    label: 'Événement',
+    note: 'Doit proposer d’ajouter un événement au calendrier.',
+    payload: text(
+      eventPayload({
+        summary: 'Réunion d’essai',
+        start: new Date(Date.UTC(2027, 0, 15, 9, 0)),
+        end: new Date(Date.UTC(2027, 0, 15, 10, 0)),
+        location: 'Salle B',
+        description: 'Essai du QR code',
+      }),
+    ),
+    level: 'M',
+    appearance: PRESETS.minimal,
+  },
+  {
+    label: 'Signal (lime), feuilles',
+    note: 'Palette du site : encre sur lime.',
+    payload: text(urlPayload('https://grichard.eu/blog/')),
+    level: 'M',
+    appearance: PRESETS.signal,
+  },
+  {
+    label: 'Avec logo arrondi',
+    note: 'Logo à 24 % du côté, niveau H imposé.',
+    payload: text(urlPayload('https://grichard.eu/contact/')),
+    level: 'H',
+    appearance: PRESETS.pro,
+    logo: 'rounded',
+  },
+  {
+    label: 'Avec logo rond, points',
+    note: 'Logo rond sur modules en points.',
+    payload: text(urlPayload('https://grichard.eu/a-propos/')),
+    level: 'H',
+    appearance: { ...PRESETS.modern, gradient: undefined, foreground: '#0b2545' },
+    logo: 'circle',
+  },
+];
+
+const codes = samples.map((sample) => {
+  const built = buildMatrix(sample.payload, sample.level);
+  if (!built.ok) throw new Error(`QR trop long : ${sample.label}`);
+  const options: RenderOptions = {
+    ...PRESETS.minimal,
+    ...sample.appearance,
+    pixelSize: 640,
+    ...(sample.logo
+      ? { logo: { href: LOGO, ratio: 0.24, padding: 1, plate: true, shape: sample.logo } }
+      : {}),
+  };
+  const svg = renderSvg(built.matrix, options);
+  return { ...sample, src: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}` };
+});
+---
+
+<Base
+  lang="fr"
+  title="Essai des QR codes (développement)"
+  description="Page d'essai interne des QR codes, jamais publiée en production."
+  path="/qr-test/"
+  noindex
+>
+  <PageHero
+    path="~/qr-test"
+    title="Essai des QR codes"
+    lead="Scannez chaque code avec un iPhone (appareil photo), un téléphone Android (appareil photo ou Google Lens) et une application tierce, depuis l'écran puis imprimé."
+  />
+  <div class="container section stack-lg">
+    <section class="stack" aria-labelledby="consignes">
+      <h2 id="consignes">À vérifier pour chaque code</h2>
+      <ol class="prose">
+        <li>Le code est reconnu en moins de deux secondes, à environ 20 cm puis à 50 cm.</li>
+        <li>
+          Le contenu proposé correspond au texte encodé, affiché sous chaque code (accents et emoji
+          compris).
+        </li>
+        <li>
+          Même résultat sur l'écran de l'ordinateur et sur une impression (deux tailles : 3 cm et 8
+          cm de côté).
+        </li>
+        <li>
+          Notez les codes qui échouent : forme, niveau et contenu, avec le modèle de téléphone et la
+          version du système.
+        </li>
+      </ol>
+    </section>
+    <ul class="cards" role="list">
+      {codes.map((code) => (
+        <li>
+          <article class="card stack">
+            <h3>{code.label}</h3>
+            <img
+              src={code.src}
+              alt={`QR code d'essai : ${code.label}`}
+              width="320"
+              height="320"
+              class="qr-test-img"
+            />
+            <p class="meta">{code.note}</p>
+            <p class="meta">
+              <code class="qr-test-code">{code.payload}</code>
+            </p>
+          </article>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .qr-test-img {
+    width: 100%;
+    height: auto;
+    background: #ffffff;
+  }
+  .qr-test-code {
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+</style>
