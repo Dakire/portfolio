@@ -118,7 +118,7 @@ export const ICS_SPLIT = {
         ],
       },
       related: 'Voir aussi',
-      relatedLinks: [],
+      relatedLinks: ['decouper-fichier-ics-trop-gros-google-agenda'],
     },
   },
   en: {
@@ -225,7 +225,7 @@ export const ICS_SPLIT = {
         ],
       },
       related: 'See also',
-      relatedLinks: [],
+      relatedLinks: ['split-large-ics-file-google-calendar'],
     },
   },
 };
