@@ -3,19 +3,27 @@ Allow: /
 Disallow: /contact.php
 Disallow: /tools.php
 
-# Robots d'IA : autorisés explicitement (recherche, assistants et entraînement)
-User-agent: GPTBot
-User-agent: ChatGPT-User
+# Robots d'IA de recherche et d'assistance (réponses avec citation de la source) : autorisés
 User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
 User-agent: PerplexityBot
-User-agent: Google-Extended
-User-agent: ClaudeBot
 User-agent: Claude-SearchBot
 User-agent: Claude-User
-User-agent: anthropic-ai
-User-agent: Claude-Web
 Allow: /
 Disallow: /contact.php
 Disallow: /tools.php
+
+# Robots d'entraînement de modèles : refusés (le moteur de recherche, lui, n'est pas concerné)
+User-agent: GPTBot
+User-agent: Google-Extended
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: Claude-Web
+User-agent: CCBot
+User-agent: Applebot-Extended
+User-agent: Bytespider
+User-agent: Meta-ExternalAgent
+User-agent: cohere-ai
+Disallow: /
 
 Sitemap: https://grichard.eu/root-access.xml

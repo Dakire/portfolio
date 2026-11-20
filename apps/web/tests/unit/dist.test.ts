@@ -195,4 +195,23 @@ describe('site construit', () => {
     for (const entry of catalog.entries)
       expect(existsSync(resolveTarget(entry.url, '/')!), entry.url).toBe(true);
   });
+
+  it('ai-catalog.json est aussi servi à la racine, identique à la version /.well-known/', () => {
+    const root = readFileSync(join(DIST, 'ai-catalog.json'), 'utf-8');
+    expect(root).toBe(readFileSync(join(DIST, '.well-known', 'ai-catalog.json'), 'utf-8'));
+    expect(() => JSON.parse(root)).not.toThrow();
+  });
+
+  it("robots.txt refuse les robots d'entraînement et autorise ceux de recherche", () => {
+    const robots = readFileSync(join(DIST, 'robots.txt'), 'utf-8');
+    const groups = robots.split(/\r?\n\s*\r?\n/).map((block) => ({
+      agents: [...block.matchAll(/^User-agent:\s*(\S+)/gm)].map((m) => m[1]),
+      blocked: /^Disallow:\s*\/\s*$/m.test(block),
+    }));
+    const blocked = (agent: string) => groups.find((g) => g.agents.includes(agent))?.blocked;
+    for (const agent of ['GPTBot', 'Google-Extended', 'ClaudeBot', 'anthropic-ai', 'CCBot'])
+      expect(blocked(agent), agent).toBe(true);
+    for (const agent of ['OAI-SearchBot', 'PerplexityBot', 'Claude-SearchBot', '*'])
+      expect(blocked(agent), agent).toBe(false);
+  });
 });

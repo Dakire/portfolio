@@ -266,7 +266,16 @@ async function cspHashes() {
   return result;
 }
 
+/**
+ * ai-catalog.json : la source est public/.well-known/ai-catalog.json (emplacement standard) ; une copie identique est servie à la racine
+ * (/ai-catalog.json), URL que les validateurs interrogent. Une redirection ne conviendrait pas : ils attendent le JSON en 200 à cette adresse.
+ */
+async function aiCatalog() {
+  await copyFile(join(DIST, '.well-known', 'ai-catalog.json'), join(DIST, 'ai-catalog.json'));
+}
+
 await sitemap();
+await aiCatalog();
 const hashes = await cspHashes();
 await htaccess(hashes);
 await ogImages();

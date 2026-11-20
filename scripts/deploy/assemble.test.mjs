@@ -24,6 +24,7 @@ async function fakeBuild(root, { subfolder = false } = {}) {
   await write(root, '.htaccess', subfolder ? HTACCESS_SUB : HTACCESS_PROD);
   await write(root, '.well-known/security.txt');
   await write(root, '.well-known/ai-catalog.json', '{}');
+  await write(root, 'ai-catalog.json', '{}');
   await write(root, '_astro/app.abc123.js');
 }
 

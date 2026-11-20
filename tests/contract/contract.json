@@ -262,6 +262,11 @@
       "type": "application/pdf"
     },
     {
+      "path": "/ai-catalog.json",
+      "type": "application/json",
+      "kind": "json"
+    },
+    {
       "path": "/.well-known/ai-catalog.json",
       "type": "application/json",
       "kind": "json"

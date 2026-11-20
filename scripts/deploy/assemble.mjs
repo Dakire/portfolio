@@ -56,6 +56,7 @@ export async function verifyBuild(dist) {
   await need('.htaccess', 'généré par le build : CSP, en-têtes, redirections');
   await need('.well-known/security.txt', 'contact sécurité');
   await need('.well-known/ai-catalog.json', 'catalogue IA');
+  await need('ai-catalog.json', 'copie racine du catalogue IA');
   if (await exists(join(dist, 'design')))
     problems.push('design/ présent : la page de style (STYLEGUIDE=1) ne doit pas être livrée');
 
