@@ -44,11 +44,12 @@
   --space-section: clamp(var(--space-7), 2rem + 5vw, var(--space-9));
 
   /* Formes et profondeur */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.625rem;
-  --radius-card: 1.25rem; /* cartes colorées (.band, .hm-contact) : 20 px, moins arrondies que les 28 px d'avant */
-  --radius-tile: 1rem; /* tuiles de la grille d'accueil : le seul grand rayon du site */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.375rem;
+  --radius-card: 0; /* les cartes ne sont plus arrondies : coin coupé (--cut) */
+  --radius-tile: 0;
+  --cut: 1.375rem; /* taille du coin coupé des cartes, boutons et blocs (clip-path) */
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.25), 0 8px 24px -12px rgb(0 0 0 / 0.35);
   --shadow-md: var(--shadow-card);
@@ -75,134 +76,140 @@
   --gutter: clamp(1rem, 0.5rem + 2.5vw, 2rem);
   --target: 2.75rem; /* cible tactile minimale : 44 px */
 
-  /* Couleurs : thème sombre (défaut). « Encre » : noir chaud, papier et terracotta, un seul signal vermillon, un vert olive pour les liaisons. Les bandes (--band-*) sont plus claires que le fond. */
-  --canvas: #14110e;
-  --surface: #1b1713;
-  --raised: #241f1a;
-  --line: #36302a;
-  --line-strong: #8c8378;
-  --guide: #1d1915;
-  --ink: #f4ede1;
-  --body: #d6cdbf;
-  --muted: #a89f92;
-  --accent: #ff6a3d;
-  --accent-strong: #ff6a3d;
-  --accent-ink: #1a0802;
-  --accent-alt: #c9d97a;
-  --link: #ff9d7d;
-  --ok: #6fe0a6;
-  --warn: #f2c14e;
-  --danger: #ff8f80;
-  --focus: #ffc4af;
-  --selection: rgb(255 106 61 / 0.3);
-  --band: #2a221b;
-  --band-ink: #f6efe3;
-  --band-muted: #c4b9a8;
-  --band-accent: #ff6a3d;
+  /* Couleurs : thème sombre (défaut). « Pit wall » : carbone froid, un seul accent jaune-vert fluo (--accent, --signal), drapeaux rouge, jaune et vert réservés à la gravité. */
+  --canvas: #0c0d0f;
+  --surface: #14161a;
+  --raised: #1c1f24;
+  --line: #2a2e35;
+  --line-strong: #6a7280;
+  --guide: #101215;
+  --ink: #f1efe8;
+  --body: #cfd2d6;
+  --muted: #98a0aa;
+  --accent: #c8ff2e;
+  --accent-strong: #c8ff2e;
+  --accent-ink: #0c0d0f;
+  --accent-alt: #3ddc97;
+  --signal: #c8ff2e; /* aplats de signalisation (texte --signal-ink dessus) : identique dans les deux thèmes */
+  --signal-ink: #0c0d0f;
+  --link: #d6ff5c;
+  --ok: #3ddc97;
+  --warn: #ffc533;
+  --danger: #ff6b6b;
+  --focus: #c8ff2e;
+  --selection: rgb(200 255 46 / 0.3);
+  --band: #14161a;
+  --band-ink: #f1efe8;
+  --band-muted: #b4bbc4;
+  --band-accent: #c8ff2e;
 
-  /* Bandeaux de section : trois tons chauds proches qui alternent, un seul accent. Deux tons seulement, plus pastel : bruns doux en thème sombre, sable et pêche pâles en thème clair. Texte et accent >= 4,5:1. */
-  --tone-ink: #f6efe3;
-  --tone-danger: #ffc2b8;
-  --tone-ok: #a9f0cb;
-  --tone-warn: #fbdc8f;
-  --tone-petrole: #38322b;
-  --tone-petrole-accent: #ffb090;
-  --tone-olive: #4a3a2d;
-  --tone-olive-accent: #ffb090;
-  --tone-prune: #38322b;
-  --tone-prune-accent: #ffb090;
-  --tone-ocre: #4a3a2d;
-  --tone-ocre-accent: #ffb090;
-  --tone-ardoise: #4a3a2d;
-  --tone-ardoise-accent: #ffb090;
+  /* Cartes colorées : deux tons seulement, texte et accent >= 4,5:1. */
+  --tone-ink: #f1efe8;
+  --tone-danger: #ff9a9a;
+  --tone-ok: #8ff0c3;
+  --tone-warn: #ffd873;
+  --tone-petrole: #1c1f24;
+  --tone-petrole-accent: #c8ff2e;
+  --tone-olive: #232830;
+  --tone-olive-accent: #c8ff2e;
+  --tone-prune: #1c1f24;
+  --tone-prune-accent: #c8ff2e;
+  --tone-ocre: #232830;
+  --tone-ocre-accent: #c8ff2e;
+  --tone-ardoise: #232830;
+  --tone-ardoise-accent: #c8ff2e;
 }
 
-/* Thème clair */
+/* Thème clair : « os » et encre ; le lime reste un aplat (texte encre dessus), jamais un texte. */
 :root[data-theme='light'] {
-  --canvas: #f2ece0;
-  --surface: #faf6ec;
-  --raised: #e7dfce;
-  --line: #d6cbb4;
-  --line-strong: #766c58;
-  --guide: #e6dfcf;
-  --ink: #1b1612;
-  --body: #3a332b;
-  --muted: #62594d;
-  --accent: #a82a08;
-  --accent-strong: #a82a08;
+  --canvas: #f2f0e9;
+  --surface: #e6e3d8;
+  --raised: #dcd8ca;
+  --line: #cfcbbd;
+  --line-strong: #6f7379;
+  --guide: #e8e5da;
+  --ink: #0f1113;
+  --body: #2b2f34;
+  --muted: #565c64;
+  --accent: #3d5a00;
+  --accent-strong: #3d5a00;
   --accent-ink: #ffffff;
-  --accent-alt: #44601a;
-  --link: #9c2a08;
-  --ok: #0a6c48;
-  --warn: #7f5600;
-  --danger: #b42318;
-  --focus: #9c2a08;
-  --selection: rgb(168 42 8 / 0.18);
-  --tone-ink: #1b1612;
-  --tone-danger: #9b2318;
-  --tone-ok: #085c3d;
-  --tone-warn: #6b4700;
-  --tone-petrole: #eee3cd;
-  --tone-petrole-accent: #98270a;
-  --tone-olive: #f2ddca;
-  --tone-olive-accent: #98270a;
-  --tone-prune: #eee3cd;
-  --tone-prune-accent: #98270a;
-  --tone-ocre: #f2ddca;
-  --tone-ocre-accent: #98270a;
-  --tone-ardoise: #f2ddca;
-  --tone-ardoise-accent: #98270a;
-  --band: #211a14;
-  --band-ink: #f6efe3;
-  --band-muted: #c4b9a8;
-  --band-accent: #ff6a3d;
-  --shadow-sm: 0 1px 2px rgb(27 22 18 / 0.08);
-  --shadow-card: 0 1px 2px rgb(27 22 18 / 0.06), 0 8px 24px -12px rgb(27 22 18 / 0.16);
-  --shadow-lg: 0 2px 4px rgb(27 22 18 / 0.07), 0 22px 48px -18px rgb(27 22 18 / 0.26);
+  --accent-alt: #09593a;
+  --signal: #c8ff2e;
+  --signal-ink: #0c0d0f;
+  --link: #3d5a00;
+  --ok: #09593a;
+  --warn: #6e4900;
+  --danger: #951c1b;
+  --focus: #0f1113;
+  --selection: rgb(200 255 46 / 0.55);
+  --tone-ink: #0f1113;
+  --tone-danger: #951c1b;
+  --tone-ok: #09593a;
+  --tone-warn: #6e4900;
+  --tone-petrole: #e6e3d8;
+  --tone-petrole-accent: #3d5a00;
+  --tone-olive: #dcd8ca;
+  --tone-olive-accent: #3d5a00;
+  --tone-prune: #e6e3d8;
+  --tone-prune-accent: #3d5a00;
+  --tone-ocre: #dcd8ca;
+  --tone-ocre-accent: #3d5a00;
+  --tone-ardoise: #dcd8ca;
+  --tone-ardoise-accent: #3d5a00;
+  --band: #14161a;
+  --band-ink: #f1efe8;
+  --band-muted: #b4bbc4;
+  --band-accent: #c8ff2e;
+  --shadow-sm: 0 1px 2px rgb(15 17 19 / 0.1);
+  --shadow-card: 0 1px 2px rgb(15 17 19 / 0.08), 0 8px 24px -12px rgb(15 17 19 / 0.18);
+  --shadow-lg: 0 2px 4px rgb(15 17 19 / 0.08), 0 22px 48px -18px rgb(15 17 19 / 0.28);
 }
 
 /* Sans JavaScript : le thème suit le système (avec JavaScript, data-theme est toujours posé et prime). */
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
-    --canvas: #f2ece0;
-    --surface: #faf6ec;
-    --raised: #e7dfce;
-    --line: #d6cbb4;
-    --line-strong: #766c58;
-    --guide: #e6dfcf;
-    --ink: #1b1612;
-    --body: #3a332b;
-    --muted: #62594d;
-    --accent: #a82a08;
-    --accent-strong: #a82a08;
+    --canvas: #f2f0e9;
+    --surface: #e6e3d8;
+    --raised: #dcd8ca;
+    --line: #cfcbbd;
+    --line-strong: #6f7379;
+    --guide: #e8e5da;
+    --ink: #0f1113;
+    --body: #2b2f34;
+    --muted: #565c64;
+    --accent: #3d5a00;
+    --accent-strong: #3d5a00;
     --accent-ink: #ffffff;
-    --accent-alt: #44601a;
-    --link: #9c2a08;
-    --ok: #0a6c48;
-    --warn: #7f5600;
-    --danger: #b42318;
-    --focus: #9c2a08;
-    --selection: rgb(168 42 8 / 0.18);
-    --tone-ink: #1b1612;
-    --tone-danger: #9b2318;
-    --tone-ok: #085c3d;
-    --tone-warn: #6b4700;
-    --tone-petrole: #eee3cd;
-    --tone-petrole-accent: #98270a;
-    --tone-olive: #f2ddca;
-    --tone-olive-accent: #98270a;
-    --tone-prune: #eee3cd;
-    --tone-prune-accent: #98270a;
-    --tone-ocre: #f2ddca;
-    --tone-ocre-accent: #98270a;
-    --tone-ardoise: #f2ddca;
-    --tone-ardoise-accent: #98270a;
-    --band: #211a14;
-    --band-ink: #f6efe3;
-    --band-muted: #c4b9a8;
-    --band-accent: #ff6a3d;
-    --shadow-sm: 0 1px 2px rgb(27 22 18 / 0.08);
-    --shadow-card: 0 1px 2px rgb(27 22 18 / 0.06), 0 8px 24px -12px rgb(27 22 18 / 0.16);
-    --shadow-lg: 0 2px 4px rgb(27 22 18 / 0.07), 0 22px 48px -18px rgb(27 22 18 / 0.26);
+    --accent-alt: #09593a;
+    --signal: #c8ff2e;
+    --signal-ink: #0c0d0f;
+    --link: #3d5a00;
+    --ok: #09593a;
+    --warn: #6e4900;
+    --danger: #951c1b;
+    --focus: #0f1113;
+    --selection: rgb(200 255 46 / 0.55);
+    --tone-ink: #0f1113;
+    --tone-danger: #951c1b;
+    --tone-ok: #09593a;
+    --tone-warn: #6e4900;
+    --tone-petrole: #e6e3d8;
+    --tone-petrole-accent: #3d5a00;
+    --tone-olive: #dcd8ca;
+    --tone-olive-accent: #3d5a00;
+    --tone-prune: #e6e3d8;
+    --tone-prune-accent: #3d5a00;
+    --tone-ocre: #dcd8ca;
+    --tone-ocre-accent: #3d5a00;
+    --tone-ardoise: #dcd8ca;
+    --tone-ardoise-accent: #3d5a00;
+    --band: #14161a;
+    --band-ink: #f1efe8;
+    --band-muted: #b4bbc4;
+    --band-accent: #c8ff2e;
+    --shadow-sm: 0 1px 2px rgb(15 17 19 / 0.1);
+    --shadow-card: 0 1px 2px rgb(15 17 19 / 0.08), 0 8px 24px -12px rgb(15 17 19 / 0.18);
+    --shadow-lg: 0 2px 4px rgb(15 17 19 / 0.08), 0 22px 48px -18px rgb(15 17 19 / 0.28);
   }
 }

@@ -1,0 +1,188 @@
+/* « Pit wall » (refonte v2.2) : coin coupé, aplats de signalisation lime, diagonales. Chargé après site.css.
+   Règle : le lime (--signal) est un aplat avec du texte --signal-ink dessus, ou un trait ; jamais un texte sur fond clair.
+   clip-path rogne aussi l'anneau de focus : sur un élément coupé, le focus est dessiné vers l'intérieur (outline-offset négatif). */
+:root {
+  --chamfer: polygon(
+    0 0,
+    calc(100% - var(--cut)) 0,
+    100% var(--cut),
+    100% 100%,
+    var(--cut) 100%,
+    0 calc(100% - var(--cut))
+  );
+  --chamfer-corner: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%,
+    0 100%
+  );
+}
+
+/* Cartes colorées, bloc de contact, cartes d'articles et d'outils, portrait : coin coupé */
+.band,
+.hm-contact,
+.portrait-frame {
+  clip-path: var(--chamfer);
+}
+.card {
+  --cut: 1rem;
+  clip-path: var(--chamfer);
+}
+.card::before,
+.card::after {
+  display: none; /* les repères d'angle du survol sont remplacés par le coin coupé */
+}
+:is(a.card, .card-stretch):hover {
+  background: var(--raised);
+}
+.card:has(:focus-visible),
+a.card:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: -5px;
+}
+
+/* Contact : aplat de signalisation, texte encre, quel que soit le thème */
+.hm-contact {
+  background: var(--signal);
+  color: var(--signal-ink);
+  --accent-ink: var(--signal-ink);
+  --ink: var(--signal-ink);
+  /* le bouton du bloc est sombre avec un texte lime : l'accent local est le lime dans les deux thèmes */
+  --accent: var(--signal);
+  --accent-strong: var(--signal);
+}
+
+/* Boutons : l'action principale est un aplat lime à coin coupé */
+.btn-primary {
+  --cut: 0.75rem;
+  border-color: var(--signal);
+  background: var(--signal);
+  color: var(--signal-ink);
+  clip-path: var(--chamfer-corner);
+}
+.btn-primary:hover {
+  border-color: var(--signal);
+  background: var(--signal);
+  box-shadow: none;
+  transform: none;
+  filter: brightness(1.08);
+}
+.btn-primary:focus-visible {
+  outline-offset: -4px;
+  outline-color: var(--signal-ink);
+}
+
+/* Registre : le survol allume un trait lime à gauche */
+.ledger-row {
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    box-shadow var(--duration-fast) var(--ease);
+}
+.ledger-row:hover,
+.ledger-row:focus-visible {
+  background: var(--surface);
+  box-shadow: inset 4px 0 0 var(--signal);
+}
+.ledger-arrow {
+  border-radius: 0;
+}
+
+/* Fond de page : deux diagonales lime très discrètes (aucun blob) */
+.page-blob,
+.band-shape {
+  display: none;
+}
+.page-bg::before,
+.page-bg::after {
+  content: '';
+  position: absolute;
+  background: var(--signal);
+}
+.page-bg::before {
+  top: 0;
+  right: 0;
+  width: clamp(14rem, 34vw, 32rem);
+  height: 100%;
+  max-height: 46rem;
+  opacity: 0.045;
+  clip-path: polygon(46% 0, 74% 0, 28% 100%, 0 100%);
+}
+.page-bg::after {
+  top: 0;
+  right: 0;
+  width: clamp(14rem, 34vw, 32rem);
+  height: 100%;
+  max-height: 46rem;
+  opacity: 0.045;
+  clip-path: polygon(82% 0, 90% 0, 44% 100%, 36% 100%);
+}
+:root[data-theme='light'] .page-bg::before,
+:root[data-theme='light'] .page-bg::after {
+  opacity: 0.35;
+}
+
+/* Marqueur de gravité d'un article : drapeau (liseré épais, symbole et mot) */
+.sev {
+  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-2);
+  border: 0;
+  border-left: 6px solid currentColor;
+  border-radius: 0;
+  background: var(--surface);
+}
+.sev > span[aria-hidden='true'] {
+  margin-right: var(--space-1);
+}
+.sev-critical > span[aria-hidden='true']::after,
+.sev-warning > span[aria-hidden='true']::after,
+.sev-fixed > span[aria-hidden='true']::after {
+  content: '';
+}
+.sev {
+  color: var(--ink);
+}
+.sev > span[aria-hidden='true'] {
+  color: currentColor;
+}
+.sev-critical {
+  border-left-color: var(--danger);
+}
+.sev-warning {
+  border-left-color: var(--warn);
+}
+.sev-fixed {
+  border-left-color: var(--ok);
+}
+.sev-critical > span[aria-hidden='true'] {
+  color: var(--danger);
+}
+.sev-warning > span[aria-hidden='true'] {
+  color: var(--warn);
+}
+.sev-fixed > span[aria-hidden='true'] {
+  color: var(--ok);
+}
+
+/* Intertitres d'article : numéro mono en lime (sombre) ou encre (clair) */
+.post-body h2::before {
+  color: var(--accent);
+}
+
+@media (forced-colors: active) {
+  .band,
+  .hm-contact,
+  .portrait-frame,
+  .card,
+  .btn-primary {
+    clip-path: none;
+  }
+}
+@media print {
+  .band,
+  .hm-contact,
+  .portrait-frame,
+  .card,
+  .btn-primary {
+    clip-path: none;
+  }
+}
