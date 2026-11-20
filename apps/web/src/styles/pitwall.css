@@ -186,3 +186,34 @@ a.card:focus-visible {
     clip-path: none;
   }
 }
+
+/* Page À propos : « En bref », une ligne par sujet (étiquette mono à gauche, texte à droite) */
+.about-facts {
+  display: grid;
+  margin: 0;
+  border-top: 2px solid var(--ink);
+}
+.about-facts > div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 14rem) minmax(0, 1fr);
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+  border-bottom: 1px solid var(--line);
+}
+.about-facts dt {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+.about-facts dd {
+  max-width: var(--measure);
+  margin: 0;
+  color: var(--ink);
+}
+@media (max-width: 40rem) {
+  .about-facts > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+  }
+}

@@ -76,6 +76,10 @@ export interface ProfileText {
   aboutTitle: string;
   about: string;
   aboutMore: string[];
+  aboutFactsTitle: string;
+  aboutFacts: [string, string][];
+  aboutInterestsTitle: string;
+  aboutInterests: string;
   skillsTitle: string;
   skillsIntro: string;
   skills: Skill[];
@@ -118,6 +122,34 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
     aboutMore: [
       'Ce site rassemble mon parcours, mes réalisations et mes compétences. Il montre aussi ce qui en est sorti : un blog de notes techniques, des outils en ligne et des cheatsheets de commandes.',
     ],
+    aboutFactsTitle: 'En bref',
+    aboutFacts: [
+      [
+        'Poste actuel',
+        'Technicien informatique et systèmes numériques chez TIXIA Services numériques, depuis août 2023.',
+      ],
+      [
+        'Au quotidien',
+        'Microsoft 365 et Google Workspace (identités, sécurité, maintien en condition opérationnelle), migrations de messagerie, zones DNS et délivrabilité, Windows Server (MDT, WDS, Active Directory, DHCP, DNS, RDP), support N1 à N3 avec escalade N4 auprès des éditeurs, montage et masterisation de PC.',
+      ],
+      [
+        'Auparavant',
+        "Dépannage informatique de proximité pour des particuliers (AlloVoisin, depuis 2021), webmaster d'un site e-commerce PrestaShop (avril à juin 2022), technicien de maintenance IT chez Tibco, groupe Lactalis (janvier 2019).",
+      ],
+      ['Réseau et sécurité', 'LAN et WLAN, pare-feu Stormshield, VPN, FTP et SFTP.'],
+      [
+        'Développement',
+        'C#, Java, Python, PowerShell, Bash, SQL et PHP ; sites avec WordPress, Wix et Shopify.',
+      ],
+      [
+        'Formation',
+        "Licence Informatique (développement et programmation), Le Mans Université, 2023. Baccalauréat scientifique, sciences de l'ingénieur, Lycée Immaculée Conception, 2020.",
+      ],
+      ['Langues', 'Français (langue maternelle), anglais (bilingue technique).'],
+    ],
+    aboutInterestsTitle: 'En dehors du travail',
+    aboutInterests:
+      "Je suis curieux de nature : j'aime explorer et tester les nouvelles technologies. En dehors de l'informatique, je suis passionné d'automobile, de Formule 1 et de BMW.",
     skillsTitle: "Domaines d'expertise",
     skillsIntro:
       'Cinq domaines, du réseau au support. Chacun renvoie vers ce qui le prouve : réalisations, articles, outils et cheatsheets.',
@@ -350,7 +382,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         endYear: 2020,
       },
     ],
-    languagesInfo: 'Français (langue maternelle), anglais (langue maternelle).',
+    languagesInfo: 'Français (langue maternelle), anglais (bilingue technique).',
   },
   en: {
     hero: {
@@ -378,6 +410,34 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
     aboutMore: [
       'This site brings together my career, my work and my skills. It also shows what came out of them: a blog of technical notes, online tools and command cheatsheets.',
     ],
+    aboutFactsTitle: 'At a glance',
+    aboutFacts: [
+      [
+        'Current role',
+        'IT and digital systems technician at TIXIA Services numériques, since August 2023.',
+      ],
+      [
+        'Day to day',
+        'Microsoft 365 and Google Workspace (identities, security, operational upkeep), email migrations, DNS zones and deliverability, Windows Server (MDT, WDS, Active Directory, DHCP, DNS, RDP), L1 to L3 support with L4 escalation to vendors, PC building and imaging.',
+      ],
+      [
+        'Before that',
+        'On-site computer repair for individuals (AlloVoisin, since 2021), webmaster of a PrestaShop e-commerce site (April to June 2022), IT maintenance technician at Tibco, Lactalis group (January 2019).',
+      ],
+      ['Network and security', 'LAN and WLAN, Stormshield firewalls, VPN, FTP and SFTP.'],
+      [
+        'Development',
+        'C#, Java, Python, PowerShell, Bash, SQL and PHP; websites with WordPress, Wix and Shopify.',
+      ],
+      [
+        'Education',
+        "Bachelor's degree in Computer Science (software development and programming), Le Mans Université, 2023. Scientific baccalaureate, engineering sciences, Lycée Immaculée Conception, 2020.",
+      ],
+      ['Languages', 'French (native), English (technical fluency).'],
+    ],
+    aboutInterestsTitle: 'Outside work',
+    aboutInterests:
+      'I am curious by nature: I like to explore and test new technologies. Outside IT, I am passionate about cars, Formula 1 and BMW.',
     skillsTitle: 'Core expertise',
     skillsIntro:
       'Five areas, from networking to support. Each one links to what backs it up: projects, articles, tools and cheatsheets.',
@@ -610,6 +670,6 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         endYear: 2020,
       },
     ],
-    languagesInfo: 'French (native), English (native).',
+    languagesInfo: 'French (native), English (technical fluency).',
   },
 };

@@ -282,6 +282,21 @@ const domains = t.skills
             />
           </div>
         </section>
+        <section class="stack" aria-labelledby="about-facts">
+          <h2 id="about-facts">{t.aboutFactsTitle}</h2>
+          <dl class="about-facts">
+            {t.aboutFacts.map(([label, text]) => (
+              <div>
+                <dt>{label}</dt>
+                <dd>{text}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+        <section class="stack" aria-labelledby="about-interests">
+          <h2 id="about-interests">{t.aboutInterestsTitle}</h2>
+          <p class="prose">{t.aboutInterests}</p>
+        </section>
         <section class="stack" aria-labelledby="about-skills">
           <h2 id="about-skills">{t.skillsTitle}</h2>
           <ul class="link-list">
