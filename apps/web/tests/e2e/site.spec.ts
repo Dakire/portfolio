@@ -24,6 +24,7 @@ const PAGES = [
   '/blog/',
   '/en/blog/',
   '/blog/spf-dkim-dmarc-expliques/',
+  '/blog/java4shell-cve-2026-114938/',
   '/cheatsheets/bios-uefi/',
   '/en/cheatsheets/',
   '/en/cheatsheets/bios-uefi-keys/',
