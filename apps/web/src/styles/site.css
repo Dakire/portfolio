@@ -1042,6 +1042,10 @@ html[data-terminal-max] {
     color: var(--shiki-light);
   }
 }
+/* Commentaires : le gris des thèmes GitHub (#6A737D) n'atteint que 3,7:1 sur le fond du bloc, sous les 4,5:1 requis. */
+:root:root .astro-code span[style*='6A737D' i] {
+  color: var(--muted);
+}
 
 .legal-sections > * + * {
   margin-top: var(--space-6);
