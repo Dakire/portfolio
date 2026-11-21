@@ -1,0 +1,129 @@
+/* Curseur du site (ADR 0014) : actif par défaut ; /js/theme.js pose data-cursor="off" si le visiteur le coupe (pied de page ou
+ * commande « cursor off » du terminal).
+ * Deux formes, sans bulle ni suivi en JavaScript : une flèche d'encre sur ce qui ne se clique pas, un réticule de pointage
+ * (anneau rouge à quatre repères) sur ce qui se clique, plein pendant l'appui. Pointeur fin seulement ; les champs de texte
+ * et les éléments désactivés gardent le curseur natif, comme le mode couleurs forcées.
+ * Les images sont intégrées en data: (autorisé par la CSP, img-src) : aucune requête, donc aucun clignotement au premier survol.
+ * Une image de curseur ne pouvant pas lire var(), ses couleurs sont écrites ici : seule exception à la règle des jetons,
+ * elles reprennent --ink, --canvas et --accent de chaque thème (tokens.css). */
+@media (pointer: fine) and (not (forced-colors: active)) {
+  html:not([data-cursor='off']) {
+    cursor:
+      url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2226%22 height=%2228%22 viewBox=%220 0 26 28%22%3E%3Cpath d=%22M4 3v21.5l5.4-5 3.6 7.8 3.5-1.6-3.6-7.6 7.4-.3z%22 fill=%22%231d1a14%22 stroke=%22%23f4efe3%22 stroke-width=%222.2%22 stroke-linejoin=%22round%22 paint-order=%22stroke%22/%3E%3C/svg%3E')
+        4 3,
+      default;
+  }
+  html:not([data-cursor='off'])
+    :is(
+      a[href],
+      button,
+      summary,
+      select,
+      [role='button'],
+      [role='tab'],
+      [role='option'],
+      label[for],
+      input:is(
+        [type='checkbox'],
+        [type='radio'],
+        [type='submit'],
+        [type='button'],
+        [type='range'],
+        [type='file']
+      )
+    ):not(:disabled, [aria-disabled='true']) {
+    cursor:
+      url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2228%22 viewBox=%220 0 28 28%22%3E%3Cg fill=%22none%22 stroke-linecap=%22round%22%3E%3Cg stroke=%22%23f4efe3%22 stroke-width=%225.4%22%3E%3Ccircle cx=%2214%22 cy=%2214%22 r=%227.5%22/%3E%3Cpath d=%22M14 2.5v4M14 21.5v4M2.5 14h4M21.5 14h4%22/%3E%3C/g%3E%3Cg stroke=%22%23a3301a%22 stroke-width=%222.2%22%3E%3Ccircle cx=%2214%22 cy=%2214%22 r=%227.5%22/%3E%3Cpath d=%22M14 2.5v4M14 21.5v4M2.5 14h4M21.5 14h4%22/%3E%3C/g%3E%3C/g%3E%3Ccircle cx=%2214%22 cy=%2214%22 r=%222%22 fill=%22%23a3301a%22/%3E%3C/svg%3E')
+        14 14,
+      pointer;
+  }
+  html:not([data-cursor='off'])
+    :is(
+      a[href],
+      button,
+      summary,
+      select,
+      [role='button'],
+      [role='tab'],
+      [role='option'],
+      label[for],
+      input:is(
+        [type='checkbox'],
+        [type='radio'],
+        [type='submit'],
+        [type='button'],
+        [type='range'],
+        [type='file']
+      )
+    ):not(:disabled, [aria-disabled='true']):active {
+    cursor:
+      url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2228%22 viewBox=%220 0 28 28%22%3E%3Cg fill=%22none%22 stroke-linecap=%22round%22%3E%3Cg stroke=%22%23f4efe3%22 stroke-width=%225.4%22%3E%3Ccircle cx=%2214%22 cy=%2214%22 r=%227.5%22/%3E%3Cpath d=%22M14 2.5v4M14 21.5v4M2.5 14h4M21.5 14h4%22/%3E%3C/g%3E%3Cg stroke=%22%23a3301a%22 stroke-width=%222.2%22%3E%3Ccircle cx=%2214%22 cy=%2214%22 r=%227.5%22/%3E%3Cpath d=%22M14 2.5v4M14 21.5v4M2.5 14h4M21.5 14h4%22/%3E%3C/g%3E%3C/g%3E%3Ccircle cx=%2214%22 cy=%2214%22 r=%226%22 fill=%22%23a3301a%22/%3E%3C/svg%3E')
+        14 14,
+      pointer;
+  }
+  html:not([data-cursor='off'])[data-theme='dark'] {
+    cursor:
+      url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2226%22 height=%2228%22 viewBox=%220 0 26 28%22%3E%3Cpath d=%22M4 3v21.5l5.4-5 3.6 7.8 3.5-1.6-3.6-7.6 7.4-.3z%22 fill=%22%23efe5cf%22 stroke=%22%2317130e%22 stroke-width=%222.2%22 stroke-linejoin=%22round%22 paint-order=%22stroke%22/%3E%3C/svg%3E')
+        4 3,
+      default;
+  }
+  html:not([data-cursor='off'])[data-theme='dark']
+    :is(
+      a[href],
+      button,
+      summary,
+      select,
+      [role='button'],
+      [role='tab'],
+      [role='option'],
+      label[for],
+      input:is(
+        [type='checkbox'],
+        [type='radio'],
+        [type='submit'],
+        [type='button'],
+        [type='range'],
+        [type='file']
+      )
+    ):not(:disabled, [aria-disabled='true']) {
+    cursor:
+      url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2228%22 viewBox=%220 0 28 28%22%3E%3Cg fill=%22none%22 stroke-linecap=%22round%22%3E%3Cg stroke=%22%2317130e%22 stroke-width=%225.4%22%3E%3Ccircle cx=%2214%22 cy=%2214%22 r=%227.5%22/%3E%3Cpath d=%22M14 2.5v4M14 21.5v4M2.5 14h4M21.5 14h4%22/%3E%3C/g%3E%3Cg stroke=%22%23ff8a6b%22 stroke-width=%222.2%22%3E%3Ccircle cx=%2214%22 cy=%2214%22 r=%227.5%22/%3E%3Cpath d=%22M14 2.5v4M14 21.5v4M2.5 14h4M21.5 14h4%22/%3E%3C/g%3E%3C/g%3E%3Ccircle cx=%2214%22 cy=%2214%22 r=%222%22 fill=%22%23ff8a6b%22/%3E%3C/svg%3E')
+        14 14,
+      pointer;
+  }
+  html:not([data-cursor='off'])[data-theme='dark']
+    :is(
+      a[href],
+      button,
+      summary,
+      select,
+      [role='button'],
+      [role='tab'],
+      [role='option'],
+      label[for],
+      input:is(
+        [type='checkbox'],
+        [type='radio'],
+        [type='submit'],
+        [type='button'],
+        [type='range'],
+        [type='file']
+      )
+    ):not(:disabled, [aria-disabled='true']):active {
+    cursor:
+      url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2228%22 viewBox=%220 0 28 28%22%3E%3Cg fill=%22none%22 stroke-linecap=%22round%22%3E%3Cg stroke=%22%2317130e%22 stroke-width=%225.4%22%3E%3Ccircle cx=%2214%22 cy=%2214%22 r=%227.5%22/%3E%3Cpath d=%22M14 2.5v4M14 21.5v4M2.5 14h4M21.5 14h4%22/%3E%3C/g%3E%3Cg stroke=%22%23ff8a6b%22 stroke-width=%222.2%22%3E%3Ccircle cx=%2214%22 cy=%2214%22 r=%227.5%22/%3E%3Cpath d=%22M14 2.5v4M14 21.5v4M2.5 14h4M21.5 14h4%22/%3E%3C/g%3E%3C/g%3E%3Ccircle cx=%2214%22 cy=%2214%22 r=%226%22 fill=%22%23ff8a6b%22/%3E%3C/svg%3E')
+        14 14,
+      pointer;
+  }
+  html:not([data-cursor='off'])
+    :is(input, textarea, [contenteditable='true']):not(
+      [type='checkbox'],
+      [type='radio'],
+      [type='submit'],
+      [type='button'],
+      [type='range'],
+      [type='file']
+    ) {
+    cursor: text;
+  }
+}

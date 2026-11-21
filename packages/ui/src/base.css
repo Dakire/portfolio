@@ -118,8 +118,8 @@ table {
 }
 
 /* Listes de navigation ou de métadonnées (role="list" pour que les lecteurs d'écran les annoncent malgré l'absence de puces) */
-ul[role='list'],
-ol[role='list'] {
+/* :where() : spécificité nulle, pour qu'une classe de composant (.hm-social, .footer-social…) puisse poser une marge */
+:where(ul, ol)[role='list'] {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -253,81 +253,6 @@ hr {
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
-}
-
-/* ---------- Curseur du site (actif par défaut ; /js/theme.js pose data-cursor="off" si le visiteur le coupe) ----------
- * Deux formes, sans bulle ni suivi en JavaScript : une flèche d'encre sur ce qui ne se clique pas, un réticule de pointage
- * (anneau rouge à quatre repères) sur ce qui se clique. Pointeur fin seulement ; les champs de texte gardent le curseur natif
- * (insertion), comme les éléments désactivés et le mode couleurs forcées. Une image de curseur ne peut pas lire var() :
- * deux fichiers par forme, un par thème (public/img/cursor-*.svg). */
-@media (pointer: fine) and (not (forced-colors: active)) {
-  html:not([data-cursor='off']) {
-    cursor:
-      url('/img/cursor-arrow.svg') 3 2,
-      default;
-  }
-  html:not([data-cursor='off'])[data-theme='dark'] {
-    cursor:
-      url('/img/cursor-arrow-nuit.svg') 3 2,
-      default;
-  }
-  html:not([data-cursor='off'])
-    :is(
-      a[href],
-      button,
-      summary,
-      select,
-      [role='button'],
-      [role='tab'],
-      [role='option'],
-      label[for],
-      input:is(
-        [type='checkbox'],
-        [type='radio'],
-        [type='submit'],
-        [type='button'],
-        [type='range'],
-        [type='file']
-      )
-    ):not(:disabled, [aria-disabled='true']) {
-    cursor:
-      url('/img/cursor-point.svg') 16 16,
-      pointer;
-  }
-  html:not([data-cursor='off'])[data-theme='dark']
-    :is(
-      a[href],
-      button,
-      summary,
-      select,
-      [role='button'],
-      [role='tab'],
-      [role='option'],
-      label[for],
-      input:is(
-        [type='checkbox'],
-        [type='radio'],
-        [type='submit'],
-        [type='button'],
-        [type='range'],
-        [type='file']
-      )
-    ):not(:disabled, [aria-disabled='true']) {
-    cursor:
-      url('/img/cursor-point-nuit.svg') 16 16,
-      pointer;
-  }
-  html:not([data-cursor='off'])
-    :is(input, textarea, [contenteditable='true']):not(
-      [type='checkbox'],
-      [type='radio'],
-      [type='submit'],
-      [type='button'],
-      [type='range'],
-      [type='file']
-    ) {
-    cursor: text;
-  }
 }
 
 /* Mouvement : transitions courtes, supprimées si l'utilisateur le demande (WCAG 2.3.3) */

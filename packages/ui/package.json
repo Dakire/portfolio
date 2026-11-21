@@ -8,6 +8,7 @@
     "./tokens.css": "./src/tokens.css",
     "./base.css": "./src/base.css",
     "./components.css": "./src/components.css",
+    "./cursor.css": "./src/cursor.css",
     "./fonts.css": "./src/fonts.css",
     "./font-preload": "./src/font-preload.ts",
     "./components/*": "./src/components/*"
