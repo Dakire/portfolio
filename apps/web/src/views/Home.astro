@@ -12,7 +12,7 @@ import { withBase } from '../lib/base';
 import { ROUTES, projectPath, routeAlternates, type Lang } from '../lib/i18n';
 import { homeLd } from '../lib/seo';
 import { resourceLinks } from '../lib/sections';
-import { projectRef, ticketOf } from '../lib/ticket';
+import { ticketOf } from '../lib/ticket';
 import { refsFor } from '../reference/refs';
 import { TOOL_GROUPS } from '../tools/hub';
 import { TOOLS, findTool, toolPath, toolUi } from '../tools/registry';
@@ -55,12 +55,11 @@ const toolGroups = TOOL_GROUPS.map((group) => ({
   }),
 }));
 
-// Fiche d'identification : les faits de « En bref » (poste, quotidien, parcours antérieur, réseau et sécurité)
+// Faits de « En bref » (poste, parcours antérieur) et langues
 const facts: [string, string][] = [
   ...(t.aboutFacts.filter((_, i) => i === 0 || i === 3) as [string, string][]),
   [fr ? 'Langues' : 'Languages', t.languagesInfo],
 ];
-// Phrase d'accroche du profil (reprise du texte « À propos », dans les deux langues)
 const statement = fr
   ? {
       main: "J'ai toujours testé les choses pour comprendre comment elles marchent.",
@@ -70,47 +69,50 @@ const statement = fr
       main: 'I have always tested things to see how they work.',
       sub: 'When a task keeps coming back, I write the tool that does it for me.',
     };
+// Technologies : étiquettes des réalisations, sans doublon (rien n'est saisi à la main)
+const technologies = [...new Set(t.projects.flatMap((p) => p.tags))];
+const featured = t.projects.slice(0, 4);
 const labels = fr
   ? {
-      sheet: "Fiche d'identification",
-      lastEntry: 'dernière entrée du carnet :',
-      projects: 'Réalisations',
-      projectsMeta: `${t.projects.length} fiches`,
-      expertise: "Domaines d'intervention",
-      expertiseMeta: `${t.skills.length} domaines`,
-      career: 'Journal de bord',
+      promptLabel: 'Aperçu en ligne de commande : domaines de compétence',
+      openTerminal: 'Essayer le terminal',
+      about: 'Présentation',
+      skills: 'Compétences',
+      allSkills: 'Toutes les compétences',
+      techs: 'Technologies',
+      projects: 'Projets sélectionnés',
+      allProjects: `Les ${t.projects.length} réalisations`,
+      career: 'Expériences',
       careerMore: 'Parcours détaillé, missions et formation',
-      record: 'Relevé',
-      recordMeta: 'terminal : tapez help',
-      blog: 'Carnet de terrain',
-      ticket: 'N°',
+      blog: 'Derniers articles',
       allPosts: `Les ${posts.length} articles du blog`,
       tools: 'Outils en ligne',
       allTools: `Le catalogue (${TOOLS.length} outils)`,
       toolsNote: 'Gratuits, sans compte, rien n’est conservé.',
-      contactKicker: "Demande d'intervention",
+      terminal: 'Terminal',
+      terminalMeta: 'tapez help',
       contactTitle: 'Une question, un projet ?',
       contactText:
         'Le formulaire est le plus direct : je lis chaque message et je réponds moi-même. Mes profils et mes CV sont aussi à portée de clic.',
     }
   : {
-      sheet: 'Identification sheet',
-      lastEntry: 'latest notebook entry:',
-      projects: 'Projects',
-      projectsMeta: `${t.projects.length} sheets`,
-      expertise: 'Areas of work',
-      expertiseMeta: `${t.skills.length} areas`,
-      career: 'Logbook',
+      promptLabel: 'Command-line preview: areas of expertise',
+      openTerminal: 'Try the terminal',
+      about: 'About',
+      skills: 'Skills',
+      allSkills: 'All skills',
+      techs: 'Technologies',
+      projects: 'Selected projects',
+      allProjects: `All ${t.projects.length} projects`,
+      career: 'Experience',
       careerMore: 'Full career, duties and education',
-      record: 'Printout',
-      recordMeta: 'terminal: type help',
-      blog: 'Field notes',
-      ticket: 'No.',
+      blog: 'Latest articles',
       allPosts: `All ${posts.length} blog posts`,
       tools: 'Online tools',
       allTools: `Full catalogue (${TOOLS.length} tools)`,
       toolsNote: 'Free, no account, nothing you type is kept.',
-      contactKicker: 'Request for help',
+      terminal: 'Terminal',
+      terminalMeta: 'type help',
       contactTitle: 'A question, a project?',
       contactText:
         'The form is the most direct way: I read every message and reply myself. My profiles and résumés are one click away.',
@@ -126,36 +128,64 @@ const labels = fr
   ld={homeLd(lang, t.meta.title, t.hero.role)}
 >
   <header class="hm-hero">
+    <div class="container hm-hero-grid">
+      <div class="hm-hero-copy">
+        <h1 class="hm-name">
+          <span class="hm-first">{firstName}</span> <span class="hm-last">{lastName}</span>
+        </h1>
+        <p class="hm-role">{t.hero.role}</p>
+        <p class="hm-pitch">{t.hero.pitch}</p>
+        <p class="hm-actions">
+          <a class="btn btn-primary" href={routes.projects}>
+            {t.hero.projectsBtn}
+          </a>
+          <a class="btn" href={routes.blog}>
+            {t.nav.blog}
+          </a>
+          <a class="btn" href={routes.contact}>
+            {t.hero.contactBtn}
+          </a>
+        </p>
+        <SocialLinks lang={lang} cv class="hm-social" />
+      </div>
+      <aside class="hm-prompt" aria-label={labels.promptLabel}>
+        <p class="hm-ps">
+          <b>guillaume@grichard.eu</b>:~$ ls competences/
+        </p>
+        <ul role="list">
+          {t.skills.map((skill) => (
+            <li>
+              <a href={`${routes.skills}#${skill.id}`}>
+                <span>{skill.id}/</span>
+                <span class="hm-dim">{skill.category}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="hm-ps">
+          <b>guillaume@grichard.eu</b>:~$ <span class="hm-caret" aria-hidden="true"></span>
+        </p>
+        <a class="hm-open" href="#terminal">
+          {labels.openTerminal}
+        </a>
+      </aside>
+    </div>
+  </header>
+
+  <section class="hm-section" aria-labelledby="about-title">
     <div class="container">
-      <p class="hm-meta">
-        <span>{labels.sheet}</span>
-        {lead && (
-          <span>
-            {labels.lastEntry}{' '}
-            <time datetime={isoDate(lead.data.date)}>{longFmt.format(lead.data.date)}</time>
-          </span>
-        )}
-      </p>
-      <h1 class="hm-name">
-        <span class="hm-first">{firstName}</span> <span class="hm-last">{lastName}</span>
-      </h1>
-      <div class="hm-hero-grid">
-        <div class="hm-hero-copy">
-          <p class="hm-role">{t.hero.role}</p>
-          <p class="hm-pitch">{t.hero.pitch}</p>
-          <p class="hm-actions">
-            <a class="btn btn-primary" href={routes.projects}>
-              {t.hero.projectsBtn}
-              <Icon name="arrow" size={18} />
-            </a>
-            <a class="btn" href={routes.contact}>
-              {t.hero.contactBtn}
-            </a>
-          </p>
-          <SocialLinks lang={lang} cv class="hm-social" />
-        </div>
-        <aside class="hm-id" aria-label={labels.sheet}>
-          <AvatarPortrait lang={lang} />
+      <div class="rubric">
+        <h2 id="about-title">{labels.about}</h2>
+        <p class="rubric-meta">
+          <a href={routes.about}>{t.nav.about}</a>
+        </p>
+      </div>
+      <div class="hm-about">
+        <div class="hm-about-text">
+          <blockquote class="hm-statement">
+            <p>{statement.main}</p>
+            <p class="note">{statement.sub}</p>
+          </blockquote>
           <dl class="hm-facts">
             {facts.map(([term, detail]) => (
               <div>
@@ -164,58 +194,61 @@ const labels = fr
               </div>
             ))}
           </dl>
-        </aside>
+        </div>
+        <AvatarPortrait lang={lang} />
       </div>
     </div>
-  </header>
+  </section>
+
+  <section class="hm-section" aria-labelledby="skills-title">
+    <div class="container">
+      <div class="rubric">
+        <h2 id="skills-title">{labels.skills}</h2>
+        <p class="rubric-meta">
+          <a href={routes.skills}>{labels.allSkills}</a>
+        </p>
+      </div>
+      <ul class="hm-skillgrid" role="list">
+        {t.skills.map((skill) => (
+          <li>
+            <a href={`${routes.skills}#${skill.id}`}>
+              <b>{skill.category}</b>
+              <span>{skill.short}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="hm-techs">
+        <h3 class="hm-subhead">{labels.techs}</h3>
+        <ul class="chip-list" role="list">
+          {technologies.map((tech) => (
+            <li class="chip">{tech}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
 
   <section class="hm-section" aria-labelledby="projects-title">
     <div class="container">
       <div class="rubric">
         <h2 id="projects-title">{labels.projects}</h2>
-        <p class="rubric-meta">{labels.projectsMeta}</p>
+        <p class="rubric-meta">
+          <a href={routes.projects}>{labels.allProjects}</a>
+        </p>
       </div>
-      <ol class="hm-index" role="list">
-        {t.projects.map((project, i) => (
+      <ul class="hm-projects" role="list">
+        {featured.map((project) => (
           <li>
-            <a class="hm-index-link" href={projectPath(lang, project.slug)}>
-              <span class="hm-index-ref">{projectRef(i)}</span>
-              <span class="hm-index-title">{project.title}</span>
-              <span class="hm-index-skill">{skillName(project.skill)}</span>
-              <span class="hm-index-more">
-                <span>{project.desc}</span>
-                <span class="hm-index-tags">{project.tags.join(' · ')}</span>
-              </span>
+            <a class="hm-project" href={projectPath(lang, project.slug)}>
+              <span class="hm-project-skill">{skillName(project.skill)}</span>
+              <h3>{project.title}</h3>
+              <p>{project.desc}</p>
+              <span class="hm-project-tags">{project.tags.join(' · ')}</span>
             </a>
           </li>
         ))}
-      </ol>
-    </div>
-  </section>
-
-  <section class="hm-section" aria-labelledby="profile-title">
-    <div class="container">
-      <div class="rubric">
-        <h2 id="profile-title">{labels.expertise}</h2>
-        <p class="rubric-meta">{labels.expertiseMeta}</p>
-      </div>
-      <div class="hm-profile">
-        <ul class="hm-domains" role="list">
-          {t.skills.map((skill) => (
-            <li>
-              <a href={`${routes.skills}#${skill.id}`}>
-                <span class="hm-check" aria-hidden="true" />
-                <b>{skill.category}</b>
-                <span>{skill.short}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-        <blockquote class="hm-statement">
-          <p>{statement.main}</p>
-          <p class="note">{statement.sub}</p>
-        </blockquote>
-      </div>
+      </ul>
     </div>
   </section>
 
@@ -231,18 +264,6 @@ const labels = fr
     </div>
   </section>
 
-  <section class="hm-section" aria-labelledby="record-title">
-    <div class="container">
-      <div class="rubric">
-        <h2 id="record-title">{labels.record}</h2>
-        <p class="rubric-meta">{labels.recordMeta}</p>
-      </div>
-      <div class="hm-terminal">
-        <Terminal lang={lang} />
-      </div>
-    </div>
-  </section>
-
   <section class="hm-section" aria-labelledby="reading-title">
     <div class="container">
       <div class="rubric">
@@ -251,39 +272,33 @@ const labels = fr
           <a href={routes.blog}>{labels.allPosts}</a>
         </p>
       </div>
-      <div class="hm-duo">
-        {lead && (
-          <article class="hm-lead">
-            <p class="ticket">
-              {labels.ticket} <b>{ticketOf(lead.data.date, lead.data.category)}</b> ·{' '}
-              {CATEGORIES[lead.data.category]?.[lang]} ·{' '}
-              <time datetime={isoDate(lead.data.date)}>{longFmt.format(lead.data.date)}</time>
-            </p>
-            <h3>
-              <a href={postPath(lang, lead.slug)}>{lead.data.title}</a>
-            </h3>
-            <p>{lead.data.summary ?? lead.data.description}</p>
-          </article>
+      <ul class="ledger-list" role="list">
+        {[lead, ...reading].flatMap((post) =>
+          post
+            ? [
+                <li>
+                  <a class="ledger-row" href={postPath(lang, post.slug)}>
+                    <span class="ledger-meta">
+                      <time datetime={isoDate(post.data.date)}>
+                        {longFmt.format(post.data.date)}
+                      </time>
+                    </span>
+                    <span class="ledger-title">
+                      {post.data.title}
+                      <span class="ledger-sub">
+                        {CATEGORIES[post.data.category]?.[lang]} ·{' '}
+                        {ticketOf(post.data.date, post.data.category)}
+                      </span>
+                    </span>
+                    <span class="ledger-arrow" aria-hidden="true">
+                      <Icon name="arrow" size={18} />
+                    </span>
+                  </a>
+                </li>,
+              ]
+            : [],
         )}
-        <ul class="ledger-list" role="list">
-          {reading.map((post) => (
-            <li>
-              <a class="ledger-row" href={postPath(lang, post.slug)}>
-                <span class="ledger-meta">{ticketOf(post.data.date, post.data.category)}</span>
-                <span class="ledger-title">
-                  {post.data.title}
-                  <span class="ledger-sub">
-                    {CATEGORIES[post.data.category]?.[lang]} · {dayFmt.format(post.data.date)}
-                  </span>
-                </span>
-                <span class="ledger-arrow" aria-hidden="true">
-                  <Icon name="arrow" size={18} />
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+      </ul>
     </div>
   </section>
 
@@ -298,7 +313,7 @@ const labels = fr
       <div class="hm-toolgroups">
         {toolGroups.map((group) => (
           <section class="hm-toolgroup" aria-labelledby={`tg-${group.id}`}>
-            <h3 id={`tg-${group.id}`} class="hm-toolgroup-title">
+            <h3 id={`tg-${group.id}`} class="hm-subhead">
               {group.title}
             </h3>
             <ul role="list">
@@ -310,8 +325,8 @@ const labels = fr
             </ul>
           </section>
         ))}
-        <section class="hm-toolgroup hm-toolgroup-wide" aria-labelledby="tg-cheatsheets">
-          <h3 id="tg-cheatsheets" class="hm-toolgroup-title">
+        <section class="hm-toolgroup" aria-labelledby="tg-cheatsheets">
+          <h3 id="tg-cheatsheets" class="hm-subhead">
             {t.nav.cheatsheets}
           </h3>
           <ul role="list">
@@ -330,10 +345,21 @@ const labels = fr
     </div>
   </section>
 
+  <section class="hm-section" id="terminal" aria-labelledby="record-title">
+    <div class="container">
+      <div class="rubric">
+        <h2 id="record-title">{labels.terminal}</h2>
+        <p class="rubric-meta">{labels.terminalMeta}</p>
+      </div>
+      <div class="hm-terminal">
+        <Terminal lang={lang} />
+      </div>
+    </div>
+  </section>
+
   <section class="hm-section" id="contact" aria-labelledby="contact-title">
     <div class="container">
-      <div class="band hm-contact">
-        <p class="label">{labels.contactKicker}</p>
+      <div class="hm-contact">
         <h2 id="contact-title" class="hm-cta">
           {labels.contactTitle}
         </h2>

@@ -78,7 +78,7 @@ p {
   text-wrap: pretty;
 }
 
-/* Liens : à l'encre, soulignés d'un trait fin orange ; au survol le trait s'épaissit.
+/* Liens : à l'encre, soulignés d'un trait fin violet ; au survol le trait s'épaissit.
  * La couleur n'est jamais seule porteuse du lien : le soulignement l'est. */
 a {
   color: var(--link);

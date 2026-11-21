@@ -1,5 +1,5 @@
-/* Accueil (ADR 0014) : fiche d'identification, index typographique des réalisations, profil, journal de bord, relevé,
- * carnet de terrain, outils, demande d'intervention. Couleurs : tokens uniquement. */
+/* Accueil (ADR 0016) : hero à deux colonnes (texte, aperçu en ligne de commande), sections séparées par un filet.
+ * Répartition : base sombre minimaliste (60 %), structure en sections (25 %), touche terminal (15 %, prompt et mono). */
 
 .hm-section {
   padding-top: var(--space-section);
@@ -7,62 +7,46 @@
 .hm-section .rubric {
   margin-bottom: var(--space-5);
 }
-.rubric-meta a {
-  color: var(--link);
-}
-
-/* ---------- Fiche d'identification ---------- */
-.hm-hero {
-  padding-block: var(--space-5) 0;
-}
-.hm-meta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--space-1) var(--space-5);
-  padding-block: var(--space-2);
-  border-bottom: 1px solid var(--line-strong);
+.hm-subhead {
+  margin-bottom: var(--space-3);
   color: var(--muted);
   font-family: var(--font-mono);
   font-size: var(--text-label);
+  font-weight: 500;
+  letter-spacing: 0;
 }
-/* Le nom est la seule image de la page : prénom en gras, nom en italique léger décalé d'un tiers, comme une signature */
-.hm-name {
-  display: grid;
-  margin-top: var(--space-5);
-  font-size: var(--text-hero);
-  font-weight: 700;
-  letter-spacing: var(--tracking-hero);
-  line-height: var(--leading-display);
-  text-wrap: nowrap;
-}
-.hm-first {
-  display: block;
-  margin-left: -0.04em; /* alignement optique du G sur la marge */
-}
-.hm-last {
-  display: block;
-  margin-left: 0.8em;
-  font-style: italic;
-  font-weight: 300;
+
+/* ---------- Hero ---------- */
+.hm-hero {
+  padding-block: var(--space-7) 0;
 }
 .hm-hero-grid {
   display: grid;
-  gap: var(--space-6);
-  margin-top: var(--space-6);
+  gap: var(--space-7);
+  align-items: center;
+}
+.hm-name {
+  font-size: clamp(2.75rem, 1.6rem + 5vw, 5rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+}
+.hm-first,
+.hm-last {
+  display: inline;
 }
 .hm-role {
+  margin-top: var(--space-4);
   color: var(--pen);
-  font-size: var(--text-xl);
-  font-style: italic;
-  line-height: 1.2;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
 }
 .hm-pitch {
-  max-width: 46ch;
+  max-width: 52ch;
   margin-top: var(--space-4);
-  color: var(--ink);
+  color: var(--muted);
   font-size: var(--text-lg);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 .hm-actions {
   display: flex;
@@ -71,22 +55,93 @@
   margin-top: var(--space-5);
 }
 .hm-social {
-  margin-top: var(--space-4);
+  margin-top: var(--space-5);
 }
-.hm-id {
+.hm-prompt {
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.9;
+}
+.hm-ps {
+  color: var(--muted);
+}
+.hm-ps b {
+  color: var(--accent);
+  font-weight: 500;
+}
+.hm-prompt ul {
+  margin: var(--space-1) 0 var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+.hm-prompt li a {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: var(--target);
+  align-items: center;
+  margin-inline: calc(-1 * var(--space-2));
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  text-decoration: none;
+  transition: background var(--duration) var(--ease);
+}
+.hm-prompt li a:hover {
+  background: var(--raised);
+}
+.hm-dim {
+  color: var(--muted);
+  text-align: right;
+}
+.hm-caret {
+  display: inline-block;
+  width: 0.5rem;
+  height: 1.1em;
+  background: var(--accent);
+  vertical-align: -0.2em;
+  animation: hm-blink 1.1s steps(1) infinite;
+}
+@keyframes hm-blink {
+  50% {
+    opacity: 0;
+  }
+}
+.hm-open {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  font-size: var(--text-label);
+}
+
+/* ---------- Présentation ---------- */
+.hm-about {
   display: grid;
-  gap: var(--space-5);
-  align-content: start;
+  gap: var(--space-6);
+  align-items: start;
+}
+.hm-statement p:first-child {
+  max-width: 28ch;
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+}
+.hm-statement .note {
+  margin-top: var(--space-3);
 }
 .hm-facts {
-  margin: 0;
-  border-top: var(--stroke) solid var(--ink);
-}
-.hm-facts > div {
   display: grid;
-  gap: var(--space-1) var(--space-4);
-  padding-block: var(--space-3);
-  border-bottom: 1px solid var(--line-strong);
+  gap: var(--space-3);
+  margin: var(--space-5) 0 0;
+}
+.hm-facts div {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
 }
 .hm-facts dt {
   color: var(--muted);
@@ -95,221 +150,117 @@
 }
 .hm-facts dd {
   margin: 0;
-  color: var(--ink);
-  font-size: var(--text-base);
-  line-height: 1.4;
-}
-@media (min-width: 48rem) {
-  .hm-hero-grid {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
-    gap: var(--space-8);
-  }
-  .hm-facts > div {
-    grid-template-columns: 8rem minmax(0, 1fr);
-  }
+  max-width: 60ch;
 }
 
-/* ---------- Index des réalisations : lignes typographiques, aperçu déployé au survol et au focus ---------- */
-.hm-index {
+/* ---------- Compétences : grille à filets, technologies en pastilles ---------- */
+.hm-skillgrid {
+  display: grid;
   margin: 0;
   padding: 0;
   list-style: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  overflow: hidden;
 }
-.hm-index > li {
-  border-bottom: 1px solid var(--line-strong);
+.hm-skillgrid li {
+  border-bottom: 1px solid var(--line);
 }
-.hm-index-link {
+.hm-skillgrid li:last-child {
+  border-bottom: 0;
+}
+.hm-skillgrid a {
   display: grid;
-  grid-template-columns: 3.75rem minmax(0, 1fr);
-  gap: 0 var(--space-4);
-  align-items: baseline;
-  padding-block: var(--space-4);
-  color: inherit;
-  text-decoration: none;
-  transition: opacity var(--duration) var(--ease);
-}
-.hm-index-ref {
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--text-label);
-  font-variant-numeric: tabular-nums;
-  transition: color var(--duration) var(--ease);
-}
-.hm-index-title {
+  gap: var(--space-1);
+  height: 100%;
+  padding: var(--space-5);
   color: var(--ink);
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.5rem);
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  line-height: 1.08;
-  text-wrap: balance;
-  transition: transform var(--duration-slow) var(--ease);
-}
-.hm-index-skill {
-  grid-column: 2;
-  margin-top: var(--space-1);
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--text-label);
-}
-.hm-index-more {
-  grid-column: 2;
-  display: grid;
-  gap: var(--space-2);
-  max-width: 62ch;
-  margin-top: var(--space-2);
-  color: var(--body);
-  font-size: var(--text-base);
-  line-height: 1.45;
-}
-.hm-index-tags {
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--text-label);
-}
-@media (min-width: 56rem) {
-  .hm-index-link {
-    grid-template-columns: 4.5rem minmax(0, 1fr) 16rem;
-  }
-  .hm-index-skill {
-    grid-column: 3;
-    margin-top: 0;
-    text-align: right;
-  }
-  .hm-index-more {
-    grid-column: 2 / 3;
-    grid-row: 2;
-    margin-top: 0;
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition:
-      max-height var(--duration-slow) var(--ease),
-      opacity var(--duration) var(--ease),
-      margin-top var(--duration-slow) var(--ease);
-  }
-  /* Survol ou focus : l'aperçu s'ouvre (en tactile et petit écran il reste ouvert) */
-  @media (hover: hover) {
-    .hm-index-link:is(:hover, :focus-visible) .hm-index-more {
-      max-height: 12rem;
-      margin-top: var(--space-2);
-      opacity: 1;
-    }
-    .hm-index-link:is(:hover, :focus-visible) .hm-index-title {
-      transform: translateX(0.5rem);
-    }
-    .hm-index-link:is(:hover, :focus-visible) .hm-index-ref {
-      color: var(--accent);
-    }
-    .hm-index:has(.hm-index-link:is(:hover, :focus-visible))
-      .hm-index-link:not(:is(:hover, :focus-visible)) {
-      opacity: 0.5;
-    }
-  }
-  @media (hover: none) {
-    .hm-index-more {
-      max-height: none;
-      opacity: 1;
-      margin-top: var(--space-2);
-    }
-  }
-}
-
-/* ---------- Profil : domaines cochés comme sur une fiche, phrase d'accroche au stylo ---------- */
-.hm-profile {
-  display: grid;
-  gap: var(--space-7);
-}
-.hm-domains {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: var(--stroke) solid var(--ink);
-}
-.hm-domains li {
-  border-bottom: 1px solid var(--line-strong);
-}
-.hm-domains a {
-  display: grid;
-  grid-template-columns: 1.5rem minmax(0, 1fr);
-  gap: var(--space-1) var(--space-4);
-  align-items: baseline;
-  padding-block: var(--space-4);
-  color: inherit;
   text-decoration: none;
+  transition: background var(--duration) var(--ease);
 }
-.hm-domains a:hover b {
-  text-decoration: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.2em;
+.hm-skillgrid a:hover {
+  background: var(--surface);
 }
-.hm-domains b {
-  grid-column: 2;
-  color: var(--ink);
+.hm-skillgrid b {
   font-size: var(--text-lg);
-  font-weight: 650;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
-.hm-domains span:not(.hm-check) {
-  grid-column: 2;
+.hm-skillgrid span {
   color: var(--muted);
   font-size: var(--text-sm);
 }
-.hm-check {
-  grid-row: 1 / span 2;
-  align-self: start;
-  position: relative;
-  width: 1.25rem;
-  height: 1.25rem;
-  margin-top: 0.2rem;
-  border: var(--stroke) solid var(--ink);
+.hm-techs {
+  margin-top: var(--space-6);
 }
-.hm-check::after {
-  content: '';
-  position: absolute;
-  left: 0.3rem;
-  top: -0.2rem;
-  width: 0.5rem;
-  height: 1rem;
-  border-right: 3px solid var(--pen);
-  border-bottom: 3px solid var(--pen);
-  transform: rotate(40deg);
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
-.hm-statement {
-  align-self: start;
-  padding-left: var(--space-5);
-  border-left: 4px solid var(--pen);
+.chip-list .chip {
+  min-height: 0;
+  padding: 0.15rem 0.7rem;
+  border-radius: 99px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
 }
-.hm-statement p:first-child {
-  color: var(--pen);
-  font-size: var(--text-2xl);
-  font-style: italic;
-  font-weight: 450;
-  line-height: 1.12;
+
+/* ---------- Projets sélectionnés ---------- */
+.hm-projects {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hm-project {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  height: 100%;
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  transition:
+    border-color var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
+}
+.hm-project:hover {
+  border-color: var(--line-strong);
+  transform: translateY(-2px);
+}
+.hm-project h3 {
+  font-size: var(--text-lg);
+  font-weight: 600;
   letter-spacing: -0.02em;
+  line-height: 1.2;
 }
-.hm-statement .note {
-  margin-top: var(--space-4);
-  color: var(--body);
+.hm-project p {
+  color: var(--muted);
+  font-size: var(--text-sm);
 }
-@media (min-width: 56rem) {
-  .hm-profile {
-    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-    gap: var(--space-8);
-  }
-  .hm-domains a {
-    grid-template-columns: 1.5rem 11rem minmax(0, 1fr);
-    align-items: baseline;
-  }
-  .hm-domains b {
-    grid-column: 2;
-  }
-  .hm-domains span:not(.hm-check) {
-    grid-column: 3;
-  }
-  .hm-check {
-    grid-row: 1;
-  }
+.hm-project-skill,
+.hm-project-tags {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+.hm-project-skill {
+  color: var(--pen);
+}
+.hm-project-tags {
+  margin-top: auto;
+  padding-top: var(--space-2);
 }
 
 /* ---------- Frise du parcours (components/CareerTimeline.astro) : règle des années, un trait par poste ---------- */
@@ -386,56 +337,10 @@
   }
 }
 
-/* ---------- Relevé : le terminal ---------- */
-.hm-terminal {
-  max-width: 62rem;
-}
-
-/* ---------- Carnet de terrain : article en tête, tickets à côté ---------- */
-.hm-duo {
-  display: grid;
-  gap: var(--space-6);
-}
-.hm-lead h3 {
-  margin-top: var(--space-3);
-  font-size: var(--text-2xl);
-  line-height: 1.08;
-}
-.hm-lead h3 a {
-  color: var(--ink);
-  text-decoration-thickness: 2px;
-  text-decoration-color: var(--accent);
-}
-.hm-lead p:last-child {
-  max-width: 48ch;
-  margin-top: var(--space-4);
-}
-@media (min-width: 64rem) {
-  .hm-duo {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    gap: var(--space-8);
-  }
-  .hm-duo .ledger-row {
-    grid-template-columns: 9.5rem minmax(0, 1fr) auto;
-  }
-}
-
-/* ---------- Outils : rangés par catégorie, un outil par ligne ---------- */
+/* ---------- Outils ---------- */
 .hm-toolgroups {
   display: grid;
-  gap: var(--space-6);
-}
-.hm-toolgroup {
-  border-top: var(--stroke) solid var(--ink);
-}
-.hm-toolgroup-title {
-  padding-block: var(--space-3);
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: var(--text-label);
-  font-weight: 500;
-  letter-spacing: 0;
-  line-height: 1.4;
+  gap: var(--space-5) var(--space-6);
 }
 .hm-toolgroup ul {
   margin: 0;
@@ -443,69 +348,41 @@
   list-style: none;
 }
 .hm-toolgroup li {
-  border-top: 1px solid var(--line-strong);
+  border-top: 1px solid var(--line);
 }
 .hm-toolgroup a {
   display: flex;
   align-items: center;
-  min-height: 3.25rem;
-  padding-block: var(--space-2);
+  min-height: var(--target);
   color: var(--ink);
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
-  font-weight: 560;
-  line-height: 1.2;
-  text-decoration-line: underline;
-  text-decoration-color: transparent;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.2em;
-}
-.hm-toolgroup a:hover {
-  text-decoration-color: var(--accent);
-}
-@media (min-width: 40rem) {
-  .hm-toolgroups {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (min-width: 64rem) {
-  .hm-toolgroups {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-.hm-toolgroup-wide {
-  grid-column: 1 / -1;
-}
-@media (min-width: 40rem) {
-  .hm-toolgroup-wide ul {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: var(--space-6);
-  }
-}
-@media (min-width: 64rem) {
-  .hm-toolgroup-wide ul {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
+  font-size: var(--text-base);
 }
 .hm-tools-note {
   margin-top: var(--space-5);
 }
 
-/* ---------- Demande d'intervention : bande d'encre ---------- */
+/* ---------- Terminal (provisoire : passe sur la page /terminal au lot 6) ---------- */
+.hm-terminal {
+  max-width: 62rem;
+}
+
+/* ---------- Contact ---------- */
 .hm-contact {
   padding: clamp(var(--space-6), 4vw, var(--space-8));
-  border: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
 }
 .hm-cta {
-  margin-top: var(--space-3);
-  max-width: 14ch;
+  max-width: 16ch;
   font-size: var(--text-display);
-  line-height: 0.98;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
 }
 .hm-contact-text {
   max-width: 52ch;
   margin-top: var(--space-4);
+  color: var(--muted);
 }
 .hm-contact-actions {
   display: flex;
@@ -514,55 +391,36 @@
   gap: var(--space-4) var(--space-5);
   margin-top: var(--space-5);
 }
-.hm-contact .label {
-  color: var(--band-muted);
-}
-.hm-contact .social a {
-  border-color: var(--band-muted);
-  color: var(--band-ink);
-}
-.hm-contact .social a:hover {
-  background: var(--band-ink);
-  color: var(--band);
-}
 
-/* ---------- Grand écran : le titre de chaque section passe dans la marge gauche et reste visible en lisant (mise en page
- * éditoriale d'Inkfolio : titre à gauche, contenu à droite). Sous 76 rem, titre au-dessus du contenu. ---------- */
-@media (min-width: 76rem) {
-  .hm-section:has(> .container > .rubric) > .container {
-    display: grid;
-    grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
-    column-gap: var(--space-7);
-    align-items: start;
+/* ---------- Écrans larges ---------- */
+@media (min-width: 40rem) {
+  .hm-toolgroups,
+  .hm-projects {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .hm-section > .container > .rubric {
-    position: sticky;
-    top: 5.5rem;
-    grid-column: 1;
-    grid-row: 1 / span 4;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-2);
-    margin-bottom: 0;
-    border-top: var(--stroke) solid var(--ink);
+  .hm-skillgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .hm-section > .container > .rubric h2 {
-    font-size: var(--text-xl);
+  .hm-skillgrid li {
+    border-right: 1px solid var(--line);
   }
-  .hm-section > .container > :not(.rubric) {
-    grid-column: 2;
+}
+@media (min-width: 64rem) {
+  .hm-hero {
+    padding-top: var(--space-8);
   }
-  .hm-index-link {
-    grid-template-columns: 4.25rem minmax(0, 1fr) 11rem;
+  .hm-hero-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: var(--space-8);
   }
-  .hm-index-title {
-    font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.125rem);
+  .hm-about {
+    grid-template-columns: minmax(0, 1fr) 16rem;
+    gap: var(--space-8);
   }
-  /* Dans la colonne de droite, les outils se rangent sur deux colonnes (quatre seraient trop étroites) */
+  .hm-skillgrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
   .hm-toolgroups {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .hm-toolgroup-wide ul {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

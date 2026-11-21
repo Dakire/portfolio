@@ -6,7 +6,7 @@
  * avant le premier rendu par /js/theme.js (<html data-theme="dark|light">). Contrastes vérifiés par
  * packages/ui/tests/contrast.test.ts (texte >= 4,5:1, bordures d'interface >= 3:1).
  *
- * Une encre d'accent (--accent, ambre-orange : liens actifs, survols, statuts), un secondaire rare (--pen, bleu acier : page
+ * Une encre d'accent (--accent, violet : liens actifs, survols, statuts), un secondaire rare (--pen, bleu acier : page
  * courante, focus, annotations). Vert, ambre et rouge d'état seulement pour les états, toujours avec un mot.
  */
 
@@ -96,16 +96,16 @@
   --ink: #e8eaee;
   --body: #d3d7de;
   --muted: #9aa1af;
-  --accent: #f08a3c;
-  --accent-strong: #f08a3c; /* fond des boutons pleins */
-  --accent-ink: #17120c;
-  --u: #f08a3c; /* soulignés, barre de lecture : jamais du texte */
-  --u-ink: #17120c;
+  --accent: #a78bfa;
+  --accent-strong: #a78bfa; /* fond des boutons pleins */
+  --accent-ink: #14102a;
+  --u: #a78bfa; /* soulignés, barre de lecture : jamais du texte */
+  --u-ink: #14102a;
   --pen: #7fa6d6; /* secondaire : page courante, annotations */
   --accent-alt: #7fa6d6;
   --link: #e8eaee;
-  --signal: #f08a3c;
-  --signal-ink: #17120c;
+  --signal: #a78bfa;
+  --signal-ink: #14102a;
   --ok: #4cb782;
   --warn: #e5b53d;
   --danger: #e5645f;
@@ -118,7 +118,7 @@
   --band: #e8eaee;
   --band-ink: #15181f;
   --band-muted: #444b5a;
-  --band-accent: #a8480a;
+  --band-accent: #6d3fd6;
 
   /* Cartes colorées (aperçus de réalisation) : deux tons seulement */
   --tone-ink: #e8eaee;
@@ -126,15 +126,15 @@
   --tone-ok: #4cb782;
   --tone-warn: #e5b53d;
   --tone-petrole: #151820;
-  --tone-petrole-accent: #f08a3c;
+  --tone-petrole-accent: #a78bfa;
   --tone-olive: #1b1f29;
-  --tone-olive-accent: #f08a3c;
+  --tone-olive-accent: #a78bfa;
   --tone-prune: #151820;
-  --tone-prune-accent: #f08a3c;
+  --tone-prune-accent: #a78bfa;
   --tone-ocre: #1b1f29;
-  --tone-ocre-accent: #f08a3c;
+  --tone-ocre-accent: #a78bfa;
   --tone-ardoise: #151820;
-  --tone-ardoise-accent: #f08a3c;
+  --tone-ardoise-accent: #a78bfa;
 }
 
 /* Thème clair : choix explicite, mêmes jetons */
@@ -153,16 +153,16 @@
   --ink: #1b1d22;
   --body: #2b2e36;
   --muted: #596070;
-  --accent: #a8480a;
-  --accent-strong: #a8480a;
-  --accent-ink: #fff8ee;
-  --u: #d9650f;
+  --accent: #6d3fd6;
+  --accent-strong: #6d3fd6;
+  --accent-ink: #ffffff;
+  --u: #7c4dff;
   --u-ink: #1b1d22;
   --pen: #2c5a94;
   --accent-alt: #2c5a94;
   --link: #1b1d22;
-  --signal: #a8480a;
-  --signal-ink: #fff8ee;
+  --signal: #6d3fd6;
+  --signal-ink: #ffffff;
   --ok: #25704a;
   --warn: #8a5a00;
   --danger: #b0262b;
@@ -174,22 +174,22 @@
   --band: #15181f;
   --band-ink: #e8eaee;
   --band-muted: #b4bac6;
-  --band-accent: #f08a3c;
+  --band-accent: #b9a2ff;
 
   --tone-ink: #1b1d22;
-  --tone-danger: #a8480a;
+  --tone-danger: #6d3fd6;
   --tone-ok: #25704a;
   --tone-warn: #8a5a00;
   --tone-petrole: #f0f0ea;
-  --tone-petrole-accent: #a8480a;
+  --tone-petrole-accent: #6d3fd6;
   --tone-olive: #ebebe4;
-  --tone-olive-accent: #a8480a;
+  --tone-olive-accent: #6d3fd6;
   --tone-prune: #f0f0ea;
-  --tone-prune-accent: #a8480a;
+  --tone-prune-accent: #6d3fd6;
   --tone-ocre: #ebebe4;
-  --tone-ocre-accent: #a8480a;
+  --tone-ocre-accent: #6d3fd6;
   --tone-ardoise: #f0f0ea;
-  --tone-ardoise-accent: #a8480a;
+  --tone-ardoise-accent: #6d3fd6;
 }
 
 /* Forçage des couleurs (mode contraste élevé) : le navigateur impose les siennes, les filets restent visibles */

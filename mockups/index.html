@@ -1,379 +1,1475 @@
 <!doctype html>
 <html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Maquette grichard.eu — phase 2</title>
-<style>
-/* Tokens (THEME-MERGE-AUDIT §3). Polices de la maquette : pile système ; Geist + IBM Plex Mono à l'implémentation. */
-:root{
-  --bg:#0f1115;--surface:#151820;--surface-2:#1b1f29;--line:#262b36;--line-2:#353b49;
-  --ink:#e8eaee;--ink-2:#9aa1af;--accent:#f08a3c;--accent-ink:#17120c;--sec:#7fa6d6;
-  --ok:#4cb782;--warn:#e5b53d;--err:#e5645f;
-  --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,"Cascadia Code",Consolas,monospace;
-  --r1:6px;--r2:10px;--r3:14px;--ease:cubic-bezier(.2,.7,.2,1);
-}
-*{box-sizing:border-box;margin:0}
-body{background:var(--bg);color:var(--ink);font:16px/1.65 var(--sans)}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--sec);outline-offset:3px;border-radius:var(--r1)}
-.mono{font-family:var(--mono)}
-.dim{color:var(--ink-2)}
-.acc{color:var(--accent)}
-/* cadre de la maquette */
-.chrome{position:sticky;top:0;z-index:9;background:#0a0c10;border-bottom:1px solid var(--line);display:flex;gap:4px;padding:8px 12px;overflow-x:auto}
-.chrome button{font:13px var(--mono);color:var(--ink-2);background:none;border:1px solid transparent;border-radius:var(--r1);padding:8px 12px;cursor:pointer;min-height:44px;white-space:nowrap}
-.chrome button[aria-selected=true]{color:var(--ink);border-color:var(--line-2);background:var(--surface)}
-.frame-bar{display:flex;gap:8px;padding:12px;justify-content:center}
-.frame-bar button{font:13px var(--mono);color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:var(--r1);padding:8px 14px;min-height:44px;cursor:pointer}
-.frame-bar button[aria-pressed=true]{color:var(--accent-ink);background:var(--accent);border-color:var(--accent)}
-.panel[hidden]{display:none}
-.stage{margin:0 auto;border:1px solid var(--line);border-radius:var(--r3);overflow:hidden;background:var(--bg);max-width:1280px}
-.stage.mobile{max-width:390px}
-/* composants */
-.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
-.stage.mobile .wrap{padding:0 16px}
-header.top{display:flex;align-items:center;gap:20px;height:60px;border-bottom:1px solid var(--line);padding:0 24px;position:sticky;top:0;background:color-mix(in srgb,var(--bg) 94%,transparent);z-index:5}
-.brand{font:600 15px var(--mono);text-decoration:none;white-space:nowrap}
-.brand b{color:var(--accent);font-weight:600}
-nav.main{display:flex;gap:2px;flex:1}
-nav.main a{font-size:14px;color:var(--ink-2);text-decoration:none;padding:10px 12px;border-radius:var(--r1);min-height:44px;display:flex;align-items:center;transition:color .2s var(--ease),background .2s var(--ease)}
-nav.main a:hover{color:var(--ink);background:var(--surface)}
-nav.main a[aria-current=page]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--sec)}
-.btn{font:500 14px var(--sans);display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:var(--r2);border:1px solid var(--line-2);background:transparent;color:var(--ink);text-decoration:none;cursor:pointer;transition:border-color .2s var(--ease),background .2s var(--ease)}
-.btn:hover{border-color:var(--ink-2);background:var(--surface)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
-.btn.primary:hover{background:#f59a55}
-.icon-btn{width:44px;padding:0;justify-content:center}
-kbd{font:12px var(--mono);border:1px solid var(--line-2);border-bottom-width:2px;border-radius:var(--r1);padding:1px 6px;color:var(--ink-2)}
-.badge{font:12px var(--mono);border:1px solid var(--line-2);border-radius:99px;padding:2px 10px;color:var(--ink-2);white-space:nowrap}
-.badge.ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
-.badge.sec{color:var(--sec);border-color:color-mix(in srgb,var(--sec) 40%,var(--line))}
-h1,h2,h3{line-height:1.15;letter-spacing:-.02em;font-weight:600}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-top:1px solid var(--line);padding-top:20px;margin-bottom:28px}
-.sec-head h2{font-size:24px}
-.sec-head a{font:13px var(--mono);color:var(--ink-2)}
-section.block{padding:64px 0 0}
-.stage.mobile section.block{padding-top:48px}
-/* hero */
-.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;padding:72px 0 8px;align-items:center}
-.stage.mobile .hero{grid-template-columns:1fr;gap:32px;padding-top:40px}
-.hero h1{font-size:clamp(44px,6.4vw,76px);letter-spacing:-.04em;line-height:1.02}
-.stage.mobile .hero h1{font-size:44px}
-.hero p.lead{font-size:19px;color:var(--ink-2);max-width:52ch;margin:20px 0 28px}
-.cta{display:flex;flex-wrap:wrap;gap:10px}
-.prompt{background:var(--surface);border:1px solid var(--line);border-radius:var(--r3);padding:20px;font:14px/1.9 var(--mono)}
-.prompt .ps{color:var(--ink-2)}
-.prompt .ps b{color:var(--accent);font-weight:500}
-.prompt ul{list-style:none;padding:0;margin:4px 0 12px}
-.prompt li a{text-decoration:none;display:flex;justify-content:space-between;gap:12px;padding:0 8px;margin:0 -8px;border-radius:var(--r1)}
-.prompt li a:hover{background:var(--surface-2)}
-.prompt .caret{display:inline-block;width:8px;height:1.1em;background:var(--accent);vertical-align:-3px;animation:blink 1.1s steps(1) infinite}
-@keyframes blink{50%{opacity:0}}
-.prompt .open{display:inline-block;margin-top:8px;color:var(--ink-2);font-size:13px}
-/* listes */
-.rows{border-top:1px solid var(--line)}
-.row{display:grid;grid-template-columns:150px 1fr auto;gap:24px;padding:20px 0;border-bottom:1px solid var(--line);align-items:baseline}
-.stage.mobile .row{grid-template-columns:1fr;gap:6px}
-.row .when{font:13px var(--mono);color:var(--ink-2)}
-.row h3{font-size:18px}
-.row p{color:var(--ink-2);font-size:15px;max-width:62ch}
-.skills{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:var(--r3);overflow:hidden}
-.stage.mobile .skills{grid-template-columns:1fr}
-.skills div{padding:22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 -1px -1px 0}
-.skills h3{font-size:16px;margin-bottom:10px}
-.skills ul{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px}
-.skills li{font:12.5px var(--mono);color:var(--ink-2);background:var(--surface);border-radius:var(--r1);padding:3px 8px}
-/* projets */
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
-.chip{font:13px var(--mono);min-height:44px;padding:0 14px;border-radius:99px;border:1px solid var(--line-2);background:none;color:var(--ink-2);cursor:pointer}
-.chip[aria-pressed=true]{border-color:var(--accent);color:var(--accent)}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.stage.mobile .grid{grid-template-columns:1fr}
-.proj{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r3);overflow:hidden;text-decoration:none;transition:border-color .2s var(--ease),transform .2s var(--ease)}
-.proj:hover{border-color:var(--line-2);transform:translateY(-2px)}
-.proj .shot{height:132px;border-bottom:1px solid var(--line);background:repeating-linear-gradient(135deg,var(--surface-2) 0 10px,var(--surface) 10px 20px);display:grid;place-items:center;font:12px var(--mono);color:var(--ink-2)}
-.proj .body{padding:20px;display:flex;flex-direction:column;gap:10px;flex:1}
-.proj h3{font-size:18px}
-.proj p{font-size:15px;color:var(--ink-2)}
-.proj .meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:auto;padding-top:6px}
-.tech{font:12.5px var(--mono);color:var(--ink-2)}
-/* blog */
-.post-row{display:grid;grid-template-columns:110px 1fr;gap:24px;padding:22px 0;border-bottom:1px solid var(--line);text-decoration:none}
-.stage.mobile .post-row{grid-template-columns:1fr;gap:6px}
-.post-row time{font:13px var(--mono);color:var(--ink-2)}
-.post-row h3{font-size:19px;margin-bottom:6px}
-.post-row:hover h3{text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:4px;text-decoration-thickness:2px}
-.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-/* article */
-.progress{height:2px;background:var(--line);position:sticky;top:60px;z-index:4}
-.progress i{display:block;height:100%;width:38%;background:var(--accent)}
-.article{display:grid;grid-template-columns:minmax(0,680px) 220px;gap:64px;justify-content:center;padding:56px 0}
-.stage.mobile .article{grid-template-columns:1fr;padding:32px 0}
-.article h1{font-size:clamp(32px,4.6vw,46px);margin:14px 0 18px;letter-spacing:-.03em}
-.article h2{font-size:24px;margin:40px 0 12px}
-.article p{margin:0 0 18px;font-size:17.5px;line-height:1.75}
-.toc{position:sticky;top:96px;align-self:start;font-size:14px;border-left:1px solid var(--line);padding-left:16px}
-.stage.mobile .toc{display:none}
-.toc a{display:block;padding:6px 0;color:var(--ink-2);text-decoration:none}
-.toc a[aria-current]{color:var(--ink)}
-pre.code{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r2);padding:16px 18px;font:14px/1.7 var(--mono);overflow:auto;margin:0 0 22px}
-pre.code .k{color:var(--sec)}pre.code .s{color:#d9a066}pre.code .c{color:var(--ink-2)}pre.code .n{color:var(--ok)}
-.copy{position:absolute;top:8px;right:8px;font:12px var(--mono);min-height:32px;padding:0 10px;border-radius:var(--r1);border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink-2);cursor:pointer}
-/* recherche */
-.scrim{background:color-mix(in srgb,#000 55%,transparent);padding:56px 16px;min-height:640px}
-.palette{max-width:640px;margin:0 auto;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r3);box-shadow:0 24px 60px -20px #000;overflow:hidden}
-.palette .q{display:flex;align-items:center;gap:12px;padding:0 16px;height:56px;border-bottom:1px solid var(--line)}
-.palette input{flex:1;background:none;border:0;color:var(--ink);font:17px var(--sans);outline:none;height:100%}
-.palette .grp{font:12px var(--mono);color:var(--ink-2);padding:14px 16px 6px}
-.palette .hit{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:10px 16px;min-height:44px;text-decoration:none}
-.palette .hit[aria-selected=true]{background:var(--surface-2);box-shadow:inset 2px 0 var(--accent)}
-.palette .hit span.t{font-weight:500}
-.palette .hit span.d{grid-column:1;font-size:14px;color:var(--ink-2)}
-mark{background:color-mix(in srgb,var(--accent) 28%,transparent);color:var(--ink);border-radius:3px;padding:0 2px}
-.palette footer{display:flex;gap:16px;padding:10px 16px;border-top:1px solid var(--line);font:12px var(--mono);color:var(--ink-2)}
-/* terminal */
-.term{max-width:860px;margin:40px auto;background:#0b0d11;border:1px solid var(--line-2);border-radius:var(--r3);overflow:hidden;font:14px/1.75 var(--mono)}
-.term .bar{display:flex;align-items:center;gap:12px;padding:0 14px;height:40px;background:var(--surface);border-bottom:1px solid var(--line)}
-.term .bar .t{flex:1;text-align:center;color:var(--ink-2);font-size:13px}
-.term .bar .st{display:flex;align-items:center;gap:6px;color:var(--ok);font-size:12px}
-.term .bar .st:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ok)}
-.term .body{padding:18px 20px;min-height:420px}
-.term .body p{margin:0}
-.term .out{color:var(--ink-2);margin:0 0 14px 0;white-space:pre-wrap}
-.term .out a{color:var(--sec)}
-.term .line{display:flex;gap:10px;flex-wrap:wrap}
-.term .ps b{color:var(--accent);font-weight:500}.term .ps i{color:var(--sec);font-style:normal}
-.stage.mobile .term{margin:0;border-radius:0;border:0}
-.alt{max-width:860px;margin:0 auto 48px;padding:0 24px;font-size:15px;color:var(--ink-2)}
-/* mobile nav */
-.sheet{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r3);padding:8px;max-width:390px;margin:24px auto}
-.sheet a{display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:0 14px;text-decoration:none;border-radius:var(--r2)}
-.sheet a[aria-current=page]{background:var(--surface-2);box-shadow:inset 2px 0 var(--sec)}
-footer.site{margin-top:80px;border-top:1px solid var(--line);padding:32px 0 40px;color:var(--ink-2);font-size:14px;display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between}
-.note{max-width:1120px;margin:12px auto;padding:0 24px;font:13px var(--mono);color:var(--ink-2)}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-</style>
-</head>
-<body>
-<div class="chrome" role="tablist" aria-label="Écrans de la maquette">
-  <button role="tab" aria-selected="true" data-tab="home">Accueil</button>
-  <button role="tab" aria-selected="false" data-tab="nav">Header et navigation</button>
-  <button role="tab" aria-selected="false" data-tab="search">Recherche</button>
-  <button role="tab" aria-selected="false" data-tab="term">/terminal</button>
-  <button role="tab" aria-selected="false" data-tab="projects">Projets</button>
-  <button role="tab" aria-selected="false" data-tab="blog">Blog</button>
-  <button role="tab" aria-selected="false" data-tab="post">Article</button>
-</div>
-
-<div class="frame-bar" role="group" aria-label="Largeur d'aperçu">
-  <button aria-pressed="true" data-w="desktop">Bureau 1280</button>
-  <button aria-pressed="false" data-w="mobile">Mobile 390</button>
-</div>
-<p class="note">Maquette statique. Les textes viennent de <span class="mono">profile.ts</span> et du blog ; les aperçus de projets et les catégories de projets sont des emplacements (données à fournir, voir PROGRESS.md).</p>
-
-<main style="padding:0 12px 60px">
-<div class="stage" id="stage">
-
-<!-- ================= ACCUEIL ================= -->
-<div class="panel" id="p-home">
-  <header class="top">
-    <a class="brand" href="#">guillaume<b>@</b>grichard</a>
-    <nav class="main" aria-label="Principale">
-      <a href="#" aria-current="page">Accueil</a><a href="#">À propos</a><a href="#">Projets</a><a href="#">Compétences</a><a href="#">Parcours</a><a href="#">Blog</a><a href="#" class="mono" aria-label="Terminal">&gt;_</a>
-    </nav>
-    <button class="btn icon-btn" aria-label="Rechercher (Ctrl K)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
-    <a class="btn primary" href="#">Contact</a>
-  </header>
-  <div class="wrap">
-    <div class="hero">
-      <div>
-        <h1>Technicien informatique et développeur.</h1>
-        <p class="lead">Réseaux, systèmes Windows et Microsoft 365, automatisation. Je dépanne, je migre, je documente, et j'écris les outils qui évitent de refaire les mêmes gestes.</p>
-        <div class="cta"><a class="btn primary" href="#">Voir les projets</a><a class="btn" href="#">Lire le blog</a><a class="btn" href="#">Me contacter</a></div>
-      </div>
-      <div class="prompt" aria-label="Aperçu : liste des projets en ligne de commande">
-        <div class="ps"><b>guillaume@grichard.eu</b>:~$ ls projets/</div>
-        <ul>
-          <li><a href="#"><span>homelab-proxmox/</span><span class="dim">réseau</span></a></li>
-          <li><a href="#"><span>deploiement-windows-server/</span><span class="dim">systèmes</span></a></li>
-          <li><a href="#"><span>migrations-messagerie/</span><span class="dim">microsoft 365</span></a></li>
-          <li><a href="#"><span>convertisseur-msg-eml/</span><span class="dim">c#</span></a></li>
-        </ul>
-        <div class="ps"><b>guillaume@grichard.eu</b>:~$ <span class="caret"></span></div>
-        <a class="open" href="#">Ouvrir le terminal complet, page /terminal</a>
-      </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Maquette grichard.eu — phase 2</title>
+    <style>
+      /* Tokens (THEME-MERGE-AUDIT §3). Polices de la maquette : pile système ; Geist + IBM Plex Mono à l'implémentation. */
+      :root {
+        --bg: #0f1115;
+        --surface: #151820;
+        --surface-2: #1b1f29;
+        --line: #262b36;
+        --line-2: #353b49;
+        --ink: #e8eaee;
+        --ink-2: #9aa1af;
+        --accent: #f08a3c;
+        --accent-ink: #17120c;
+        --sec: #7fa6d6;
+        --ok: #4cb782;
+        --warn: #e5b53d;
+        --err: #e5645f;
+        --sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+        --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+        --r1: 6px;
+        --r2: 10px;
+        --r3: 14px;
+        --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font: 16px/1.65 var(--sans);
+      }
+      a {
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid var(--sec);
+        outline-offset: 3px;
+        border-radius: var(--r1);
+      }
+      .mono {
+        font-family: var(--mono);
+      }
+      .dim {
+        color: var(--ink-2);
+      }
+      .acc {
+        color: var(--accent);
+      }
+      /* cadre de la maquette */
+      .chrome {
+        position: sticky;
+        top: 0;
+        z-index: 9;
+        background: #0a0c10;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        gap: 4px;
+        padding: 8px 12px;
+        overflow-x: auto;
+      }
+      .chrome button {
+        font: 13px var(--mono);
+        color: var(--ink-2);
+        background: none;
+        border: 1px solid transparent;
+        border-radius: var(--r1);
+        padding: 8px 12px;
+        cursor: pointer;
+        min-height: 44px;
+        white-space: nowrap;
+      }
+      .chrome button[aria-selected='true'] {
+        color: var(--ink);
+        border-color: var(--line-2);
+        background: var(--surface);
+      }
+      .frame-bar {
+        display: flex;
+        gap: 8px;
+        padding: 12px;
+        justify-content: center;
+      }
+      .frame-bar button {
+        font: 13px var(--mono);
+        color: var(--ink-2);
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r1);
+        padding: 8px 14px;
+        min-height: 44px;
+        cursor: pointer;
+      }
+      .frame-bar button[aria-pressed='true'] {
+        color: var(--accent-ink);
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+      .panel[hidden] {
+        display: none;
+      }
+      .stage {
+        margin: 0 auto;
+        border: 1px solid var(--line);
+        border-radius: var(--r3);
+        overflow: hidden;
+        background: var(--bg);
+        max-width: 1280px;
+      }
+      .stage.mobile {
+        max-width: 390px;
+      }
+      /* composants */
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .stage.mobile .wrap {
+        padding: 0 16px;
+      }
+      header.top {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        height: 60px;
+        border-bottom: 1px solid var(--line);
+        padding: 0 24px;
+        position: sticky;
+        top: 0;
+        background: color-mix(in srgb, var(--bg) 94%, transparent);
+        z-index: 5;
+      }
+      .brand {
+        font: 600 15px var(--mono);
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .brand b {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      nav.main {
+        display: flex;
+        gap: 2px;
+        flex: 1;
+      }
+      nav.main a {
+        font-size: 14px;
+        color: var(--ink-2);
+        text-decoration: none;
+        padding: 10px 12px;
+        border-radius: var(--r1);
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        transition:
+          color 0.2s var(--ease),
+          background 0.2s var(--ease);
+      }
+      nav.main a:hover {
+        color: var(--ink);
+        background: var(--surface);
+      }
+      nav.main a[aria-current='page'] {
+        color: var(--ink);
+        box-shadow: inset 0 -2px 0 var(--sec);
+      }
+      .btn {
+        font: 500 14px var(--sans);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 0 18px;
+        border-radius: var(--r2);
+        border: 1px solid var(--line-2);
+        background: transparent;
+        color: var(--ink);
+        text-decoration: none;
+        cursor: pointer;
+        transition:
+          border-color 0.2s var(--ease),
+          background 0.2s var(--ease);
+      }
+      .btn:hover {
+        border-color: var(--ink-2);
+        background: var(--surface);
+      }
+      .btn.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--accent-ink);
+        font-weight: 600;
+      }
+      .btn.primary:hover {
+        background: #f59a55;
+      }
+      .icon-btn {
+        width: 44px;
+        padding: 0;
+        justify-content: center;
+      }
+      kbd {
+        font: 12px var(--mono);
+        border: 1px solid var(--line-2);
+        border-bottom-width: 2px;
+        border-radius: var(--r1);
+        padding: 1px 6px;
+        color: var(--ink-2);
+      }
+      .badge {
+        font: 12px var(--mono);
+        border: 1px solid var(--line-2);
+        border-radius: 99px;
+        padding: 2px 10px;
+        color: var(--ink-2);
+        white-space: nowrap;
+      }
+      .badge.ok {
+        color: var(--ok);
+        border-color: color-mix(in srgb, var(--ok) 45%, var(--line));
+      }
+      .badge.sec {
+        color: var(--sec);
+        border-color: color-mix(in srgb, var(--sec) 40%, var(--line));
+      }
+      h1,
+      h2,
+      h3 {
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        font-weight: 600;
+      }
+      .sec-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        border-top: 1px solid var(--line);
+        padding-top: 20px;
+        margin-bottom: 28px;
+      }
+      .sec-head h2 {
+        font-size: 24px;
+      }
+      .sec-head a {
+        font: 13px var(--mono);
+        color: var(--ink-2);
+      }
+      section.block {
+        padding: 64px 0 0;
+      }
+      .stage.mobile section.block {
+        padding-top: 48px;
+      }
+      /* hero */
+      .hero {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 48px;
+        padding: 72px 0 8px;
+        align-items: center;
+      }
+      .stage.mobile .hero {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding-top: 40px;
+      }
+      .hero h1 {
+        font-size: clamp(44px, 6.4vw, 76px);
+        letter-spacing: -0.04em;
+        line-height: 1.02;
+      }
+      .stage.mobile .hero h1 {
+        font-size: 44px;
+      }
+      .hero p.lead {
+        font-size: 19px;
+        color: var(--ink-2);
+        max-width: 52ch;
+        margin: 20px 0 28px;
+      }
+      .cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .prompt {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r3);
+        padding: 20px;
+        font: 14px/1.9 var(--mono);
+      }
+      .prompt .ps {
+        color: var(--ink-2);
+      }
+      .prompt .ps b {
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .prompt ul {
+        list-style: none;
+        padding: 0;
+        margin: 4px 0 12px;
+      }
+      .prompt li a {
+        text-decoration: none;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 0 8px;
+        margin: 0 -8px;
+        border-radius: var(--r1);
+      }
+      .prompt li a:hover {
+        background: var(--surface-2);
+      }
+      .prompt .caret {
+        display: inline-block;
+        width: 8px;
+        height: 1.1em;
+        background: var(--accent);
+        vertical-align: -3px;
+        animation: blink 1.1s steps(1) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+      .prompt .open {
+        display: inline-block;
+        margin-top: 8px;
+        color: var(--ink-2);
+        font-size: 13px;
+      }
+      /* listes */
+      .rows {
+        border-top: 1px solid var(--line);
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 150px 1fr auto;
+        gap: 24px;
+        padding: 20px 0;
+        border-bottom: 1px solid var(--line);
+        align-items: baseline;
+      }
+      .stage.mobile .row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .row .when {
+        font: 13px var(--mono);
+        color: var(--ink-2);
+      }
+      .row h3 {
+        font-size: 18px;
+      }
+      .row p {
+        color: var(--ink-2);
+        font-size: 15px;
+        max-width: 62ch;
+      }
+      .skills {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+        border: 1px solid var(--line);
+        border-radius: var(--r3);
+        overflow: hidden;
+      }
+      .stage.mobile .skills {
+        grid-template-columns: 1fr;
+      }
+      .skills div {
+        padding: 22px;
+        border-right: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        margin: 0 -1px -1px 0;
+      }
+      .skills h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+      .skills ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .skills li {
+        font: 12.5px var(--mono);
+        color: var(--ink-2);
+        background: var(--surface);
+        border-radius: var(--r1);
+        padding: 3px 8px;
+      }
+      /* projets */
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+      .chip {
+        font: 13px var(--mono);
+        min-height: 44px;
+        padding: 0 14px;
+        border-radius: 99px;
+        border: 1px solid var(--line-2);
+        background: none;
+        color: var(--ink-2);
+        cursor: pointer;
+      }
+      .chip[aria-pressed='true'] {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .stage.mobile .grid {
+        grid-template-columns: 1fr;
+      }
+      .proj {
+        display: flex;
+        flex-direction: column;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r3);
+        overflow: hidden;
+        text-decoration: none;
+        transition:
+          border-color 0.2s var(--ease),
+          transform 0.2s var(--ease);
+      }
+      .proj:hover {
+        border-color: var(--line-2);
+        transform: translateY(-2px);
+      }
+      .proj .shot {
+        height: 132px;
+        border-bottom: 1px solid var(--line);
+        background: repeating-linear-gradient(
+          135deg,
+          var(--surface-2) 0 10px,
+          var(--surface) 10px 20px
+        );
+        display: grid;
+        place-items: center;
+        font: 12px var(--mono);
+        color: var(--ink-2);
+      }
+      .proj .body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+      }
+      .proj h3 {
+        font-size: 18px;
+      }
+      .proj p {
+        font-size: 15px;
+        color: var(--ink-2);
+      }
+      .proj .meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: auto;
+        padding-top: 6px;
+      }
+      .tech {
+        font: 12.5px var(--mono);
+        color: var(--ink-2);
+      }
+      /* blog */
+      .post-row {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 24px;
+        padding: 22px 0;
+        border-bottom: 1px solid var(--line);
+        text-decoration: none;
+      }
+      .stage.mobile .post-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .post-row time {
+        font: 13px var(--mono);
+        color: var(--ink-2);
+      }
+      .post-row h3 {
+        font-size: 19px;
+        margin-bottom: 6px;
+      }
+      .post-row:hover h3 {
+        text-decoration: underline;
+        text-decoration-color: var(--accent);
+        text-underline-offset: 4px;
+        text-decoration-thickness: 2px;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      /* article */
+      .progress {
+        height: 2px;
+        background: var(--line);
+        position: sticky;
+        top: 60px;
+        z-index: 4;
+      }
+      .progress i {
+        display: block;
+        height: 100%;
+        width: 38%;
+        background: var(--accent);
+      }
+      .article {
+        display: grid;
+        grid-template-columns: minmax(0, 680px) 220px;
+        gap: 64px;
+        justify-content: center;
+        padding: 56px 0;
+      }
+      .stage.mobile .article {
+        grid-template-columns: 1fr;
+        padding: 32px 0;
+      }
+      .article h1 {
+        font-size: clamp(32px, 4.6vw, 46px);
+        margin: 14px 0 18px;
+        letter-spacing: -0.03em;
+      }
+      .article h2 {
+        font-size: 24px;
+        margin: 40px 0 12px;
+      }
+      .article p {
+        margin: 0 0 18px;
+        font-size: 17.5px;
+        line-height: 1.75;
+      }
+      .toc {
+        position: sticky;
+        top: 96px;
+        align-self: start;
+        font-size: 14px;
+        border-left: 1px solid var(--line);
+        padding-left: 16px;
+      }
+      .stage.mobile .toc {
+        display: none;
+      }
+      .toc a {
+        display: block;
+        padding: 6px 0;
+        color: var(--ink-2);
+        text-decoration: none;
+      }
+      .toc a[aria-current] {
+        color: var(--ink);
+      }
+      pre.code {
+        position: relative;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r2);
+        padding: 16px 18px;
+        font: 14px/1.7 var(--mono);
+        overflow: auto;
+        margin: 0 0 22px;
+      }
+      pre.code .k {
+        color: var(--sec);
+      }
+      pre.code .s {
+        color: #d9a066;
+      }
+      pre.code .c {
+        color: var(--ink-2);
+      }
+      pre.code .n {
+        color: var(--ok);
+      }
+      .copy {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        font: 12px var(--mono);
+        min-height: 32px;
+        padding: 0 10px;
+        border-radius: var(--r1);
+        border: 1px solid var(--line-2);
+        background: var(--surface-2);
+        color: var(--ink-2);
+        cursor: pointer;
+      }
+      /* recherche */
+      .scrim {
+        background: color-mix(in srgb, #000 55%, transparent);
+        padding: 56px 16px;
+        min-height: 640px;
+      }
+      .palette {
+        max-width: 640px;
+        margin: 0 auto;
+        background: var(--surface);
+        border: 1px solid var(--line-2);
+        border-radius: var(--r3);
+        box-shadow: 0 24px 60px -20px #000;
+        overflow: hidden;
+      }
+      .palette .q {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 16px;
+        height: 56px;
+        border-bottom: 1px solid var(--line);
+      }
+      .palette input {
+        flex: 1;
+        background: none;
+        border: 0;
+        color: var(--ink);
+        font: 17px var(--sans);
+        outline: none;
+        height: 100%;
+      }
+      .palette .grp {
+        font: 12px var(--mono);
+        color: var(--ink-2);
+        padding: 14px 16px 6px;
+      }
+      .palette .hit {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 4px 12px;
+        padding: 10px 16px;
+        min-height: 44px;
+        text-decoration: none;
+      }
+      .palette .hit[aria-selected='true'] {
+        background: var(--surface-2);
+        box-shadow: inset 2px 0 var(--accent);
+      }
+      .palette .hit span.t {
+        font-weight: 500;
+      }
+      .palette .hit span.d {
+        grid-column: 1;
+        font-size: 14px;
+        color: var(--ink-2);
+      }
+      mark {
+        background: color-mix(in srgb, var(--accent) 28%, transparent);
+        color: var(--ink);
+        border-radius: 3px;
+        padding: 0 2px;
+      }
+      .palette footer {
+        display: flex;
+        gap: 16px;
+        padding: 10px 16px;
+        border-top: 1px solid var(--line);
+        font: 12px var(--mono);
+        color: var(--ink-2);
+      }
+      /* terminal */
+      .term {
+        max-width: 860px;
+        margin: 40px auto;
+        background: #0b0d11;
+        border: 1px solid var(--line-2);
+        border-radius: var(--r3);
+        overflow: hidden;
+        font: 14px/1.75 var(--mono);
+      }
+      .term .bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 14px;
+        height: 40px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--line);
+      }
+      .term .bar .t {
+        flex: 1;
+        text-align: center;
+        color: var(--ink-2);
+        font-size: 13px;
+      }
+      .term .bar .st {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--ok);
+        font-size: 12px;
+      }
+      .term .bar .st:before {
+        content: '';
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--ok);
+      }
+      .term .body {
+        padding: 18px 20px;
+        min-height: 420px;
+      }
+      .term .body p {
+        margin: 0;
+      }
+      .term .out {
+        color: var(--ink-2);
+        margin: 0 0 14px 0;
+        white-space: pre-wrap;
+      }
+      .term .out a {
+        color: var(--sec);
+      }
+      .term .line {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .term .ps b {
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .term .ps i {
+        color: var(--sec);
+        font-style: normal;
+      }
+      .stage.mobile .term {
+        margin: 0;
+        border-radius: 0;
+        border: 0;
+      }
+      .alt {
+        max-width: 860px;
+        margin: 0 auto 48px;
+        padding: 0 24px;
+        font-size: 15px;
+        color: var(--ink-2);
+      }
+      /* mobile nav */
+      .sheet {
+        background: var(--surface);
+        border: 1px solid var(--line-2);
+        border-radius: var(--r3);
+        padding: 8px;
+        max-width: 390px;
+        margin: 24px auto;
+      }
+      .sheet a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 48px;
+        padding: 0 14px;
+        text-decoration: none;
+        border-radius: var(--r2);
+      }
+      .sheet a[aria-current='page'] {
+        background: var(--surface-2);
+        box-shadow: inset 2px 0 var(--sec);
+      }
+      footer.site {
+        margin-top: 80px;
+        border-top: 1px solid var(--line);
+        padding: 32px 0 40px;
+        color: var(--ink-2);
+        font-size: 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 32px;
+        justify-content: space-between;
+      }
+      .note {
+        max-width: 1120px;
+        margin: 12px auto;
+        padding: 0 24px;
+        font: 13px var(--mono);
+        color: var(--ink-2);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chrome" role="tablist" aria-label="Écrans de la maquette">
+      <button role="tab" aria-selected="true" data-tab="home">Accueil</button>
+      <button role="tab" aria-selected="false" data-tab="nav">Header et navigation</button>
+      <button role="tab" aria-selected="false" data-tab="search">Recherche</button>
+      <button role="tab" aria-selected="false" data-tab="term">/terminal</button>
+      <button role="tab" aria-selected="false" data-tab="projects">Projets</button>
+      <button role="tab" aria-selected="false" data-tab="blog">Blog</button>
+      <button role="tab" aria-selected="false" data-tab="post">Article</button>
     </div>
 
-    <section class="block"><div class="sec-head"><h2>Compétences</h2><a href="#">toutes les compétences</a></div>
-      <div class="skills">
-        <div><h3>Réseau et systèmes</h3><ul><li>Proxmox</li><li>OPNsense</li><li>WireGuard</li><li>Windows Server</li></ul></div>
-        <div><h3>Messagerie et poste</h3><ul><li>Microsoft 365</li><li>Exchange</li><li>MDT</li><li>WDS</li></ul></div>
-        <div><h3>Développement</h3><ul><li>Python</li><li>C#</li><li>JavaScript</li><li>React</li></ul></div>
-      </div>
-    </section>
-
-    <section class="block"><div class="sec-head"><h2>Projets sélectionnés</h2><a href="#">tous les projets</a></div>
-      <div class="rows">
-        <a class="row" href="#" style="text-decoration:none"><span class="when">infrastructure</span><div><h3>Homelab Proxmox, OPNsense et WireGuard</h3><p>Laboratoire personnel : virtualisation, pare-feu et accès distant chiffré.</p></div><span class="badge ok">en ligne</span></a>
-        <a class="row" href="#" style="text-decoration:none"><span class="when">systèmes</span><div><h3>Déploiement Windows Server (MDT, WDS)</h3><p>Déploiement de postes par le réseau.</p></div><span class="badge">réalisation</span></a>
-        <a class="row" href="#" style="text-decoration:none"><span class="when">développement</span><div><h3>Outil de conversion e-mail (C#)</h3><p>Conversion de messages avec leurs pièces jointes.</p></div><span class="badge">réalisation</span></a>
-      </div>
-    </section>
-
-    <section class="block"><div class="sec-head"><h2>Expériences</h2><a href="#">parcours complet</a></div>
-      <div class="rows">
-        <div class="row"><span class="when">récent</span><div><h3>Technicien informatique et systèmes numériques</h3><p>TIXIA Services numériques</p></div></div>
-        <div class="row"><span class="when">avant</span><div><h3>Technicien de maintenance IT</h3><p>Tibco (groupe Lactalis)</p></div></div>
-      </div>
-    </section>
-
-    <section class="block"><div class="sec-head"><h2>Derniers articles</h2><a href="#">tout le blog</a></div>
-      <a class="post-row" href="#"><time>2026-10-28</time><div><h3>Calcul de masque et CIDR expliqués : /24, /27, sous-réseaux</h3><p class="dim">Notation CIDR, masque décimal, adresses utilisables, avec des calculs vérifiés.</p></div></a>
-    </section>
-
-    <section class="block"><div class="sec-head"><h2>Contact</h2></div>
-      <p class="dim" style="max-width:56ch;margin-bottom:20px">Une question, une mission, un dépannage : écrivez-moi par le formulaire.</p><a class="btn primary" href="#">Écrire un message</a>
-    </section>
-    <footer class="site"><span>© Guillaume Richard</span><span>Mentions légales · Confidentialité · Accessibilité</span><span class="mono">Thème : sombre · clair</span></footer>
-  </div>
-</div>
-
-<!-- ================= NAV ================= -->
-<div class="panel" id="p-nav" hidden>
-  <div class="note" style="padding-top:20px">Bureau : page courante soulignée en bleu acier, survol en surface. Bouton de recherche toujours visible.</div>
-  <header class="top" style="position:static">
-    <a class="brand" href="#">guillaume<b>@</b>grichard</a>
-    <nav class="main" aria-label="Principale (exemple)"><a href="#">Accueil</a><a href="#">À propos</a><a href="#" aria-current="page">Projets</a><a href="#">Compétences</a><a href="#">Parcours</a><a href="#">Blog</a><a href="#" class="mono">&gt;_</a></nav>
-    <button class="btn" aria-label="Rechercher"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><kbd>Ctrl K</kbd></button>
-    <a class="btn primary" href="#">Contact</a>
-  </header>
-  <div class="note" style="padding-top:28px">Mobile : barre réduite (nom, recherche, menu) puis feuille de navigation à cibles de 48 px.</div>
-  <header class="top" style="position:static;max-width:390px;margin:0 auto;border:1px solid var(--line);border-radius:var(--r3) var(--r3) 0 0">
-    <a class="brand" href="#" style="flex:1">guillaume<b>@</b>grichard</a>
-    <button class="btn icon-btn" aria-label="Rechercher"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
-    <button class="btn icon-btn" aria-label="Menu" aria-expanded="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-  </header>
-  <div class="sheet" style="margin-top:0;border-radius:0 0 var(--r3) var(--r3)">
-    <a href="#">Accueil</a><a href="#">À propos</a><a href="#" aria-current="page">Projets</a><a href="#">Compétences</a><a href="#">Parcours</a><a href="#">Blog</a><a href="#"><span>Terminal</span><span class="mono acc">&gt;_</span></a><a href="#">Contact</a>
-  </div>
-  <div style="height:32px"></div>
-</div>
-
-<!-- ================= RECHERCHE ================= -->
-<div class="panel" id="p-search" hidden>
-  <div class="scrim">
-    <div class="palette" role="dialog" aria-label="Recherche">
-      <div class="q"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-2)" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input value="proxmox" aria-label="Rechercher dans le site"><button class="btn icon-btn" aria-label="Fermer" style="min-height:36px;width:36px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-      <div class="grp">Projets</div>
-      <a class="hit" href="#" aria-selected="true"><span class="t">Homelab <mark>Proxmox</mark>, OPNsense et WireGuard</span><span class="badge">projet</span><span class="d">Laboratoire personnel : virtualisation, pare-feu et accès distant.</span></a>
-      <div class="grp">Compétences</div>
-      <a class="hit" href="#"><span class="t">Virtualisation (<mark>Proxmox</mark>)</span><span class="badge sec">compétence</span><span class="d">Réseau et systèmes</span></a>
-      <div class="grp">Pages</div>
-      <a class="hit" href="#"><span class="t">Compétences</span><span class="badge">page</span></a>
-      <footer><span><kbd>↑</kbd> <kbd>↓</kbd> naviguer</span><span><kbd>Entrée</kbd> ouvrir</span><span><kbd>Échap</kbd> fermer</span></footer>
+    <div class="frame-bar" role="group" aria-label="Largeur d'aperçu">
+      <button aria-pressed="true" data-w="desktop">Bureau 1280</button>
+      <button aria-pressed="false" data-w="mobile">Mobile 390</button>
     </div>
-    <p class="note" style="margin-top:20px;text-align:center">Champ vide : suggestions (pages, articles récents). Aucun résultat : « Rien pour “xyz”. Essayez un mot plus court ou parcourez les rubriques. »</p>
-  </div>
-</div>
+    <p class="note">
+      Maquette statique. Les textes viennent de <span class="mono">profile.ts</span> et du blog ;
+      les aperçus de projets et les catégories de projets sont des emplacements (données à fournir,
+      voir PROGRESS.md).
+    </p>
 
-<!-- ================= TERMINAL ================= -->
-<div class="panel" id="p-term" hidden>
-  <header class="top"><a class="brand" href="#">guillaume<b>@</b>grichard</a><nav class="main" aria-label="Principale"><a href="#">Accueil</a><a href="#">Projets</a><a href="#">Blog</a><a href="#" class="mono" aria-current="page">&gt;_</a></nav><a class="btn primary" href="#">Contact</a></header>
-  <div class="term">
-    <div class="bar"><span class="t">session : portfolio</span><span class="st">connecté</span></div>
-    <div class="body" role="log" aria-live="polite">
-      <p class="out">Bienvenue. Tapez <b class="acc">help</b> pour la liste des commandes, Tab pour compléter.</p>
-      <p class="line ps"><span><b>guillaume@grichard.eu</b>:<i>~</i> (main)$</span> <span>projects</span></p>
-      <p class="out">homelab-proxmox          Homelab Proxmox, OPNsense et WireGuard
-deploiement-windows-server  Déploiement Windows Server (MDT, WDS)
-migrations-messagerie       Migrations de comptes de messagerie
-convertisseur-msg-eml       Outil de conversion e-mail (C#)
-Détail : <a href="#">project homelab-proxmox</a></p>
-      <p class="line ps"><span><b>guillaume@grichard.eu</b>:<i>~</i> (main)$</span> <span>sudo rm -rf /</span></p>
-      <p class="out">guillaume n'est pas dans le fichier sudoers. Cet incident sera signalé (à personne).</p>
-      <p class="line ps"><span><b>guillaume@grichard.eu</b>:<i>~</i> (main)$</span> <span>skils</span></p>
-      <p class="out">skils : commande introuvable. Vouliez-vous dire <a href="#">skills</a> ?</p>
-      <p class="line ps"><span><b>guillaume@grichard.eu</b>:<i>~</i> (main)$</span> <span class="caret" style="display:inline-block;width:8px;height:1.1em;background:var(--accent);animation:blink 1.1s steps(1) infinite"></span></p>
-    </div>
-  </div>
-  <div class="alt"><strong style="color:var(--ink)">Sans terminal :</strong> le contenu essentiel est rendu en HTML. À propos, Compétences, Projets, Parcours, Blog et Contact restent accessibles dans le menu. Raccourcis actifs seulement dans le terminal : <kbd>Ctrl L</kbd> effacer, <kbd>Ctrl C</kbd> interrompre, <kbd>Ctrl K</kbd> rechercher.</div>
-</div>
+    <main style="padding: 0 12px 60px">
+      <div class="stage" id="stage">
+        <!-- ================= ACCUEIL ================= -->
+        <div class="panel" id="p-home">
+          <header class="top">
+            <a class="brand" href="#">guillaume<b>@</b>grichard</a>
+            <nav class="main" aria-label="Principale">
+              <a href="#" aria-current="page">Accueil</a><a href="#">À propos</a
+              ><a href="#">Projets</a><a href="#">Compétences</a><a href="#">Parcours</a
+              ><a href="#">Blog</a><a href="#" class="mono" aria-label="Terminal">&gt;_</a>
+            </nav>
+            <button class="btn icon-btn" aria-label="Rechercher (Ctrl K)">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" />
+              </svg>
+            </button>
+            <a class="btn primary" href="#">Contact</a>
+          </header>
+          <div class="wrap">
+            <div class="hero">
+              <div>
+                <h1>Technicien informatique et développeur.</h1>
+                <p class="lead">
+                  Réseaux, systèmes Windows et Microsoft 365, automatisation. Je dépanne, je migre,
+                  je documente, et j'écris les outils qui évitent de refaire les mêmes gestes.
+                </p>
+                <div class="cta">
+                  <a class="btn primary" href="#">Voir les projets</a
+                  ><a class="btn" href="#">Lire le blog</a><a class="btn" href="#">Me contacter</a>
+                </div>
+              </div>
+              <div class="prompt" aria-label="Aperçu : liste des projets en ligne de commande">
+                <div class="ps"><b>guillaume@grichard.eu</b>:~$ ls projets/</div>
+                <ul>
+                  <li>
+                    <a href="#"><span>homelab-proxmox/</span><span class="dim">réseau</span></a>
+                  </li>
+                  <li>
+                    <a href="#"
+                      ><span>deploiement-windows-server/</span><span class="dim">systèmes</span></a
+                    >
+                  </li>
+                  <li>
+                    <a href="#"
+                      ><span>migrations-messagerie/</span><span class="dim">microsoft 365</span></a
+                    >
+                  </li>
+                  <li>
+                    <a href="#"><span>convertisseur-msg-eml/</span><span class="dim">c#</span></a>
+                  </li>
+                </ul>
+                <div class="ps"><b>guillaume@grichard.eu</b>:~$ <span class="caret"></span></div>
+                <a class="open" href="#">Ouvrir le terminal complet, page /terminal</a>
+              </div>
+            </div>
 
-<!-- ================= PROJETS ================= -->
-<div class="panel" id="p-projects" hidden>
-  <header class="top"><a class="brand" href="#">guillaume<b>@</b>grichard</a><nav class="main" aria-label="Principale"><a href="#">Accueil</a><a href="#" aria-current="page">Projets</a><a href="#">Blog</a></nav><a class="btn primary" href="#">Contact</a></header>
-  <div class="wrap" style="padding-top:56px">
-    <h1 style="font-size:clamp(34px,5vw,52px);letter-spacing:-.035em;margin-bottom:12px">Projets</h1>
-    <p class="dim" style="max-width:56ch;margin-bottom:32px">Réalisations professionnelles et personnelles. Filtrez par catégorie ou par technologie.</p>
-    <div class="filters" role="group" aria-label="Catégories"><button class="chip" aria-pressed="true">Tous (4)</button><button class="chip" aria-pressed="false">Infrastructure</button><button class="chip" aria-pressed="false">Systèmes</button><button class="chip" aria-pressed="false">Développement</button></div>
-    <div class="grid">
-      <a class="proj" href="#"><div class="shot">aperçu à fournir</div><div class="body"><h3>Homelab Proxmox, OPNsense et WireGuard</h3><p>Laboratoire personnel : virtualisation, pare-feu et accès distant chiffré.</p><div class="meta"><span class="tech">Proxmox · OPNsense · WireGuard</span><span class="badge ok">en ligne</span></div></div></a>
-      <a class="proj" href="#"><div class="shot">aperçu à fournir</div><div class="body"><h3>Déploiement Windows Server (MDT, WDS)</h3><p>Déploiement de postes par le réseau.</p><div class="meta"><span class="tech">Windows Server · MDT · WDS</span><span class="badge">réalisation</span></div></div></a>
-      <a class="proj" href="#"><div class="shot">aperçu à fournir</div><div class="body"><h3>Migrations de comptes de messagerie</h3><p>Reprise de boîtes d'un système vers un autre.</p><div class="meta"><span class="tech">Microsoft 365</span><span class="badge">réalisation</span></div></div></a>
-      <a class="proj" href="#"><div class="shot">aperçu à fournir</div><div class="body"><h3>Outil de conversion e-mail (C#)</h3><p>Conversion de messages avec leurs pièces jointes. Dépôt privé : pas de lien GitHub.</p><div class="meta"><span class="tech">C#</span><span class="badge">privé</span></div></div></a>
-    </div>
-  </div>
-</div>
+            <section class="block">
+              <div class="sec-head">
+                <h2>Compétences</h2>
+                <a href="#">toutes les compétences</a>
+              </div>
+              <div class="skills">
+                <div>
+                  <h3>Réseau et systèmes</h3>
+                  <ul>
+                    <li>Proxmox</li>
+                    <li>OPNsense</li>
+                    <li>WireGuard</li>
+                    <li>Windows Server</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3>Messagerie et poste</h3>
+                  <ul>
+                    <li>Microsoft 365</li>
+                    <li>Exchange</li>
+                    <li>MDT</li>
+                    <li>WDS</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3>Développement</h3>
+                  <ul>
+                    <li>Python</li>
+                    <li>C#</li>
+                    <li>JavaScript</li>
+                    <li>React</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
 
-<!-- ================= BLOG ================= -->
-<div class="panel" id="p-blog" hidden>
-  <header class="top"><a class="brand" href="#">guillaume<b>@</b>grichard</a><nav class="main" aria-label="Principale"><a href="#">Accueil</a><a href="#">Projets</a><a href="#" aria-current="page">Blog</a></nav><a class="btn primary" href="#">Contact</a></header>
-  <div class="wrap" style="padding-top:56px">
-    <h1 style="font-size:clamp(34px,5vw,52px);letter-spacing:-.035em;margin-bottom:12px">Blog</h1>
-    <p class="dim" style="max-width:56ch;margin-bottom:28px">Réseau, sécurité, outils et actualité IT.</p>
-    <div class="filters" role="group" aria-label="Catégories"><button class="chip" aria-pressed="true">Toutes</button><button class="chip" aria-pressed="false">dns</button><button class="chip" aria-pressed="false">sécurité</button></div>
-    <div class="rows" style="border-top:1px solid var(--line)">
-      <a class="post-row" href="#"><time>2026-10-28</time><div><h3>Calcul de masque et CIDR expliqués : /24, /27, sous-réseaux</h3><p class="dim">Notation CIDR, masque décimal, adresses utilisables et découpage en sous-réseaux.</p><div class="tags"><span class="badge">Réseau</span><span class="badge">CIDR</span><span class="badge">IPv4</span><span class="badge mono">9 min</span></div></div></a>
-      <a class="post-row" href="#"><time>2026-10</time><div><h3>Découper un fichier ICS trop gros pour Google Agenda</h3><p class="dim">Importer un calendrier volumineux sans le perdre.</p><div class="tags"><span class="badge">Agenda</span><span class="badge">ICS</span></div></div></a>
-    </div>
-    <p class="mono dim" style="margin-top:28px;font-size:13px">Page 1 sur 4 · précédent · suivant</p>
-  </div>
-</div>
+            <section class="block">
+              <div class="sec-head">
+                <h2>Projets sélectionnés</h2>
+                <a href="#">tous les projets</a>
+              </div>
+              <div class="rows">
+                <a class="row" href="#" style="text-decoration: none"
+                  ><span class="when">infrastructure</span>
+                  <div>
+                    <h3>Homelab Proxmox, OPNsense et WireGuard</h3>
+                    <p>
+                      Laboratoire personnel : virtualisation, pare-feu et accès distant chiffré.
+                    </p>
+                  </div>
+                  <span class="badge ok">en ligne</span></a
+                >
+                <a class="row" href="#" style="text-decoration: none"
+                  ><span class="when">systèmes</span>
+                  <div>
+                    <h3>Déploiement Windows Server (MDT, WDS)</h3>
+                    <p>Déploiement de postes par le réseau.</p>
+                  </div>
+                  <span class="badge">réalisation</span></a
+                >
+                <a class="row" href="#" style="text-decoration: none"
+                  ><span class="when">développement</span>
+                  <div>
+                    <h3>Outil de conversion e-mail (C#)</h3>
+                    <p>Conversion de messages avec leurs pièces jointes.</p>
+                  </div>
+                  <span class="badge">réalisation</span></a
+                >
+              </div>
+            </section>
 
-<!-- ================= ARTICLE ================= -->
-<div class="panel" id="p-post" hidden>
-  <header class="top"><a class="brand" href="#">guillaume<b>@</b>grichard</a><nav class="main" aria-label="Principale"><a href="#">Accueil</a><a href="#">Projets</a><a href="#" aria-current="page">Blog</a></nav><a class="btn primary" href="#">Contact</a></header>
-  <div class="progress" role="progressbar" aria-label="Progression de lecture" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100"><i></i></div>
-  <div class="wrap">
-    <div class="article">
-      <article>
-        <nav class="mono dim" style="font-size:13px" aria-label="Fil d'Ariane">Accueil / Blog / dns</nav>
-        <h1>Calcul de masque et CIDR expliqués : /24, /27, sous-réseaux</h1>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:32px"><time class="mono dim" style="font-size:13px">28 octobre 2026</time><span class="badge">9 min de lecture</span><span class="badge">Réseau</span><span class="badge">CIDR</span></div>
-        <p>« Mets le serveur en 192.168.1.130/27 » : tant qu'on ne sait pas lire ce <code class="mono">/27</code>, difficile de savoir quelles machines se parlent directement.</p>
-        <h2 id="m">Lire un masque</h2>
-        <p>Le nombre après la barre oblique est le nombre de bits réservés au réseau.</p>
-        <pre class="code"><button class="copy" aria-label="Copier le code">Copier</button><span class="c"># /27 = 27 bits réseau, 5 bits machine</span>
+            <section class="block">
+              <div class="sec-head">
+                <h2>Expériences</h2>
+                <a href="#">parcours complet</a>
+              </div>
+              <div class="rows">
+                <div class="row">
+                  <span class="when">récent</span>
+                  <div>
+                    <h3>Technicien informatique et systèmes numériques</h3>
+                    <p>TIXIA Services numériques</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <span class="when">avant</span>
+                  <div>
+                    <h3>Technicien de maintenance IT</h3>
+                    <p>Tibco (groupe Lactalis)</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="block">
+              <div class="sec-head">
+                <h2>Derniers articles</h2>
+                <a href="#">tout le blog</a>
+              </div>
+              <a class="post-row" href="#"
+                ><time>2026-10-28</time>
+                <div>
+                  <h3>Calcul de masque et CIDR expliqués : /24, /27, sous-réseaux</h3>
+                  <p class="dim">
+                    Notation CIDR, masque décimal, adresses utilisables, avec des calculs vérifiés.
+                  </p>
+                </div></a
+              >
+            </section>
+
+            <section class="block">
+              <div class="sec-head"><h2>Contact</h2></div>
+              <p class="dim" style="max-width: 56ch; margin-bottom: 20px">
+                Une question, une mission, un dépannage : écrivez-moi par le formulaire.
+              </p>
+              <a class="btn primary" href="#">Écrire un message</a>
+            </section>
+            <footer class="site">
+              <span>© Guillaume Richard</span
+              ><span>Mentions légales · Confidentialité · Accessibilité</span
+              ><span class="mono">Thème : sombre · clair</span>
+            </footer>
+          </div>
+        </div>
+
+        <!-- ================= NAV ================= -->
+        <div class="panel" id="p-nav" hidden>
+          <div class="note" style="padding-top: 20px">
+            Bureau : page courante soulignée en bleu acier, survol en surface. Bouton de recherche
+            toujours visible.
+          </div>
+          <header class="top" style="position: static">
+            <a class="brand" href="#">guillaume<b>@</b>grichard</a>
+            <nav class="main" aria-label="Principale (exemple)">
+              <a href="#">Accueil</a><a href="#">À propos</a
+              ><a href="#" aria-current="page">Projets</a><a href="#">Compétences</a
+              ><a href="#">Parcours</a><a href="#">Blog</a><a href="#" class="mono">&gt;_</a>
+            </nav>
+            <button class="btn" aria-label="Rechercher">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" /></svg
+              ><kbd>Ctrl K</kbd>
+            </button>
+            <a class="btn primary" href="#">Contact</a>
+          </header>
+          <div class="note" style="padding-top: 28px">
+            Mobile : barre réduite (nom, recherche, menu) puis feuille de navigation à cibles de 48
+            px.
+          </div>
+          <header
+            class="top"
+            style="
+              position: static;
+              max-width: 390px;
+              margin: 0 auto;
+              border: 1px solid var(--line);
+              border-radius: var(--r3) var(--r3) 0 0;
+            "
+          >
+            <a class="brand" href="#" style="flex: 1">guillaume<b>@</b>grichard</a>
+            <button class="btn icon-btn" aria-label="Rechercher">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" />
+              </svg>
+            </button>
+            <button class="btn icon-btn" aria-label="Menu" aria-expanded="true">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M4 7h16M4 12h16M4 17h16" />
+              </svg>
+            </button>
+          </header>
+          <div class="sheet" style="margin-top: 0; border-radius: 0 0 var(--r3) var(--r3)">
+            <a href="#">Accueil</a><a href="#">À propos</a
+            ><a href="#" aria-current="page">Projets</a><a href="#">Compétences</a
+            ><a href="#">Parcours</a><a href="#">Blog</a
+            ><a href="#"><span>Terminal</span><span class="mono acc">&gt;_</span></a
+            ><a href="#">Contact</a>
+          </div>
+          <div style="height: 32px"></div>
+        </div>
+
+        <!-- ================= RECHERCHE ================= -->
+        <div class="panel" id="p-search" hidden>
+          <div class="scrim">
+            <div class="palette" role="dialog" aria-label="Recherche">
+              <div class="q">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--ink-2)"
+                  stroke-width="2"
+                >
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-3.5-3.5" /></svg
+                ><input value="proxmox" aria-label="Rechercher dans le site" /><button
+                  class="btn icon-btn"
+                  aria-label="Fermer"
+                  style="min-height: 36px; width: 36px"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M6 6l12 12M18 6 6 18" />
+                  </svg>
+                </button>
+              </div>
+              <div class="grp">Projets</div>
+              <a class="hit" href="#" aria-selected="true"
+                ><span class="t">Homelab <mark>Proxmox</mark>, OPNsense et WireGuard</span
+                ><span class="badge">projet</span
+                ><span class="d"
+                  >Laboratoire personnel : virtualisation, pare-feu et accès distant.</span
+                ></a
+              >
+              <div class="grp">Compétences</div>
+              <a class="hit" href="#"
+                ><span class="t">Virtualisation (<mark>Proxmox</mark>)</span
+                ><span class="badge sec">compétence</span
+                ><span class="d">Réseau et systèmes</span></a
+              >
+              <div class="grp">Pages</div>
+              <a class="hit" href="#"
+                ><span class="t">Compétences</span><span class="badge">page</span></a
+              >
+              <footer>
+                <span><kbd>↑</kbd> <kbd>↓</kbd> naviguer</span><span><kbd>Entrée</kbd> ouvrir</span
+                ><span><kbd>Échap</kbd> fermer</span>
+              </footer>
+            </div>
+            <p class="note" style="margin-top: 20px; text-align: center">
+              Champ vide : suggestions (pages, articles récents). Aucun résultat : « Rien pour
+              “xyz”. Essayez un mot plus court ou parcourez les rubriques. »
+            </p>
+          </div>
+        </div>
+
+        <!-- ================= TERMINAL ================= -->
+        <div class="panel" id="p-term" hidden>
+          <header class="top">
+            <a class="brand" href="#">guillaume<b>@</b>grichard</a>
+            <nav class="main" aria-label="Principale">
+              <a href="#">Accueil</a><a href="#">Projets</a><a href="#">Blog</a
+              ><a href="#" class="mono" aria-current="page">&gt;_</a>
+            </nav>
+            <a class="btn primary" href="#">Contact</a>
+          </header>
+          <div class="term">
+            <div class="bar">
+              <span class="t">session : portfolio</span><span class="st">connecté</span>
+            </div>
+            <div class="body" role="log" aria-live="polite">
+              <p class="out">
+                Bienvenue. Tapez <b class="acc">help</b> pour la liste des commandes, Tab pour
+                compléter.
+              </p>
+              <p class="line ps">
+                <span><b>guillaume@grichard.eu</b>:<i>~</i> (main)$</span> <span>projects</span>
+              </p>
+              <p class="out">
+                homelab-proxmox Homelab Proxmox, OPNsense et WireGuard deploiement-windows-server
+                Déploiement Windows Server (MDT, WDS) migrations-messagerie Migrations de comptes de
+                messagerie convertisseur-msg-eml Outil de conversion e-mail (C#) Détail :
+                <a href="#">project homelab-proxmox</a>
+              </p>
+              <p class="line ps">
+                <span><b>guillaume@grichard.eu</b>:<i>~</i> (main)$</span>
+                <span>sudo rm -rf /</span>
+              </p>
+              <p class="out">
+                guillaume n'est pas dans le fichier sudoers. Cet incident sera signalé (à personne).
+              </p>
+              <p class="line ps">
+                <span><b>guillaume@grichard.eu</b>:<i>~</i> (main)$</span> <span>skils</span>
+              </p>
+              <p class="out">
+                skils : commande introuvable. Vouliez-vous dire <a href="#">skills</a> ?
+              </p>
+              <p class="line ps">
+                <span><b>guillaume@grichard.eu</b>:<i>~</i> (main)$</span>
+                <span
+                  class="caret"
+                  style="
+                    display: inline-block;
+                    width: 8px;
+                    height: 1.1em;
+                    background: var(--accent);
+                    animation: blink 1.1s steps(1) infinite;
+                  "
+                ></span>
+              </p>
+            </div>
+          </div>
+          <div class="alt">
+            <strong style="color: var(--ink)">Sans terminal :</strong> le contenu essentiel est
+            rendu en HTML. À propos, Compétences, Projets, Parcours, Blog et Contact restent
+            accessibles dans le menu. Raccourcis actifs seulement dans le terminal :
+            <kbd>Ctrl L</kbd> effacer, <kbd>Ctrl C</kbd> interrompre, <kbd>Ctrl K</kbd> rechercher.
+          </div>
+        </div>
+
+        <!-- ================= PROJETS ================= -->
+        <div class="panel" id="p-projects" hidden>
+          <header class="top">
+            <a class="brand" href="#">guillaume<b>@</b>grichard</a>
+            <nav class="main" aria-label="Principale">
+              <a href="#">Accueil</a><a href="#" aria-current="page">Projets</a><a href="#">Blog</a>
+            </nav>
+            <a class="btn primary" href="#">Contact</a>
+          </header>
+          <div class="wrap" style="padding-top: 56px">
+            <h1
+              style="
+                font-size: clamp(34px, 5vw, 52px);
+                letter-spacing: -0.035em;
+                margin-bottom: 12px;
+              "
+            >
+              Projets
+            </h1>
+            <p class="dim" style="max-width: 56ch; margin-bottom: 32px">
+              Réalisations professionnelles et personnelles. Filtrez par catégorie ou par
+              technologie.
+            </p>
+            <div class="filters" role="group" aria-label="Catégories">
+              <button class="chip" aria-pressed="true">Tous (4)</button
+              ><button class="chip" aria-pressed="false">Infrastructure</button
+              ><button class="chip" aria-pressed="false">Systèmes</button
+              ><button class="chip" aria-pressed="false">Développement</button>
+            </div>
+            <div class="grid">
+              <a class="proj" href="#"
+                ><div class="shot">aperçu à fournir</div>
+                <div class="body">
+                  <h3>Homelab Proxmox, OPNsense et WireGuard</h3>
+                  <p>Laboratoire personnel : virtualisation, pare-feu et accès distant chiffré.</p>
+                  <div class="meta">
+                    <span class="tech">Proxmox · OPNsense · WireGuard</span
+                    ><span class="badge ok">en ligne</span>
+                  </div>
+                </div></a
+              >
+              <a class="proj" href="#"
+                ><div class="shot">aperçu à fournir</div>
+                <div class="body">
+                  <h3>Déploiement Windows Server (MDT, WDS)</h3>
+                  <p>Déploiement de postes par le réseau.</p>
+                  <div class="meta">
+                    <span class="tech">Windows Server · MDT · WDS</span
+                    ><span class="badge">réalisation</span>
+                  </div>
+                </div></a
+              >
+              <a class="proj" href="#"
+                ><div class="shot">aperçu à fournir</div>
+                <div class="body">
+                  <h3>Migrations de comptes de messagerie</h3>
+                  <p>Reprise de boîtes d'un système vers un autre.</p>
+                  <div class="meta">
+                    <span class="tech">Microsoft 365</span><span class="badge">réalisation</span>
+                  </div>
+                </div></a
+              >
+              <a class="proj" href="#"
+                ><div class="shot">aperçu à fournir</div>
+                <div class="body">
+                  <h3>Outil de conversion e-mail (C#)</h3>
+                  <p>
+                    Conversion de messages avec leurs pièces jointes. Dépôt privé : pas de lien
+                    GitHub.
+                  </p>
+                  <div class="meta">
+                    <span class="tech">C#</span><span class="badge">privé</span>
+                  </div>
+                </div></a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= BLOG ================= -->
+        <div class="panel" id="p-blog" hidden>
+          <header class="top">
+            <a class="brand" href="#">guillaume<b>@</b>grichard</a>
+            <nav class="main" aria-label="Principale">
+              <a href="#">Accueil</a><a href="#">Projets</a><a href="#" aria-current="page">Blog</a>
+            </nav>
+            <a class="btn primary" href="#">Contact</a>
+          </header>
+          <div class="wrap" style="padding-top: 56px">
+            <h1
+              style="
+                font-size: clamp(34px, 5vw, 52px);
+                letter-spacing: -0.035em;
+                margin-bottom: 12px;
+              "
+            >
+              Blog
+            </h1>
+            <p class="dim" style="max-width: 56ch; margin-bottom: 28px">
+              Réseau, sécurité, outils et actualité IT.
+            </p>
+            <div class="filters" role="group" aria-label="Catégories">
+              <button class="chip" aria-pressed="true">Toutes</button
+              ><button class="chip" aria-pressed="false">dns</button
+              ><button class="chip" aria-pressed="false">sécurité</button>
+            </div>
+            <div class="rows" style="border-top: 1px solid var(--line)">
+              <a class="post-row" href="#"
+                ><time>2026-10-28</time>
+                <div>
+                  <h3>Calcul de masque et CIDR expliqués : /24, /27, sous-réseaux</h3>
+                  <p class="dim">
+                    Notation CIDR, masque décimal, adresses utilisables et découpage en
+                    sous-réseaux.
+                  </p>
+                  <div class="tags">
+                    <span class="badge">Réseau</span><span class="badge">CIDR</span
+                    ><span class="badge">IPv4</span><span class="badge mono">9 min</span>
+                  </div>
+                </div></a
+              >
+              <a class="post-row" href="#"
+                ><time>2026-10</time>
+                <div>
+                  <h3>Découper un fichier ICS trop gros pour Google Agenda</h3>
+                  <p class="dim">Importer un calendrier volumineux sans le perdre.</p>
+                  <div class="tags">
+                    <span class="badge">Agenda</span><span class="badge">ICS</span>
+                  </div>
+                </div></a
+              >
+            </div>
+            <p class="mono dim" style="margin-top: 28px; font-size: 13px">
+              Page 1 sur 4 · précédent · suivant
+            </p>
+          </div>
+        </div>
+
+        <!-- ================= ARTICLE ================= -->
+        <div class="panel" id="p-post" hidden>
+          <header class="top">
+            <a class="brand" href="#">guillaume<b>@</b>grichard</a>
+            <nav class="main" aria-label="Principale">
+              <a href="#">Accueil</a><a href="#">Projets</a><a href="#" aria-current="page">Blog</a>
+            </nav>
+            <a class="btn primary" href="#">Contact</a>
+          </header>
+          <div
+            class="progress"
+            role="progressbar"
+            aria-label="Progression de lecture"
+            aria-valuenow="38"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            <i></i>
+          </div>
+          <div class="wrap">
+            <div class="article">
+              <article>
+                <nav class="mono dim" style="font-size: 13px" aria-label="Fil d'Ariane">
+                  Accueil / Blog / dns
+                </nav>
+                <h1>Calcul de masque et CIDR expliqués : /24, /27, sous-réseaux</h1>
+                <div
+                  style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                    align-items: center;
+                    margin-bottom: 32px;
+                  "
+                >
+                  <time class="mono dim" style="font-size: 13px">28 octobre 2026</time
+                  ><span class="badge">9 min de lecture</span><span class="badge">Réseau</span
+                  ><span class="badge">CIDR</span>
+                </div>
+                <p>
+                  « Mets le serveur en 192.168.1.130/27 » : tant qu'on ne sait pas lire ce
+                  <code class="mono">/27</code>, difficile de savoir quelles machines se parlent
+                  directement.
+                </p>
+                <h2 id="m">Lire un masque</h2>
+                <p>Le nombre après la barre oblique est le nombre de bits réservés au réseau.</p>
+                <pre
+                  class="code"
+                ><button class="copy" aria-label="Copier le code">Copier</button><span class="c"># /27 = 27 bits réseau, 5 bits machine</span>
 <span class="k">masque</span>   = <span class="n">255.255.255.224</span>
 <span class="k">hôtes</span>    = 2<sup>5</sup> - 2 = <span class="n">30</span></pre>
-        <div style="display:flex;gap:10px;margin:32px 0;flex-wrap:wrap"><button class="btn">Copier le lien</button><a class="btn" href="#">Partager</a></div>
-        <div class="sec-head" style="margin-top:48px"><h2 style="font-size:20px;margin:0">Articles liés</h2></div>
-        <a class="post-row" href="#" style="grid-template-columns:1fr"><div><h3 style="font-size:17px">Découper un fichier ICS trop gros</h3></div></a>
-      </article>
-      <aside class="toc" aria-label="Sommaire"><div class="mono dim" style="font-size:12px;margin-bottom:8px">Dans cet article</div><a href="#m" aria-current="true">Lire un masque</a><a href="#">Hôtes utilisables</a><a href="#">Cas /31 et /32</a></aside>
-    </div>
-  </div>
-</div>
+                <div style="display: flex; gap: 10px; margin: 32px 0; flex-wrap: wrap">
+                  <button class="btn">Copier le lien</button><a class="btn" href="#">Partager</a>
+                </div>
+                <div class="sec-head" style="margin-top: 48px">
+                  <h2 style="font-size: 20px; margin: 0">Articles liés</h2>
+                </div>
+                <a class="post-row" href="#" style="grid-template-columns: 1fr"
+                  ><div><h3 style="font-size: 17px">Découper un fichier ICS trop gros</h3></div></a
+                >
+              </article>
+              <aside class="toc" aria-label="Sommaire">
+                <div class="mono dim" style="font-size: 12px; margin-bottom: 8px">
+                  Dans cet article
+                </div>
+                <a href="#m" aria-current="true">Lire un masque</a><a href="#">Hôtes utilisables</a
+                ><a href="#">Cas /31 et /32</a>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /stage -->
+    </main>
 
-</div><!-- /stage -->
-</main>
-
-<script>
-// Onglets et largeur d'aperçu uniquement.
-const tabs=[...document.querySelectorAll('[data-tab]')],stage=document.getElementById('stage');
-tabs.forEach(b=>b.addEventListener('click',()=>{
-  tabs.forEach(t=>t.setAttribute('aria-selected',String(t===b)));
-  document.querySelectorAll('.panel').forEach(p=>p.hidden=p.id!=='p-'+b.dataset.tab);
-}));
-document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
-  stage.classList.toggle('mobile',b.dataset.w==='mobile');
-}));
-document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
-  const g=c.parentElement;g.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',String(x===c)));
-}));
-</script>
-</body>
+    <script>
+      // Onglets et largeur d'aperçu uniquement.
+      const tabs = [...document.querySelectorAll('[data-tab]')],
+        stage = document.getElementById('stage');
+      tabs.forEach((b) =>
+        b.addEventListener('click', () => {
+          tabs.forEach((t) => t.setAttribute('aria-selected', String(t === b)));
+          document
+            .querySelectorAll('.panel')
+            .forEach((p) => (p.hidden = p.id !== 'p-' + b.dataset.tab));
+        }),
+      );
+      document.querySelectorAll('[data-w]').forEach((b) =>
+        b.addEventListener('click', () => {
+          document
+            .querySelectorAll('[data-w]')
+            .forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          stage.classList.toggle('mobile', b.dataset.w === 'mobile');
+        }),
+      );
+      document.querySelectorAll('.chip').forEach((c) =>
+        c.addEventListener('click', () => {
+          const g = c.parentElement;
+          g.querySelectorAll('.chip').forEach((x) =>
+            x.setAttribute('aria-pressed', String(x === c)),
+          );
+        }),
+      );
+    </script>
+  </body>
 </html>

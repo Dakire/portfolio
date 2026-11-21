@@ -169,7 +169,7 @@
 }
 .post-head {
   padding-block: var(--space-4) var(--space-6);
-  border-bottom: 4px double var(--ink);
+  border-bottom: 1px solid var(--line);
 }
 .post-head h1 {
   max-width: 20ch;
@@ -521,7 +521,7 @@
   align-items: start;
   margin-block: var(--space-7);
   padding-block: var(--space-6);
-  border-top: 4px double var(--ink);
+  border-top: 1px solid var(--line);
 }
 .author-avatar {
   width: 5rem;

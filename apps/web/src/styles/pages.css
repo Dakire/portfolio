@@ -119,7 +119,7 @@
 }
 .about-id-title {
   padding-top: var(--space-3);
-  border-top: 4px double var(--ink);
+  border-top: 1px solid var(--line);
   font-size: var(--text-xl);
 }
 .about-facts,

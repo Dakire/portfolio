@@ -4,7 +4,7 @@
 
 - Phase 1 (audit) : **faite** → `THEME-MERGE-AUDIT.md`.
 - Phase 2 (maquette) : **faite**, `mockups/index.html`, en attente de validation.
-- Phase 3 : lots 1 et 2 faits ; lots 3-10 à faire.
+- Phase 3 : lots 1 à 3 faits ; lots 4-10 à faire.
 - Phase 4 : à faire.
 
 ## Décisions
@@ -34,3 +34,11 @@
 - En-tête : filet fin, nav à fond de survol et page courante soulignée en bleu acier (plus de masque SVG au stylo), boutons à coins doux, bouton primaire en accent ambre, intitulé « technicien informatique » (plus « carnet d'interventions »). Pied de page : filets fins. Menu mobile et sous-menu Outils restylés. Vérifié en 1440 et 375 px (captures), e2e 277 verts, vitest 1739 verts.
 - Lien `>_` vers `/terminal/` volontairement absent : la page n'existe qu'au lot 6 (fonctionnalité inachevée = masquée).
 - Reste carnet : accueil (« Fiche d'identification », « carnet »), `.rubric` à double filet, `GR-Rxx`, `cursor.css` → lots 3 à 10.
+
+## Lot 3 (accueil) : fait, non poussé
+
+- Accent changé à la demande de Guillaume : **violet** (`#a78bfa` sombre, `#6d3fd6` clair), curseur compris ; ni orange ni vert. ADR 0016, CLAUDE.md, AGENTS.md à jour.
+- Accueil refait selon 60 % (base sombre, filets fins, grille de compétences, cartes de projets) / 25 % (sections Astrofy : présentation, compétences, technologies, projets, frise d'expériences, derniers articles) / 15 % (aperçu `ls competences/` en mono dans le hero, curseur clignotant, section terminal).
+- Provisoire : le terminal interactif reste sur l'accueil (ancre `#terminal`) jusqu'au lot 6 ; le prompt du hero y renvoie, puis renverra vers `/terminal/`.
+- Rubriques : double filet remplacé par un filet fin (accueil, blog, pages, outils). Références `GR-Rxx` retirées de l'accueil.
+- Reste carnet : `cursor.css` à garder (violet) ou retirer, `lib/ticket.ts`, réglage « carnet » du pied de page, OG cards.
