@@ -186,9 +186,16 @@ test('sans JavaScript, le contenu reste lisible', async ({ browser }) => {
   await context.close();
 });
 
-test('aucun défilement horizontal de 320 à 1440 px', async ({ page }) => {
-  for (const path of ['/', '/cheatsheets/bios-uefi/', '/blog/spf-dkim-dmarc-expliques/']) {
-    for (const width of [320, 768, 1440]) {
+test('aucun défilement horizontal de 320 à 1920 px', async ({ page }) => {
+  for (const path of [
+    '/',
+    '/cheatsheets/bios-uefi/',
+    '/blog/spf-dkim-dmarc-expliques/',
+    '/terminal/',
+    '/projets/',
+    '/search/',
+  ]) {
+    for (const width of [320, 390, 768, 1280, 1920]) {
       await page.setViewportSize({ width, height: 900 });
       await page.goto(path);
       const overflow = await page.evaluate(

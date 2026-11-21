@@ -85,31 +85,22 @@ const html = ({ title, kicker, lang }, fonts) => `<!doctype html>
   @font-face { font-family: 'Text'; font-weight: 200 800; font-style: italic; src: url(${fonts.textItalic}) format('woff2-variations'); }
   @font-face { font-family: 'Mono'; font-weight: 500; src: url(${fonts.mono}) format('woff2'); }
   * { box-sizing: border-box; margin: 0; }
-  /* Papier du thème clair de packages/ui/src/tokens.css (ADR 0014) : feuille, double filet de marge, encre, tampon rouge */
-  body { width: ${SIZE.width}px; height: ${SIZE.height}px; overflow: hidden; background: #e2d9c4; position: relative;
-    font-family: 'Text', Georgia, serif; color: #1d1a14; }
-  .sheet { position: absolute; inset: 36px 60px; background: #f4efe3; box-shadow: 0 2px 4px #28200a40, 0 24px 48px -20px #28200a66; }
-  .m1, .m2 { position: absolute; top: 0; bottom: 0; width: 2px; background: #c4523d; }
-  .m1 { left: 120px; } .m2 { left: 130px; }
-  .hole { position: absolute; left: 40px; width: 30px; height: 30px; border-radius: 50%; background: #e2d9c4; box-shadow: inset 0 0 0 1px #cfc5ad; }
-  .frame { position: absolute; top: 0; bottom: 0; left: 170px; right: 70px; padding: 52px 0; display: flex; flex-direction: column; justify-content: space-between; }
-  .brand { font: 650 38px 'Text', Georgia, serif; letter-spacing: -.02em; border-bottom: 4px double #1d1a14; padding-bottom: 16px; display: flex; justify-content: space-between; align-items: baseline; }
-  .brand span { font: 500 20px 'Mono', ui-monospace, monospace; color: #5e5646; letter-spacing: 0; }
-  .kicker { color: #5e5646; font: 500 22px 'Mono', ui-monospace, monospace; margin-bottom: 20px; }
-  .kicker b { color: #a3301a; font-weight: 500; }
-  h1 { font: 650 ${titleSize(title)}px/1.02 'Text', Georgia, serif; letter-spacing: -.03em; max-width: 900px;
+  /* Thème sombre de packages/ui/src/tokens.css (ADR 0016) : fond #0f1115, filet #262b36, texte #e8eaee, accent violet #a78bfa */
+  body { width: ${SIZE.width}px; height: ${SIZE.height}px; overflow: hidden; background: #0f1115; position: relative;
+    font-family: 'Text', system-ui, sans-serif; color: #e8eaee; }
+  .frame { position: absolute; inset: 56px 72px; display: flex; flex-direction: column; justify-content: space-between; }
+  .brand { font: 600 36px 'Text', system-ui, sans-serif; letter-spacing: -.02em; border-bottom: 1px solid #262b36; padding-bottom: 20px; display: flex; justify-content: space-between; align-items: baseline; }
+  .brand span { font: 500 20px 'Mono', ui-monospace, monospace; color: #9aa1af; letter-spacing: 0; }
+  .kicker { color: #a78bfa; font: 500 22px 'Mono', ui-monospace, monospace; margin-bottom: 20px; }
+  h1 { font: 600 ${titleSize(title)}px/1.05 'Text', system-ui, sans-serif; letter-spacing: -.035em; max-width: 960px;
     display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-  .foot { display: flex; justify-content: space-between; align-items: center; font: italic 400 26px 'Text', Georgia, serif; color: #254a8c; }
-  .foot i { font-style: normal; border: 3px solid #a3301a; color: #a3301a; padding: 2px 14px; font: 600 18px 'Mono', ui-monospace, monospace; transform: rotate(-3deg); }
+  .foot { display: flex; justify-content: space-between; align-items: center; font: 400 24px 'Text', system-ui, sans-serif; color: #9aa1af; }
+  .foot i { font-style: normal; border: 1px solid #353b49; border-radius: 99px; color: #a78bfa; padding: 4px 18px; font: 500 18px 'Mono', ui-monospace, monospace; }
 </style></head><body>
-  <div class="sheet">
-    <div class="m1"></div><div class="m2"></div>
-    <div class="hole" style="top: 130px"></div><div class="hole" style="top: 430px"></div>
-    <div class="frame">
-      <div class="brand">Guillaume Richard<span>grichard.eu</span></div>
-      <div><p class="kicker"><b>N°</b> ${esc(kicker)}</p><h1>${esc(title)}</h1></div>
-      <div class="foot"><span>Technicien informatique et systèmes numériques</span><i>${lang === 'fr' ? 'CARNET' : 'NOTEBOOK'}</i></div>
-    </div>
+  <div class="frame">
+    <div class="brand">Guillaume Richard<span>grichard.eu</span></div>
+    <div><p class="kicker">${esc(kicker)}</p><h1>${esc(title)}</h1></div>
+    <div class="foot"><span>Technicien informatique et systèmes numériques</span><i>guillaume@grichard.eu:~$</i></div>
   </div>
 </body></html>`;
 
