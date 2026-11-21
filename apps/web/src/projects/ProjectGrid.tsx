@@ -45,6 +45,7 @@ export default function ProjectGrid({ items, labels }: Props) {
 
   const chip = (value: string, current: string, set: (v: string) => void, label: string) => (
     <button
+      key={value}
       type="button"
       class="chip"
       aria-pressed={current === value}
@@ -85,7 +86,7 @@ export default function ProjectGrid({ items, labels }: Props) {
                 <p class="pcard-desc">{p.desc}</p>
                 <ul class="pcard-tags" role="list">
                   {p.tags.map((t) => (
-                    <li>{t}</li>
+                    <li key={t}>{t}</li>
                   ))}
                 </ul>
                 {p.href ? (

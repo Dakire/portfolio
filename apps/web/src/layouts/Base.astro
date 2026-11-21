@@ -72,7 +72,7 @@ const searchKind =
             : 'page'
     : /^(categorie|category)\//.test(sub)
       ? 'category'
-      : /^tag\//.test(sub)
+      : sub.startsWith('tag/')
         ? 'tag'
         : 'article';
 const excluded = [

@@ -75,3 +75,17 @@
 
 - Vocabulaire « carnet » retiré des textes visibles : « Journal de bord » devient « Expériences » (Parcours), 404 « Page introuvable », réglage de curseur « violet / système » (FR et EN). Les pages À propos, Compétences, Contact, Outils, Cheatsheets, légales héritent des nouveaux jetons et composants (axe vert dans les deux thèmes).
 - Reste lot 10 : responsive 320 à 1920, finitions (cursor.css, OG cards, `/design/`), puis phase 4.
+
+## Lot 10 (finitions) : fait, non poussé
+
+- Cartes de partage (OG) sombres et violettes ; test de défilement horizontal étendu à 320, 390, 768, 1280 et 1920 px sur accueil, cheatsheets, article, terminal, projets, recherche.
+
+## Rapport final (phase 4)
+
+- Build, `astro check` (0 erreur), oxlint, vitest web (1761), tests de contraste ui (19), e2e Playwright (284, axe WCAG 2.2 AA dans les deux thèmes), contrat des URL (133), `pnpm audit:prod` : verts.
+- Aucune erreur console ni requête en échec sur 10 pages en 390 px (FR et EN).
+- Recherche : palette Pagefind testée (ouverture clavier, groupes, accents/casse, aucun résultat, `/search/?q=`). Terminal : commandes couvertes par 1761 tests unitaires et e2e (Ctrl+C/K/L, historique de session, Tab, easter eggs).
+- NON fait ou non vérifié : Lighthouse (outil non installé ici ; objectif ≥ 95 à mesurer en ligne), `pnpm verify` complet (PHP, `composer test|cs|stan` non relancés : aucun fichier PHP touché), vérification visuelle manuelle du thème clair et du clavier virtuel mobile, test des liens sortants.
+- Données à fournir par Guillaume : disponibilité réelle (aucun indicateur affiché), captures d'aperçu des projets, catégorie « perso/pro » des projets (`kind`), dépôt public de chaque projet.
+- Décisions à confirmer : accent violet (choisi par Guillaume), suppression de `dist-preprod` (préproduction interdite), suppression éventuelle de `cursor.css` (gardé, en violet).
+- Risque avant push (= production) : CSP élargie (`wasm-unsafe-eval` pour Pagefind) ; `pagefind/` ajoute ~1 Mo en FTP ; nouvelles URL `/terminal/`, `/search/` (FR et EN) à ajouter au contrat si souhaité ; les pages `.htaccess` de redirection n'ont pas changé.
