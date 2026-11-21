@@ -420,37 +420,76 @@
   }
 }
 
-/* ---------- Outils : une seule phrase de liens ---------- */
-.hm-tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 var(--space-5);
+/* ---------- Outils : rangés par catégorie, un outil par ligne ---------- */
+.hm-toolgroups {
+  display: grid;
+  gap: var(--space-6);
+}
+.hm-toolgroup {
+  border-top: var(--stroke) solid var(--ink);
+}
+.hm-toolgroup-title {
+  padding-block: var(--space-3);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+.hm-toolgroup ul {
   margin: 0;
   padding: 0;
   list-style: none;
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 560;
-  line-height: 1.45;
 }
-.hm-tools li:not(:last-child)::after {
-  content: '/';
-  margin-left: var(--space-5);
-  color: var(--margin-rule);
+.hm-toolgroup li {
+  border-top: 1px solid var(--line-strong);
 }
-.hm-tools a {
-  display: inline-block;
-  min-height: var(--target);
+.hm-toolgroup a {
+  display: flex;
+  align-items: center;
+  min-height: 3.25rem;
+  padding-block: var(--space-2);
   color: var(--ink);
-  text-decoration-color: var(--accent);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 560;
+  line-height: 1.2;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
   text-decoration-thickness: 2px;
-  text-underline-offset: 0.18em;
+  text-underline-offset: 0.2em;
 }
-.hm-tools a:hover {
-  color: var(--pen);
+.hm-toolgroup a:hover {
+  text-decoration-color: var(--accent);
+}
+@media (min-width: 40rem) {
+  .hm-toolgroups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 64rem) {
+  .hm-toolgroups {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.hm-toolgroup-wide {
+  grid-column: 1 / -1;
+}
+@media (min-width: 40rem) {
+  .hm-toolgroup-wide ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-6);
+  }
+}
+@media (min-width: 64rem) {
+  .hm-toolgroup-wide ul {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 .hm-tools-note {
-  margin-top: var(--space-4);
+  margin-top: var(--space-5);
 }
 
 /* ---------- Demande d'intervention : bande d'encre ---------- */
