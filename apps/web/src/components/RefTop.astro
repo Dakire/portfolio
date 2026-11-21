@@ -16,7 +16,9 @@ const copy = lang === 'fr' ? 'Copier' : 'Copy';
 
 {ref.top && (
   <section class="ref-top" aria-labelledby={id}>
-    <h2 id={id}>{ref.topTitle ?? ui.topTitle}</h2>
+    <div class="rubric">
+      <h2 id={id}>{ref.topTitle ?? ui.topTitle}</h2>
+    </div>
     {ref.top.map((block) => (
       <div class="ref-top-block">
         <h3>{block.title}</h3>

@@ -1,49 +1,120 @@
-/* Section « Référence » : barre de recherche et résultats (un seul composant pour toutes les pages). Couleurs : tokens uniquement. */
+/* Cheatsheets et ressources (ADR 0014) : « fiches mémo ». Hub en registre, page d'aide-mémoire en fiche (recherche en tête,
+ * entrées en fiches, blocs de départ, liste complète repliée). Un seul composant de recherche pour toutes les pages.
+ * Couleurs : tokens uniquement. Les classes posées par public/js/reference.js (ref-*, mark) sont stylées ici. */
 
+/* ---------- Hub : un registre de fiches ---------- */
+.ref-hub {
+  padding-bottom: var(--space-section);
+}
+.ref-hub .rubric {
+  margin-bottom: var(--space-4);
+}
+@media (min-width: 40.01rem) {
+  .ref-hub .ledger-row {
+    grid-template-columns: 9.5rem minmax(0, 1fr) auto;
+  }
+}
+.ref-hub .ledger-title {
+  font-size: var(--text-xl);
+}
+
+/* ---------- Page d'un aide-mémoire ---------- */
+.ref-page {
+  display: grid;
+  gap: var(--space-7);
+  padding-bottom: var(--space-section);
+}
+.ref-block {
+  display: grid;
+  gap: var(--space-5);
+}
+.ref-block > .rubric {
+  margin-bottom: 0;
+}
+.ref-hub .rubric h2,
+.ref-block .rubric h2,
+.res-section .rubric h2 {
+  font-size: var(--text-xl);
+}
+
+/* Sommaire : une ligne d'ancres en mono, séparées par des filets */
+.ref-toc ul {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block: var(--stroke) solid var(--ink);
+}
+.ref-toc li + li {
+  border-left: 1px solid var(--line-strong);
+}
+.ref-toc a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  padding: 0 var(--space-4);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  text-decoration: none;
+}
+.ref-toc a:hover {
+  background: var(--surface);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+
+/* ---------- Recherche : le champ de la fiche, grand ---------- */
 .ref-search {
   display: grid;
   gap: var(--space-2);
 }
 .ref-search label {
-  font-weight: 600;
   color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 500;
 }
 .ref-search-box {
   position: relative;
 }
 .ref-input {
   width: 100%;
-  min-height: var(--target);
-  padding: 0 var(--space-5) 0 var(--space-4);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-md);
-  background: var(--surface);
+  min-height: 3.5rem;
+  padding: 0 var(--space-4);
+  border: var(--stroke) solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--raised);
   color: var(--ink);
-  font: inherit;
   font-family: var(--font-mono);
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
 }
 .ref-input::placeholder {
   color: var(--muted);
+  opacity: 1;
 }
-.ref-input:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
+.ref-input:focus {
+  border-color: var(--ink);
 }
 .ref-hint {
   margin: 0;
   color: var(--muted);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
 }
 .ref-hint kbd {
-  font-family: var(--font-mono);
   padding: 0 var(--space-1);
   border: 1px solid var(--line-strong);
+  border-bottom-width: 2px;
   border-radius: var(--radius-sm);
-  background: var(--raised);
+  background: var(--surface);
   color: var(--ink);
+  font-family: var(--font-mono);
 }
 
+/* Catégories : puces (même forme que .chip), la courante est pleine d'encre */
 .ref-cats {
   display: flex;
   flex-wrap: wrap;
@@ -53,46 +124,48 @@
   border: 0;
 }
 .ref-cats legend {
-  padding: 0;
   margin-bottom: var(--space-2);
-  font-size: var(--text-xs);
+  padding: 0;
   color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
 }
 .ref-pill {
+  display: inline-flex;
+  align-items: center;
   min-height: var(--target);
   padding: 0 var(--space-4);
   border: 1px solid var(--line-strong);
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--body);
-  font: inherit;
-  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
   cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
 }
 .ref-pill:hover {
-  background: var(--raised);
+  border-color: var(--ink);
+  background: var(--surface);
+  color: var(--ink);
 }
 .ref-pill[aria-pressed='true'] {
-  background: var(--accent-strong);
-  border-color: var(--accent-strong);
-  color: var(--accent-ink);
-  font-weight: 600;
-}
-.ref-pill:focus-visible,
-.ref-suggest:focus-visible,
-.ref-item article:focus-visible,
-.ref-copy:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--canvas);
 }
 
 .ref-status {
   margin: 0;
   min-height: 1.5em;
   color: var(--muted);
-  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
 }
 
+/* ---------- Résultats : une fiche par entrée ---------- */
 .ref-results {
   display: grid;
   gap: var(--space-4);
@@ -104,9 +177,10 @@
   display: grid;
   gap: var(--space-3);
   padding: var(--space-5);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
+  background: var(--raised);
+  border: 1px solid var(--line-strong);
+  border-top: var(--stroke) solid var(--ink);
+  border-radius: var(--radius-sm);
 }
 .ref-item-head {
   display: flex;
@@ -118,51 +192,62 @@
   margin: 0 var(--space-2) 0 0;
   font-family: var(--font-mono);
   font-size: var(--text-lg);
+  font-weight: 600;
+  letter-spacing: 0;
   overflow-wrap: anywhere;
+  text-wrap: wrap;
 }
 .ref-name {
-  font-family: var(--font-mono);
+  padding: 0.1em 0.4em;
+  border: 0;
+  background: var(--sunk);
   color: var(--ink);
-  background: none;
-  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
 }
 .ref-item p {
   margin: 0;
 }
 .ref-syn {
+  padding: var(--space-2) var(--space-3);
+  background: var(--sunk);
+  border-left: 3px solid var(--line-strong);
+  color: var(--ink);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
-  color: var(--body);
   overflow-wrap: anywhere;
 }
 .ref-desc {
-  color: var(--body);
   max-width: var(--measure);
+  color: var(--body);
 }
 .ref-badge {
-  padding: 0.125rem var(--space-3);
+  padding: 0 var(--space-2);
   border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  font-size: var(--text-xs);
+  border-radius: var(--radius-sm);
   color: var(--body);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.8;
 }
 .ref-badge-ref {
-  border-color: var(--accent-alt);
-  color: var(--ink);
+  border-color: var(--pen);
+  color: var(--pen);
 }
 .ref-risk-read {
-  color: var(--ok);
   border-color: var(--ok);
+  color: var(--ok);
 }
 .ref-risk-modify {
-  color: var(--warn);
   border-color: var(--warn);
+  color: var(--warn);
 }
 .ref-risk-admin {
-  color: var(--danger);
   border-color: var(--danger);
+  color: var(--danger);
 }
 
+/* Exemple à copier : code sur fond en creux, bouton à droite */
 .ref-example {
   display: flex;
   align-items: flex-start;
@@ -173,29 +258,34 @@
   min-width: 0;
   margin: 0;
   padding: var(--space-3) var(--space-4);
-  background: var(--canvas);
+  background: var(--sunk);
   border: 1px solid var(--line);
-  border-radius: var(--radius-md);
+  border-left: 3px solid var(--pen);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 .ref-example code {
-  background: none;
   padding: 0;
-  color: var(--ink);
+  border: 0;
+  background: none;
+  color: inherit;
 }
 .ref-copy {
   flex: none;
   min-width: 5.5rem;
 }
 .ref-more summary {
-  min-height: var(--target);
   display: flex;
   align-items: center;
-  cursor: pointer;
+  min-height: var(--target);
   color: var(--link);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  cursor: pointer;
 }
 .ref-more .ref-example {
   margin-bottom: var(--space-3);
@@ -210,10 +300,14 @@
 .ref-meta div {
   display: grid;
   gap: 0.125rem;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--line);
 }
 .ref-meta dt {
-  font-weight: 600;
   color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 600;
 }
 .ref-meta dd {
   margin: 0;
@@ -226,8 +320,9 @@
   }
 }
 .ref-tags {
-  font-size: var(--text-xs);
   color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
 }
 .ref-links {
   font-size: var(--text-sm);
@@ -239,29 +334,31 @@
   color: var(--link);
 }
 
-.ref-item-approx {
-  opacity: 0.92;
+.ref-item-approx article {
+  border-style: dashed;
+  border-top-style: solid;
 }
+/* Mots trouvés : surlignage au stylo (texte d'encre, fond en --selection) */
 .ref-item mark {
+  padding: 0 1px;
+  border-radius: 2px;
   background: var(--selection);
   color: var(--ink);
-  border-radius: 2px;
-  padding: 0 1px;
 }
 
 .ref-empty {
   display: grid;
   gap: var(--space-3);
   padding: var(--space-5);
-  border: 1px dashed var(--line-strong);
-  border-radius: var(--radius-lg);
+  border: var(--stroke) dashed var(--line-strong);
+  background: var(--surface);
 }
 .ref-empty p {
   margin: 0;
 }
 .ref-empty-title {
-  font-weight: 600;
   color: var(--ink);
+  font-weight: 650;
 }
 .ref-suggest {
   min-height: var(--target);
@@ -269,8 +366,8 @@
   border: 0;
   background: none;
   color: var(--link);
-  font: inherit;
   font-family: var(--font-mono);
+  font-size: inherit;
   text-decoration: underline;
   cursor: pointer;
 }
@@ -279,10 +376,10 @@
   justify-content: center;
 }
 
-/* Blocs statiques de la page (connexion, avertissements) */
+/* ---------- Blocs de départ (connexion, avertissements) ---------- */
 .ref-top {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-5);
 }
 .ref-top > * {
   margin: 0;
@@ -291,67 +388,33 @@
   display: grid;
   gap: var(--space-3);
   padding: var(--space-5);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
+  border: 1px solid var(--line-strong);
+  border-left: 6px solid var(--ink);
   background: var(--surface);
+}
+.ref-top-block h3 {
+  font-size: var(--text-lg);
 }
 .ref-notice {
   max-width: var(--measure);
-  padding-top: var(--space-3);
+  padding: var(--space-3) 0 0;
   border-top: 2px solid var(--accent);
   color: var(--body);
   font-size: var(--text-sm);
 }
-
-/* Sommaire de la page : une ligne d'ancres, en chasse fixe, séparées par des filets */
-.page-toc ul {
-  display: flex;
-  flex-wrap: wrap;
-  border-block: 1px solid var(--line);
-}
-.page-toc li + li {
-  border-left: 1px solid var(--line);
-}
-.page-toc a {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--target);
-  padding: 0 var(--space-4);
-  color: var(--body);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.04em;
-  text-decoration: none;
-}
-.page-toc a:hover,
-.page-toc a:focus-visible {
-  color: var(--ink);
-  text-decoration: underline;
-  text-decoration-color: var(--accent);
-}
 .ref-source {
+  color: var(--muted);
   font-size: var(--text-sm);
-  color: var(--muted);
 }
 
-/* Cartes de l'accueil « Référence » */
-.ref-card-count {
-  color: var(--muted);
-  font-size: var(--text-xs);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ref-pill {
-    transition: none;
-  }
-}
-
-/* Liste complète en HTML (repliée) : le contenu existe pour les moteurs et sans JavaScript */
+/* ---------- Liste complète en HTML (repliée) : le contenu existe pour les moteurs et sans JavaScript ---------- */
 .ref-all > summary {
   display: flex;
   align-items: center;
   min-height: var(--target);
   color: var(--link);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
   font-weight: 600;
   cursor: pointer;
 }
@@ -362,6 +425,10 @@
   padding: 0;
   list-style: none;
 }
+.ref-all-list > li {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line-strong);
+}
 .ref-all-list h3 {
   font-size: var(--text-base);
 }
@@ -369,9 +436,75 @@
   margin: var(--space-2) 0 0;
   padding: var(--space-3);
   border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--canvas);
+  border-left: 3px solid var(--pen);
+  background: var(--sunk);
   font-size: var(--text-sm);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+/* ---------- Liens associés ---------- */
+.ref-proofs {
+  display: grid;
+  gap: var(--space-6);
+}
+@media (min-width: 48rem) {
+  .ref-proofs {
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+}
+.ref-proofs h3 {
+  margin-bottom: var(--space-2);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.ref-link-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--stroke) solid var(--ink);
+}
+.ref-link-list li {
+  border-bottom: 1px solid var(--line-strong);
+}
+.ref-link-list a {
+  display: flex;
+  align-items: center;
+  min-height: var(--target);
+  padding-block: var(--space-2);
+}
+
+/* ---------- Page « Ressources » : trois entrées, situations, derniers articles ---------- */
+.res-page {
+  display: grid;
+  gap: var(--space-section);
+  padding-bottom: var(--space-section);
+}
+.res-section {
+  display: grid;
+  gap: var(--space-5);
+}
+.res-code {
+  display: inline-block;
+  margin-top: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  background: var(--sunk);
+  border-left: 3px solid var(--pen);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+.res-code code {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.res-open {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
 }

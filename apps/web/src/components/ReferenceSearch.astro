@@ -24,9 +24,10 @@ const label = ref ? (ref.searchLabel ?? ui.searchLabel) : ui.searchLabelAll;
   data-docs-label={ref?.docs?.label}
   aria-labelledby="ref-search-title"
 >
-  <h2 id="ref-search-title" class="visually-hidden">
-    {ui.results}
-  </h2>
+  <div class="rubric">
+    <h2 id="ref-search-title">{lang === 'fr' ? 'Recherche' : 'Search'}</h2>
+    <p class="rubric-meta">{ui.results}</p>
+  </div>
   <form role="search" class="ref-search" aria-label={label} novalidate>
     <label for="ref-q">{label}</label>
     <div class="ref-search-box">

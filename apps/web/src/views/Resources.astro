@@ -1,18 +1,18 @@
 ---
 // Page « Ressources » : présente le blog, les outils et les cheatsheets comme le prolongement du métier,
 // avec des situations concrètes (et des exemples à saisir) pour savoir laquelle ouvrir.
-import Card from '@grichard/ui/components/Card.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import PostCard from '../components/PostCard.astro';
-import { PORTFOLIO_DATA, PROFILE } from '../data/content';
+import '../styles/reference.css';
+import { PORTFOLIO_DATA } from '../data/content';
 import { resolveRelated } from '../data/related';
 import { SITE_TEXT } from '../data/site-text';
-import { getPosts } from '../lib/blog';
+import { CATEGORIES, getPosts, isoDate, postPath } from '../lib/blog';
 import { crumbs } from '../lib/crumbs';
 import { collectionLd, ogImage } from '../lib/seo-pages';
 import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
 import { resourceLinks } from '../lib/sections';
+import { ticketOf } from '../lib/ticket';
 
 interface Props {
   lang: Lang;
@@ -74,64 +74,85 @@ const examples = (
   <PageHero path={text.title} title={text.title} crumbs={trail}>
     <p class="lead">{text.intro}</p>
   </PageHero>
-  <div class="container stack-lg section">
-    <section aria-labelledby="sections">
-      <h2 id="sections" class="visually-hidden">
-        {text.title}
-      </h2>
-      <div class="cards cards-wide">
-        {cards.map((card) => (
-          <Card class="card-stretch">
-            <h3>
-              <a class="card-link" href={card.href}>
-                {card.title}
-              </a>
-            </h3>
-            <p>{card.text}</p>
-            <p class="meta">{text.open} →</p>
-          </Card>
-        ))}
+  <div class="container res-page">
+    <section class="res-section" aria-labelledby="sections">
+      <div class="rubric">
+        <h2 id="sections">{text.title}</h2>
+        <p class="rubric-meta">{cards.length}</p>
       </div>
+      <ul class="ledger-list" role="list">
+        {cards.map((card) => (
+          <li>
+            <a class="ledger-row" href={card.href}>
+              <span class="ledger-meta res-open">{text.open}</span>
+              <span class="ledger-title">
+                {card.title}
+                <span class="ledger-sub">{card.text}</span>
+              </span>
+              <span class="ledger-arrow" aria-hidden="true">
+                →
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </section>
 
-    <section class="stack" aria-labelledby="examples">
-      <h2 id="examples">{text.examplesTitle}</h2>
+    <section class="res-section" aria-labelledby="examples">
+      <div class="rubric">
+        <h2 id="examples">{text.examplesTitle}</h2>
+      </div>
       <p class="prose">{text.examplesIntro}</p>
-      <ul class="cards cards-wide" role="list">
+      <ul class="ledger-list" role="list">
         {examples.map((example) => (
           <li>
-            <Card class="card-stretch example-card">
-              <h3>
-                <a class="card-link" href={example.href}>
-                  {example.situation}
-                </a>
-              </h3>
-              <p>{example.text}</p>
-              {example.code && (
-                <p class="example-code">
-                  <code>{example.code}</code>
-                </p>
-              )}
-              <p class="meta">{example.linkLabel} →</p>
-            </Card>
+            <a class="ledger-row" href={example.href}>
+              <span class="ledger-meta res-open">{example.linkLabel}</span>
+              <span class="ledger-title">
+                {example.situation}
+                <span class="ledger-sub">{example.text}</span>
+                {example.code && (
+                  <span class="res-code">
+                    <code>{example.code}</code>
+                  </span>
+                )}
+              </span>
+              <span class="ledger-arrow" aria-hidden="true">
+                →
+              </span>
+            </a>
           </li>
         ))}
       </ul>
     </section>
 
     {posts.length > 0 && (
-      <section class="stack" aria-labelledby="latest">
-        <h2 id="latest">{text.latest}</h2>
-        <ul class="cards cards-wide" role="list">
+      <section class="res-section" aria-labelledby="latest">
+        <div class="rubric">
+          <h2 id="latest">{text.latest}</h2>
+          <p class="rubric-meta">
+            <a href={routes.blog}>{t.blog.all} →</a>
+          </p>
+        </div>
+        <ul class="ledger-list" role="list">
           {posts.map((post) => (
             <li>
-              <PostCard post={post} minLabel={t.blog.min} />
+              <a class="ledger-row" href={postPath(lang, post.slug)}>
+                <span class="ledger-meta">{ticketOf(post.data.date, post.data.category)}</span>
+                <span class="ledger-title">
+                  {post.data.title}
+                  <span class="ledger-sub">
+                    {CATEGORIES[post.data.category]?.[lang]} ·{' '}
+                    <time datetime={isoDate(post.data.date)}>{isoDate(post.data.date)}</time>
+                  </span>
+                </span>
+                <span class="ledger-arrow" aria-hidden="true">
+                  →
+                </span>
+              </a>
             </li>
           ))}
         </ul>
-        <p>
-          <a href={routes.blog}>{t.blog.all} →</a>
-        </p>
       </section>
     )}
   </div>

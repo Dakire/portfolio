@@ -1,5 +1,4 @@
 ---
-import { tone } from '../lib/tones';
 // Page d'une cheatsheet : introduction, blocs statiques (« Connexion »…), recherche, liste complète en HTML, liens associés, source et licence.
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
@@ -87,8 +86,8 @@ const pageToc = [
   scripts={['/js/libs/minisearch.js', '/js/reference.js']}
 >
   <PageHero title={ref.h1} lead={ref.intro} crumbs={trail} />
-  <div class="container section stack-lg ref-intro">
-    <nav class="page-toc" aria-label={lang === 'fr' ? 'Sur cette page' : 'On this page'}>
+  <div class="container ref-page">
+    <nav class="ref-toc" aria-label={lang === 'fr' ? 'Sur cette page' : 'On this page'}>
       <ul role="list">
         {pageToc.map((item) => (
           <li>
@@ -97,9 +96,7 @@ const pageToc = [
         ))}
       </ul>
     </nav>
-  </div>
-  <div class={`band band-${tone(ref.id.length)}`}>
-    <div class="container stack-lg hm-section">
+    <div class="ref-block">
       {!ref.topAfter && <RefTop lang={lang} reference={ref} id="ref-top-title" />}
       <ReferenceSearch lang={lang} ref={ref} cats={ref.cats} />
       {ref.notice && (
@@ -109,11 +106,11 @@ const pageToc = [
       )}
       {ref.topAfter && <RefTop lang={lang} reference={ref} id="ref-top-title-after" />}
     </div>
-  </div>
-  <div class="container section stack-lg">
     {entries.length > 0 && (
-      <section class="stack" aria-labelledby="ref-all-title">
-        <h2 id="ref-all-title">{ui.allTitle}</h2>
+      <section class="ref-block" aria-labelledby="ref-all-title">
+        <div class="rubric">
+          <h2 id="ref-all-title">{ui.allTitle}</h2>
+        </div>
         <details class="ref-all">
           <summary>{ui.allSummary(entries.length)}</summary>
           <ul class="ref-all-list" role="list">
@@ -136,13 +133,15 @@ const pageToc = [
       </section>
     )}
     {hasRelated(related) && (
-      <section class="stack" aria-labelledby="ref-related-title">
-        <h2 id="ref-related-title">{ui.related}</h2>
-        <div class="proofs">
+      <section class="ref-block" aria-labelledby="ref-related-title">
+        <div class="rubric">
+          <h2 id="ref-related-title">{ui.related}</h2>
+        </div>
+        <div class="ref-proofs">
           {links.map((group) => (
             <div>
               <h3>{group.title}</h3>
-              <ul class="link-list">
+              <ul class="ref-link-list" role="list">
                 {group.items.map((item) => (
                   <li>
                     <a href={item.href}>{item.label}</a>
@@ -155,11 +154,13 @@ const pageToc = [
       </section>
     )}
     {ref.source && (
-      <section class="stack" aria-labelledby="ref-source-title">
-        <h2 id="ref-source-title">{ui.sourceTitle}</h2>
+      <section class="ref-block" aria-labelledby="ref-source-title">
+        <div class="rubric">
+          <h2 id="ref-source-title">{ui.sourceTitle}</h2>
+        </div>
         <p class="ref-source">
-          {ui.sourceBy} <a href={ref.source.url}>{ref.source.name}</a>. {ui.license} :
-          <a href={ref.source.licenseUrl}>{ref.source.license}</a>.{ref.source.note}
+          {ui.sourceBy} <a href={ref.source.url}>{ref.source.name}</a>. {ui.license} :{' '}
+          <a href={ref.source.licenseUrl}>{ref.source.license}</a>. {ref.source.note}
         </p>
       </section>
     )}
