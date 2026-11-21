@@ -81,34 +81,35 @@ const titleSize = (title) => (title.length <= 42 ? 76 : title.length <= 72 ? 64 
 
 const html = ({ title, kicker, lang }, fonts) => `<!doctype html>
 <html lang="${lang}"><head><meta charset="utf-8"><style>
-  @font-face { font-family: 'Text'; font-weight: 200 800; src: url(${fonts.text}) format('woff2-variations'); }
-  @font-face { font-family: 'Display'; font-weight: 200 800; font-stretch: 75% 100%; src: url(${fonts.display}) format('woff2-variations'); }
-  @font-face { font-family: 'Mono'; font-weight: 100 800; src: url(${fonts.mono}) format('woff2-variations'); }
+  @font-face { font-family: 'Text'; font-weight: 200 800; font-style: normal; src: url(${fonts.text}) format('woff2-variations'); }
+  @font-face { font-family: 'Text'; font-weight: 200 800; font-style: italic; src: url(${fonts.textItalic}) format('woff2-variations'); }
+  @font-face { font-family: 'Mono'; font-weight: 500; src: url(${fonts.mono}) format('woff2'); }
   * { box-sizing: border-box; margin: 0; }
-  /* Couleurs du thème sombre de packages/ui/src/tokens.css (ADR 0011) : colonne encadrée, rails hachurés, lignes de construction, voyant ambre */
-  body { width: ${SIZE.width}px; height: ${SIZE.height}px; overflow: hidden; background: #101316; color: #eef1f3; position: relative;
-    font-family: 'Text', system-ui, sans-serif; }
-  .rail { position: absolute; top: 0; bottom: 0; width: 44px; border: solid #262c32; border-width: 0 1px;
-    background: repeating-linear-gradient(-45deg, #262c32 0 1px, transparent 1px 9px); }
-  .rail.l { left: 40px; } .rail.r { right: 40px; }
-  .h { position: absolute; left: 0; right: 0; height: 1px; background: #262c32; }
-  .h.t { top: 150px; } .h.b { bottom: 120px; }
-  .frame { position: absolute; top: 0; bottom: 0; left: 84px; right: 84px; padding: 58px 56px; display: flex; flex-direction: column; justify-content: space-between; }
-  .brand { display: flex; align-items: center; gap: 16px; font: 600 30px 'Mono', ui-monospace, monospace; letter-spacing: -.01em; }
-  .brand::before { content: ''; width: 16px; height: 16px; background: #f5a524; box-shadow: 0 0 22px #f5a52480; }
-  .brand b { color: #f5a524; font-weight: 600; }
-  .kicker { color: #f5a524; font: 500 22px 'Mono', ui-monospace, monospace; margin-bottom: 22px; text-transform: uppercase; letter-spacing: .1em; }
-  h1 { font: 760 ${titleSize(title)}px/1 'Display', 'Arial Narrow', sans-serif; font-stretch: 82%; letter-spacing: -.025em; max-width: 980px;
+  /* Papier du thème clair de packages/ui/src/tokens.css (ADR 0014) : feuille, double filet de marge, encre, tampon rouge */
+  body { width: ${SIZE.width}px; height: ${SIZE.height}px; overflow: hidden; background: #e2d9c4; position: relative;
+    font-family: 'Text', Georgia, serif; color: #1d1a14; }
+  .sheet { position: absolute; inset: 36px 60px; background: #f4efe3; box-shadow: 0 2px 4px #28200a40, 0 24px 48px -20px #28200a66; }
+  .m1, .m2 { position: absolute; top: 0; bottom: 0; width: 2px; background: #c4523d; }
+  .m1 { left: 120px; } .m2 { left: 130px; }
+  .hole { position: absolute; left: 40px; width: 30px; height: 30px; border-radius: 50%; background: #e2d9c4; box-shadow: inset 0 0 0 1px #cfc5ad; }
+  .frame { position: absolute; top: 0; bottom: 0; left: 170px; right: 70px; padding: 52px 0; display: flex; flex-direction: column; justify-content: space-between; }
+  .brand { font: 650 38px 'Text', Georgia, serif; letter-spacing: -.02em; border-bottom: 4px double #1d1a14; padding-bottom: 16px; display: flex; justify-content: space-between; align-items: baseline; }
+  .brand span { font: 500 20px 'Mono', ui-monospace, monospace; color: #5e5646; letter-spacing: 0; }
+  .kicker { color: #5e5646; font: 500 22px 'Mono', ui-monospace, monospace; margin-bottom: 20px; }
+  .kicker b { color: #a3301a; font-weight: 500; }
+  h1 { font: 650 ${titleSize(title)}px/1.02 'Text', Georgia, serif; letter-spacing: -.03em; max-width: 900px;
     display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-  .foot { display: flex; justify-content: space-between; align-items: center; font: 500 20px 'Mono', ui-monospace, monospace; color: #98a2ab; }
-  .foot i { font-style: normal; display: inline-block; width: 120px; height: 6px; background: #f5a524; }
+  .foot { display: flex; justify-content: space-between; align-items: center; font: italic 400 26px 'Text', Georgia, serif; color: #254a8c; }
+  .foot i { font-style: normal; border: 3px solid #a3301a; color: #a3301a; padding: 2px 14px; font: 600 18px 'Mono', ui-monospace, monospace; transform: rotate(-3deg); }
 </style></head><body>
-  <div class="rail l"></div><div class="rail r"></div>
-  <div class="h t"></div><div class="h b"></div>
-  <div class="frame">
-    <div class="brand"><span>grichard<b>.eu</b></span></div>
-    <div><p class="kicker">${esc(kicker)}</p><h1>${esc(title)}</h1></div>
-    <div class="foot"><span>Guillaume Richard · technicien IT</span><i></i></div>
+  <div class="sheet">
+    <div class="m1"></div><div class="m2"></div>
+    <div class="hole" style="top: 130px"></div><div class="hole" style="top: 430px"></div>
+    <div class="frame">
+      <div class="brand">Guillaume Richard<span>grichard.eu</span></div>
+      <div><p class="kicker"><b>N°</b> ${esc(kicker)}</p><h1>${esc(title)}</h1></div>
+      <div class="foot"><span>Technicien informatique et systèmes numériques</span><i>${lang === 'fr' ? 'CARNET' : 'NOTEBOOK'}</i></div>
+    </div>
   </div>
 </body></html>`;
 
@@ -157,16 +158,14 @@ async function ogImages() {
   await mkdir(CACHE, { recursive: true });
 
   const files = await readdir(join(DIST, '_astro'));
-  const font = (name) => {
-    const file = files.find((f) =>
-      new RegExp(`^${name}-latin-(?:wght|wdth)-normal\\..*\\.woff2$`).test(f),
-    );
+  const font = (pattern) => {
+    const file = files.find((f) => pattern.test(f));
     return file ? `./_astro/${file}` : '';
   };
   const fonts = {
-    text: font('atkinson-hyperlegible-next'),
-    display: font('bricolage-grotesque'),
-    mono: font('jetbrains-mono'),
+    text: font(/^newsreader-latin-wght-normal\..*\.woff2$/),
+    textItalic: font(/^newsreader-latin-wght-italic\..*\.woff2$/),
+    mono: font(/^ibm-plex-mono-latin-500-normal\..*\.woff2$/),
   };
   const tmp = join(DIST, '.og-render.html');
   let browser;
