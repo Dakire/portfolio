@@ -34,7 +34,7 @@ Ne jamais introduire de dépendance d'exécution Node, ni d'appel à un service 
 | Contrat sur le nouveau site        | `CONTRACT_DIST=apps/web/dist pnpm test:contract` (après `pnpm --filter @grichard/web build`)      |
 | Sitemap en ligne (GET, chaque URL) | `pnpm --filter @grichard/web sitemap:check` (référence : `/root-access.xml`, voir docs/seo.md)    |
 
-Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. `/root-access.xml` (liste d'URL, référence déclarée dans `robots.txt` ; `/sitemap.xml` et `/sitemap-0.xml` en restent des copies identiques) est produit par `postbuild.mjs` : voir [docs/seo.md](docs/seo.md). Identité visuelle : [ADR 0013](docs/adr/0013-cartes-colorees.md) (cartes colorées en deux tons, formes douces, menu en liens simples), [ADR 0012](docs/adr/0012-edition-releve.md) (structure des pages, portfolio d'abord ; conventions d'interface ci-dessous), suite de l'[ADR 0011](docs/adr/0011-identite-atelier.md) et de l'[ADR 0010](docs/adr/0010-identite-fiche-technique.md). Portail Symfony (`apps/portal`, voir [docs/portail.md](docs/portail.md)) : `composer install`, `composer test|cs|stan` dans `apps/portal`. Déploiement : [docs/deploiement.md](docs/deploiement.md) (production automatique après CI verte sur `main` ; à la main : retour arrière, portail).
+Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. `/root-access.xml` (liste d'URL, référence déclarée dans `robots.txt` ; `/sitemap.xml` et `/sitemap-0.xml` en restent des copies identiques) est produit par `postbuild.mjs` : voir [docs/seo.md](docs/seo.md). Identité visuelle : [ADR 0014](docs/adr/0014-carnet-d-interventions.md) (« carnet d'interventions » : feuille de classeur, deux encres, Newsreader et IBM Plex Mono ; remplace les ADR 0010 à 0013 pour l'apparence), [ADR 0012](docs/adr/0012-edition-releve.md) (structure des pages, portfolio d'abord). Portail Symfony (`apps/portal`, voir [docs/portail.md](docs/portail.md)) : `composer install`, `composer test|cs|stan` dans `apps/portal`. Déploiement : [docs/deploiement.md](docs/deploiement.md) (production automatique après CI verte sur `main` ; à la main : retour arrière, portail).
 
 ## Architecture cible
 
@@ -59,20 +59,24 @@ Site portfolio (ADR 0009, [docs/refonte-portfolio.md](docs/refonte-portfolio.md)
 - Glossaire français → commandes : `data/reference/glossaire*.yml` ; un mot de `en` court (moins de 5 lettres) doit être un mot entier (ex. « output » ne doit pas matcher « ou »).
 - Les scripts PowerShell M365 sont des exemples non exécutés sur un tenant réel : les annoncer comme tels.
 
-## Conventions d'interface (ADR 0012 et 0013)
+## Conventions d'interface (ADR 0012 et 0014)
 
+- **Feuille** : toute la page est une `.sheet` (`base.css`) posée sur un bureau ; marge à double filet rouge et perforations en dégradés CSS sur grand écran seulement. Ne pas poser de fond pleine largeur qui masquerait la marge.
+- **Thème** : clair par défaut (sans choix mémorisé, quel que soit le système) ; sombre = « papier de nuit » brun-noir, choix explicite. **Aucun bouton de thème dans l'en-tête** : les réglages de lecture (papier, curseur) sont dans le pied de page. Pas de `prefers-color-scheme` dans `tokens.css`.
+- **Deux encres** : `--accent` (tampon rouge : statuts, survols, marge) et `--pen` (stylo bleu : liens, annotations). Vert, ambre et rouge d'état seulement pour les états, toujours avec un mot. Pas de couleur écrite en dur : jetons de `packages/ui/src/tokens.css` ; seules exceptions, les images de curseur (`public/img/cursor-*.svg`) qui ne peuvent pas lire `var()`.
+- **Vocabulaire** (`components.css`) : `.rubric` (double filet, titre, mention en mono), `.ledger-row` (ligne de registre), `.ticket`, `.note` (annotation), `.stamp` (tampon : seul endroit où les capitales sont admises), `.band` (bande d'encre inversée, redéfinit `--ink`, `--accent`, `--line`… : ne pas y poser de couleur en dur), `.card`/`.tile` (fiche), `.field`, `.table`, `.chip`, `.alert`, `.btn`. Pas de cartes arrondies, pas d'ombre sauf la feuille, pas de blobs.
+- **Références** (`lib/ticket.ts`) : `GR-Rxx` par réalisation (rang dans la liste), `AAAAMMJJ-RUB` par article (date de publication et code de rubrique). Dérivées de données existantes : ne rien inventer.
+- **Curseur** : actif par défaut (pointeur fin, hors couleurs forcées), deux formes (flèche d'encre, réticule rouge sur le cliquable), sans bulle ni JavaScript de suivi ; coupé par le pied de page ou la commande `cursor off` du terminal (`localStorage` `cursor=off`). Champs de texte et éléments désactivés gardent le curseur natif.
+- **Menu** : nom et sous-titre à gauche, recherche, langue et Contact à droite, liens sur une seconde ligne ; page courante entourée au stylo (masque SVG teinté par `--pen`) ; sous-menu Outils en fiche d'index.
 - **Réseaux sociaux** : icônes seules, sans texte visible (`SocialLinks.astro`, `Icon.astro`) ; le nom est dans `aria-label`. Seuls les deux CV portent le code de langue (FR, EN).
-- **Listes** : lignes de registre (`.ledger-row`, `.lrow`, composants `ProjectCards`, `ToolCards`, `SkillCards`) ; cartes seulement pour les articles du blog (avec mini description) et les résultats de cheatsheets. Liens du texte : encre, soulignement d'accent de 2 px.
+- **Listes** : lignes de registre (`.ledger-row`, index `.hm-index`) ; cartes (`.card`) seulement pour les résultats de cheatsheets. Liens du texte : bleu de stylo souligné, le trait s'épaissit au survol.
 - **Bandeau de cookies** : premier dans le DOM (ordre de Tab), affiché en bas par CSS (`order`, `position: sticky`). Ne jamais rembourrer `body` pour lui faire de la place.
 - **SVG de page** : pas de `<title>` (il collisionne avec le titre de page, `dist.test.ts`) ni de `style=""` ; traits et remplissages par classes et tokens.
-- **Cartes colorées** (`.band`, ADR 0013) : une section colorée est une carte arrondie sur le fond de page (pas un bandeau pleine largeur), en **deux tons seulement** (`tone(i)` de `src/lib/tones.ts`, jetons `--tone-*`). `.band` redéfinit `--ink`, `--accent`, `--surface`, `--danger`… : ne pas y poser de couleur en dur. Pour un aplat d'accent, `.hm-contact`. Pas de carte partout : les sections de l'accueil Profil et Outils restent sur le fond de page.
-- **Formes** : `Shape.astro` (blob ou vague, décoratif, `aria-hidden`) sur la première carte d'une page et quelques autres, jamais sur toutes ; blobs de fond de page dans `Base.astro` (`.page-bg`).
-- **Espacement** : le bas de `.page-hero` fournit tout l'espace avant le contenu ; une règle d'espacement ne doit pas supposer ce que contient la section voisine (carte ou fond). Vérifier une page nouvelle ou modifiée en 1440 et 375 px, deux thèmes.
-- **Menu** : liens nus, soulignement d'accent (page courante, survol) ; ni pilule ni boîte. Sous-menu Outils au même style. Pas de curseur animé.
-- **Libellés** : texte courant en sourdine, pas de capitales espacées en chasse fixe (sauf code et terminal).
+- **Espacement** : le bas de `.page-hero` fournit tout l'espace avant le contenu ; une règle d'espacement ne doit pas supposer ce que contient la section voisine. Vérifier une page nouvelle ou modifiée en 1440 et 375 px, deux thèmes.
+- **Libellés** : annotations en mono sans capitales ni espacement des lettres (sauf `.stamp`, code et terminal).
 - **Formulaire de contact** hydraté à l'approche de l'écran (`client:visible`) : les tests e2e défilent jusqu'à lui.
 - **Profil** : les missions des expériences sont des exemples, pas une liste exhaustive (libellé « Missions, entre autres »). Le dépôt `MSG-EML-To-PDF-With-Attachments` est privé : ne pas le lier avant que Guillaume le passe en public.
-- **Avatar** : `public/img/guillaume-*.svg` ; après toute modification, régénérer `favicon.svg`, `favicon.ico`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` et `apple-touch-icon.png`.
+- **Avatar** : `public/img/guillaume-*.svg` (affiché comme photo d'identité) ; après toute modification, régénérer `favicon.svg`, `favicon.ico`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` et `apple-touch-icon.png`.
 
 ## Pièges d'outillage (Windows)
 

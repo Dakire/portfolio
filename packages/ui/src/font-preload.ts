@@ -1,6 +1,6 @@
-// Polices à précharger (<link rel="preload">) : titres et texte courant, pour qu'ils soient prêts au premier affichage.
+// Polices à précharger (<link rel="preload">) : texte courant et chasse fixe, pour qu'elles soient prêtes au premier affichage.
 // Mêmes fichiers que fonts.css (même chemin relatif) : le build n'en produit qu'une copie, le préchargement sert bien la feuille de style.
-import display from '../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wdth-normal.woff2?url';
-import text from '../node_modules/@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-wght-normal.woff2?url';
+import text from '../node_modules/@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url';
+import mono from '../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2?url';
 
-export const FONT_PRELOAD = { display, text };
+export const FONT_PRELOAD = { text, mono };

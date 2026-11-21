@@ -1,35 +1,37 @@
 /*
- * Tokens du design system grichard.eu : la seule source des couleurs, de la typographie, des espacements, des rayons et des ombres.
- * Chargé tel quel par le site (Astro) et par l'espace client (Symfony/Twig) : même identité, sans étape de build côté PHP.
+ * Tokens du design system grichard.eu (ADR 0014, « carnet d'interventions ») : la seule source des couleurs, de la typographie,
+ * des espacements, des rayons et du mouvement.
  *
- * Thème : <html data-theme="dark|light"> est posé avant le premier rendu par /js/theme.js. Sans JavaScript, le thème suit le système.
- * Contrastes vérifiés par packages/ui/tests/contrast.test.ts (texte >= 4.5:1, bordures d'interface >= 3:1).
+ * Thème : <html data-theme="light|dark"> est posé avant le premier rendu par /js/theme.js. Le thème clair (papier) est le
+ * défaut, avec ou sans JavaScript ; le sombre (papier de nuit) est un choix explicite du visiteur (pied de page).
+ * Contrastes vérifiés par packages/ui/tests/contrast.test.ts (texte >= 4,5:1, bordures d'interface >= 3:1).
+ *
+ * Deux encres, comme sur une fiche : le tampon rouge (--accent : statuts, marge, actions) et le stylo bleu (--pen : liens,
+ * annotations). Aucune autre couleur de marque ; vert, ambre et rouge d'état ne servent qu'aux états, toujours doublés d'un mot.
  */
 
 :root {
-  color-scheme: dark light;
+  color-scheme: light;
 
-  /* Typographie */
-  --font-display:
-    'Bricolage Grotesque Variable', 'Arial Narrow', 'Helvetica Neue', system-ui, sans-serif;
-  --font-sans:
-    'Atkinson Hyperlegible Next Variable', system-ui, -apple-system, 'Segoe UI', Verdana, sans-serif;
-  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
+  /* Typographie : deux familles, Newsreader (titres et texte) et IBM Plex Mono (annotations, champs, code) */
+  --font-display: 'Newsreader Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-sans: var(--font-display);
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
   --text-xs: 0.8125rem;
   --text-sm: 0.9375rem;
-  --text-base: 1.0625rem;
-  --text-lg: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
-  --text-xl: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
-  --text-2xl: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
-  --text-display: clamp(2.25rem, 1.6rem + 3.2vw, 4rem);
-  --text-hero: clamp(2.75rem, 1.4rem + 6.4vw, 6.25rem);
-  --tracking-label: 0.08em;
-  --tracking-display: -0.025em;
-  --stretch-display: 82%; /* largeur des grands titres (axe wdth de Bricolage, 75 % à 100 %) */
-  --leading-display: 1;
-  --leading-tight: 1.15;
+  --text-base: 1.1875rem;
+  --text-lg: clamp(1.25rem, 1.15rem + 0.4vw, 1.4375rem);
+  --text-xl: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  --text-2xl: clamp(1.875rem, 1.45rem + 1.8vw, 2.875rem);
+  --text-display: clamp(2.5rem, 1.7rem + 3.4vw, 4.5rem);
+  --text-hero: clamp(3.75rem, 0.6rem + 15vw, 14rem);
+  --text-label: 0.8125rem; /* annotations en mono */
+  --tracking-display: -0.03em;
+  --tracking-hero: -0.045em;
+  --leading-display: 0.92;
+  --leading-tight: 1.12;
   --leading-snug: 1.35;
-  --leading-body: 1.65;
+  --leading-body: 1.62;
 
   /* Espacements (échelle 4 px) */
   --space-1: 0.25rem;
@@ -43,17 +45,20 @@
   --space-9: 6rem;
   --space-section: clamp(var(--space-7), 2rem + 5vw, var(--space-9));
 
-  /* Formes et profondeur */
-  --radius-sm: 0.125rem;
-  --radius-md: 0.25rem;
-  --radius-lg: 0.375rem;
-  --radius-card: 0; /* les cartes ne sont plus arrondies : coin coupé (--cut) */
+  /* Formes : le papier est carré ; seuls les voyants et les tampons sont ronds */
+  --radius-sm: 1px;
+  --radius-md: 2px;
+  --radius-lg: 3px;
+  --radius-card: 0;
   --radius-tile: 0;
-  --cut: 1.375rem; /* taille du coin coupé des cartes, boutons et blocs (clip-path) */
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.25), 0 8px 24px -12px rgb(0 0 0 / 0.35);
+  --stroke: 1.5px; /* épaisseur des filets d'encre */
+
+  /* Profondeur : une feuille posée sur un bureau, rien d'autre ne porte d'ombre */
+  --shadow-sm: 0 1px 1px rgb(40 30 10 / 0.12);
+  --shadow-card: 0 1px 2px rgb(40 30 10 / 0.14);
   --shadow-md: var(--shadow-card);
-  --shadow-lg: 0 2px 4px rgb(0 0 0 / 0.3), 0 20px 48px -16px rgb(0 0 0 / 0.55);
+  --shadow-lg: 0 2px 4px rgb(40 30 10 / 0.16), 0 18px 40px -18px rgb(40 30 10 / 0.35);
+  --shadow-sheet: 0 1px 2px rgb(40 30 10 / 0.18), 0 28px 60px -28px rgb(40 30 10 / 0.35);
 
   /* Mouvement (neutralisé par prefers-reduced-motion dans base.css) */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -70,146 +75,127 @@
   --z-banner: 50;
   --z-skip: 100;
 
-  /* Mise en page */
+  /* Mise en page : la feuille (colonne de la page) et sa marge de classeur */
+  --sheet: 82rem;
   --container: 72rem;
-  --measure: 68ch;
-  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2rem);
+  --measure: 66ch;
+  --gutter: clamp(1rem, 0.4rem + 2.8vw, 2.5rem);
+  --margin: 0rem; /* marge de classeur : seulement sur grand écran (base.css) */
   --target: 2.75rem; /* cible tactile minimale : 44 px */
 
-  /* Couleurs : thème sombre (défaut). « Pit wall » : carbone froid, un seul accent jaune-vert fluo (--accent, --signal), drapeaux rouge, jaune et vert réservés à la gravité. */
-  --canvas: #0c0d0f;
-  --surface: #14161a;
-  --raised: #1c1f24;
-  --line: #2a2e35;
-  --line-strong: #6a7280;
-  --guide: #101215;
-  --ink: #f1efe8;
-  --body: #cfd2d6;
-  --muted: #98a0aa;
-  --accent: #c8ff2e;
-  --accent-strong: #c8ff2e;
-  --accent-ink: #0c0d0f;
-  --accent-alt: #3ddc97;
-  --signal: #c8ff2e; /* aplats de signalisation (texte --signal-ink dessus) : identique dans les deux thèmes */
-  --signal-ink: #0c0d0f;
-  --link: #d6ff5c;
-  --ok: #3ddc97;
-  --warn: #ffc533;
-  --danger: #ff6b6b;
-  --focus: #c8ff2e;
-  --selection: rgb(200 255 46 / 0.3);
-  --band: #14161a;
-  --band-ink: #f1efe8;
-  --band-muted: #b4bbc4;
-  --band-accent: #c8ff2e;
+  /* Couleurs : thème clair, papier cassé (défaut) */
+  --desk: #e2d9c4; /* le bureau, autour de la feuille */
+  --canvas: #f4efe3; /* la feuille */
+  --surface: #faf6ec; /* encadré, champ */
+  --raised: #fffdf7; /* fiche posée sur la feuille */
+  --sunk: #ebe4d3; /* zone en creux : code, bandeau d'état */
+  --line: #cfc5ad; /* filets décoratifs (jamais seuls pour délimiter une commande) */
+  --line-strong: #7d7360; /* bordures de champs, de boutons et de tableaux : >= 3:1 */
+  --guide: #ebe4d3;
+  --ink: #1d1a14;
+  --body: #2c2820;
+  --muted: #5e5646;
+  --accent: #a3301a; /* tampon rouge */
+  --accent-strong: #a3301a;
+  --accent-ink: #fff8ee;
+  --pen: #254a8c; /* stylo bleu */
+  --accent-alt: #254a8c;
+  --link: #254a8c;
+  --signal: #a3301a; /* aplats de signalisation (texte --signal-ink dessus) */
+  --signal-ink: #fff8ee;
+  --ok: #2f6b3a;
+  --warn: #8a5a00;
+  --danger: #b0262b;
+  --focus: #254a8c;
+  --selection: rgb(37 74 140 / 0.22);
+  --margin-rule: #c4523d; /* double filet de marge (décoratif) */
+  --hole: #e2d9c4; /* perforations : la couleur du bureau, vue à travers la feuille */
 
-  /* Cartes colorées : deux tons seulement, texte et accent >= 4,5:1. */
-  --tone-ink: #f1efe8;
-  --tone-danger: #ff9a9a;
-  --tone-ok: #8ff0c3;
-  --tone-warn: #ffd873;
-  --tone-petrole: #1c1f24;
-  --tone-petrole-accent: #c8ff2e;
-  --tone-olive: #232830;
-  --tone-olive-accent: #c8ff2e;
-  --tone-prune: #1c1f24;
-  --tone-prune-accent: #c8ff2e;
-  --tone-ocre: #232830;
-  --tone-ocre-accent: #c8ff2e;
-  --tone-ardoise: #232830;
-  --tone-ardoise-accent: #c8ff2e;
+  /* Bandeau inversé (feuille d'encre : l'en-tête d'article, le contact) */
+  --band: #1d1a14;
+  --band-ink: #f4efe3;
+  --band-muted: #c9bfa8;
+  --band-accent: #ff9a7e;
+
+  /* Cartes colorées (aperçus de réalisation, calques) : deux papiers seulement */
+  --tone-ink: #1d1a14;
+  --tone-danger: #a3301a;
+  --tone-ok: #2f6b3a;
+  --tone-warn: #8a5a00;
+  --tone-petrole: #ebe4d3;
+  --tone-petrole-accent: #a3301a;
+  --tone-olive: #e6dcc3;
+  --tone-olive-accent: #a3301a;
+  --tone-prune: #ebe4d3;
+  --tone-prune-accent: #a3301a;
+  --tone-ocre: #e6dcc3;
+  --tone-ocre-accent: #a3301a;
+  --tone-ardoise: #ebe4d3;
+  --tone-ardoise-accent: #a3301a;
 }
 
-/* Thème clair : « os » et encre ; le lime reste un aplat (texte encre dessus), jamais un texte. */
-:root[data-theme='light'] {
-  --canvas: #f2f0e9;
-  --surface: #e6e3d8;
-  --raised: #dcd8ca;
-  --line: #cfcbbd;
-  --line-strong: #6f7379;
-  --guide: #e8e5da;
-  --ink: #0f1113;
-  --body: #2b2f34;
-  --muted: #565c64;
-  --accent: #3d5a00;
-  --accent-strong: #3d5a00;
-  --accent-ink: #ffffff;
-  --accent-alt: #09593a;
-  --signal: #c8ff2e;
-  --signal-ink: #0c0d0f;
-  --link: #3d5a00;
-  --ok: #09593a;
-  --warn: #6e4900;
-  --danger: #951c1b;
-  --focus: #0f1113;
-  --selection: rgb(200 255 46 / 0.55);
-  --tone-ink: #0f1113;
-  --tone-danger: #951c1b;
-  --tone-ok: #09593a;
-  --tone-warn: #6e4900;
-  --tone-petrole: #e6e3d8;
-  --tone-petrole-accent: #3d5a00;
-  --tone-olive: #dcd8ca;
-  --tone-olive-accent: #3d5a00;
-  --tone-prune: #e6e3d8;
-  --tone-prune-accent: #3d5a00;
-  --tone-ocre: #dcd8ca;
-  --tone-ocre-accent: #3d5a00;
-  --tone-ardoise: #dcd8ca;
-  --tone-ardoise-accent: #3d5a00;
-  --band: #14161a;
-  --band-ink: #f1efe8;
-  --band-muted: #b4bbc4;
-  --band-accent: #c8ff2e;
-  --shadow-sm: 0 1px 2px rgb(15 17 19 / 0.1);
-  --shadow-card: 0 1px 2px rgb(15 17 19 / 0.08), 0 8px 24px -12px rgb(15 17 19 / 0.18);
-  --shadow-lg: 0 2px 4px rgb(15 17 19 / 0.08), 0 22px 48px -18px rgb(15 17 19 / 0.28);
+/* Papier de nuit : brun-noir, encre crème, jamais un noir pur ni un gris froid */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --shadow-sm: 0 1px 1px rgb(0 0 0 / 0.5);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.5);
+  --shadow-md: var(--shadow-card);
+  --shadow-lg: 0 2px 4px rgb(0 0 0 / 0.5), 0 18px 40px -18px rgb(0 0 0 / 0.8);
+  --shadow-sheet: 0 1px 2px rgb(0 0 0 / 0.6), 0 28px 60px -28px rgb(0 0 0 / 0.9);
+
+  --desk: #0f0c08;
+  --canvas: #17130e;
+  --surface: #1e1912;
+  --raised: #272016;
+  --sunk: #120f0a;
+  --line: #3a3224;
+  --line-strong: #8a7f69;
+  --guide: #120f0a;
+  --ink: #efe5cf;
+  --body: #d9ceb6;
+  --muted: #b3a78e;
+  --accent: #ff8a6b;
+  --accent-strong: #ff8a6b;
+  --accent-ink: #17130e;
+  --pen: #8fb0ee;
+  --accent-alt: #8fb0ee;
+  --link: #8fb0ee;
+  --signal: #ff8a6b;
+  --signal-ink: #17130e;
+  --ok: #7fcf8f;
+  --warn: #f0b84a;
+  --danger: #ff8d8d;
+  --focus: #8fb0ee;
+  --selection: rgb(143 176 238 / 0.3);
+  --margin-rule: #8f4a3a;
+  --hole: #0f0c08;
+
+  --band: #efe5cf;
+  --band-ink: #1d1a14;
+  --band-muted: #4d4536;
+  --band-accent: #a3301a;
+
+  --tone-ink: #efe5cf;
+  --tone-danger: #ff8d8d;
+  --tone-ok: #7fcf8f;
+  --tone-warn: #f0b84a;
+  --tone-petrole: #1e1912;
+  --tone-petrole-accent: #ff8a6b;
+  --tone-olive: #272016;
+  --tone-olive-accent: #ff8a6b;
+  --tone-prune: #1e1912;
+  --tone-prune-accent: #ff8a6b;
+  --tone-ocre: #272016;
+  --tone-ocre-accent: #ff8a6b;
+  --tone-ardoise: #1e1912;
+  --tone-ardoise-accent: #ff8a6b;
 }
 
-/* Sans JavaScript : le thème suit le système (avec JavaScript, data-theme est toujours posé et prime). */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    --canvas: #f2f0e9;
-    --surface: #e6e3d8;
-    --raised: #dcd8ca;
-    --line: #cfcbbd;
-    --line-strong: #6f7379;
-    --guide: #e8e5da;
-    --ink: #0f1113;
-    --body: #2b2f34;
-    --muted: #565c64;
-    --accent: #3d5a00;
-    --accent-strong: #3d5a00;
-    --accent-ink: #ffffff;
-    --accent-alt: #09593a;
-    --signal: #c8ff2e;
-    --signal-ink: #0c0d0f;
-    --link: #3d5a00;
-    --ok: #09593a;
-    --warn: #6e4900;
-    --danger: #951c1b;
-    --focus: #0f1113;
-    --selection: rgb(200 255 46 / 0.55);
-    --tone-ink: #0f1113;
-    --tone-danger: #951c1b;
-    --tone-ok: #09593a;
-    --tone-warn: #6e4900;
-    --tone-petrole: #e6e3d8;
-    --tone-petrole-accent: #3d5a00;
-    --tone-olive: #dcd8ca;
-    --tone-olive-accent: #3d5a00;
-    --tone-prune: #e6e3d8;
-    --tone-prune-accent: #3d5a00;
-    --tone-ocre: #dcd8ca;
-    --tone-ocre-accent: #3d5a00;
-    --tone-ardoise: #dcd8ca;
-    --tone-ardoise-accent: #3d5a00;
-    --band: #14161a;
-    --band-ink: #f1efe8;
-    --band-muted: #b4bbc4;
-    --band-accent: #c8ff2e;
-    --shadow-sm: 0 1px 2px rgb(15 17 19 / 0.1);
-    --shadow-card: 0 1px 2px rgb(15 17 19 / 0.08), 0 8px 24px -12px rgb(15 17 19 / 0.18);
-    --shadow-lg: 0 2px 4px rgb(15 17 19 / 0.08), 0 22px 48px -18px rgb(15 17 19 / 0.28);
+/* Forçage des couleurs (mode contraste élevé) : le navigateur impose les siennes, les filets restent visibles */
+@media (forced-colors: active) {
+  :root {
+    --line: CanvasText;
+    --line-strong: CanvasText;
+    --margin-rule: CanvasText;
   }
 }

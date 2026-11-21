@@ -26,9 +26,9 @@ const ratio = (a: string, b: string) => {
   return (hi! + 0.05) / (lo! + 0.05);
 };
 
-const dark = tokens(/:root/);
-// Le premier bloc :root contient aussi des variables non colorées : seules les couleurs hexadécimales sont lues.
-const light = tokens(/:root\[data-theme='light'\]/);
+// Le premier bloc :root (thème clair, défaut) contient aussi des variables non colorées : seules les couleurs hexadécimales sont lues.
+const light = tokens(/:root/);
+const dark = tokens(/:root\[data-theme='dark'\]/);
 const themes = { sombre: dark, clair: light } as const;
 
 describe.each(Object.entries(themes))('thème %s', (_name, t) => {
@@ -69,9 +69,9 @@ describe.each(Object.entries(themes))('thème %s', (_name, t) => {
   });
 });
 
-describe('thème système sans JavaScript', () => {
-  it('reprend exactement les couleurs du thème clair', () => {
-    const media = css.match(/@media \(prefers-color-scheme: light\)\s*\{(.*)\n\}/s)?.[1] ?? '';
-    expect(tokens(/:root:not\(\[data-theme\]\)/, media)).toEqual(light);
+describe('thème par défaut', () => {
+  it('est le clair, sans JavaScript et sans media query système', () => {
+    expect(css).not.toMatch(/prefers-color-scheme/);
+    expect(css).toMatch(/:root \{\s*color-scheme: light;/);
   });
 });

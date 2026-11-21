@@ -1,0 +1,29 @@
+---
+/** Choix du curseur du site : carnet (actif par défaut) ou celui du système. Piloté par /js/theme.js ; sans JavaScript le groupe reste masqué. */
+interface Props {
+  label: string;
+  labels: { on: string; off: string };
+}
+const { label, labels } = Astro.props;
+---
+
+<div class="theme-switch" role="group" aria-label={label} data-cursor-switch hidden>
+  <button type="button" data-cursor-set="on" aria-pressed="true">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="6" fill="none" stroke="currentColor" stroke-width="2"></circle>
+      <path
+        d="M12 2v4M12 18v4M2 12h4M18 12h4"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+      ></path>
+    </svg>
+    <span>{labels.on}</span>
+  </button>
+  <button type="button" data-cursor-set="off" aria-pressed="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M5 3v16l4.2-3.9 3 6.4 2.7-1.2-3-6.3 5.9-.2z" fill="currentColor"></path>
+    </svg>
+    <span>{labels.off}</span>
+  </button>
+</div>

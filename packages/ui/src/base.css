@@ -1,4 +1,5 @@
-/* Styles de base : réinitialisation légère, typographie, focus, lien d'évitement, mise en page. Dépend de tokens.css. */
+/* Styles de base (ADR 0014) : réinitialisation légère, typographie, focus, lien d'évitement, feuille de classeur et curseur du site.
+ * Dépend de tokens.css. */
 
 *,
 *::before,
@@ -9,19 +10,20 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  scroll-padding-top: 5rem; /* l'en-tête collant ne masque pas la cible d'une ancre */
+  scroll-padding-top: 1.5rem;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--canvas);
+  background: var(--desk);
   color: var(--body);
   font-family: var(--font-sans);
   font-size: var(--text-base);
   line-height: var(--leading-body);
   font-optical-sizing: auto;
-  font-synthesis: none; /* jamais de faux gras ni de faux italique (Bricolage n'a pas d'italique) */
+  font-kerning: normal;
+  font-synthesis: none; /* jamais de faux gras ni de faux italique */
   hanging-punctuation: first;
   -webkit-font-smoothing: antialiased;
 }
@@ -41,27 +43,17 @@ h3,
 h4 {
   margin: 0;
   color: var(--ink);
-  font-weight: 650;
-  line-height: var(--leading-tight);
-  letter-spacing: -0.015em;
-  text-wrap: balance;
-}
-h1,
-h2,
-h3 {
   font-family: var(--font-display);
-  font-stretch: var(--stretch-display);
-  font-weight: 700;
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 h1 {
   font-size: var(--text-display);
-  font-weight: 760;
-  line-height: 1.02;
+  font-weight: 650;
+  line-height: 1;
   letter-spacing: var(--tracking-display);
-}
-h2 {
-  line-height: 1.08;
-  letter-spacing: -0.02em;
 }
 h2 {
   font-size: var(--text-2xl);
@@ -86,13 +78,15 @@ p {
   text-wrap: pretty;
 }
 
+/* Liens : encre du stylo bleu, soulignés ; au survol le trait s'épaissit (jamais la couleur seule) */
 a {
   color: var(--link);
-  text-decoration-thickness: 0.08em;
-  text-underline-offset: 0.2em;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.22em;
 }
 a:hover {
-  text-decoration-thickness: 0.14em;
+  text-decoration-thickness: 3px;
 }
 
 img,
@@ -108,8 +102,15 @@ kbd,
 pre,
 samp {
   font-family: var(--font-mono);
-  font-size: 0.92em;
+  font-size: 0.86em;
   font-variant-ligatures: none; /* « != », « -> » restent lisibles tels qu'on les tape */
+}
+:not(pre) > code {
+  padding: 0.08em 0.32em;
+  background: var(--sunk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow-wrap: anywhere;
 }
 
 table {
@@ -126,7 +127,7 @@ ol[role='list'] {
 
 hr {
   border: 0;
-  border-top: 1px solid var(--line);
+  border-top: var(--stroke) solid var(--line-strong);
   margin: var(--space-6) 0;
 }
 
@@ -144,14 +145,76 @@ hr {
   left: var(--space-3);
   z-index: var(--z-skip);
   padding: var(--space-3) var(--space-4);
-  background: var(--accent-strong);
-  color: var(--accent-ink);
+  background: var(--ink);
+  color: var(--canvas);
+  font-family: var(--font-mono);
   font-weight: 600;
-  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
   transform: translateY(-200%);
 }
 .skip-link:focus {
   transform: none;
+}
+
+/* ---------- La feuille ----------
+ * Toute la page est une feuille posée sur un bureau. Grand écran : marge de classeur (double filet rouge) et perforations ;
+ * petit écran : la feuille occupe tout l'écran, sans bureau ni décor. Le décor est en dégradés CSS (aucune image). */
+.sheet {
+  position: relative;
+  max-width: var(--sheet);
+  margin-inline: auto;
+  padding-left: var(--margin);
+  background: var(--canvas);
+}
+.sheet-in {
+  position: relative;
+  z-index: var(--z-base);
+}
+@media (min-width: 64rem) {
+  :root {
+    --margin: 5.5rem;
+  }
+  .sheet {
+    margin-block: 0;
+    box-shadow: var(--shadow-sheet);
+  }
+  .sheet::before,
+  .sheet::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+  }
+  /* Double filet de marge */
+  .sheet::before {
+    width: var(--margin);
+    background:
+      linear-gradient(var(--margin-rule), var(--margin-rule)) calc(100% - 0.5rem) 0 / 1.5px 100%
+        no-repeat,
+      linear-gradient(var(--margin-rule), var(--margin-rule)) calc(100% - 0.8rem) 0 / 1.5px 100%
+        no-repeat;
+  }
+  /* Perforations : deux trous par « feuillet » de 72 rem, vus à travers la feuille */
+  .sheet::after {
+    width: 3.4rem;
+    background:
+      radial-gradient(
+        circle at 1.7rem 15rem,
+        var(--hole) 0.55rem,
+        var(--line) calc(0.55rem + 1px),
+        transparent calc(0.55rem + 2px)
+      ),
+      radial-gradient(
+        circle at 1.7rem 57rem,
+        var(--hole) 0.55rem,
+        var(--line) calc(0.55rem + 1px),
+        transparent calc(0.55rem + 2px)
+      );
+    background-size: 100% 72rem;
+    background-repeat: repeat-y;
+  }
 }
 
 .container {
@@ -170,7 +233,7 @@ hr {
 .stack-lg > * + * {
   margin-top: var(--space-7);
 }
-/* Sections d'une page d'accueil : rythme vertical égal, un peu plus large que .stack-lg */
+/* Sections d'une page d'accueil : rythme vertical égal */
 .sections > * + * {
   margin-top: var(--space-section);
 }
@@ -192,6 +255,81 @@ hr {
   white-space: nowrap;
 }
 
+/* ---------- Curseur du site (actif par défaut ; /js/theme.js pose data-cursor="off" si le visiteur le coupe) ----------
+ * Deux formes, sans bulle ni suivi en JavaScript : une flèche d'encre sur ce qui ne se clique pas, un réticule de pointage
+ * (anneau rouge à quatre repères) sur ce qui se clique. Pointeur fin seulement ; les champs de texte gardent le curseur natif
+ * (insertion), comme les éléments désactivés et le mode couleurs forcées. Une image de curseur ne peut pas lire var() :
+ * deux fichiers par forme, un par thème (public/img/cursor-*.svg). */
+@media (pointer: fine) and (not (forced-colors: active)) {
+  html:not([data-cursor='off']) {
+    cursor:
+      url('/img/cursor-arrow.svg') 3 2,
+      default;
+  }
+  html:not([data-cursor='off'])[data-theme='dark'] {
+    cursor:
+      url('/img/cursor-arrow-nuit.svg') 3 2,
+      default;
+  }
+  html:not([data-cursor='off'])
+    :is(
+      a[href],
+      button,
+      summary,
+      select,
+      [role='button'],
+      [role='tab'],
+      [role='option'],
+      label[for],
+      input:is(
+        [type='checkbox'],
+        [type='radio'],
+        [type='submit'],
+        [type='button'],
+        [type='range'],
+        [type='file']
+      )
+    ):not(:disabled, [aria-disabled='true']) {
+    cursor:
+      url('/img/cursor-point.svg') 16 16,
+      pointer;
+  }
+  html:not([data-cursor='off'])[data-theme='dark']
+    :is(
+      a[href],
+      button,
+      summary,
+      select,
+      [role='button'],
+      [role='tab'],
+      [role='option'],
+      label[for],
+      input:is(
+        [type='checkbox'],
+        [type='radio'],
+        [type='submit'],
+        [type='button'],
+        [type='range'],
+        [type='file']
+      )
+    ):not(:disabled, [aria-disabled='true']) {
+    cursor:
+      url('/img/cursor-point-nuit.svg') 16 16,
+      pointer;
+  }
+  html:not([data-cursor='off'])
+    :is(input, textarea, [contenteditable='true']):not(
+      [type='checkbox'],
+      [type='radio'],
+      [type='submit'],
+      [type='button'],
+      [type='range'],
+      [type='file']
+    ) {
+    cursor: text;
+  }
+}
+
 /* Mouvement : transitions courtes, supprimées si l'utilisateur le demande (WCAG 2.3.3) */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -208,5 +346,13 @@ hr {
   body {
     background: #fff;
     color: #000;
+  }
+  .sheet {
+    box-shadow: none;
+    padding-left: 0;
+  }
+  .sheet::before,
+  .sheet::after {
+    display: none;
   }
 }
