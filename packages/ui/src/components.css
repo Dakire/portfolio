@@ -1,8 +1,8 @@
-/* Composants (ADR 0014, « carnet d'interventions ») : classes simples, partagées par les composants Astro et les pages.
- * Vocabulaire : filet double de rubrique, tampon, annotation au stylo, numéro de ticket, ligne de registre, fiche. Aucune
- * couleur en dur : tout vient des tokens. Les ombres sont réservées à la feuille (base.css). */
+/* Composants (ADR 0016, « console d'ingénieur ») : classes simples, partagées par les composants Astro et les pages.
+ * Vocabulaire : rubrique, badge, annotation, numéro de ticket, ligne de registre, carte. Aucune couleur en dur : tout vient
+ * des tokens. Pas d'ombre sauf palette de recherche et modales. */
 
-/* ---------- Boutons : cible >= 44 px, angles vifs, encre pleine ou filet ---------- */
+/* ---------- Boutons : cible >= 44 px, coins doux, accent plein ou filet ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -10,11 +10,11 @@
   gap: var(--space-2);
   min-height: var(--target);
   padding: 0 var(--space-5);
-  border: var(--stroke) solid var(--ink);
+  border: var(--stroke) solid var(--line-strong);
   border-radius: var(--radius-btn);
   background: transparent;
   color: var(--ink);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: 500;
   line-height: 1.2;
@@ -27,21 +27,24 @@
     transform var(--duration-fast) var(--ease);
 }
 .btn:hover {
-  background: var(--ink);
-  color: var(--canvas);
+  background: var(--surface);
+  border-color: var(--ink);
   text-decoration: none;
 }
 .btn:active {
   transform: translateY(1px);
 }
 .btn-primary {
-  background: var(--ink);
-  color: var(--canvas);
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+  color: var(--accent-ink);
+  font-weight: 600;
 }
 .btn-primary:hover {
-  background: var(--u);
-  border-color: var(--u);
-  color: var(--u-ink);
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+  color: var(--accent-ink);
+  filter: brightness(1.1);
 }
 .btn-ghost {
   border-color: transparent;
