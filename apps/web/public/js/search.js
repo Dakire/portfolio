@@ -26,7 +26,7 @@
   const loadEngine = () =>
     (engine ??= import(dialog.dataset.pagefind)
       .then(async (pf) => {
-        await pf.options({ baseUrl: dialog.dataset.base });
+        await pf.options({ baseUrl: dialog.dataset.pagefindBase });
         await pf.init();
         return pf;
       })

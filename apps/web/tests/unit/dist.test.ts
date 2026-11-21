@@ -51,6 +51,10 @@ describe('site construit', () => {
     expect(pages.length).toBeGreaterThan(40);
   });
 
+  it('aucune page n’a d’attribut data-base (réservé au build de sous-dossier, refusé par la livraison)', () => {
+    expect(pages.filter(({ html }) => /data-base=/.test(html)).map(({ url }) => url)).toEqual([]);
+  });
+
   it('chaque page indexable, sauf les accueils et la 404, a un fil d’Ariane', () => {
     const missing = pages
       .filter(
