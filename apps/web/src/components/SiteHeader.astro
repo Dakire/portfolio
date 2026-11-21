@@ -41,9 +41,8 @@ const groups = TOOL_GROUPS.map((group) => ({
 
 <header class="site-header">
   <div class="container site-header-inner">
-    <a href={ROUTES[lang].home} class="site-name" aria-label={`grichard.eu, ${ui.home}`}>
-      <span aria-hidden="true">Guillaume Richard</span>
-      <small aria-hidden="true">{ui.tagline}</small>
+    <a href={ROUTES[lang].home} class="site-name">
+      <span>Guillaume Richard</span> <small>{ui.tagline}</small>
     </a>
     <Button
       variant="primary"

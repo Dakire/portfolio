@@ -48,7 +48,13 @@ const items = [
     <li>
       <a
         href={item.href}
-        aria-label={item.external ? `${item.label} ${ui.external}` : item.label}
+        aria-label={
+          item.external
+            ? `${item.label} ${ui.external}`
+            : item.hreflang
+              ? `${item.label}, ${item.hreflang.toUpperCase()}`
+              : item.label
+        }
         title={item.label}
         rel={item.external ? 'noopener' : undefined}
         hreflang={item.hreflang}
