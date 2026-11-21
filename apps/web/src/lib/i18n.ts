@@ -105,7 +105,7 @@ export const UI = {
     theme: 'Thème',
     themeLabels: { auto: 'système', light: 'clair', dark: 'sombre' },
     cursor: 'Curseur',
-    cursorLabels: { on: 'carnet', off: 'système' },
+    cursorLabels: { on: 'violet', off: 'système' },
     nav: {
       about: 'À propos',
       career: 'Parcours',
@@ -155,7 +155,7 @@ export const UI = {
     theme: 'Theme',
     themeLabels: { auto: 'system', light: 'light', dark: 'dark' },
     cursor: 'Cursor',
-    cursorLabels: { on: 'notebook', off: 'system' },
+    cursorLabels: { on: 'violet', off: 'system' },
     nav: {
       about: 'About',
       career: 'Career',

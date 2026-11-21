@@ -163,7 +163,7 @@ test('le curseur du site est actif par défaut et se coupe depuis le pied de pag
   expect(await cursorOf('main a[href]')).not.toContain('data:image');
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-cursor', 'off');
-  await group.getByRole('button', { name: 'carnet' }).click();
+  await group.getByRole('button', { name: 'violet' }).click();
   await expect(page.locator('html')).not.toHaveAttribute('data-cursor', 'off');
 });
 

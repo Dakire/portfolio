@@ -1,6 +1,6 @@
 ---
 // Page d'erreur unique (ErrorDocument 404 et 403) : servie à toutes les adresses inconnues, en français et en anglais.
-// Mise en page de fiche : « fiche introuvable », avec un tampon, et trois sorties (accueil, recherche, blog).
+// Mise en page de fiche : avec un badge de statut et trois sorties (accueil, recherche, blog).
 import Button from '@grichard/ui/components/Button.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
@@ -18,7 +18,7 @@ import '../styles/pages.css';
 >
   <PageHero
     path="~/404"
-    title="Fiche introuvable"
+    title="Page introuvable"
     kicker="Erreur 404"
     lead="Cette adresse n'existe pas ou a changé. Le contenu a peut-être été déplacé."
   >

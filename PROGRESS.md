@@ -70,3 +70,8 @@
 
 - Déjà en place : index, catégories, tags, temps de lecture, date, articles associés, sommaire. Ajouts : `public/js/post.js` (barre de progression, bouton Copier sur chaque bloc de code, « Copier le lien », partage natif Web Share si disponible, sans service tiers), articles voisins (plus ancien / plus récent), libellé « Fiche n° » retiré. Test `blog.spec.ts`.
 - Pas de pagination : l'index est groupé par mois (37 articles) ; à ajouter si le blog dépasse ~60 articles.
+
+## Lot 9 (pages secondaires) : fait, non poussé
+
+- Vocabulaire « carnet » retiré des textes visibles : « Journal de bord » devient « Expériences » (Parcours), 404 « Page introuvable », réglage de curseur « violet / système » (FR et EN). Les pages À propos, Compétences, Contact, Outils, Cheatsheets, légales héritent des nouveaux jetons et composants (axe vert dans les deux thèmes).
+- Reste lot 10 : responsive 320 à 1920, finitions (cursor.css, OG cards, `/design/`), puis phase 4.
