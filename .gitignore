@@ -46,3 +46,4 @@ apps/web/dist-preprod
 
 # Captures avant/après de la v2.2 (volumineuses, locales)
 docs/screenshots/
+.claude/settings.local.json
