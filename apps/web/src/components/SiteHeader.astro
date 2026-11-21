@@ -1,6 +1,5 @@
 ---
 import Button from '@grichard/ui/components/Button.astro';
-import ThemeSwitch from '@grichard/ui/components/ThemeSwitch.astro';
 import { ROUTES, UI, type Lang } from '../lib/i18n';
 import { resourceLinks } from '../lib/sections';
 import { TOOL_GROUPS } from '../tools/hub';
@@ -43,10 +42,8 @@ const groups = TOOL_GROUPS.map((group) => ({
 <header class="site-header">
   <div class="container site-header-inner">
     <a href={ROUTES[lang].home} class="site-name" aria-label={`grichard.eu, ${ui.home}`}>
-      grichard
-      <span aria-hidden="true" class="site-tld">
-        .eu
-      </span>
+      <span aria-hidden="true">Guillaume Richard</span>
+      <small aria-hidden="true">{ui.tagline}</small>
     </a>
     <Button
       variant="primary"
@@ -128,7 +125,6 @@ const groups = TOOL_GROUPS.map((group) => ({
         <a href={otherHref ?? ROUTES[other].home} hreflang={other} lang={other} class="lang-link">
           {ui.langName}
         </a>
-        <ThemeSwitch label={ui.theme} labels={ui.themeLabels} />
       </div>
     </div>
   </div>

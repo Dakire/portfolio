@@ -1,0 +1,488 @@
+/* Accueil (ADR 0014) : fiche d'identification, index typographique des réalisations, profil, journal de bord, relevé,
+ * carnet de terrain, outils, demande d'intervention. Couleurs : tokens uniquement. */
+
+.hm-section {
+  padding-top: var(--space-section);
+}
+.hm-section .rubric {
+  margin-bottom: var(--space-5);
+}
+.rubric-meta a {
+  color: var(--link);
+}
+
+/* ---------- Fiche d'identification ---------- */
+.hm-hero {
+  padding-block: var(--space-5) 0;
+}
+.hm-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-5);
+  padding-block: var(--space-2);
+  border-bottom: 1px solid var(--line-strong);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+/* Le nom est la seule image de la page : prénom en gras, nom en italique léger décalé d'un tiers, comme une signature */
+.hm-name {
+  display: grid;
+  margin-top: var(--space-5);
+  font-size: var(--text-hero);
+  font-weight: 700;
+  letter-spacing: var(--tracking-hero);
+  line-height: var(--leading-display);
+  text-wrap: nowrap;
+}
+.hm-first {
+  display: block;
+  margin-left: -0.04em; /* alignement optique du G sur la marge */
+}
+.hm-last {
+  display: block;
+  margin-left: 0.8em;
+  font-style: italic;
+  font-weight: 300;
+}
+.hm-hero-grid {
+  display: grid;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+}
+.hm-role {
+  color: var(--pen);
+  font-size: var(--text-xl);
+  font-style: italic;
+  line-height: 1.2;
+}
+.hm-pitch {
+  max-width: 46ch;
+  margin-top: var(--space-4);
+  color: var(--ink);
+  font-size: var(--text-lg);
+  line-height: 1.5;
+}
+.hm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+.hm-social {
+  margin-top: var(--space-4);
+}
+.hm-id {
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+}
+.hm-facts {
+  margin: 0;
+  border-top: var(--stroke) solid var(--ink);
+}
+.hm-facts > div {
+  display: grid;
+  gap: var(--space-1) var(--space-4);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--line-strong);
+}
+.hm-facts dt {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+.hm-facts dd {
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--text-base);
+  line-height: 1.4;
+}
+@media (min-width: 48rem) {
+  .hm-hero-grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
+    gap: var(--space-8);
+  }
+  .hm-facts > div {
+    grid-template-columns: 8rem minmax(0, 1fr);
+  }
+}
+
+/* ---------- Index des réalisations : lignes typographiques, aperçu déployé au survol et au focus ---------- */
+.hm-index {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hm-index > li {
+  border-bottom: 1px solid var(--line-strong);
+}
+.hm-index-link {
+  display: grid;
+  grid-template-columns: 3.75rem minmax(0, 1fr);
+  gap: 0 var(--space-4);
+  align-items: baseline;
+  padding-block: var(--space-4);
+  color: inherit;
+  text-decoration: none;
+  transition: opacity var(--duration) var(--ease);
+}
+.hm-index-ref {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-variant-numeric: tabular-nums;
+  transition: color var(--duration) var(--ease);
+}
+.hm-index-title {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  text-wrap: balance;
+  transition: transform var(--duration-slow) var(--ease);
+}
+.hm-index-skill {
+  grid-column: 2;
+  margin-top: var(--space-1);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+.hm-index-more {
+  grid-column: 2;
+  display: grid;
+  gap: var(--space-2);
+  max-width: 62ch;
+  margin-top: var(--space-2);
+  color: var(--body);
+  font-size: var(--text-base);
+  line-height: 1.45;
+}
+.hm-index-tags {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+@media (min-width: 56rem) {
+  .hm-index-link {
+    grid-template-columns: 4.5rem minmax(0, 1fr) 16rem;
+  }
+  .hm-index-skill {
+    grid-column: 3;
+    margin-top: 0;
+    text-align: right;
+  }
+  .hm-index-more {
+    grid-column: 2 / 3;
+    grid-row: 2;
+    margin-top: 0;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition:
+      max-height var(--duration-slow) var(--ease),
+      opacity var(--duration) var(--ease),
+      margin-top var(--duration-slow) var(--ease);
+  }
+  /* Survol ou focus : l'aperçu s'ouvre (en tactile et petit écran il reste ouvert) */
+  @media (hover: hover) {
+    .hm-index-link:is(:hover, :focus-visible) .hm-index-more {
+      max-height: 12rem;
+      margin-top: var(--space-2);
+      opacity: 1;
+    }
+    .hm-index-link:is(:hover, :focus-visible) .hm-index-title {
+      transform: translateX(0.5rem);
+    }
+    .hm-index-link:is(:hover, :focus-visible) .hm-index-ref {
+      color: var(--accent);
+    }
+    .hm-index:has(.hm-index-link:is(:hover, :focus-visible))
+      .hm-index-link:not(:is(:hover, :focus-visible)) {
+      opacity: 0.5;
+    }
+  }
+  @media (hover: none) {
+    .hm-index-more {
+      max-height: none;
+      opacity: 1;
+      margin-top: var(--space-2);
+    }
+  }
+}
+
+/* ---------- Profil : domaines cochés comme sur une fiche, phrase d'accroche au stylo ---------- */
+.hm-profile {
+  display: grid;
+  gap: var(--space-7);
+}
+.hm-domains {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--stroke) solid var(--ink);
+}
+.hm-domains li {
+  border-bottom: 1px solid var(--line-strong);
+}
+.hm-domains a {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: var(--space-1) var(--space-4);
+  align-items: baseline;
+  padding-block: var(--space-4);
+  color: inherit;
+  text-decoration: none;
+}
+.hm-domains a:hover b {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+.hm-domains b {
+  grid-column: 2;
+  color: var(--ink);
+  font-size: var(--text-lg);
+  font-weight: 650;
+}
+.hm-domains span:not(.hm-check) {
+  grid-column: 2;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+.hm-check {
+  grid-row: 1 / span 2;
+  align-self: start;
+  position: relative;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.2rem;
+  border: var(--stroke) solid var(--ink);
+}
+.hm-check::after {
+  content: '';
+  position: absolute;
+  left: 0.3rem;
+  top: -0.2rem;
+  width: 0.5rem;
+  height: 1rem;
+  border-right: 3px solid var(--pen);
+  border-bottom: 3px solid var(--pen);
+  transform: rotate(40deg);
+}
+.hm-statement {
+  align-self: start;
+  padding-left: var(--space-5);
+  border-left: 4px solid var(--pen);
+}
+.hm-statement p:first-child {
+  color: var(--pen);
+  font-size: var(--text-2xl);
+  font-style: italic;
+  font-weight: 450;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+.hm-statement .note {
+  margin-top: var(--space-4);
+  color: var(--body);
+}
+@media (min-width: 56rem) {
+  .hm-profile {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: var(--space-8);
+  }
+  .hm-domains a {
+    grid-template-columns: 1.5rem 11rem minmax(0, 1fr);
+    align-items: baseline;
+  }
+  .hm-domains b {
+    grid-column: 2;
+  }
+  .hm-domains span:not(.hm-check) {
+    grid-column: 3;
+  }
+  .hm-check {
+    grid-row: 1;
+  }
+}
+
+/* ---------- Frise du parcours (components/CareerTimeline.astro) : règle des années, un trait par poste ---------- */
+.timeline {
+  display: grid;
+}
+.timeline-head,
+.timeline-row {
+  display: grid;
+  gap: var(--space-2) var(--space-5);
+}
+.timeline-head > span {
+  display: none;
+}
+.timeline-years {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: var(--stroke) solid var(--ink);
+}
+.timeline-years li {
+  padding-bottom: var(--space-1);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+}
+.timeline-row {
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--line-strong);
+}
+.timeline-name {
+  color: var(--body);
+  font-size: var(--text-sm);
+  line-height: 1.3;
+}
+.timeline-name b {
+  display: block;
+  color: var(--ink);
+  font-size: var(--text-base);
+  font-weight: 650;
+}
+.timeline-track {
+  width: 100%;
+  height: 1.25rem;
+  overflow: visible;
+}
+.timeline-grid {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.timeline-bar {
+  fill: var(--ink);
+}
+.timeline-bar.is-now {
+  fill: var(--accent);
+}
+.timeline-mark {
+  fill: var(--pen);
+}
+@media (min-width: 56rem) {
+  .timeline-head,
+  .timeline-row {
+    grid-template-columns: 17rem minmax(0, 1fr);
+    align-items: center;
+  }
+  .timeline-head > span {
+    display: block;
+  }
+}
+
+/* ---------- Relevé : le terminal ---------- */
+.hm-terminal {
+  max-width: 62rem;
+}
+
+/* ---------- Carnet de terrain : article en tête, tickets à côté ---------- */
+.hm-duo {
+  display: grid;
+  gap: var(--space-6);
+}
+.hm-lead h3 {
+  margin-top: var(--space-3);
+  font-size: var(--text-2xl);
+  line-height: 1.08;
+}
+.hm-lead h3 a {
+  color: var(--ink);
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--accent);
+}
+.hm-lead p:last-child {
+  max-width: 48ch;
+  margin-top: var(--space-4);
+}
+@media (min-width: 64rem) {
+  .hm-duo {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--space-8);
+  }
+  .hm-duo .ledger-row {
+    grid-template-columns: 9.5rem minmax(0, 1fr) auto;
+  }
+}
+
+/* ---------- Outils : une seule phrase de liens ---------- */
+.hm-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 560;
+  line-height: 1.45;
+}
+.hm-tools li:not(:last-child)::after {
+  content: '/';
+  margin-left: var(--space-5);
+  color: var(--margin-rule);
+}
+.hm-tools a {
+  display: inline-block;
+  min-height: var(--target);
+  color: var(--ink);
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+.hm-tools a:hover {
+  color: var(--pen);
+}
+.hm-tools-note {
+  margin-top: var(--space-4);
+}
+
+/* ---------- Demande d'intervention : bande d'encre ---------- */
+.hm-contact {
+  padding: clamp(var(--space-6), 4vw, var(--space-8));
+  border: 0;
+}
+.hm-cta {
+  margin-top: var(--space-3);
+  max-width: 14ch;
+  font-size: var(--text-display);
+  line-height: 0.98;
+}
+.hm-contact-text {
+  max-width: 52ch;
+  margin-top: var(--space-4);
+}
+.hm-contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-5);
+  margin-top: var(--space-5);
+}
+.hm-contact .label {
+  color: var(--band-muted);
+}
+.hm-contact .social a {
+  border-color: var(--band-muted);
+  color: var(--band-ink);
+}
+.hm-contact .social a:hover {
+  background: var(--band-ink);
+  color: var(--band);
+}

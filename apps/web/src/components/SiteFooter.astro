@@ -4,6 +4,8 @@ import { SITE_TEXT } from '../data/site-text';
 import { withBase } from '../lib/base';
 import { ROUTES, UI, type Lang } from '../lib/i18n';
 import { resourceLinks } from '../lib/sections';
+import CursorSwitch from '@grichard/ui/components/CursorSwitch.astro';
+import ThemeSwitch from '@grichard/ui/components/ThemeSwitch.astro';
 import SocialLinks from './SocialLinks.astro';
 
 interface Props {
@@ -73,6 +75,13 @@ const resources = resourceLinks(lang).filter((link) => link.key !== 'resources')
         <SocialLinks lang={lang} rss class="footer-social" />
       </nav>
     </div>
+    <div class="footer-settings">
+      <p>{ui.reading}</p>
+      <div>
+        <ThemeSwitch label={ui.theme} labels={ui.themeLabels} />
+        <CursorSwitch label={ui.cursor} labels={ui.cursorLabels} />
+      </div>
+    </div>
     <div class="footer-bottom">
       <p>{`© ${year} ${PROFILE.name}. ${ui.rights}`}</p>
       <ul class="footer-links">
@@ -93,11 +102,4 @@ const resources = resourceLinks(lang).filter((link) => link.key !== 'resources')
       </ul>
     </div>
   </div>
-  <p class="footer-signature" aria-hidden="true">
-    <svg viewBox="0 0 1000 150" preserveAspectRatio="xMidYMid meet">
-      <text x="0" y="128" font-size="158" textLength="1000" lengthAdjust="spacingAndGlyphs">
-        {PROFILE.name}
-      </text>
-    </svg>
-  </p>
 </footer>

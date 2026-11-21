@@ -5,7 +5,6 @@ import '@grichard/ui/tokens.css';
 import '@grichard/ui/base.css';
 import '@grichard/ui/components.css';
 import '../styles/site.css';
-import '../styles/pitwall.css';
 import SkipLink from '@grichard/ui/components/SkipLink.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
@@ -62,9 +61,9 @@ const allScripts = [...scripts, '/js/nav.js', '/js/search.js', '/js/consent.js',
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#101316" />
-    <meta name="color-scheme" content="dark light" />
-    <link rel="preload" href={FONT_PRELOAD.display} as="font" type="font/woff2" crossorigin />
+    <meta name="theme-color" content="#f4efe3" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="preload" href={FONT_PRELOAD.mono} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={FONT_PRELOAD.text} as="font" type="font/woff2" crossorigin />
     <script is:inline src={versioned('/js/theme.js')}></script>
     <link rel="icon" href={withBase('/favicon.ico')} sizes="48x48" />
@@ -105,20 +104,16 @@ const allScripts = [...scripts, '/js/nav.js', '/js/search.js', '/js/consent.js',
     {ld && <script type="application/ld+json" set:html={jsonForScript(ld)} />}
   </head>
   <body>
-    <div class="page-bg" aria-hidden="true">
-      <svg class="page-blob page-blob-top" viewBox="0 0 400 400" focusable="false">
-        <path d="M318 62c52 40 76 111 52 172s-92 92-158 104-143-4-176-60S-4 164 36 108 126 12 195 8s71 14 123 54Z" />
-      </svg>
-      <svg class="page-blob page-blob-bottom" viewBox="0 0 400 400" focusable="false">
-        <path d="M70 90C140 20 270 10 340 80s60 170 10 230-150 80-225 50S0 160 70 90Z" />
-      </svg>
-    </div>
     <SkipLink label={ui.skip} />
-    <SiteHeader lang={lang} path={path} otherHref={otherHref} />
-    <main id="contenu" tabindex="-1">
-      <slot />
-    </main>
-    <SiteFooter lang={lang} />
+    <div class="sheet">
+      <div class="sheet-in">
+        <SiteHeader lang={lang} path={path} otherHref={otherHref} />
+        <main id="contenu" tabindex="-1">
+          <slot />
+        </main>
+        <SiteFooter lang={lang} />
+      </div>
+    </div>
     <SearchDialog lang={lang} />
     {allScripts.map((src) => (
       <script is:inline defer src={versioned(src)} />

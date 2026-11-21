@@ -1,0 +1,210 @@
+/* ---------- Terminal de l'accueil, mis en page comme une feuille de relevé (ADR 0014) (components/Terminal.astro, src/terminal/ui.ts) ----------
+   Sans JavaScript : présentation statique et liens. La classe « js » (posée par /js/theme.js avant le premier rendu)
+   affiche l'invite et les suggestions dès le départ : aucun décalage quand le script arrive. */
+.terminal {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.terminal-window .chip {
+  font-family: var(--font-mono);
+}
+.terminal-window {
+  overflow: hidden;
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius-sm);
+  background: var(--raised);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-2);
+  border-bottom: var(--stroke) solid var(--ink);
+  background: var(--surface);
+}
+/* Boutons de la fenêtre : visibles seulement avec JavaScript (le script les révèle) ; cible tactile de 44 px,
+   pastille de 14 px, symbole au survol et au focus comme dans une vraie fenêtre. */
+.terminal-controls {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+.terminal-ctl {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--target);
+  height: var(--target);
+  margin-block: calc(var(--space-3) * -1);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.terminal-ctl[hidden] {
+  display: none;
+}
+.terminal-ctl > span {
+  display: grid;
+  place-items: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  border: var(--stroke) solid var(--ink);
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1;
+  transition: background-color var(--duration-fast) var(--ease);
+}
+.terminal-ctl:hover > span,
+.terminal-ctl:focus-visible > span {
+  background: var(--ink);
+  color: var(--canvas);
+}
+.terminal-ctl-close > span::before {
+  content: '×';
+}
+.terminal-ctl-min > span::before {
+  content: '−';
+}
+.terminal-ctl-max > span::before {
+  content: '+';
+}
+.terminal-ctl[aria-pressed='true'] > span {
+  background: var(--ink);
+  color: var(--canvas);
+}
+.terminal[data-minimized] .terminal-screen,
+.terminal[data-minimized] .terminal-footer {
+  display: none;
+}
+.terminal[data-minimized] .terminal-bar {
+  border-bottom: 0;
+}
+/* Agrandi : la fenêtre couvre la page (fond estompé), l'écran occupe la hauteur disponible */
+.terminal[data-maximized] .terminal-window {
+  position: fixed;
+  inset: calc(var(--space-8) + var(--space-5)) var(--space-5) var(--space-5);
+  z-index: var(--z-overlay);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 0 100vmax color-mix(in srgb, var(--canvas) 82%, transparent);
+  background: var(--raised);
+}
+.terminal[data-maximized] .terminal-screen {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+}
+html[data-terminal-max] {
+  overflow: hidden;
+}
+.terminal-name {
+  overflow: hidden;
+  margin-left: var(--space-2);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.terminal-screen {
+  height: 19rem;
+  overflow-y: auto;
+  padding: var(--space-4);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.terminal-boot dt {
+  color: var(--ink);
+}
+.terminal-boot dd {
+  margin: 0 0 var(--space-3);
+  color: var(--body);
+}
+.term-entry {
+  margin-top: var(--space-3);
+  color: var(--body);
+}
+.term-entry p {
+  padding-left: 2ch;
+  text-indent: -2ch; /* une ligne longue repart sous le texte, pas sous la puce */
+  white-space: pre-wrap;
+}
+.term-entry p:first-child {
+  color: var(--ink);
+}
+.term-accent {
+  color: var(--accent);
+}
+.term-dim {
+  color: var(--muted);
+}
+.term-error {
+  color: var(--danger);
+}
+.terminal-prompt {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding-inline: var(--space-1);
+  border-radius: var(--radius-sm);
+}
+.terminal-prompt:focus-within {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.terminal-prompt input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--target);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+}
+.terminal-prompt input:focus-visible {
+  outline: none; /* le focus est montré sur toute la ligne d'invite (:focus-within) */
+}
+.terminal-prompt input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+.terminal-footer {
+  display: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--line-strong);
+  background: var(--surface);
+}
+.terminal-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.terminal-hint {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+.js .terminal-prompt,
+.js .terminal-footer {
+  display: flex;
+}
+.js .terminal:not([data-off]) .terminal-links,
+.terminal-off,
+.terminal[data-off] .terminal-window {
+  display: none;
+}
+.terminal[data-off] .terminal-off {
+  display: block;
+}
+.terminal-toggle {
+  justify-self: end;
+  font-weight: 500;
+}
