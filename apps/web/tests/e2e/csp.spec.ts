@@ -68,7 +68,11 @@ for (const path of PAGES) {
       await setTheme(page, scheme);
       const consoleErrors: string[] = [];
       page.on('console', (msg) => {
-        if (msg.type() === 'error' && /Content Security Policy|CSP/i.test(msg.text()))
+        if (
+          msg.type() === 'error' &&
+          /Content Security Policy|CSP/i.test(msg.text()) &&
+          !msg.text().includes('local.adguard.org') // bloqueur de publicités du poste de développement, voir plus bas
+        )
           consoleErrors.push(msg.text());
       });
       await page.goto(path);
@@ -77,9 +81,10 @@ for (const path of PAGES) {
         await islands.first().scrollIntoViewIfNeeded();
         await expect(page.locator('astro-island[ssr]')).toHaveCount(0, { timeout: 10_000 });
       }
-      const violations = await page.evaluate(
-        () => (window as unknown as { __csp: string[] }).__csp,
-      );
+      const reported = await page.evaluate(() => (window as unknown as { __csp: string[] }).__csp);
+      // Un bloqueur de publicités installé sur le poste de développement (AdGuard) injecte ses scripts depuis local.adguard.org :
+      // ce n'est pas une ressource du site, la CSP les bloque à juste titre.
+      const violations = reported.filter((entry) => !entry.includes('local.adguard.org'));
       expect(violations).toEqual([]);
       expect(consoleErrors).toEqual([]);
     });

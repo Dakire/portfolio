@@ -146,9 +146,21 @@ test('le curseur du site est actif par défaut et se coupe depuis le pied de pag
 }) => {
   await page.goto('/');
   await expect(page.locator('html')).not.toHaveAttribute('data-cursor', 'off');
+  const cursorOf = (selector: string) =>
+    page
+      .locator(selector)
+      .first()
+      .evaluate((el) => getComputedStyle(el).cursor);
+  // Deux formes distinctes, intégrées en data: (aucune requête) : flèche sur le texte, réticule sur le cliquable
+  const arrow = await cursorOf('main');
+  const pointer = await cursorOf('main a[href]');
+  expect(arrow).toContain('data:image/svg+xml');
+  expect(pointer).toContain('data:image/svg+xml');
+  expect(pointer).not.toEqual(arrow);
   const group = page.getByRole('contentinfo').getByRole('group', { name: 'Curseur' });
   await group.getByRole('button', { name: 'système' }).click();
   await expect(page.locator('html')).toHaveAttribute('data-cursor', 'off');
+  expect(await cursorOf('main a[href]')).not.toContain('data:image');
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-cursor', 'off');
   await group.getByRole('button', { name: 'carnet' }).click();
