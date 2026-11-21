@@ -21,6 +21,7 @@ export type RouteKey =
   | 'privacy'
   | 'accessibility'
   | 'search'
+  | 'terminal'
   | 'rss';
 
 const mapRoutes = (routes: Record<RouteKey, string>): Record<RouteKey, string> =>
@@ -44,6 +45,7 @@ const RAW_ROUTES: Record<Lang, Record<RouteKey, string>> = {
     privacy: '/confidentialite/',
     accessibility: '/accessibilite/',
     search: '/search/',
+    terminal: '/terminal/',
     rss: '/rss.xml',
   },
   en: {
@@ -60,6 +62,7 @@ const RAW_ROUTES: Record<Lang, Record<RouteKey, string>> = {
     privacy: '/en/privacy/',
     accessibility: '/en/accessibility/',
     search: '/en/search/',
+    terminal: '/en/terminal/',
     rss: '/en/rss.xml',
   },
 };
@@ -112,6 +115,7 @@ export const UI = {
       blog: 'Blog',
       tools: 'Outils',
       cheatsheets: 'Cheatsheets',
+      terminal: 'Terminal',
       contact: 'Contact',
     },
     footerLinks: {
@@ -161,6 +165,7 @@ export const UI = {
       blog: 'Blog',
       tools: 'Tools',
       cheatsheets: 'Cheatsheets',
+      terminal: 'Terminal',
       contact: 'Contact',
     },
     footerLinks: {

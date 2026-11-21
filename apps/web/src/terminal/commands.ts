@@ -20,11 +20,15 @@ export type Action =
   | { type: 'open'; href: string }
   | { type: 'navigate'; href: string }
   | { type: 'cursor'; value: 'on' | 'off' }
-  | { type: 'clear' };
+  | { type: 'clear' }
+  | { type: 'reset' }
+  | { type: 'effect'; name: 'matrix' | 'konami' };
 
 export interface Result {
   lines: Line[];
   action?: Action;
+  /** Nouveau dossier courant de l'arborescence virtuelle (absent : inchangé). */
+  cwd?: string;
 }
 
 /** Données consultées par le terminal : un extrait du contenu du site, sérialisé dans la page (voir data.ts). */
@@ -56,6 +60,11 @@ export interface Context {
   s: TerminalStrings;
   d: TerminalData;
   theme?: 'dark' | 'light';
+  /** Dossier courant de l'arborescence virtuelle ('' = racine). */
+  cwd?: string;
+  /** Commandes déjà saisies pendant la session (pour history). */
+  history?: string[];
+  random?: () => number;
 }
 
 /** Commandes listées par help, dans l'ordre d'affichage. */
@@ -80,6 +89,18 @@ export const COMMANDS = [
   'neofetch',
   'cursor',
   'clear',
+  'reset',
+  'history',
+  'date',
+  'pwd',
+  'cd',
+  'education',
+  'project',
+  'github',
+  'website',
+  'banner',
+  'man',
+  'fortune',
 ] as const;
 export type Command = (typeof COMMANDS)[number];
 
@@ -88,9 +109,9 @@ const HIDDEN = [
   'sudo',
   'rm',
   'exit',
-  'pwd',
-  'date',
   'echo',
+  'matrix',
+  'konami',
   'coffee',
   '418',
   'ping',
@@ -99,6 +120,8 @@ const HIDDEN = [
 ] as const;
 
 export const FILES = ['about.txt', 'stack.txt', 'contact.txt'] as const;
+/** Arborescence virtuelle : dossiers de la racine. */
+export const DIRS = ['about', 'skills', 'projects', 'experience', 'blog', 'contact'] as const;
 export const SECTIONS = ['home', 'skills', 'projects', 'tools', 'blog', 'contact'] as const;
 
 const fill = (text: string, params: Record<string, string> = {}): string =>
@@ -121,8 +144,61 @@ function pick(
   return common.length > prefix.length ? { text: common, unique: false } : null;
 }
 
+/** Distance d'édition (suggestion en cas de faute de frappe). */
+function distance(a: string, b: string): number {
+  const row = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let prev = row[0]!;
+    row[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const tmp = row[j]!;
+      row[j] = Math.min(row[j]! + 1, row[j - 1]! + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+      prev = tmp;
+    }
+  }
+  return row[b.length]!;
+}
+const nearest = (word: string): string | null => {
+  let best: string | null = null;
+  let score = 3;
+  for (const c of COMMANDS) {
+    const dist = distance(word, c);
+    if (dist < score) {
+      score = dist;
+      best = c;
+    }
+  }
+  return best;
+};
+
+/** Normalise un chemin de l'arborescence virtuelle : renvoie le dossier ('' = racine) ou le nom d'un fichier de ce dossier. */
+function resolve(cwd: string, target: string): { dir: string; file?: string } | null {
+  const parts = target.startsWith('~') || target.startsWith('/') ? [] : cwd ? [cwd] : [];
+  for (const raw of target.replace(/^~/, '').split('/')) {
+    const part = raw.toLowerCase();
+    if (!part || part === '.') continue;
+    if (part === '..') {
+      parts.pop();
+      continue;
+    }
+    parts.push(part);
+  }
+  const [dir = '', file, extra] = parts;
+  if (dir === '') return { dir: '' };
+  if (extra !== undefined) return null;
+  if (!(DIRS as readonly string[]).includes(dir)) {
+    return parts.length === 1 && (FILES as readonly string[]).includes(dir)
+      ? { dir: '', file: dir }
+      : null;
+  }
+  return file === undefined ? { dir } : { dir, file };
+}
+
 /** Complétion par Tab : le texte complété, ou null s'il n'y a rien à compléter (Tab quitte alors le champ). */
-export function complete(raw: string, d?: Pick<TerminalData, 'tools'>): string | null {
+export function complete(
+  raw: string,
+  d?: Partial<Pick<TerminalData, 'tools' | 'projects' | 'posts'>>,
+): string | null {
   const m = /^(\S*)(\s+)?(.*)$/.exec(raw.trimStart());
   if (!m) return null;
   const [, cmd = '', space, rest = ''] = m;
@@ -136,8 +212,12 @@ export function complete(raw: string, d?: Pick<TerminalData, 'tools'>): string |
     theme: ['dark', 'light', 'auto'],
     cursor: ['on', 'off'],
     lang: ['fr', 'en'],
-    ls: ['blog'],
-    open: d?.tools.map((tool) => tool.id) ?? [],
+    ls: DIRS,
+    cd: [...DIRS, '..', '~'],
+    man: COMMANDS,
+    project: d?.projects?.flatMap((p) => (p.slug ? [p.slug] : [])) ?? [],
+    blog: d?.posts?.map((p) => p.slug) ?? [],
+    open: d?.tools?.map((tool) => tool.id) ?? [],
   };
   const candidates = args[cmd.toLowerCase()];
   if (!candidates) return null;
@@ -145,7 +225,10 @@ export function complete(raw: string, d?: Pick<TerminalData, 'tools'>): string |
   return done ? `${cmd} ${done.text}` : null;
 }
 
-export function run(raw: string, { s, d, theme = 'dark' }: Context): Result {
+export function run(
+  raw: string,
+  { s, d, theme = 'dark', cwd = '', history = [], random = Math.random }: Context,
+): Result {
   const input = raw.trim();
   if (!input) return { lines: [] };
   const [cmd = '', ...args] = input.split(/\s+/);
@@ -209,7 +292,18 @@ export function run(raw: string, { s, d, theme = 'dark' }: Context): Result {
         action: { type: 'navigate', href: tool.href },
       };
     }
-    case 'blog':
+    case 'blog': {
+      if (arg) {
+        const post =
+          d.posts.find((x) => x.slug === arg) ?? d.posts.find((x) => x.slug.includes(arg));
+        if (!post) return { lines: [[seg(fill(s.blogMissing, { slug: args[0]! }), 'error')]] };
+        return {
+          lines: [
+            [seg('▸ ', 'accent'), link(post.title, post.href)],
+            ...(post.date ? [[seg(`  ${post.date}`, 'dim')]] : []),
+          ],
+        };
+      }
       return {
         lines: d.posts.length
           ? [
@@ -217,6 +311,33 @@ export function run(raw: string, { s, d, theme = 'dark' }: Context): Result {
               [seg('→ ', 'dim'), link(s.openBlog, d.paths.blog)],
             ]
           : [[seg(s.noPosts, 'dim')]],
+      };
+    }
+    case 'project': {
+      if (!arg) return { lines: [[seg(s.projectUsage, 'dim')]] };
+      const p =
+        d.projects.find((x) => x.slug === arg) ??
+        d.projects.find((x) => (x.slug ?? '').includes(arg) || x.title.toLowerCase().includes(arg));
+      if (!p) return { lines: [[seg(fill(s.projectMissing, { name: args[0]! }), 'error')]] };
+      return {
+        lines: [
+          [seg(`▸ ${p.title}`, 'accent')],
+          ...(p.desc ? [[seg(`  ${p.desc}`)]] : []),
+          [seg(`  ${p.tags.join(' · ')}`, 'dim')],
+          ...(p.url ? [[seg('  → ', 'dim'), link(p.url, p.url)]] : []),
+          ...(p.href ? [[seg('  → ', 'dim'), link(p.href, p.href, true)]] : []),
+        ],
+      };
+    }
+    case 'education':
+      return {
+        lines: d.education?.length
+          ? d.education.flatMap((e) => [
+              [seg(`▸ ${e.title}`, 'accent')],
+              [seg(`  ${e.school}`)],
+              [seg(`  ${e.date}`, 'dim')],
+            ])
+          : [[seg(s.noEducation, 'dim')]],
       };
     case 'contact':
       return {
@@ -242,26 +363,53 @@ export function run(raw: string, { s, d, theme = 'dark' }: Context): Result {
       };
     case 'ls': {
       const target = args[0];
-      if (!target || ['.', '~', '~/'].includes(target)) return { lines: [[seg(s.files)]] };
-      if (['blog', 'blog/', '~/blog', '~/blog/'].includes(target))
-        return {
-          lines: d.posts.length
-            ? d.posts.map((p) => [link(p.slug, p.href)])
-            : [[seg(s.noPosts, 'dim')]],
-        };
-      return { lines: [[seg(fill(s.lsMissing, { file: target }), 'error')]] };
+      const where = target ? resolve(cwd, target) : { dir: cwd };
+      if (!where) return { lines: [[seg(fill(s.lsMissing, { file: target ?? '' }), 'error')]] };
+      if (where.file) return { lines: [[seg(where.file)]] };
+      switch (where.dir) {
+        case '':
+          return { lines: [[seg(s.files)]] };
+        case 'about':
+          return { lines: [[seg('about.txt')]] };
+        case 'contact':
+          return { lines: [[seg('contact.txt')]] };
+        case 'skills':
+          return { lines: d.skills.map((k) => [seg(k.category)]) };
+        case 'experience':
+          return { lines: d.experiences.map((e) => [seg(`${e.role}, ${e.company}`)]) };
+        case 'projects':
+          return {
+            lines: d.projects.map((p) => [p.url ? link(p.slug ?? p.title, p.url) : seg(p.title)]),
+          };
+        default:
+          return {
+            lines: d.posts.length
+              ? d.posts.map((p) => [link(p.slug, p.href)])
+              : [[seg(s.noPosts, 'dim')]],
+          };
+      }
     }
     case 'cat': {
       if (!arg) return { lines: [[seg(s.catUsage, 'dim')]] };
-      const file = arg.replace(/^(~\/|\.\/)/, '');
-      if (file === 'about.txt') return { lines: lines(d.about) };
-      if (file === 'stack.txt') return { lines: lines(d.stack) };
-      if (file === 'contact.txt')
+      const where = resolve(cwd, args[0]!);
+      const file = where?.file ?? (where?.dir === '' ? undefined : undefined);
+      const name = (file ?? args[0]!.replace(/^(~\/|\.\/)/, '')).toLowerCase();
+      if (name === 'about.txt') return { lines: lines(d.about) };
+      if (name === 'stack.txt') return { lines: lines(d.stack) };
+      if (name === 'contact.txt')
         return { lines: [[seg(d.links.email)], [seg(d.location, 'dim')]] };
+      if (where?.dir === 'projects' && where.file) return run(`project ${where.file}`, { s, d });
+      if (where?.dir === 'blog' && where.file) return run(`blog ${where.file}`, { s, d });
       return { lines: [[seg(fill(s.catMissing, { file: args[0]! }), 'error')]] };
     }
-    case 'goto':
     case 'cd': {
+      if (!arg || arg === '~' || arg === '/') return { lines: [], cwd: '' };
+      const where = resolve(cwd, args[0]!);
+      if (!where) return { lines: [[seg(fill(s.cdMissing, { dir: args[0]! }), 'error')]] };
+      if (where.file) return { lines: [[seg(fill(s.notDir, { file: args[0]! }), 'error')]] };
+      return { lines: [], cwd: where.dir };
+    }
+    case 'goto': {
       if (!arg)
         return { lines: [[seg(fill(s.gotoUsage, { sections: SECTIONS.join(', ') }), 'dim')]] };
       const wanted = arg.replace(/^~?\//, '').replace(/\/$/, '');
@@ -331,7 +479,7 @@ export function run(raw: string, { s, d, theme = 'dark' }: Context): Result {
     case 'clear':
       return { lines: [], action: { type: 'clear' } };
     case 'pwd':
-      return { lines: [[seg('/home/guillaume/portfolio')]] };
+      return { lines: [[seg(`/home/guillaume/portfolio${cwd ? `/${cwd}` : ''}`)]] };
     case 'date':
       return {
         lines: [
@@ -377,7 +525,61 @@ export function run(raw: string, { s, d, theme = 'dark' }: Context): Result {
       return { lines: [[seg(s.vim, 'dim')]] };
     case '42':
       return { lines: [[seg(s.answer, 'dim')]] };
-    default:
-      return { lines: [[seg(fill(s.notFound, { cmd }), 'error')]] };
+    case 'reset':
+      return { lines: [], action: { type: 'reset' }, cwd: '' };
+    case 'history':
+      return {
+        lines: history.length
+          ? history.map((h, i) => [seg(`${String(i + 1).padStart(4)}  `, 'dim'), seg(h)])
+          : [[seg(s.historyEmpty, 'dim')]],
+      };
+    case 'github':
+      return { lines: [[seg('▸ ', 'accent'), link(d.links.github, d.links.github, true)]] };
+    case 'website':
+      return {
+        lines: [[seg('▸ ', 'accent'), link('https://grichard.eu/', 'https://grichard.eu/')]],
+      };
+    case 'banner':
+      return {
+        lines: [
+          ...[
+            '  ___ ___ ___ ___ _  _   _   ___ ___ ',
+            ' / __| _ \\_ _/ __| || | /_\\ | _ \\   \\',
+            '| (_ |   /| | (__| __ |/ _ \\|   / |) |',
+            ' \\___|_|_\\___\\___|_||_/_/ \\_\\_|_\\___/',
+          ].map((row) => [seg(row, 'accent')]),
+          [seg(s.tagline, 'dim')],
+        ],
+      };
+    case 'man': {
+      if (!arg) return { lines: [[seg(s.manUsage, 'dim')]] };
+      const known = (COMMANDS as readonly string[]).includes(arg) ? (arg as Command) : null;
+      if (!known) return { lines: [[seg(fill(s.manMissing, { cmd: args[0]! }), 'error')]] };
+      return {
+        lines: [
+          [seg(known.toUpperCase(), 'accent')],
+          [seg(`  ${s.help[known]}`)],
+          [seg(s.manUsageLabel, 'accent')],
+          [seg(`  ${known}${s.help[known].includes('<') ? ' …' : ''}`)],
+        ],
+      };
+    }
+    case 'fortune':
+      return {
+        lines: [[seg(s.fortunes[Math.floor(random() * s.fortunes.length)] ?? '', 'dim')]],
+      };
+    case 'matrix':
+      return { lines: [[seg(s.matrix, 'dim')]], action: { type: 'effect', name: 'matrix' } };
+    case 'konami':
+      return { lines: [[seg(s.konami, 'dim')]], action: { type: 'effect', name: 'konami' } };
+    default: {
+      const near = nearest(name);
+      return {
+        lines: [
+          [seg(fill(s.notFound, { cmd }), 'error')],
+          ...(near ? [[seg(fill(s.didYouMean, { cmd: near }), 'dim')]] : []),
+        ],
+      };
+    }
   }
 }

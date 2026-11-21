@@ -1,0 +1,98 @@
+---
+// Page /terminal/ : terminal interactif (registre de commandes fermé : aucun eval, aucun accès système) précédé d'une version
+// statique du contenu essentiel, lisible sans JavaScript et indexable.
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Terminal from '../components/Terminal.astro';
+import { PORTFOLIO_DATA } from '../data/content';
+import { crumbs } from '../lib/crumbs';
+import { ROUTES, UI, routeAlternates, type Lang } from '../lib/i18n';
+import { terminalData } from '../terminal/data';
+import '../styles/pages.css';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ui = UI[lang];
+const t = PORTFOLIO_DATA[lang];
+const routes = ROUTES[lang];
+const d = await terminalData(lang);
+const fr = lang === 'fr';
+const title = fr
+  ? 'Terminal : explorer le portfolio en ligne de commande'
+  : 'Terminal: explore the portfolio from the command line';
+const description = fr
+  ? 'Un terminal interactif pour parcourir le profil, les projets, les articles et les outils de Guillaume Richard. Même contenu sans JavaScript.'
+  : 'An interactive terminal to browse Guillaume Richard’s profile, projects, articles and tools. The same content is available without JavaScript.';
+const copy = fr
+  ? {
+      h1: 'Terminal',
+      lead: 'Tapez help pour la liste des commandes. Les raccourcis (Ctrl+L, Ctrl+C, Ctrl+K) n’agissent que dans le terminal.',
+      plain: 'Sans terminal',
+      plainText: 'Les mêmes informations, en pages classiques :',
+      skills: 'Compétences',
+      projects: 'Projets',
+    }
+  : {
+      h1: 'Terminal',
+      lead: 'Type help for the list of commands. The shortcuts (Ctrl+L, Ctrl+C, Ctrl+K) only act inside the terminal.',
+      plain: 'Without the terminal',
+      plainText: 'The same information, as ordinary pages:',
+      skills: 'Skills',
+      projects: 'Projects',
+    };
+const trail = crumbs(lang, [], { label: copy.h1, path: routes.terminal });
+const nav = [
+  { href: routes.about, label: ui.nav.about },
+  { href: routes.skills, label: ui.nav.skills },
+  { href: routes.projects, label: ui.nav.projects },
+  { href: routes.career, label: ui.nav.career },
+  { href: routes.blog, label: ui.nav.blog },
+  { href: routes.contact, label: ui.nav.contact },
+];
+---
+
+<Base
+  lang={lang}
+  title={`${title} | Guillaume Richard`}
+  description={description}
+  path={routes.terminal}
+  alternates={routeAlternates('terminal')}
+  ld={{ '@context': 'https://schema.org', '@graph': [trail.ld] }}
+>
+  <PageHero title={copy.h1} lead={copy.lead} crumbs={trail} />
+  <div class="container section">
+    <Terminal lang={lang} />
+
+    <section class="term-plain" aria-labelledby="plain-title">
+      <h2 id="plain-title">{copy.plain}</h2>
+      <p>{copy.plainText}</p>
+      <ul class="row" role="list">
+        {nav.map((item) => (
+          <li>
+            <a class="chip" href={item.href}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <h3>{copy.skills}</h3>
+      <ul>
+        {d.skills.map((k) => (
+          <li>
+            <b>{k.category}</b> : {k.items}
+          </li>
+        ))}
+      </ul>
+      <h3>{copy.projects}</h3>
+      <ul>
+        {t.projects.map((p) => (
+          <li>
+            <a href={`${routes.projects}${p.slug}/`}>{p.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</Base>

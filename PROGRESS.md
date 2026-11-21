@@ -52,3 +52,11 @@
 - Pagefind 1.6 (dev), indexé au build ; palette Ctrl/Cmd+K groupée (Pages, Projets, Articles, Compétences...), surlignage, suggestions, état « aucun résultat », page `/search/?q=` (FR et EN, noindex). CSP `wasm-unsafe-eval`. Tests e2e `search.spec.ts` ; 278 e2e et 1747 vitest verts.
 - Piège : un `astro preview` oublié sur le port 4321 fausse les e2e (servait un ancien dist) : l'arrêter avant de lancer.
 - Les compétences et expériences sont des sections de leurs pages (résultats de niveau page, groupe selon le filtre `type`).
+
+## Lot 6 (terminal) : fait, non poussé
+
+- Page `/terminal/` (FR) et `/en/terminal/` ; entrée `>_ Terminal` dans le menu ; le terminal quitte l'accueil (le prompt du hero y renvoie). Contenu essentiel en HTML statique sous le terminal (compétences, projets, liens), indexable.
+- Nouvelles commandes : reset, history, date, pwd, cd, education, project <nom>, blog <slug>, github, website, banner, man <cmd>, fortune ; cachées : matrix, konami (courts, interruptibles, sans animation si mouvement réduit), sudo/42/coffee existants. Arborescence virtuelle /about /skills /projects /experience /blog /contact (ls/cd/pwd/cat), prompt `guillaume@grichard.eu:~/dossier (main)$`.
+- Expérience : historique en `sessionStorage`, Tab sur commandes et arguments (dossiers, projets, articles, man), suggestion « Vouliez-vous dire », casse ignorée, Ctrl+L / Ctrl+C / Ctrl+K seulement dans le champ du terminal. Registre fermé : aucun eval ni JS arbitraire.
+- Vérifié : check 0 erreur, vitest 1761, e2e 281 verts (axe compris).
+- Reste : test manuel mobile (clavier virtuel) au lot 10 / phase 4.

@@ -1,5 +1,5 @@
 ---
-// Terminal interactif de l'accueil. Sans JavaScript : présentation statique (commandes d'accueil) et liens vers les pages.
+// Terminal interactif (page /terminal/). Sans JavaScript : présentation statique (commandes d'accueil) et liens vers les pages.
 // Avec JavaScript : src/terminal/ui.ts (module externe) active le champ, l'historique, la complétion et les suggestions.
 import { PORTFOLIO_DATA } from '../data/content';
 import { withBase } from '../lib/base';
@@ -67,6 +67,7 @@ const shortcuts = [
       <span class="terminal-name" aria-hidden="true">
         {s.title}
       </span>
+      <span class="terminal-status">{lang === 'fr' ? 'session active' : 'session live'}</span>
     </div>
     <div class="terminal-screen" data-terminal-screen>
       <dl class="terminal-boot">
@@ -90,8 +91,8 @@ const shortcuts = [
         data-terminal-log
       ></div>
       <form class="terminal-prompt" data-terminal-form>
-        <span class="term-accent" aria-hidden="true">
-          $
+        <span class="term-accent term-ps" aria-hidden="true" data-terminal-ps>
+          guillaume@grichard.eu:~ (main)$
         </span>
         <label for="terminal-input" class="visually-hidden">
           {s.inputLabel}

@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('exécute des commandes et annonce le résultat dans le journal', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/terminal/');
   const input = page.getByRole('textbox', { name: 'Commande du terminal' });
   const log = page.getByRole('log', { name: 'Résultats des commandes' });
   await expect(input).toBeEnabled();
@@ -30,7 +30,7 @@ test('exécute des commandes et annonce le résultat dans le journal', async ({ 
 });
 
 test('historique aux flèches et complétion par Tab sans piège clavier', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/terminal/');
   const input = page.getByRole('textbox', { name: 'Commande du terminal' });
   await expect(input).toBeEnabled();
   for (const command of ['about', 'skills']) {
@@ -54,7 +54,7 @@ test('historique aux flèches et complétion par Tab sans piège clavier', async
 });
 
 test('les suggestions, theme et open agissent sur la page', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/terminal/');
   const log = page.getByRole('log', { name: 'Résultats des commandes' });
   await page.getByRole('button', { name: 'projects', exact: true }).click();
   await expect(log).toContainText('Outil de conversion e-mail');
@@ -68,7 +68,7 @@ test('les suggestions, theme et open agissent sur la page', async ({ page }) => 
 });
 
 test('peut être désactivé, et le choix est mémorisé', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/terminal/');
   const toggle = page.getByRole('button', { name: 'Désactiver le terminal' });
   await toggle.click();
   await expect(page.getByRole('textbox', { name: 'Commande du terminal' })).toBeHidden();
@@ -81,7 +81,7 @@ test('peut être désactivé, et le choix est mémorisé', async ({ page }) => {
 });
 
 test('boutons de la fenêtre : réduire, agrandir (Échap) et fermer', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/terminal/');
   const input = page.getByRole('textbox', { name: 'Commande du terminal' });
   const minimize = page.getByRole('button', { name: 'Réduire le terminal' });
   const maximize = page.getByRole('button', { name: /^Agrandir le terminal/ });
@@ -112,7 +112,7 @@ test('sans JavaScript : présentation et raccourcis, pas de champ inutilisable',
 }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  await page.goto('http://localhost:4321/');
+  await page.goto('http://localhost:4321/terminal/');
   await expect(page.getByRole('navigation', { name: 'Raccourcis' })).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Raccourcis' }).getByRole('link')).toHaveCount(
     7,
@@ -124,7 +124,7 @@ test('sans JavaScript : présentation et raccourcis, pas de champ inutilisable',
 for (const theme of ['dark', 'light'] as const) {
   test(`WCAG 2.2 AA : terminal utilisé (thème ${theme})`, async ({ page }) => {
     await setTheme(page, theme);
-    await page.goto('/en/');
+    await page.goto('/en/terminal/');
     const input = page.getByRole('textbox', { name: 'Terminal command' });
     await expect(input).toBeEnabled();
     for (const command of ['help', 'projects', 'nope', 'neofetch']) {
@@ -138,3 +138,51 @@ for (const theme of ['dark', 'light'] as const) {
     expect(results.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
   });
 }
+
+test('cd et le prompt suivent l’arborescence, l’historique survit au rechargement de la session', async ({
+  page,
+}) => {
+  await page.goto('/terminal/');
+  const input = page.getByRole('textbox', { name: 'Commande du terminal' });
+  const log = page.getByRole('log', { name: 'Résultats des commandes' });
+  await expect(input).toBeEnabled();
+  await input.fill('cd projects');
+  await input.press('Enter');
+  await expect(page.locator('[data-terminal-ps]')).toContainText('~/projects (main)$');
+  await input.fill('pwd');
+  await input.press('Enter');
+  await expect(log).toContainText('/home/guillaume/portfolio/projects');
+  await input.fill('skils');
+  await input.press('Enter');
+  await expect(log).toContainText('Vouliez-vous dire : skills');
+  await page.reload();
+  await expect(input).toBeEnabled();
+  await input.press('ArrowUp');
+  await expect(input).toHaveValue('skils');
+});
+
+test('Ctrl+C interrompt la saisie, Ctrl+K ouvre la recherche, easter eggs courts', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/terminal/');
+  const input = page.getByRole('textbox', { name: 'Commande du terminal' });
+  const log = page.getByRole('log', { name: 'Résultats des commandes' });
+  await expect(input).toBeEnabled();
+  await input.fill('abandon');
+  await input.press('Control+c');
+  await expect(input).toHaveValue('');
+  await expect(log).toContainText('^C');
+  await input.fill('fortune');
+  await input.press('Enter');
+  await input.fill('man ls');
+  await input.press('Enter');
+  await expect(log).toContainText('USAGE');
+  await input.fill('matrix');
+  await input.press('Enter');
+  await expect(page.locator('.term-matrix')).toBeVisible();
+  await input.press('Escape');
+  await expect(page.locator('.term-matrix')).toHaveCount(0);
+  await input.press('Control+k');
+  await expect(page.getByRole('dialog', { name: 'Rechercher' })).toBeVisible();
+});

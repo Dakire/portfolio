@@ -4,7 +4,6 @@ import AvatarPortrait from '../components/AvatarPortrait.astro';
 import CareerTimeline from '../components/CareerTimeline.astro';
 import Icon from '../components/Icon.astro';
 import SocialLinks from '../components/SocialLinks.astro';
-import Terminal from '../components/Terminal.astro';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
 import { SITE_TEXT } from '../data/site-text';
 import { CATEGORIES, getPosts, isoDate, postPath } from '../lib/blog';
@@ -89,8 +88,6 @@ const labels = fr
       tools: 'Outils en ligne',
       allTools: `Le catalogue (${TOOLS.length} outils)`,
       toolsNote: 'Gratuits, sans compte, rien n’est conservé.',
-      terminal: 'Terminal',
-      terminalMeta: 'tapez help',
       contactTitle: 'Une question, un projet ?',
       contactText:
         'Le formulaire est le plus direct : je lis chaque message et je réponds moi-même. Mes profils et mes CV sont aussi à portée de clic.',
@@ -111,8 +108,6 @@ const labels = fr
       tools: 'Online tools',
       allTools: `Full catalogue (${TOOLS.length} tools)`,
       toolsNote: 'Free, no account, nothing you type is kept.',
-      terminal: 'Terminal',
-      terminalMeta: 'type help',
       contactTitle: 'A question, a project?',
       contactText:
         'The form is the most direct way: I read every message and reply myself. My profiles and résumés are one click away.',
@@ -165,7 +160,7 @@ const labels = fr
         <p class="hm-ps">
           <b>guillaume@grichard.eu</b>:~$ <span class="hm-caret" aria-hidden="true"></span>
         </p>
-        <a class="hm-open" href="#terminal">
+        <a class="hm-open" href={routes.terminal}>
           {labels.openTerminal}
         </a>
       </aside>
@@ -342,18 +337,6 @@ const labels = fr
         </section>
       </div>
       <p class="hm-tools-note note">{labels.toolsNote}</p>
-    </div>
-  </section>
-
-  <section class="hm-section" id="terminal" aria-labelledby="record-title">
-    <div class="container">
-      <div class="rubric">
-        <h2 id="record-title">{labels.terminal}</h2>
-        <p class="rubric-meta">{labels.terminalMeta}</p>
-      </div>
-      <div class="hm-terminal">
-        <Terminal lang={lang} />
-      </div>
     </div>
   </section>
 

@@ -1,4 +1,4 @@
-// Interface du terminal de l'accueil : branche l'interpréteur (commands.ts) sur le balisage de components/Terminal.astro.
+// Interface du terminal (page /terminal/) : branche l'interpréteur (commands.ts) sur le balisage de components/Terminal.astro.
 // JavaScript sans dépendance, chargé en module externe (CSP). Sans JavaScript, le terminal reste une présentation statique
 // suivie de liens. Accessibilité : champ étiqueté, sorties annoncées (role="log"), suggestions cliquables, Tab ne piège
 // jamais le focus, aucune animation imposée, et un bouton pour désactiver le terminal (choix mémorisé).
@@ -6,6 +6,7 @@ import { complete, run, type Action, type Line, type TerminalData } from './comm
 import { TERMINAL } from './text';
 
 const STORAGE_KEY = 'terminal';
+const HISTORY_KEY = 'terminal-history';
 const MAX_ENTRIES = 30;
 
 const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -25,6 +26,24 @@ const storeOff = (off: boolean) => {
     else localStorage.removeItem(STORAGE_KEY);
   } catch {
     // stockage indisponible : le choix vaut pour cette visite
+  }
+};
+
+const readHistory = (): string[] => {
+  try {
+    const raw = sessionStorage.getItem(HISTORY_KEY);
+    const parsed: unknown = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter((x): x is string => typeof x === 'string') : [];
+  } catch {
+    return [];
+  }
+};
+const writeHistory = (items: string[]) => {
+  try {
+    if (items.length) sessionStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(-100)));
+    else sessionStorage.removeItem(HISTORY_KEY);
+  } catch {
+    // stockage indisponible : l'historique vaut pour cette page
   }
 };
 
@@ -58,7 +77,65 @@ export function mountTerminal(root: HTMLElement): void {
 
   const data = JSON.parse(raw) as TerminalData;
   const s = TERMINAL[data.lang];
-  const history = { items: [] as string[], index: -1, draft: '' };
+  const history = { items: readHistory(), index: -1, draft: '' };
+  let cwd = '';
+  const psNode = root.querySelector<HTMLElement>('[data-terminal-ps]');
+  const prompt = () => `guillaume@grichard.eu:~${cwd ? `/${cwd}` : ''} (main)$`;
+  const syncPrompt = () => {
+    if (psNode) psNode.textContent = prompt();
+  };
+  syncPrompt();
+
+  // Effets d'easter egg : courts (quelques secondes) et interruptibles (Échap, Ctrl+C, nouvelle commande).
+  let stopEffect: (() => void) | null = null;
+  const interrupt = (): boolean => {
+    if (!stopEffect) return false;
+    stopEffect();
+    return true;
+  };
+  const matrix = (entry: HTMLElement) => {
+    if (reducedMotion()) return;
+    const pre = document.createElement('pre');
+    pre.className = 'term-matrix';
+    pre.setAttribute('aria-hidden', 'true');
+    entry.append(pre);
+    const cols = Math.max(20, Math.min(60, Math.floor(screen.clientWidth / 9)));
+    const glyphs = 'ｱｲｳｴｵｶｷｸｹｺ01アイウエオ';
+    const drops = Array.from({ length: cols }, () => Math.floor(Math.random() * 8));
+    const rows: string[] = [];
+    const tick = () => {
+      rows.unshift(
+        drops
+          .map((d, i) => {
+            drops[i] = d > 0 ? d - 1 : Math.random() > 0.9 ? 6 : 0;
+            return d > 0 ? glyphs[Math.floor(Math.random() * glyphs.length)] : ' ';
+          })
+          .join(''),
+      );
+      rows.length = Math.min(rows.length, 8);
+      pre.textContent = rows.join('\n');
+    };
+    const timer = window.setInterval(tick, 90);
+    const done = () => {
+      window.clearInterval(timer);
+      window.clearTimeout(limit);
+      pre.remove();
+      stopEffect = null;
+    };
+    const limit = window.setTimeout(done, 3500);
+    stopEffect = done;
+  };
+  const konami = () => {
+    if (reducedMotion()) return;
+    root.setAttribute('data-konami', '');
+    const limit = window.setTimeout(done, 1200);
+    function done() {
+      window.clearTimeout(limit);
+      root.removeAttribute('data-konami');
+      stopEffect = null;
+    }
+    stopEffect = done;
+  };
 
   const perform = (action?: Action) => {
     if (!action) return;
@@ -85,30 +162,53 @@ export function mountTerminal(root: HTMLElement): void {
       case 'clear':
         log.replaceChildren();
         break;
+      case 'reset':
+        log.replaceChildren();
+        history.items = [];
+        history.index = -1;
+        writeHistory([]);
+        break;
+      case 'effect':
+        break; // lancé par exec : il a besoin de l'entrée qui vient d'être ajoutée
     }
   };
 
   const exec = (command: string) => {
     const typed = command.trim();
     if (!typed) return;
+    interrupt();
     if (history.items.at(-1) !== typed) history.items.push(typed);
     history.index = -1;
+    writeHistory(history.items);
 
-    const result = run(typed, { s, d: data, theme: currentTheme() });
-    if (result.action?.type !== 'clear') {
+    const result = run(typed, {
+      s,
+      d: data,
+      theme: currentTheme(),
+      cwd,
+      history: history.items,
+    });
+    const before = prompt();
+    if (result.cwd !== undefined) cwd = result.cwd;
+    if (result.action?.type !== 'clear' && result.action?.type !== 'reset') {
       const entry = document.createElement('div');
       entry.className = 'term-entry';
       const prompt = document.createElement('p');
       const sign = document.createElement('span');
       sign.className = 'term-accent';
       sign.setAttribute('aria-hidden', 'true');
-      sign.textContent = '$ ';
+      sign.textContent = `${before} `;
       prompt.append(sign, typed);
       entry.append(prompt, ...result.lines.map(renderLine));
       log.append(entry);
       while (log.childElementCount > MAX_ENTRIES) log.firstElementChild?.remove();
+      if (result.action?.type === 'effect') {
+        if (result.action.name === 'matrix') matrix(entry);
+        else konami();
+      }
       screen.scrollTop = screen.scrollHeight; // la dernière sortie reste visible, comme dans un vrai terminal
     }
+    syncPrompt();
     perform(result.action);
   };
 
@@ -137,6 +237,25 @@ export function mountTerminal(root: HTMLElement): void {
     } else if (event.key === 'l' && event.ctrlKey) {
       event.preventDefault();
       log.replaceChildren();
+    } else if (event.key === 'c' && event.ctrlKey && !event.metaKey) {
+      // Ctrl+C : interrompt l'effet en cours, sinon abandonne la saisie (comme un shell) ; avec du texte sélectionné, copie.
+      if (input.selectionStart !== input.selectionEnd) return;
+      event.preventDefault();
+      if (interrupt()) return;
+      const entry = document.createElement('div');
+      entry.className = 'term-entry';
+      const line = document.createElement('p');
+      line.append(`${prompt()} ${input.value}${s.interrupted}`);
+      entry.append(line);
+      log.append(entry);
+      input.value = '';
+      history.index = -1;
+      screen.scrollTop = screen.scrollHeight;
+    } else if (event.key === 'k' && event.ctrlKey && !event.metaKey) {
+      event.preventDefault();
+      document.querySelector<HTMLButtonElement>('[data-search-open]')?.click();
+    } else if (event.key === 'Escape' && interrupt()) {
+      event.preventDefault();
     }
   });
 

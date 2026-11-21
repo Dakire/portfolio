@@ -137,10 +137,10 @@ describe('commandes', () => {
     expect(text(run('cat', ctx()))).toContain('usage');
   });
 
-  it("goto (et cd) accepte l'identifiant ou le nom affiché de la section", () => {
+  it("goto accepte l'identifiant ou le nom affiché de la section", () => {
     expect(run('goto skills', ctx()).action).toEqual({ type: 'goto', id: 'skills' });
     expect(run('goto compétences', ctx()).action).toEqual({ type: 'goto', id: 'skills' });
-    expect(run('cd ~/projects/', ctx()).action).toEqual({ type: 'goto', id: 'projects' });
+    expect(run('cd ~/projects/', ctx()).cwd).toBe('projects');
     expect(run('goto nulle-part', ctx()).lines[0]![0]!.kind).toBe('error');
     expect(text(run('goto', ctx()))).toContain('usage');
   });
@@ -205,7 +205,7 @@ describe('complétion', () => {
   it.each([
     ['he', 'help '],
     ['sk', 'skills '],
-    ['pro', 'projects '],
+    ['pro', 'project'],
     ['c', null], // cat, cd, clear, contact, cv : ambigu sans préfixe commun plus long
     ['neo', 'neofetch '],
     ['goto sk', 'goto skills'],
@@ -227,5 +227,62 @@ describe('complétion', () => {
     expect(complete('ex')).toBeNull(); // experience, exit : rien de plus que « ex » en commun
     expect(complete('cl')).toBe('clear ');
     expect(complete('expe')).toBe('experience ');
+  });
+});
+
+describe('arborescence, projets et nouvelles commandes', () => {
+  const at = (cwd: string, lang: 'fr' | 'en' = 'fr') => ({ ...ctx(lang), cwd });
+
+  it('cd, pwd et ls suivent l’arborescence virtuelle', () => {
+    expect(run('cd blog', ctx()).cwd).toBe('blog');
+    expect(run('cd ..', at('blog')).cwd).toBe('');
+    expect(run('cd ~', at('blog')).cwd).toBe('');
+    expect(run('cd nulle-part', ctx()).lines[0]![0]!.kind).toBe('error');
+    expect(run('cd about.txt', ctx()).lines[0]![0]!.kind).toBe('error');
+    expect(text(run('pwd', at('skills')))).toBe('/home/guillaume/portfolio/skills');
+    expect(text(run('ls', at('blog')))).toContain('spf-dkim-dmarc-expliques');
+    expect(text(run('ls', ctx()))).toContain('projects/');
+    expect(text(run('ls skills', ctx()))).toContain('Réseau & Systèmes');
+    expect(text(run('cat about.txt', at('about')))).toContain('Passionné');
+  });
+
+  it('project et blog <slug> : détail, casse et recherche partielle', () => {
+    expect(text(run('project', ctx()))).toContain('usage');
+    expect(run('project zzz', ctx()).lines[0]![0]!.kind).toBe('error');
+    expect(run('blog nope', ctx()).lines[0]![0]!.kind).toBe('error');
+    expect(hrefs(run('blog SPF-DKIM', ctx()))).toEqual(['/blog/spf-dkim-dmarc-expliques/']);
+  });
+
+  it('history, reset, man, banner, fortune, education, github, website', () => {
+    expect(text(run('history', ctx()))).toContain('vide');
+    expect(text(run('history', { ...ctx(), history: ['help', 'about'] }))).toContain('about');
+    expect(run('reset', at('blog'))).toMatchObject({ action: { type: 'reset' }, cwd: '' });
+    expect(text(run('man ls', ctx()))).toContain('LS');
+    expect(run('man nope', ctx()).lines[0]![0]!.kind).toBe('error');
+    expect(text(run('banner', ctx()))).toContain('technicien');
+    expect(text(run('fortune', { ...ctx(), random: () => 0 }))).toContain('bug');
+    expect(text(run('education', ctx()))).toContain('aucune');
+    expect(hrefs(run('github', ctx()))[0]).toContain('github');
+    expect(hrefs(run('website', ctx()))).toEqual(['https://grichard.eu/']);
+  });
+
+  it('matrix et konami déclenchent un effet court, absents de help', () => {
+    expect(run('matrix', ctx()).action).toEqual({ type: 'effect', name: 'matrix' });
+    expect(run('konami', ctx('en')).action).toEqual({ type: 'effect', name: 'konami' });
+    const help = text(run('help', ctx()));
+    expect(help).not.toContain('matrix');
+    expect(help).not.toContain('konami');
+  });
+
+  it('suggère la commande proche en cas de faute de frappe, casse ignorée', () => {
+    expect(text(run('skils', ctx()))).toContain('Vouliez-vous dire : skills');
+    expect(text(run('PROJECTS', ctx()))).toContain('▸');
+    expect(text(run('zzzzzzzz', ctx()))).not.toContain('Vouliez-vous');
+  });
+
+  it('complète les arguments : dossiers, projets, articles, man', () => {
+    expect(complete('cd pro')).toBe('cd projects');
+    expect(complete('man cu')).toBe('man cursor');
+    expect(complete('blog spf', data('fr'))).toBe('blog spf-dkim-dmarc-expliques');
   });
 });

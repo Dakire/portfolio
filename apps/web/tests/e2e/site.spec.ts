@@ -282,7 +282,7 @@ test('le bandeau de consentement ne décale pas la page (CLS) et ne masque pas l
   expect(await mainTop()).toBe(withBanner);
 });
 
-test('la navigation principale : sept entrées à plat, Contact en bouton, page courante signalée', async ({
+test('la navigation principale : huit entrées à plat, Contact en bouton, page courante signalée', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -296,6 +296,7 @@ test('la navigation principale : sept entrées à plat, Contact en bouton, page 
     'Blog',
     'Outils',
     'Cheatsheets',
+    '>_ Terminal',
   ]);
   await expect(nav.getByRole('link', { name: 'Compétences' })).toHaveAttribute(
     'aria-current',

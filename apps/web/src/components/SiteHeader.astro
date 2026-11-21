@@ -26,6 +26,7 @@ const items: { key: keyof (typeof ui)['nav']; href: string }[] = [
   { key: 'blog', href: ROUTES[lang].blog },
   { key: 'tools', href: ROUTES[lang].tools },
   ...(cheatsheets ? [{ key: 'cheatsheets' as const, href: cheatsheets.href }] : []),
+  { key: 'terminal', href: ROUTES[lang].terminal },
 ];
 const current = (href: string) =>
   path === href ? ('page' as const) : path.startsWith(href) ? ('true' as const) : undefined;
@@ -68,6 +69,11 @@ const groups = TOOL_GROUPS.map((group) => ({
           {items.map((item) => (
             <li class={item.key === 'tools' ? 'has-sub' : undefined}>
               <a href={item.href} aria-current={current(item.href)}>
+                {item.key === 'terminal' && (
+                  <span class="nav-prompt" aria-hidden="true">
+                    &gt;_{' '}
+                  </span>
+                )}
                 {ui.nav[item.key]}
               </a>
               {item.key === 'tools' && (

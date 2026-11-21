@@ -1,4 +1,4 @@
-/* ---------- Terminal de l'accueil, mis en page comme une feuille de relevé (ADR 0014) (components/Terminal.astro, src/terminal/ui.ts) ----------
+/* ---------- Terminal : fenêtre sobre, fond en creux, accent violet (ADR 0016) (components/Terminal.astro, src/terminal/ui.ts) ----------
    Sans JavaScript : présentation statique et liens. La classe « js » (posée par /js/theme.js avant le premier rendu)
    affiche l'invite et les suggestions dès le départ : aucun décalage quand le script arrive. */
 .terminal {
@@ -11,9 +11,9 @@
 }
 .terminal-window {
   overflow: hidden;
-  border: var(--stroke) solid var(--ink);
-  border-radius: var(--radius-sm);
-  background: var(--raised);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--sunk);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
 }
@@ -22,7 +22,7 @@
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-3) var(--space-4) var(--space-3) var(--space-2);
-  border-bottom: var(--stroke) solid var(--ink);
+  border-bottom: 1px solid var(--line);
   background: var(--surface);
 }
 /* Boutons de la fenêtre : visibles seulement avec JavaScript (le script les révèle) ; cible tactile de 44 px,
@@ -52,7 +52,8 @@
   place-items: center;
   width: 1.125rem;
   height: 1.125rem;
-  border: var(--stroke) solid var(--ink);
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
   color: var(--ink);
   font-size: 0.8125rem;
   font-weight: 600;
@@ -61,8 +62,8 @@
 }
 .terminal-ctl:hover > span,
 .terminal-ctl:focus-visible > span {
-  background: var(--ink);
-  color: var(--canvas);
+  background: var(--raised);
+  border-color: var(--ink);
 }
 .terminal-ctl-close > span::before {
   content: '×';
@@ -74,8 +75,8 @@
   content: '+';
 }
 .terminal-ctl[aria-pressed='true'] > span {
-  background: var(--ink);
-  color: var(--canvas);
+  background: var(--raised);
+  border-color: var(--accent);
 }
 .terminal[data-minimized] .terminal-screen,
 .terminal[data-minimized] .terminal-footer {
@@ -92,7 +93,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 0 0 100vmax color-mix(in srgb, var(--canvas) 82%, transparent);
-  background: var(--raised);
+  background: var(--sunk);
 }
 .terminal[data-maximized] .terminal-screen {
   flex: 1 1 auto;
@@ -104,14 +105,30 @@ html[data-terminal-max] {
 }
 .terminal-name {
   overflow: hidden;
+  flex: 1;
   margin-left: var(--space-2);
   color: var(--muted);
   font-size: var(--text-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.terminal-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  color: var(--ok);
+  font-size: var(--text-xs);
+}
+.terminal-status::before {
+  content: '';
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--ok);
+}
 .terminal-screen {
-  height: 19rem;
+  height: min(30rem, 70dvh);
   overflow-y: auto;
   padding: var(--space-4);
   line-height: 1.6;
@@ -147,8 +164,9 @@ html[data-terminal-max] {
 }
 .terminal-prompt {
   display: none;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2);
+  gap: 0 var(--space-2);
   margin-top: var(--space-2);
   padding-inline: var(--space-1);
   border-radius: var(--radius-sm);
@@ -157,9 +175,13 @@ html[data-terminal-max] {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
+.term-ps {
+  color: var(--muted);
+  white-space: nowrap;
+}
 .terminal-prompt input {
   flex: 1;
-  min-width: 0;
+  min-width: 12ch;
   min-height: var(--target);
   padding: 0;
   border: 0;
@@ -180,7 +202,7 @@ html[data-terminal-max] {
   align-items: center;
   gap: var(--space-2) var(--space-4);
   padding: var(--space-3) var(--space-4);
-  border-top: 1px solid var(--line-strong);
+  border-top: 1px solid var(--line);
   background: var(--surface);
 }
 .terminal-chips {
@@ -207,4 +229,33 @@ html[data-terminal-max] {
 .terminal-toggle {
   justify-self: end;
   font-weight: 500;
+}
+
+/* Prompt dans le menu : décor, le nom accessible est « Terminal » */
+.nav-prompt {
+  color: var(--accent);
+  font-family: var(--font-mono);
+}
+/* Easter eggs : pluie de caractères (3,5 s au plus), clignotement de la fenêtre (1,2 s) */
+.term-matrix {
+  margin: var(--space-2) 0 0;
+  color: var(--ok);
+  font-size: var(--text-xs);
+  line-height: 1.2;
+  white-space: pre;
+  overflow: hidden;
+}
+.terminal[data-konami] .terminal-window {
+  animation: term-konami 0.4s ease-in-out 3;
+}
+@keyframes term-konami {
+  50% {
+    border-color: var(--accent);
+  }
+}
+.term-plain {
+  margin-top: var(--space-7);
+}
+.term-plain h3 {
+  margin-top: var(--space-4);
 }

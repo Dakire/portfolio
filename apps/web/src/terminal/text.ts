@@ -1,4 +1,4 @@
-// Textes du terminal de l'accueil (FR/EN). Les paramètres s'insèrent dans {accolades}.
+// Textes du terminal (page /terminal/) (FR/EN). Les paramètres s'insèrent dans {accolades}.
 import type { Lang } from '../lib/i18n';
 import type { Command } from './commands';
 
@@ -57,6 +57,23 @@ export interface TerminalStrings {
   ping: string;
   vim: string;
   answer: string;
+  didYouMean: string;
+  notDir: string;
+  cdMissing: string;
+  projectUsage: string;
+  projectMissing: string;
+  blogMissing: string;
+  noEducation: string;
+  historyEmpty: string;
+  resetDone: string;
+  manUsage: string;
+  manMissing: string;
+  manUsageLabel: string;
+  tagline: string;
+  matrix: string;
+  konami: string;
+  interrupted: string;
+  fortunes: string[];
   sections: Record<Section, string>;
   themes: Record<'dark' | 'light' | 'auto', string>;
   languages: Record<Lang, string>;
@@ -69,7 +86,7 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
     title: 'guillaume@grichard.eu: ~',
     inputLabel: 'Commande du terminal',
     placeholder: 'tapez help',
-    hint: 'Tapez une commande (help pour la liste), ↑ ↓ pour l’historique, Tab pour compléter.',
+    hint: 'Tapez une commande (help pour la liste), ↑ ↓ pour l’historique, Tab pour compléter. Ctrl+L efface, Ctrl+C interrompt, Ctrl+K cherche.',
     suggestions: ['help', 'skills', 'projects', 'tools', 'contact'],
     log: 'Résultats des commandes',
     close: 'Fermer le terminal',
@@ -103,8 +120,21 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
       neofetch: 'informations système',
       cursor: 'cursor [on|off] : curseur du site (souris)',
       clear: "effacer l'écran",
+      reset: 'effacer l’écran, l’historique et revenir à la racine',
+      history: 'historique des commandes de la session',
+      date: 'date et heure',
+      pwd: 'dossier courant',
+      cd: 'cd <dossier> : changer de dossier (about, skills, projects, experience, blog, contact)',
+      education: 'formation',
+      project: 'project <nom> : détail d’un projet',
+      github: 'mon GitHub',
+      website: 'ce site',
+      banner: 'afficher la bannière',
+      man: 'man <commande> : aide d’une commande',
+      fortune: 'une phrase au hasard',
     },
-    files: 'about.txt  stack.txt  contact.txt  blog/',
+    files:
+      'about/  skills/  projects/  experience/  blog/  contact/  about.txt  stack.txt  contact.txt',
     lsMissing: 'ls : {file} : dossier introuvable',
     catUsage: 'usage : cat <fichier> (about.txt, stack.txt, contact.txt)',
     catMissing: 'cat : {file} : fichier introuvable',
@@ -138,6 +168,31 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
     ping: '64 octets depuis grichard.eu : temps < 1 ms (ça tourne dans votre navigateur, c’est de la triche).',
     vim: 'Ce n’est pas vim, mais vous avez quand même cherché à en sortir. Essayez :q',
     answer: 'La réponse à la grande question. Reste à retrouver la question.',
+    didYouMean: 'Vouliez-vous dire : {cmd} ?',
+    notDir: '{file} : n’est pas un dossier',
+    cdMissing: 'cd : {dir} : dossier introuvable',
+    projectUsage: 'usage : project <nom> (projects pour la liste)',
+    projectMissing: 'project : projet inconnu : {name}',
+    blogMissing: 'blog : article inconnu : {slug}',
+    noEducation: 'aucune formation renseignée',
+    historyEmpty: 'historique vide',
+    resetDone: 'session réinitialisée',
+    manUsage: 'usage : man <commande>',
+    manMissing: 'man : aucune entrée de manuel pour {cmd}',
+    manUsageLabel: 'USAGE',
+    tagline: 'technicien informatique · réseaux, systèmes, automatisation',
+    matrix: 'Réveillez-vous, Neo… (Échap ou Ctrl+C pour interrompre)',
+    konami:
+      '↑ ↑ ↓ ↓ ← → ← → B A : +30 vies. Ce n’est pas ce genre de site, mais merci d’avoir essayé.',
+    interrupted: '^C',
+    fortunes: [
+      'Ce n’est pas un bug, c’est une fonctionnalité non documentée.',
+      'Il y a deux problèmes difficiles en informatique : l’invalidation du cache, nommer les choses et les erreurs d’un décalage.',
+      'Avez-vous essayé de l’éteindre puis de le rallumer ?',
+      'Les sauvegardes, on n’y pense que le jour où l’on en a besoin.',
+      'Un script qui marche une fois est un brouillon ; un script documenté est un outil.',
+      'C’est toujours le DNS.',
+    ],
     sections: {
       home: 'accueil',
       skills: 'compétences',
@@ -163,7 +218,7 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
     title: 'guillaume@grichard.eu: ~',
     inputLabel: 'Terminal command',
     placeholder: 'type help',
-    hint: 'Type a command (help for the list), ↑ ↓ for history, Tab to complete.',
+    hint: 'Type a command (help for the list), ↑ ↓ for history, Tab to complete. Ctrl+L clears, Ctrl+C interrupts, Ctrl+K searches.',
     suggestions: ['help', 'skills', 'projects', 'tools', 'contact'],
     log: 'Command output',
     close: 'Close the terminal',
@@ -197,8 +252,21 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
       neofetch: 'system information',
       cursor: 'cursor [on|off]: site cursor (mouse)',
       clear: 'clear the screen',
+      reset: 'clear the screen and history, back to the root',
+      history: 'command history of this session',
+      date: 'date and time',
+      pwd: 'current directory',
+      cd: 'cd <directory>: change directory (about, skills, projects, experience, blog, contact)',
+      education: 'education',
+      project: 'project <name>: project details',
+      github: 'my GitHub',
+      website: 'this site',
+      banner: 'show the banner',
+      man: 'man <command>: help for a command',
+      fortune: 'a random quote',
     },
-    files: 'about.txt  stack.txt  contact.txt  blog/',
+    files:
+      'about/  skills/  projects/  experience/  blog/  contact/  about.txt  stack.txt  contact.txt',
     lsMissing: 'ls: {file}: no such directory',
     catUsage: 'usage: cat <file> (about.txt, stack.txt, contact.txt)',
     catMissing: 'cat: {file}: no such file',
@@ -232,6 +300,30 @@ export const TERMINAL: Record<Lang, TerminalStrings> = {
     ping: '64 bytes from grichard.eu: time < 1 ms (it runs in your browser, so that is cheating).',
     vim: 'This is not vim, but you still tried to get out of it. Try :q',
     answer: 'The answer to the big question. Now to find the question.',
+    didYouMean: 'Did you mean: {cmd}?',
+    notDir: '{file}: not a directory',
+    cdMissing: 'cd: {dir}: no such directory',
+    projectUsage: 'usage: project <name> (projects for the list)',
+    projectMissing: 'project: unknown project: {name}',
+    blogMissing: 'blog: unknown article: {slug}',
+    noEducation: 'no education listed',
+    historyEmpty: 'history is empty',
+    resetDone: 'session reset',
+    manUsage: 'usage: man <command>',
+    manMissing: 'man: no manual entry for {cmd}',
+    manUsageLabel: 'USAGE',
+    tagline: 'IT technician · networks, systems, automation',
+    matrix: 'Wake up, Neo… (Esc or Ctrl+C to interrupt)',
+    konami: '↑ ↑ ↓ ↓ ← → ← → B A: +30 lives. This is not that kind of site, but thanks for trying.',
+    interrupted: '^C',
+    fortunes: [
+      'It is not a bug, it is an undocumented feature.',
+      'There are two hard problems in computing: cache invalidation, naming things, and off-by-one errors.',
+      'Have you tried turning it off and on again?',
+      'Backups are only thought of on the day you need one.',
+      'A script that works once is a draft; a documented script is a tool.',
+      'It is always DNS.',
+    ],
     sections: {
       home: 'home',
       skills: 'skills',
