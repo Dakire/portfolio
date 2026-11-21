@@ -8,7 +8,7 @@ tags: ['SPF', 'DKIM', 'DMARC', 'DNS']
 
 Un e-mail se falsifie très facilement : le champ « From » n'est, à l'origine, qu'une simple déclaration. **SPF, DKIM et DMARC** sont trois mécanismes complémentaires, publiés dans le DNS de votre domaine, qui permettent aux serveurs destinataires de vérifier qu'un message vient bien de vous. Sans eux, vos mails finissent en spam, et n'importe qui peut usurper votre domaine.
 
-<figure class="diagram">
+<figure class="diagram" tabindex="0">
 <svg viewBox="0 0 760 250" role="img" aria-label="Vérifications faites à la réception d'un e-mail : SPF, DKIM puis DMARC, qui décide du sort du message" focusable="false">
 <g class="d-box"><rect x="8" y="88" width="150" height="74" rx="3"/><rect x="302" y="14" width="190" height="56" rx="3"/><rect x="302" y="97" width="190" height="56" rx="3"/><rect x="302" y="180" width="190" height="56" rx="3"/><rect class="d-out" x="592" y="88" width="160" height="74" rx="3"/></g>
 <g class="d-line"><path d="M158 125H230M230 42V208M230 42H302M230 125H302M230 208H302"/><path d="M492 42H540V125H592M492 125H592M492 208H540V125"/></g>

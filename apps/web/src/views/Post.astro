@@ -24,6 +24,8 @@ import {
 import { ROUTES, SITE, UI, type Alternates, type Lang } from '../lib/i18n';
 import { withBase } from '../lib/base';
 import { postLd } from '../lib/seo';
+import { ticketOf } from '../lib/ticket';
+import '../styles/blog.css';
 
 interface Props {
   post: Post;
@@ -37,6 +39,7 @@ const SEVERITY_LABEL = {
   fixed: { fr: 'Correctif disponible', en: 'Fix available' },
 } as const;
 const { post } = Astro.props;
+const ticket = ticketOf(post.data.date, post.data.category);
 const lang: Lang = post.lang;
 const t = PORTFOLIO_DATA[lang].blog;
 const ui = UI[lang];
@@ -108,7 +111,7 @@ const crumbs = [
     minutes: readingMinutes(post.body),
   })}
 >
-  <div class="container section">
+  <div class="container section post">
     <nav aria-label={ui.breadcrumb} class="meta breadcrumb">
       <ol class="row" role="list">
         {crumbs.slice(0, 2).map((c) => (
@@ -121,7 +124,10 @@ const crumbs = [
     </nav>
 
     <article>
-      <header class="stack page-hero">
+      <header class="stack page-hero post-head">
+        <p class="ticket post-ticket">
+          {lang === 'fr' ? 'Fiche n°' : 'Sheet no.'} <b>{ticket}</b>
+        </p>
         <h1>{post.data.title}</h1>
         {post.data.severity && (
           <p class={`sev sev-${post.data.severity}`}>
@@ -182,7 +188,7 @@ const crumbs = [
       <div class="post-layout">
         {toc.length > 1 && (
           <nav class="toc" aria-labelledby="toc-title">
-            <h2 id="toc-title" class="meta">
+            <h2 id="toc-title" class="label">
               {t.toc}
             </h2>
             <ol role="list">
@@ -199,7 +205,7 @@ const crumbs = [
         </div>
         {furtherLinks.length > 0 && (
           <aside class="post-aside" aria-labelledby="further-title">
-            <h2 id="further-title" class="meta">
+            <h2 id="further-title" class="note">
               {lang === 'fr' ? 'Pour aller plus loin' : 'Go further'}
             </h2>
             <ul role="list">
@@ -263,17 +269,22 @@ const crumbs = [
 
     {related.length > 0 && (
       <section class="stack related" aria-labelledby="related-title">
-        <h2 id="related-title">{t.related}</h2>
+        <div class="rubric">
+          <h2 id="related-title">{t.related}</h2>
+        </div>
         <ul class="ledger-list" role="list">
           {related.map((p) => (
             <li>
               <a class="ledger-row" href={postPath(p.lang, p.slug)}>
-                <span class="ledger-meta label">
-                  <time datetime={isoDate(p.data.date)}>{formatDate(p.data.date, p.lang)}</time>
-                  {' · '}
-                  {CATEGORIES[p.data.category]?.[p.lang]}
+                <span class="ledger-meta">{ticketOf(p.data.date, p.data.category)}</span>
+                <span class="ledger-title">
+                  {p.data.title}
+                  <span class="ledger-sub">
+                    <time datetime={isoDate(p.data.date)}>{formatDate(p.data.date, p.lang)}</time>
+                    {' · '}
+                    {CATEGORIES[p.data.category]?.[p.lang]}
+                  </span>
                 </span>
-                <span class="ledger-title">{p.data.title}</span>
                 <span class="ledger-arrow" aria-hidden="true">
                   <Icon name="arrow" size={18} />
                 </span>

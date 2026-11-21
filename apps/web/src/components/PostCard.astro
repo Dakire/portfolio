@@ -1,7 +1,10 @@
 ---
-import Card from '@grichard/ui/components/Card.astro';
+// Entrée de blog en fiche : ticket, titre, description. Utilisée hors du blog (page Ressources) ; le blog lui-même liste
+// ses articles en lignes de registre (views/BlogIndex.astro).
 import Tag from '@grichard/ui/components/Tag.astro';
 import { CATEGORIES, formatDate, isoDate, postPath, readingMinutes, type Post } from '../lib/blog';
+import { ticketOf } from '../lib/ticket';
+import '../styles/blog.css';
 
 interface Props {
   post: Post;
@@ -10,7 +13,14 @@ interface Props {
 const { post, minLabel } = Astro.props;
 ---
 
-<Card href={postPath(post.lang, post.slug)} class="card-post">
+<article class="post-card">
+  <p class="ticket">
+    <b>{ticketOf(post.data.date, post.data.category)}</b>
+  </p>
+  <h3>
+    <a href={postPath(post.lang, post.slug)}>{post.data.title}</a>
+  </h3>
+  <p class="post-card-text">{post.data.description}</p>
   <p class="meta post-meta">
     <Tag>{CATEGORIES[post.data.category]?.[post.lang]}</Tag>
     <span>
@@ -18,12 +28,4 @@ const { post, minLabel } = Astro.props;
       {` · ${readingMinutes(post.body)} ${minLabel}`}
     </span>
   </p>
-  <h3>{post.data.title}</h3>
-  <p class="card-post-text">{post.data.description}</p>
-  <span class="label more-link card-post-cta">
-    {post.lang === 'fr' ? 'Lire l’article' : 'Read the article'}
-    <span class="arrow" aria-hidden="true">
-      →
-    </span>
-  </span>
-</Card>
+</article>

@@ -1,0 +1,587 @@
+/* Blog (ADR 0014) : « carnet de terrain ». Index en lignes de registre groupées par mois, article en fiche (ticket, sommaire à
+ * gauche, texte, notes en marge à droite), schémas, code, tableaux, gravité, bloc auteur. Couleurs : tokens uniquement.
+ * Contient aussi les petites règles utilitaires que le blog utilisait de site.css (.row, .meta). */
+
+/* ---------- Utilitaires du blog ---------- */
+.blog-page .row,
+.post .row,
+.post-card .row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.meta {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+/* ---------- Index ---------- */
+.blog-page {
+  display: grid;
+  gap: var(--space-7);
+  padding-bottom: var(--space-section);
+}
+.blog-filters {
+  display: grid;
+  gap: var(--space-3);
+}
+.chip-count {
+  margin-left: var(--space-2);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+.chip[aria-current='page'] .chip-count {
+  color: inherit;
+}
+.blog-months {
+  gap: var(--space-8);
+  padding-bottom: 0;
+}
+.blog-month .rubric {
+  margin-bottom: var(--space-4);
+}
+.blog-month .rubric h2 {
+  text-transform: capitalize;
+}
+.blog-page .section-title,
+.blog-page > section > h2:not(.label) {
+  font-size: var(--text-xl);
+}
+.blog-page .stack ul[role='list']:not(.row) {
+  display: grid;
+  gap: var(--space-1);
+}
+/* Ligne d'article : colonne de ticket à gauche (ticket, date, rubrique), titre et description à droite */
+.post-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  padding-block: var(--space-5);
+}
+.post-row-meta {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+}
+.post-row-meta .ticket b {
+  color: var(--ink);
+}
+.post-row-meta time {
+  color: var(--ink);
+}
+.post-row-body {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 52rem;
+  font-size: inherit;
+  text-decoration: none;
+}
+.post-row-body h3 {
+  color: var(--ink);
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+.post-row:hover .post-row-body h3,
+.post-row:focus-visible .post-row-body h3 {
+  text-decoration-color: var(--accent);
+}
+.post-row-body .ledger-sub {
+  font-weight: 400;
+  font-size: var(--text-base);
+}
+@media (min-width: 48rem) {
+  .post-row {
+    grid-template-columns: 14rem minmax(0, 1fr) auto;
+  }
+  .post-row-meta {
+    grid-column: 1;
+    display: grid;
+    align-content: start;
+  }
+  .post-row-body {
+    grid-column: 2;
+  }
+  .post-row .ledger-arrow {
+    grid-column: 3;
+  }
+}
+
+/* Carte d'article hors du blog (page Ressources) */
+.post-card {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  height: 100%;
+  padding: var(--space-5);
+  background: var(--raised);
+  border: var(--stroke) solid var(--ink);
+}
+.post-card h3 {
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+}
+.post-card h3 a {
+  color: var(--ink);
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+}
+.post-card-text {
+  color: var(--body);
+  font-size: var(--text-sm);
+}
+
+/* ---------- Article : la fiche ---------- */
+.post {
+  padding-top: var(--space-4);
+}
+.post .breadcrumb {
+  padding-bottom: var(--space-2);
+}
+.post .breadcrumb ol {
+  gap: 0 var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.post .breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+}
+.post .breadcrumb li:not(:last-child)::after {
+  content: '/';
+  margin-left: var(--space-2);
+  color: var(--muted);
+}
+.post-head {
+  padding-block: var(--space-4) var(--space-6);
+  border-bottom: 4px double var(--ink);
+}
+.post-head h1 {
+  max-width: 20ch;
+  font-size: clamp(2.25rem, 1.3rem + 3.8vw, 4.5rem);
+  letter-spacing: var(--tracking-display);
+  line-height: 1;
+}
+.post-head .lead {
+  max-width: 54ch;
+  color: var(--body);
+  font-size: var(--text-lg);
+  font-style: italic;
+  line-height: 1.4;
+}
+.post-ticket {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+.post-ticket b {
+  color: var(--accent);
+  font-size: var(--text-sm);
+}
+.art-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-6);
+  margin: 0;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line-strong);
+}
+.art-meta > div {
+  display: grid;
+  gap: var(--space-1);
+}
+.art-meta dt {
+  color: var(--muted);
+}
+.art-meta dd {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+.art-meta a {
+  color: var(--link);
+}
+
+/* Marqueur de gravité d'un article d'actualité : tampon avec symbole et mot, jamais la couleur seule */
+.sev {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  align-self: start;
+  justify-self: start;
+  margin: 0;
+  padding: 0.15em 0.7em;
+  border: 2px solid currentColor;
+  border-radius: var(--radius-md);
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transform: rotate(-2deg);
+}
+.sev-critical {
+  color: var(--danger);
+}
+.sev-warning {
+  color: var(--warn);
+}
+.sev-fixed {
+  color: var(--ok);
+}
+
+/* Disposition : sommaire à gauche, texte, notes de marge à droite (grand écran) */
+.post-layout {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: minmax(0, 1fr);
+  padding-top: var(--space-6);
+}
+@media (min-width: 64rem) {
+  .post-layout {
+    grid-template-columns: 13rem minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-6) var(--space-7);
+  }
+  .post-aside {
+    grid-column: 2;
+  }
+  .toc,
+  .post-aside {
+    position: sticky;
+    top: 1.5rem;
+    max-height: calc(100dvh - 3rem);
+    overflow-y: auto;
+  }
+}
+@media (min-width: 82rem) {
+  .post-layout {
+    grid-template-columns: 13rem minmax(0, var(--measure)) 14rem;
+    justify-content: space-between;
+  }
+  .post-aside {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .post-layout:not(:has(.toc)) .post-body {
+    grid-column: 2;
+  }
+}
+.toc,
+.post-aside {
+  font-size: var(--text-sm);
+}
+.toc #toc-title {
+  padding-bottom: var(--space-2);
+  border-bottom: var(--stroke) solid var(--ink);
+}
+.toc ol[role='list'] {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: toc;
+}
+.toc li {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  padding-block: var(--space-2);
+  border-bottom: 1px solid var(--line-strong);
+  counter-increment: toc;
+}
+.toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.9;
+}
+.toc a {
+  color: var(--body);
+  text-decoration: none;
+}
+.toc a:hover,
+.toc a:focus-visible {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+/* Notes de marge : annotation au stylo bleu, liste à filets, comme un renvoi écrit dans la marge d'une fiche */
+.post-aside {
+  padding-left: var(--space-4);
+  border-left: 4px solid var(--pen);
+}
+.post-aside #further-title {
+  font-size: var(--text-base);
+}
+.post-aside #further-title::before {
+  content: none;
+}
+.post-aside ul {
+  margin-top: var(--space-3);
+}
+.post-aside li {
+  padding-block: var(--space-2);
+  border-top: 1px solid var(--line-strong);
+}
+.post-aside a {
+  color: var(--link);
+  font-weight: 600;
+}
+
+/* Texte */
+.post-body {
+  max-width: var(--measure);
+  counter-reset: part;
+}
+.post-body > * + * {
+  margin-top: var(--space-4);
+}
+.post-body h2 {
+  margin-top: var(--space-8);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line-strong);
+  font-size: var(--text-2xl);
+  line-height: 1.05;
+  counter-increment: part;
+}
+.post-body h2::before {
+  content: '§ ' counter(part);
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1;
+}
+.post-body h3 {
+  margin-top: var(--space-6);
+  font-size: var(--text-xl);
+}
+.post-body ul,
+.post-body ol {
+  padding-left: var(--space-5);
+}
+.post-body li + li {
+  margin-top: var(--space-2);
+}
+.post-body li::marker {
+  color: var(--accent);
+}
+.post-body a:hover {
+  background: color-mix(in srgb, var(--pen) 14%, transparent);
+}
+/* Encadré (citation) : filet d'encre, fond clair, trait rouge de marge à gauche */
+.post-body blockquote {
+  padding: var(--space-4) var(--space-5);
+  border: var(--stroke) solid var(--ink);
+  border-left: 6px solid var(--margin-rule);
+  background: var(--raised);
+  color: var(--body);
+}
+.post-body blockquote > * + * {
+  margin-top: var(--space-3);
+}
+.post-body img {
+  border: 1px solid var(--line-strong);
+}
+.post-body hr {
+  margin-block: var(--space-6);
+}
+
+/* Tableaux (enveloppés par lib/rehype-table-scroll.mjs) */
+.table-scroll {
+  overflow-x: auto;
+  border-top: var(--stroke) solid var(--ink);
+  border-bottom: var(--stroke) solid var(--ink);
+}
+.post-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+.post-body th,
+.post-body td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--line-strong);
+  text-align: left;
+  vertical-align: top;
+}
+.post-body tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.post-body thead th {
+  border-bottom: var(--stroke) solid var(--ink);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 600;
+}
+.post-body tbody th {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Coloration syntaxique (Shiki : variables CSS par thème). Papier clair par défaut, papier de nuit si le visiteur l'a choisi. */
+.astro-code {
+  padding: var(--space-4);
+  overflow-x: auto;
+  border: 1px solid var(--line-strong);
+  border-left: 4px solid var(--margin-rule);
+  border-radius: 0;
+  background-color: var(--sunk);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+.astro-code,
+.astro-code span {
+  color: var(--shiki-light);
+}
+:root[data-theme='dark'] .astro-code,
+:root[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark);
+}
+/* Commentaires : le gris des thèmes GitHub (#6A737D) n'atteint pas 4,5:1 sur le fond du bloc */
+:root:root .astro-code span[style*='6A737D' i] {
+  color: var(--muted);
+}
+
+/* Schéma d'article (SVG en ligne, sans style en ligne) : traits et textes aux tokens du site, pleine largeur de la colonne */
+.post-body .diagram {
+  margin: var(--space-6) 0;
+  padding-block: var(--space-5);
+  border-block: 1px solid var(--line-strong);
+}
+.diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  fill: none;
+}
+.diagram .d-box rect {
+  fill: var(--raised);
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+.diagram .d-box .d-out {
+  fill: var(--canvas);
+  stroke: var(--accent);
+  stroke-width: 2.5;
+}
+.diagram .d-line path {
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+}
+.diagram text {
+  font-family: var(--font-mono);
+}
+.diagram .d-title text {
+  fill: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+.diagram .d-note text {
+  fill: var(--muted);
+  font-size: 12px;
+}
+.diagram figcaption {
+  margin-top: var(--space-3);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+/* ---------- Bloc auteur : petite photo d'identité, texte ---------- */
+.author {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+  margin-block: var(--space-7);
+  padding-block: var(--space-6);
+  border-top: 4px double var(--ink);
+}
+.author-avatar {
+  width: 5rem;
+  padding: 0.25rem 0.25rem 0.5rem;
+  background: var(--raised);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-card);
+  transform: rotate(-2deg);
+}
+.author-avatar img {
+  width: 100%;
+  height: auto;
+  background: var(--sunk);
+}
+.author-avatar .avatar-sombre {
+  display: none;
+}
+:root[data-theme='dark'] .author-avatar .avatar-sombre {
+  display: block;
+}
+:root[data-theme='dark'] .author-avatar .avatar-clair {
+  display: none;
+}
+.author-text {
+  display: grid;
+  gap: var(--space-3);
+}
+.author-text p {
+  max-width: 60ch;
+}
+.author-text b {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+.related {
+  margin-top: var(--space-7);
+}
+.related .rubric {
+  margin-bottom: var(--space-4);
+}
+.post > .stack,
+.post article > footer {
+  margin-top: var(--space-5);
+}
+.post .cta-band {
+  margin-top: var(--space-8);
+}
+
+/* Petit écran : le schéma garde sa taille de lecture et défile dans son cadre (figure atteignable au clavier : tabindex dans l'article) */
+@media (max-width: 47.99rem) {
+  .post-body .diagram {
+    overflow-x: auto;
+  }
+  .diagram svg {
+    min-width: 40rem;
+  }
+  .diagram figcaption {
+    position: sticky;
+    left: 0;
+    max-width: calc(100vw - 2 * var(--gutter));
+  }
+}
