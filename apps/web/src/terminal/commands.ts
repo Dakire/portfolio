@@ -37,9 +37,17 @@ export interface TerminalData {
   stack: string;
   skills: { category: string; items: string }[];
   experiences: { role: string; company: string; date: string }[];
-  projects: { title: string; tags: string[]; href?: string }[];
+  projects: {
+    title: string;
+    tags: string[];
+    slug?: string;
+    desc?: string;
+    url?: string;
+    href?: string;
+  }[];
+  education?: { title: string; school: string; date: string }[];
   tools: { id: string; name: string; href: string }[];
-  posts: { title: string; slug: string; href: string }[];
+  posts: { title: string; slug: string; href: string; date?: string }[];
   links: { email: string; github: string; linkedin: string };
   paths: { blog: string; tools: string; contact: string; cv: string; otherHome: string };
 }
@@ -205,7 +213,7 @@ export function run(raw: string, { s, d, theme = 'dark' }: Context): Result {
       return {
         lines: d.posts.length
           ? [
-              ...d.posts.map((p) => [seg('▸ ', 'accent'), link(p.title, p.href)]),
+              ...d.posts.slice(0, 5).map((p) => [seg('▸ ', 'accent'), link(p.title, p.href)]),
               [seg('→ ', 'dim'), link(s.openBlog, d.paths.blog)],
             ]
           : [[seg(s.noPosts, 'dim')]],

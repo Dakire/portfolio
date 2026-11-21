@@ -42,3 +42,7 @@
 - Provisoire : le terminal interactif reste sur l'accueil (ancre `#terminal`) jusqu'au lot 6 ; le prompt du hero y renvoie, puis renverra vers `/terminal/`.
 - Rubriques : double filet remplacé par un filet fin (accueil, blog, pages, outils). Références `GR-Rxx` retirées de l'accueil.
 - Reste carnet : `cursor.css` à garder (violet) ou retirer, `lib/ticket.ts`, réglage « carnet » du pied de page, OG cards.
+
+## Lot 4 (données centralisées) : fait, non poussé
+
+- `src/data/catalog.ts` : catalogue typé unique (pages, projets, compétences, expériences, articles, catégories, tags, outils, cheatsheets), dérivé des données existantes. `/search-index.json` et les données du terminal (`terminal/data.ts`, désormais avec slug/description des projets, formation, tous les articles) en dépendent. vitest 1743 verts, check 0 erreur.
