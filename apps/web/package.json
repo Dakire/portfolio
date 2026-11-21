@@ -24,19 +24,19 @@
     "@grichard/tools-core": "workspace:*",
     "@grichard/ui": "workspace:*",
     "astro": "^7.4.13",
-    "lucide-preact": "^1.53.0",
+    "lucide-preact": "^1.77.0",
     "preact": "^11.0.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
-    "@axe-core/playwright": "^4.13.0",
+    "@axe-core/playwright": "^4.14.0",
     "@grichard/config": "workspace:*",
-    "@playwright/test": "^1.63.0",
-    "@types/node": "^22.0.0",
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^22.20.5",
     "minisearch": "^7.2.0",
-    "oxlint": "^1.86.0",
+    "oxlint": "^1.94.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.11",
+    "vitest": "^4.1.12",
     "yaml": "^2.9.1"
   }
 }
