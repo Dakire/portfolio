@@ -145,7 +145,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         'Formation',
         "Licence Informatique (développement et programmation), Le Mans Université, 2023. Baccalauréat scientifique, sciences de l'ingénieur, Lycée Immaculée Conception, 2020.",
       ],
-      ['Langues', 'Français (langue maternelle), anglais (bilingue technique).'],
+      ['Langues', 'Français et anglais (bilingue, deux langues maternelles).'],
     ],
     aboutInterestsTitle: 'En dehors du travail',
     aboutInterests:
@@ -382,7 +382,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         endYear: 2020,
       },
     ],
-    languagesInfo: 'Français (langue maternelle), anglais (bilingue technique).',
+    languagesInfo: 'Français et anglais (bilingue, deux langues maternelles).',
   },
   en: {
     hero: {
@@ -433,7 +433,7 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         'Education',
         "Bachelor's degree in Computer Science (software development and programming), Le Mans Université, 2023. Scientific baccalaureate, engineering sciences, Lycée Immaculée Conception, 2020.",
       ],
-      ['Languages', 'French (native), English (technical fluency).'],
+      ['Languages', 'French and English (bilingual, both native languages).'],
     ],
     aboutInterestsTitle: 'Outside work',
     aboutInterests:
@@ -670,6 +670,6 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         endYear: 2020,
       },
     ],
-    languagesInfo: 'French (native), English (technical fluency).',
+    languagesInfo: 'French and English (bilingual, both native languages).',
   },
 };
