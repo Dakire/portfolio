@@ -1,411 +1,229 @@
 ---
 import Base from '../layouts/Base.astro';
 import Button from '@grichard/ui/components/Button.astro';
-import Card from '@grichard/ui/components/Card.astro';
-import Tag from '@grichard/ui/components/Tag.astro';
-import Kbd from '@grichard/ui/components/Kbd.astro';
-import Eyebrow from '@grichard/ui/components/Eyebrow.astro';
-import Breadcrumb from '@grichard/ui/components/Breadcrumb.astro';
-import SectionNav from '@grichard/ui/components/SectionNav.astro';
-import CtaBand from '@grichard/ui/components/CtaBand.astro';
-import Icon from '../components/Icon.astro';
-import SocialLinks from '../components/SocialLinks.astro';
-import ProjectCards from '../components/ProjectCards.astro';
-import { PORTFOLIO_DATA } from '../data/content';
-
-const colors = [
-  'canvas',
-  'surface',
-  'raised',
-  'line',
-  'line-strong',
-  'guide',
-  'band',
-  'band-ink',
-  'ink',
-  'body',
-  'muted',
-  'accent',
-  'link',
-  'ok',
-  'warn',
-  'danger',
-];
-const sizes = ['display', '2xl', 'xl', 'lg', 'base', 'sm', 'xs'];
+import '../styles/home.css';
+import './design.css';
 ---
 
 <Base
   lang="fr"
   title="Design system"
-  description="Tokens et composants du site (page interne)."
+  description="Page de style du carnet d'interventions (développement seulement)."
   path="/design/"
   noindex
 >
   <div class="container section stack-lg">
-    <header class="grid-bg hero">
-      <Eyebrow path="~/design-system" />
-      <h1>Design system</h1>
-      <p class="prose">
-        Tokens, typographie et composants. Basculez le thème en haut de page : tout doit rester
-        lisible dans les trois modes.
-      </p>
+    <header class="stack">
+      <p class="ticket">Développement seulement · ADR 0014</p>
+      <h1>Carnet d'interventions</h1>
+      <p class="note">Un papier, deux encres, deux familles : tout le reste est un filet.</p>
     </header>
 
-    <section class="stack" aria-labelledby="couleurs">
-      <h2 id="couleurs">Couleurs</h2>
-      <ul class="swatches">
-        {colors.map((c) => (
-          <li class={`swatch swatch-${c}`}>
-            <span class="swatch-chip" />
-            <code>--{c}</code>
-          </li>
-        ))}
+    <section class="stack" aria-labelledby="ds-colors">
+      <div class="rubric">
+        <h2 id="ds-colors">Couleurs</h2>
+        <p class="rubric-meta">basculer le thème en bas de page</p>
+      </div>
+      <ul class="ds-swatches" role="list">
+        <li>
+          <span class="ds-chip ds-canvas"></span>
+          <p>--canvas</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-surface"></span>
+          <p>--surface</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-raised"></span>
+          <p>--raised</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-sunk"></span>
+          <p>--sunk</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-line"></span>
+          <p>--line</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-line-strong"></span>
+          <p>--line-strong</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-ink"></span>
+          <p>--ink</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-body"></span>
+          <p>--body</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-muted"></span>
+          <p>--muted</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-accent"></span>
+          <p>--accent</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-pen"></span>
+          <p>--pen</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-ok"></span>
+          <p>--ok</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-warn"></span>
+          <p>--warn</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-danger"></span>
+          <p>--danger</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-band"></span>
+          <p>--band</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-band-ink"></span>
+          <p>--band-ink</p>
+        </li>
+        <li>
+          <span class="ds-chip ds-margin-rule"></span>
+          <p>--margin-rule</p>
+        </li>
       </ul>
     </section>
 
-    <section class="stack" aria-labelledby="typo">
-      <h2 id="typo">Typographie</h2>
-      {sizes.map((s) => (
-        <p class={`type-${s}`}>
-          Technicien systèmes et réseaux — <code>--text-{s}</code>
-        </p>
-      ))}
+    <section class="stack ds-type" aria-labelledby="ds-type">
+      <div class="rubric">
+        <h2 id="ds-type">Typographie</h2>
+        <p class="rubric-meta">Newsreader · IBM Plex Mono</p>
+      </div>
+      <p class="hm-name">
+        <span class="hm-first">Guillaume</span>
+        <span class="hm-last">Richard</span>
+      </p>
+      <h1>Titre de page, 650</h1>
+      <h2>Titre de rubrique</h2>
+      <h3>Titre de section</h3>
       <p>
-        Monospace : <code>dig +short TXT _dmarc.exemple.fr</code>
+        Texte courant en Newsreader, 19 px, interligne 1,62.{' '}
+        <a href="#ds-type">Un lien en bleu de stylo</a>, souligné. <code>code en mono</code>.
+      </p>
+      <p class="label">Libellé en mono, sourdine</p>
+      <p class="ticket">
+        N° <b>20261120-SEC</b> · Sécurité · 20 novembre 2026
+      </p>
+      <p class="note">Une annotation au stylo bleu, en italique.</p>
+      <p>
+        <span class="stamp">en cours</span> <span class="stamp stamp-pen">à revoir</span>
       </p>
     </section>
 
-    <section class="stack" aria-labelledby="boutons">
-      <h2 id="boutons">Boutons, étiquettes, raccourcis</h2>
-      <p class="row">
+    <section class="stack" aria-labelledby="ds-actions">
+      <div class="rubric">
+        <h2 id="ds-actions">Actions</h2>
+      </div>
+      <div class="ds-row">
         <Button variant="primary">Principal</Button>
         <Button>Secondaire</Button>
         <Button variant="ghost">Discret</Button>
         <Button disabled>Désactivé</Button>
-        <Button href="#couleurs">Lien</Button>
-      </p>
-      <p class="row">
-        <Tag>neutre</Tag>
-        <Tag tone="ok">conforme</Tag>
-        <Tag tone="warn">avertissement</Tag>
-        <Tag tone="danger">erreur</Tag>
-        <span>
-          Palette de commandes : <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
+        <span class="chip">Puce</span>
+        <span class="chip" aria-current="page">
+          Puce active
         </span>
-      </p>
-    </section>
-
-    <section class="stack" aria-labelledby="cartes">
-      <h2 id="cartes">Cartes</h2>
-      <div class="cards">
-        <Card href="#cartes">
-          <h3>Carte lien</h3>
-          <p>Toute la carte est cliquable.</p>
-        </Card>
-        <Card>
-          <h3>Carte statique</h3>
-          <p>Surface, bordure, rayon : jamais d'ombre décorative.</p>
-        </Card>
+        <span class="tag">étiquette</span>
+        <kbd class="kbd">Ctrl</kbd>
       </div>
     </section>
 
-    <section class="stack" aria-labelledby="navigation">
-      <h2 id="navigation">Navigation et appel à l'action</h2>
-      <Breadcrumb
-        label="Fil d'Ariane (exemple)"
-        items={[
-          { label: 'Accueil', href: '#navigation' },
-          { label: 'Réalisations', href: '#navigation' },
-          { label: 'Migrations de comptes' },
-        ]}
-      />
-      <SectionNav
-        label="Ressources (exemple)"
-        items={[
-          { label: 'Blog', href: '#navigation' },
-          { label: 'Outils', href: '#navigation', current: 'page' },
-          { label: 'Cheatsheets', href: '#navigation' },
-        ]}
-      />
-      <CtaBand title="Un projet, une question ?" level={3}>
-        <p>Écrivez-moi, un message suffit pour démarrer.</p>
-        <Fragment slot="actions">
-          <Button variant="primary" href="#navigation">
-            Me contacter
-          </Button>
-        </Fragment>
-      </CtaBand>
-    </section>
-
-    <section class="stack" aria-labelledby="releve">
-      <h2 id="releve">Édition relevé (ADR 0012)</h2>
-      <p class="prose">
-        Icônes dessinées au trait de 1,75 (jamais de texte visible pour les réseaux : le nom est
-        dans aria-label), lignes de registre à la place des cartes de liste, règle graduée en pied
-        d'en-tête, numéros en contour pour les parties numérotées.
-      </p>
-      <p class="row">
-        <Icon name="github" />
-        <Icon name="linkedin" />
-        <Icon name="mail" />
-        <Icon name="cv" />
-        <Icon name="rss" />
-        <Icon name="arrow" />
-      </p>
-      <SocialLinks lang="fr" cv rss />
-      <ProjectCards items={PORTFOLIO_DATA.fr.projects} lang="fr" limit={2} />
-      <div class="ruler" aria-hidden="true"></div>
-      <p class="hm-bignum" aria-hidden="true">
-        01
-      </p>
-    </section>
-
-    <section class="stack" aria-labelledby="identite">
-      <h2 id="identite">Identité (ADR 0011)</h2>
-      <p class="prose">
-        Titres en Bricolage Grotesque condensée, texte en Atkinson Hyperlegible Next, libellés en
-        JetBrains Mono. Un sur-titre posé sur un filet nomme chaque section ; la numérotation est
-        réservée aux contenus ordonnés (étapes, sommaire).
-      </p>
-      <p class="rule-label">Sur-titre sur filet</p>
-      <h3 class="type-display-sample">Un titre de section, condensé et serré</h3>
-      <ol class="steps">
-        <li>Première étape : le numéro en chasse fixe, un filet au-dessus.</li>
-        <li>Deuxième étape : l'ordre est une information.</li>
-      </ol>
-      <dl class="spec-sheet">
-        <div>
-          <dt>Domaine</dt>
-          <dd>Réseau &amp; Systèmes</dd>
-        </div>
-        <div>
-          <dt>Outils</dt>
-          <dd>Proxmox · OPNsense · WireGuard</dd>
-        </div>
-      </dl>
-      <div class="tile">
-        <h3>Tuile</h3>
-        <p>
-          Le seul composant au grand rayon (<code>--radius-tile</code>), fond en aplat, un filet.
-        </p>
+    <section class="stack" aria-labelledby="ds-lists">
+      <div class="rubric">
+        <h2 id="ds-lists">Registre</h2>
       </div>
+      <ul class="ledger-list" role="list">
+        <li>
+          <a class="ledger-row" href="#ds-lists">
+            <span class="ledger-meta">GR-R01</span>
+            <span class="ledger-title">
+              Une ligne de registre<span class="ledger-sub">Sous-titre en sourdine</span>
+            </span>
+            <span class="ledger-arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="ledger-row" href="#ds-lists">
+            <span class="ledger-meta">20261114-SEC</span>
+            <span class="ledger-title">
+              Une seconde ligne, plus longue pour voir le retour à la ligne sur petit écran
+            </span>
+            <span class="ledger-arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+        </li>
+      </ul>
     </section>
-    <div class="band design-band">
-      <div class="container stack">
-        <p class="rule-label">Bande inversée</p>
-        <h2>Fond de bande, texte et accent recalculés</h2>
-        <p>
-          Les jetons <code>--band-*</code> sont testés à 4,5:1 dans les deux thèmes ; le lien et
-          l'accent restent lisibles. <a href="#identite">Un lien</a>
-        </p>
-      </div>
-    </div>
 
-    <section class="stack" aria-labelledby="alertes">
-      <h2 id="alertes">Alertes</h2>
-      <div class="alert" role="status">
-        <p class="alert-title">Information</p>
-        <p>Message neutre : le rôle « status » l'annonce sans interrompre.</p>
+    <section class="stack" aria-labelledby="ds-forms">
+      <div class="rubric">
+        <h2 id="ds-forms">Champs, alertes, tableau</h2>
+      </div>
+      <div class="field">
+        <label for="ds-name">Nom de domaine</label>
+        <input id="ds-name" type="text" value="exemple.fr" />
+        <p class="field-hint">Indication en sourdine</p>
       </div>
       <div class="alert alert-ok" role="status">
         <p class="alert-title">Conforme</p>
-        <p>Le contrôle est passé.</p>
+        <p>Message d'état.</p>
       </div>
       <div class="alert alert-warn" role="status">
-        <p class="alert-title">Avertissement</p>
-        <p>À corriger quand c'est possible.</p>
+        <p class="alert-title">À surveiller</p>
+        <p>Message d'avertissement.</p>
       </div>
       <div class="alert alert-danger" role="alert">
         <p class="alert-title">Erreur</p>
-        <p>Le rôle « alert » est réservé aux erreurs qui demandent une action.</p>
+        <p>Message d'erreur.</p>
       </div>
-    </section>
-
-    <section class="stack" aria-labelledby="tableaux">
-      <h2 id="tableaux">Tableaux</h2>
-      <div class="table-wrap" tabindex="0" role="region" aria-labelledby="tableaux-legende">
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Exemple de tableau">
         <table class="table">
-          <caption id="tableaux-legende">En-têtes de sécurité (exemple)</caption>
+          <caption>Exemple</caption>
           <thead>
             <tr>
-              <th scope="col">En-tête</th>
-              <th scope="col">Valeur</th>
-              <th scope="col">État</th>
+              <th>Paramètre</th>
+              <th>Rôle</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th scope="row">Strict-Transport-Security</th>
               <td>
-                <code>max-age=31536000; includeSubDomains</code>
+                <code>p=none</code>
               </td>
-              <td>
-                <Tag tone="ok">présent</Tag>
-              </td>
+              <td>Surveillance seulement</td>
             </tr>
             <tr>
-              <th scope="row">Content-Security-Policy</th>
               <td>
-                <code>default-src 'self'</code>
+                <code>p=reject</code>
               </td>
-              <td>
-                <Tag tone="ok">présent</Tag>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">Permissions-Policy</th>
-              <td>—</td>
-              <td>
-                <Tag tone="warn">absent</Tag>
-              </td>
+              <td>Rejet des messages en échec</td>
             </tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <section class="stack" aria-labelledby="formulaire">
-      <h2 id="formulaire">Formulaire</h2>
-      <form class="stack form" novalidate>
-        <div class="field">
-          <label for="f-nom">Nom</label>
-          <input id="f-nom" name="nom" autocomplete="name" />
-          <span class="field-hint">Aide : champ facultatif.</span>
-        </div>
-        <div class="field">
-          <label for="f-mail">E-mail</label>
-          <input
-            id="f-mail"
-            name="mail"
-            type="email"
-            aria-invalid="true"
-            aria-describedby="f-mail-err"
-            value="pas-un-mail"
-          />
-          <span class="field-error" id="f-mail-err">
-            Saisissez une adresse e-mail valide.
-          </span>
-        </div>
-      </form>
+    <section class="band stack" aria-labelledby="ds-band">
+      <h2 id="ds-band">Bande d'encre</h2>
+      <p>
+        Les jetons sont redéfinis à l'intérieur : <a href="#ds-band">un lien</a>, un bouton.
+      </p>
+      <Button variant="primary">Action</Button>
     </section>
   </div>
 </Base>
-
-<style is:global>
-  .hero {
-    padding-block: var(--space-6);
-  }
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-3);
-  }
-  .cards {
-    display: grid;
-    gap: var(--space-4);
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-  }
-  .form {
-    max-width: 28rem;
-  }
-  .swatches {
-    display: grid;
-    gap: var(--space-3);
-    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
-    padding: 0;
-    list-style: none;
-  }
-  .swatch {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-  }
-  .swatch-chip {
-    width: 2.5rem;
-    height: 2.5rem;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-sm);
-    background: var(--chip);
-  }
-  .swatch-canvas {
-    --chip: var(--canvas);
-  }
-  .swatch-surface {
-    --chip: var(--surface);
-  }
-  .swatch-raised {
-    --chip: var(--raised);
-  }
-  .swatch-line {
-    --chip: var(--line);
-  }
-  .swatch-guide {
-    --chip: var(--guide);
-  }
-  .swatch-band {
-    --chip: var(--band);
-  }
-  .swatch-band-ink {
-    --chip: var(--band-ink);
-  }
-  .design-band {
-    padding-block: var(--space-6);
-  }
-  .type-display-sample {
-    font-size: var(--text-display);
-    font-stretch: var(--stretch-display);
-    font-weight: 760;
-    line-height: 1;
-  }
-  .swatch-line-strong {
-    --chip: var(--line-strong);
-  }
-  .swatch-ink {
-    --chip: var(--ink);
-  }
-  .swatch-body {
-    --chip: var(--body);
-  }
-  .swatch-muted {
-    --chip: var(--muted);
-  }
-  .swatch-accent {
-    --chip: var(--accent);
-  }
-  .swatch-link {
-    --chip: var(--link);
-  }
-  .swatch-ok {
-    --chip: var(--ok);
-  }
-  .swatch-warn {
-    --chip: var(--warn);
-  }
-  .swatch-danger {
-    --chip: var(--danger);
-  }
-  .type-display {
-    font-size: var(--text-display);
-    font-weight: 650;
-    line-height: var(--leading-tight);
-  }
-  .type-2xl {
-    font-size: var(--text-2xl);
-  }
-  .type-xl {
-    font-size: var(--text-xl);
-  }
-  .type-lg {
-    font-size: var(--text-lg);
-  }
-  .type-base {
-    font-size: var(--text-base);
-  }
-  .type-sm {
-    font-size: var(--text-sm);
-  }
-  .type-xs {
-    font-size: var(--text-xs);
-  }
-</style>

@@ -8,6 +8,7 @@
     "node": ">=22"
   },
   "scripts": {
+    "dev": "pnpm --filter @grichard/web dev",
     "legacy:build": "pnpm --filter legacy run build",
     "legacy:check": "pnpm --filter legacy run lint && pnpm --filter legacy run test && pnpm --filter legacy run test:e2e",
     "test:contract": "vitest run --config vitest.contract.config.js",

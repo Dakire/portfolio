@@ -1,0 +1,87 @@
+/* Page de style (développement seulement) : nuancier, échelle typographique, composants du carnet. */
+.ds-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ds-swatches li {
+  border: 1px solid var(--line-strong);
+  background: var(--raised);
+}
+.ds-chip {
+  display: block;
+  height: 3.25rem;
+  border-bottom: 1px solid var(--line-strong);
+  background: var(--sw);
+}
+.ds-swatches p {
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+.ds-type > * + * {
+  margin-top: var(--space-3);
+}
+.ds-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+.ds-canvas {
+  --sw: var(--canvas);
+}
+.ds-surface {
+  --sw: var(--surface);
+}
+.ds-raised {
+  --sw: var(--raised);
+}
+.ds-sunk {
+  --sw: var(--sunk);
+}
+.ds-line {
+  --sw: var(--line);
+}
+.ds-line-strong {
+  --sw: var(--line-strong);
+}
+.ds-ink {
+  --sw: var(--ink);
+}
+.ds-body {
+  --sw: var(--body);
+}
+.ds-muted {
+  --sw: var(--muted);
+}
+.ds-accent {
+  --sw: var(--accent);
+}
+.ds-pen {
+  --sw: var(--pen);
+}
+.ds-ok {
+  --sw: var(--ok);
+}
+.ds-warn {
+  --sw: var(--warn);
+}
+.ds-danger {
+  --sw: var(--danger);
+}
+.ds-band {
+  --sw: var(--band);
+}
+.ds-band-ink {
+  --sw: var(--band-ink);
+}
+.ds-margin-rule {
+  --sw: var(--margin-rule);
+}
+.ds-band {
+  padding: var(--space-6);
+}
