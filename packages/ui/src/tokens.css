@@ -1,39 +1,37 @@
 /*
- * Tokens du design system grichard.eu (ADR 0014, « carnet d'interventions ») : la seule source des couleurs, de la typographie,
- * des espacements, des rayons et du mouvement.
+ * Tokens du design system grichard.eu (ADR 0016, « console d'ingénieur ») : la seule source des couleurs, de la typographie,
+ * des espacements, des rayons et du mouvement. Remplace l'ADR 0014 (carnet d'interventions) pour l'apparence.
  *
- * Thème : <html data-theme="light|dark"> est posé avant le premier rendu par /js/theme.js. Le thème clair (papier) est le
- * défaut, avec ou sans JavaScript ; le sombre (papier de nuit) est un choix explicite du visiteur (pied de page).
- * Contrastes vérifiés par packages/ui/tests/contrast.test.ts (texte >= 4,5:1, bordures d'interface >= 3:1).
+ * Thème : sombre par défaut (avec ou sans JavaScript, quel que soit le système) ; clair = choix explicite du visiteur, posé
+ * avant le premier rendu par /js/theme.js (<html data-theme="dark|light">). Contrastes vérifiés par
+ * packages/ui/tests/contrast.test.ts (texte >= 4,5:1, bordures d'interface >= 3:1).
  *
- * Deux encres, comme sur une fiche : le tampon orange (--accent : statuts, survols, marge ; --u : soulignés ondulés, barre de
- * lecture) et le stylo bleu (--pen : annotations, page courante, focus). Les liens sont à l'encre, soulignés en vague orange
- * (signature reprise du thème Inkfolio, dont seul le dessin est repris). Aucune autre couleur de marque ; vert, ambre et rouge
- * d'état ne servent qu'aux états, toujours doublés d'un mot.
+ * Une encre d'accent (--accent, ambre-orange : liens actifs, survols, statuts), un secondaire rare (--pen, bleu acier : page
+ * courante, focus, annotations). Vert, ambre et rouge d'état seulement pour les états, toujours avec un mot.
  */
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
-  /* Typographie : deux familles, Newsreader (titres et texte) et IBM Plex Mono (annotations, champs, code) */
-  --font-display: 'Newsreader Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  /* Typographie : deux familles, Geist (titres et texte) et IBM Plex Mono (annotations, champs, code, terminal) */
+  --font-display: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-sans: var(--font-display);
   --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
   --text-xs: 0.8125rem;
   --text-sm: 0.9375rem;
-  --text-base: 1.1875rem;
+  --text-base: 1.0625rem;
   --text-lg: clamp(1.25rem, 1.15rem + 0.4vw, 1.4375rem);
   --text-xl: clamp(1.5rem, 1.25rem + 1vw, 2rem);
   --text-2xl: clamp(1.875rem, 1.45rem + 1.8vw, 2.875rem);
   --text-display: clamp(2.5rem, 1.7rem + 3.4vw, 4.5rem);
   --text-hero: clamp(3.75rem, 0.6rem + 15vw, 14rem);
   --text-label: 0.8125rem; /* annotations en mono */
-  --tracking-display: -0.03em;
+  --tracking-display: -0.035em;
   --tracking-hero: -0.045em;
-  --leading-display: 0.92;
+  --leading-display: 1.02;
   --leading-tight: 1.12;
   --leading-snug: 1.35;
-  --leading-body: 1.62;
+  --leading-body: 1.65;
 
   /* Espacements (échelle 4 px) */
   --space-1: 0.25rem;
@@ -50,24 +48,24 @@
   /* Formes : la feuille reste carrée ; boutons, champs, étiquettes et menus ont des coins doux (6 à 12 px) */
   --radius-sm: 6px;
   --radius-md: 9px;
-  --radius-lg: 12px;
-  --radius-btn: 11px;
-  --radius-card: 12px;
-  --radius-tile: 12px;
-  --stroke: 1.5px; /* épaisseur des filets d'encre */
+  --radius-lg: 14px;
+  --radius-btn: 10px;
+  --radius-card: 14px;
+  --radius-tile: 14px;
+  --stroke: 1px; /* épaisseur des filets d'encre */
 
-  /* Profondeur : une feuille posée sur un bureau, rien d'autre ne porte d'ombre */
-  --shadow-sm: 0 1px 1px rgb(40 30 10 / 0.12);
-  --shadow-card: 0 1px 2px rgb(40 30 10 / 0.14);
-  --shadow-md: var(--shadow-card);
-  --shadow-lg: 0 2px 4px rgb(40 30 10 / 0.16), 0 18px 40px -18px rgb(40 30 10 / 0.35);
-  --shadow-sheet: 0 1px 2px rgb(40 30 10 / 0.18), 0 28px 60px -28px rgb(40 30 10 / 0.35);
+  /* Profondeur : aucune ombre sur les cartes ; une ombre diffuse seulement pour la palette de recherche et les modales */
+  --shadow-sm: none;
+  --shadow-card: none;
+  --shadow-md: none;
+  --shadow-lg: 0 24px 60px -20px rgb(0 0 0 / 0.7);
+  --shadow-sheet: none;
 
   /* Mouvement (neutralisé par prefers-reduced-motion dans base.css) */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --duration-fast: 120ms;
-  --duration-base: 160ms;
-  --duration-slow: 280ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
   --duration: var(--duration-base);
 
   /* Empilement : une seule échelle pour tout le site */
@@ -86,116 +84,112 @@
   --margin: 0rem; /* marge de classeur : seulement sur grand écran (base.css) */
   --target: 2.75rem; /* cible tactile minimale : 44 px */
 
-  /* Couleurs : thème clair, papier cassé (défaut) */
-  --desk: #e2d9c4; /* le bureau, autour de la feuille */
-  --canvas: #f4efe3; /* la feuille */
-  --surface: #faf6ec; /* encadré, champ */
-  --raised: #fffdf7; /* fiche posée sur la feuille */
-  --sunk: #ebe4d3; /* zone en creux : code, bandeau d'état */
-  --line: #cfc5ad; /* filets décoratifs (jamais seuls pour délimiter une commande) */
-  --line-strong: #7d7360; /* bordures de champs, de boutons et de tableaux : >= 3:1 */
-  --guide: #ebe4d3;
-  --ink: #1d1a14;
-  --body: #2c2820;
-  --muted: #5e5646;
-  --accent: #a83f00; /* tampon orange (texte : 4,9:1 sur le papier) */
-  --accent-strong: #a83f00;
-  --accent-ink: #fff8ee;
-  --u: #ff6b01; /* soulignés ondulés, barre de lecture, survol des boutons : jamais du texte */
-  --u-ink: #1d1a14; /* texte sur fond --u (6,1:1) */
-  --pen: #254a8c; /* stylo bleu */
-  --accent-alt: #254a8c;
-  --link: #1d1a14; /* les liens sont à l'encre, soulignés en vague orange */
-  --signal: #a83f00; /* aplats de signalisation (texte --signal-ink dessus) */
-  --signal-ink: #fff8ee;
-  --ok: #2f6b3a;
-  --warn: #8a5a00;
-  --danger: #b0262b;
-  --focus: #254a8c;
-  --selection: rgb(37 74 140 / 0.22);
-  --margin-rule: #e0763c; /* double filet de marge (décoratif) */
-  --hole: #e2d9c4; /* perforations : la couleur du bureau, vue à travers la feuille */
+  /* Couleurs : thème sombre (défaut). Fond neutre légèrement bleuté, jamais un noir pur. */
+  --desk: #0f1115; /* arrière-plan de la page */
+  --canvas: #0f1115; /* fond de la colonne de contenu */
+  --surface: #151820; /* encadré, champ, carte */
+  --raised: #1b1f29; /* surface élevée */
+  --sunk: #0b0d11; /* zone en creux : code, terminal */
+  --line: #262b36; /* filets décoratifs */
+  --line-strong: #727a8c; /* bordures de champs, boutons, tableaux : >= 3:1 */
+  --guide: #0b0d11;
+  --ink: #e8eaee;
+  --body: #d3d7de;
+  --muted: #9aa1af;
+  --accent: #f08a3c;
+  --accent-strong: #f08a3c; /* fond des boutons pleins */
+  --accent-ink: #17120c;
+  --u: #f08a3c; /* soulignés, barre de lecture : jamais du texte */
+  --u-ink: #17120c;
+  --pen: #7fa6d6; /* secondaire : page courante, annotations */
+  --accent-alt: #7fa6d6;
+  --link: #e8eaee;
+  --signal: #f08a3c;
+  --signal-ink: #17120c;
+  --ok: #4cb782;
+  --warn: #e5b53d;
+  --danger: #e5645f;
+  --focus: #7fa6d6;
+  --selection: rgb(127 166 214 / 0.3);
+  --margin-rule: #353b49; /* filet de marge (décoratif, retiré au lot 2) */
+  --hole: #0f1115;
 
-  /* Bandeau inversé (feuille d'encre : l'en-tête d'article, le contact) */
-  --band: #1d1a14;
-  --band-ink: #f4efe3;
-  --band-muted: #c9bfa8;
-  --band-accent: #ff9a4d;
+  /* Bandeau inversé (en-tête d'article, contact) : surface claire sur thème sombre */
+  --band: #e8eaee;
+  --band-ink: #15181f;
+  --band-muted: #444b5a;
+  --band-accent: #a8480a;
 
-  /* Cartes colorées (aperçus de réalisation, calques) : deux papiers seulement */
-  --tone-ink: #1d1a14;
-  --tone-danger: #a83f00;
-  --tone-ok: #2f6b3a;
-  --tone-warn: #8a5a00;
-  --tone-petrole: #ebe4d3;
-  --tone-petrole-accent: #a83f00;
-  --tone-olive: #e6dcc3;
-  --tone-olive-accent: #a83f00;
-  --tone-prune: #ebe4d3;
-  --tone-prune-accent: #a83f00;
-  --tone-ocre: #e6dcc3;
-  --tone-ocre-accent: #a83f00;
-  --tone-ardoise: #ebe4d3;
-  --tone-ardoise-accent: #a83f00;
+  /* Cartes colorées (aperçus de réalisation) : deux tons seulement */
+  --tone-ink: #e8eaee;
+  --tone-danger: #e5645f;
+  --tone-ok: #4cb782;
+  --tone-warn: #e5b53d;
+  --tone-petrole: #151820;
+  --tone-petrole-accent: #f08a3c;
+  --tone-olive: #1b1f29;
+  --tone-olive-accent: #f08a3c;
+  --tone-prune: #151820;
+  --tone-prune-accent: #f08a3c;
+  --tone-ocre: #1b1f29;
+  --tone-ocre-accent: #f08a3c;
+  --tone-ardoise: #151820;
+  --tone-ardoise-accent: #f08a3c;
 }
 
-/* Papier de nuit : brun-noir, encre crème, jamais un noir pur ni un gris froid */
-:root[data-theme='dark'] {
-  color-scheme: dark;
-  --shadow-sm: 0 1px 1px rgb(0 0 0 / 0.5);
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.5);
-  --shadow-md: var(--shadow-card);
-  --shadow-lg: 0 2px 4px rgb(0 0 0 / 0.5), 0 18px 40px -18px rgb(0 0 0 / 0.8);
-  --shadow-sheet: 0 1px 2px rgb(0 0 0 / 0.6), 0 28px 60px -28px rgb(0 0 0 / 0.9);
+/* Thème clair : choix explicite, mêmes jetons */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --shadow-lg: 0 24px 60px -24px rgb(20 24 34 / 0.35);
 
-  --desk: #0f0c08;
-  --canvas: #17130e;
-  --surface: #1e1912;
-  --raised: #272016;
-  --sunk: #120f0a;
-  --line: #3a3224;
-  --line-strong: #8a7f69;
-  --guide: #120f0a;
-  --ink: #efe5cf;
-  --body: #d9ceb6;
-  --muted: #b3a78e;
-  --accent: #ff7b1a;
-  --accent-strong: #ff7b1a;
-  --accent-ink: #17130e;
-  --u: #ff7b1a;
-  --u-ink: #17130e; /* texte sur fond --u (7,1:1) */
-  --pen: #8fb0ee;
-  --accent-alt: #8fb0ee;
-  --link: #efe5cf;
-  --signal: #ff7b1a;
-  --signal-ink: #17130e;
-  --ok: #7fcf8f;
-  --warn: #f0b84a;
-  --danger: #ff8d8d;
-  --focus: #8fb0ee;
-  --selection: rgb(143 176 238 / 0.3);
-  --margin-rule: #9a5526;
-  --hole: #0f0c08;
+  --desk: #f1f1ec;
+  --canvas: #fafaf7;
+  --surface: #ffffff;
+  --raised: #ffffff;
+  --sunk: #f0f0ea;
+  --line: #dcdcd3;
+  --line-strong: #7b8190;
+  --guide: #f0f0ea;
+  --ink: #1b1d22;
+  --body: #2b2e36;
+  --muted: #596070;
+  --accent: #a8480a;
+  --accent-strong: #a8480a;
+  --accent-ink: #fff8ee;
+  --u: #d9650f;
+  --u-ink: #1b1d22;
+  --pen: #2c5a94;
+  --accent-alt: #2c5a94;
+  --link: #1b1d22;
+  --signal: #a8480a;
+  --signal-ink: #fff8ee;
+  --ok: #25704a;
+  --warn: #8a5a00;
+  --danger: #b0262b;
+  --focus: #2c5a94;
+  --selection: rgb(44 90 148 / 0.22);
+  --margin-rule: #c9c9bf;
+  --hole: #f1f1ec;
 
-  --band: #efe5cf;
-  --band-ink: #1d1a14;
-  --band-muted: #4d4536;
-  --band-accent: #a83f00;
+  --band: #15181f;
+  --band-ink: #e8eaee;
+  --band-muted: #b4bac6;
+  --band-accent: #f08a3c;
 
-  --tone-ink: #efe5cf;
-  --tone-danger: #ff8d8d;
-  --tone-ok: #7fcf8f;
-  --tone-warn: #f0b84a;
-  --tone-petrole: #1e1912;
-  --tone-petrole-accent: #ff7b1a;
-  --tone-olive: #272016;
-  --tone-olive-accent: #ff7b1a;
-  --tone-prune: #1e1912;
-  --tone-prune-accent: #ff7b1a;
-  --tone-ocre: #272016;
-  --tone-ocre-accent: #ff7b1a;
-  --tone-ardoise: #1e1912;
-  --tone-ardoise-accent: #ff7b1a;
+  --tone-ink: #1b1d22;
+  --tone-danger: #a8480a;
+  --tone-ok: #25704a;
+  --tone-warn: #8a5a00;
+  --tone-petrole: #f0f0ea;
+  --tone-petrole-accent: #a8480a;
+  --tone-olive: #ebebe4;
+  --tone-olive-accent: #a8480a;
+  --tone-prune: #f0f0ea;
+  --tone-prune-accent: #a8480a;
+  --tone-ocre: #ebebe4;
+  --tone-ocre-accent: #a8480a;
+  --tone-ardoise: #f0f0ea;
+  --tone-ardoise-accent: #a8480a;
 }
 
 /* Forçage des couleurs (mode contraste élevé) : le navigateur impose les siennes, les filets restent visibles */

@@ -163,8 +163,8 @@ async function ogImages() {
     return file ? `./_astro/${file}` : '';
   };
   const fonts = {
-    text: font(/^newsreader-latin-wght-normal\..*\.woff2$/),
-    textItalic: font(/^newsreader-latin-wght-italic\..*\.woff2$/),
+    text: font(/^geist-latin-wght-normal\..*\.woff2$/),
+    textItalic: font(/^geist-latin-wght-normal\..*\.woff2$/),
     mono: font(/^ibm-plex-mono-latin-500-normal\..*\.woff2$/),
   };
   const tmp = join(DIST, '.og-render.html');

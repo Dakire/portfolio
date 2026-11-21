@@ -78,18 +78,18 @@ p {
   text-wrap: pretty;
 }
 
-/* Liens : à l'encre, soulignés d'un trait ondulé orange (signature reprise d'Inkfolio) ; au survol le trait s'épaissit.
+/* Liens : à l'encre, soulignés d'un trait fin orange ; au survol le trait s'épaissit.
  * La couleur n'est jamais seule porteuse du lien : le soulignement l'est. */
 a {
   color: var(--link);
   text-decoration-line: underline;
-  text-decoration-style: wavy;
+  text-decoration-style: solid;
   text-decoration-color: var(--u);
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 0.3em;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
 }
 a:hover {
-  text-decoration-thickness: 2.5px;
+  text-decoration-thickness: 2px;
 }
 
 img,
@@ -159,65 +159,18 @@ hr {
   transform: none;
 }
 
-/* ---------- La feuille ----------
- * Toute la page est une feuille posée sur un bureau. Grand écran : marge de classeur (double filet rouge) et perforations ;
- * petit écran : la feuille occupe tout l'écran, sans bureau ni décor. Le décor est en dégradés CSS (aucune image). */
+/* ---------- Colonne de page ----------
+ * La page est une colonne centrée sur le fond (ADR 0016) : plus de marge de classeur ni de perforations. Les classes .sheet et
+ * .sheet-in restent les points d'ancrage de la mise en page (lot 2 : renommage éventuel). */
 .sheet {
   position: relative;
   max-width: var(--sheet);
   margin-inline: auto;
-  padding-left: var(--margin);
   background: var(--canvas);
 }
 .sheet-in {
   position: relative;
   z-index: var(--z-base);
-}
-@media (min-width: 64rem) {
-  :root {
-    --margin: 5.5rem;
-  }
-  .sheet {
-    margin-block: 0;
-    box-shadow: var(--shadow-sheet);
-  }
-  .sheet::before,
-  .sheet::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    pointer-events: none;
-  }
-  /* Double filet de marge */
-  .sheet::before {
-    width: var(--margin);
-    background:
-      linear-gradient(var(--margin-rule), var(--margin-rule)) calc(100% - 0.5rem) 0 / 1.5px 100%
-        no-repeat,
-      linear-gradient(var(--margin-rule), var(--margin-rule)) calc(100% - 0.8rem) 0 / 1.5px 100%
-        no-repeat;
-  }
-  /* Perforations : deux trous par « feuillet » de 72 rem, vus à travers la feuille */
-  .sheet::after {
-    width: 3.4rem;
-    background:
-      radial-gradient(
-        circle at 1.7rem 15rem,
-        var(--hole) 0.55rem,
-        var(--line) calc(0.55rem + 1px),
-        transparent calc(0.55rem + 2px)
-      ),
-      radial-gradient(
-        circle at 1.7rem 57rem,
-        var(--hole) 0.55rem,
-        var(--line) calc(0.55rem + 1px),
-        transparent calc(0.55rem + 2px)
-      );
-    background-size: 100% 72rem;
-    background-repeat: repeat-y;
-  }
 }
 
 .container {
@@ -277,10 +230,5 @@ hr {
   }
   .sheet {
     box-shadow: none;
-    padding-left: 0;
-  }
-  .sheet::before,
-  .sheet::after {
-    display: none;
   }
 }
