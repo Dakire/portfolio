@@ -46,3 +46,9 @@
 ## Lot 4 (données centralisées) : fait, non poussé
 
 - `src/data/catalog.ts` : catalogue typé unique (pages, projets, compétences, expériences, articles, catégories, tags, outils, cheatsheets), dérivé des données existantes. `/search-index.json` et les données du terminal (`terminal/data.ts`, désormais avec slug/description des projets, formation, tous les articles) en dépendent. vitest 1743 verts, check 0 erreur.
+
+## Lot 5 (recherche Pagefind) : fait, non poussé
+
+- Pagefind 1.6 (dev), indexé au build ; palette Ctrl/Cmd+K groupée (Pages, Projets, Articles, Compétences...), surlignage, suggestions, état « aucun résultat », page `/search/?q=` (FR et EN, noindex). CSP `wasm-unsafe-eval`. Tests e2e `search.spec.ts` ; 278 e2e et 1747 vitest verts.
+- Piège : un `astro preview` oublié sur le port 4321 fausse les e2e (servait un ancien dist) : l'arrêter avant de lancer.
+- Les compétences et expériences sont des sections de leurs pages (résultats de niveau page, groupe selon le filtre `type`).

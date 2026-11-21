@@ -20,6 +20,7 @@ export type RouteKey =
   | 'legal'
   | 'privacy'
   | 'accessibility'
+  | 'search'
   | 'rss';
 
 const mapRoutes = (routes: Record<RouteKey, string>): Record<RouteKey, string> =>
@@ -42,6 +43,7 @@ const RAW_ROUTES: Record<Lang, Record<RouteKey, string>> = {
     legal: '/mentions-legales/',
     privacy: '/confidentialite/',
     accessibility: '/accessibilite/',
+    search: '/search/',
     rss: '/rss.xml',
   },
   en: {
@@ -57,6 +59,7 @@ const RAW_ROUTES: Record<Lang, Record<RouteKey, string>> = {
     legal: '/en/legal-notice/',
     privacy: '/en/privacy/',
     accessibility: '/en/accessibility/',
+    search: '/en/search/',
     rss: '/en/rss.xml',
   },
 };
@@ -85,7 +88,9 @@ export const UI = {
     allTools: 'Tout le catalogue des outils →',
     search: 'Rechercher',
     searchPlaceholder: 'Rechercher un article, un outil, une page…',
-    searchHint: 'Tapez pour chercher dans les articles, outils, cheatsheets et pages du site.',
+    searchHint: 'Suggestions, ou tapez pour chercher dans les pages, projets et articles du site.',
+    searchTitle: 'Recherche',
+    searchPageDescription: 'Rechercher dans les pages, projets, compétences et articles du site.',
     searchNone: 'Aucun résultat.',
     searchCount: '{n} résultat(s).',
     searchError: 'La recherche est indisponible pour le moment.',
@@ -132,7 +137,9 @@ export const UI = {
     allTools: 'Full tool catalogue →',
     search: 'Search',
     searchPlaceholder: 'Search an article, a tool, a page…',
-    searchHint: 'Type to search the site’s articles, tools, cheatsheets and pages.',
+    searchHint: 'Suggestions, or type to search the site’s pages, projects and articles.',
+    searchTitle: 'Search',
+    searchPageDescription: 'Search the site’s pages, projects, skills and articles.',
     searchNone: 'No results.',
     searchCount: '{n} result(s).',
     searchError: 'Search is unavailable right now.',

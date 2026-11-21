@@ -111,6 +111,11 @@ const crumbs = [
     minutes: readingMinutes(post.body),
   })}
 >
+  <meta data-pagefind-filter="category[content]" content={CATEGORIES[post.data.category]?.[lang]} />
+  {post.data.tags.map((tag) => (
+    <meta data-pagefind-filter="tag[content]" content={tag} />
+  ))}
+  <meta data-pagefind-meta="date[content]" content={isoDate(post.data.date)} />
   <div class="container section post">
     <nav aria-label={ui.breadcrumb} class="meta breadcrumb">
       <ol class="row" role="list">

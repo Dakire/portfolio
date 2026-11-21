@@ -15,3 +15,10 @@ Guillaume veut une identité sobre, premium, à personnalité technique : base s
 - **Mouvement** : 120 / 200 / 320 ms, neutralisé par `prefers-reduced-motion`.
 - **À retirer aux lots suivants** : curseur Windows (`cursor.css`), marge/perforations (fait en CSS au lot 1, balisage au lot 2), bandeau d'en-tête « carnet », références `GR-Rxx`.
 - Interdits : dégradés omniprésents, halos, glassmorphism, néon, violet/cyan.
+
+## Recherche globale : Pagefind
+
+- Index statique produit au build (`pagefind --site dist`, étape finale de `pnpm --filter @grichard/web build`), chargé à la première ouverture de la palette (JS + WebAssembly de `/pagefind/`), aucun service externe. Remplace l'ancien moteur maison de `search.js` ; les cheatsheets gardent leur MiniSearch (`reference.js`) et sont exclues de l'index.
+- Indexation : `data-pagefind-body` sur `<main>` (Base.astro) sauf pages non indexables, 404, légales, cheatsheets, `/search/`. Filtres : `type` (page, project, article, skill, experience, tool, category, tag), `category`, `tag` ; date en méta. `/search-index.json` (catalogue unique, `data/catalog.ts`) ne sert plus qu'aux suggestions du champ vide.
+- CSP : `'wasm-unsafe-eval'` ajouté à `script-src` (WebAssembly de Pagefind, aucun `eval` JavaScript autorisé).
+- Interface : palette (Ctrl/Cmd+K, `/`, ↑ ↓, Entrée, Échap), résultats groupés par type avec extrait surligné ; page partageable `/search/?q=` (noindex, hors sitemap).

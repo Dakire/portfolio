@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/postbuild.mjs",
+    "build": "astro build && node scripts/postbuild.mjs && pagefind --site dist --quiet",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "oxlint",
@@ -35,6 +35,7 @@
     "@types/node": "^22.20.5",
     "minisearch": "^7.2.0",
     "oxlint": "^1.94.0",
+    "pagefind": "^1.6.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.12",
     "yaml": "^2.9.1"

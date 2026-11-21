@@ -1,0 +1,36 @@
+---
+// Page /search/?q= : recherche partageable (même moteur que la palette, voir /js/search.js). Non indexée.
+import Base from '../layouts/Base.astro';
+import { ROUTES, UI, routeAlternates, type Lang } from '../lib/i18n';
+import '../styles/pages.css';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ui = UI[lang];
+---
+
+<Base
+  lang={lang}
+  title={`${ui.searchTitle} | Guillaume Richard`}
+  description={ui.searchPageDescription}
+  path={ROUTES[lang].search}
+  alternates={routeAlternates('search')}
+  noindex
+>
+  <div class="container section" data-search-page>
+    <h1>{ui.searchTitle}</h1>
+    <p class="lead">{ui.searchHint}</p>
+    <input
+      type="search"
+      class="search-input search-page-input"
+      placeholder={ui.searchPlaceholder}
+      aria-label={ui.search}
+      autocomplete="off"
+      spellcheck="false"
+      enterkeyhint="search"
+    />
+    <div class="search-results" data-search-results aria-live="polite"></div>
+  </div>
+</Base>

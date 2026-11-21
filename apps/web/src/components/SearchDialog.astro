@@ -1,7 +1,8 @@
 ---
-// Recherche globale : boîte de dialogue modale native (focus piégé, Échap, retour du focus au bouton), alimentée par /search-index.json
-// et pilotée par /js/search.js. Sans JavaScript, le bouton d'ouverture reste masqué : le site se parcourt par ses menus.
+// Recherche globale : palette de commandes en boîte de dialogue modale native (focus piégé, Échap, retour du focus au bouton),
+// alimentée par Pagefind (/pagefind/) et pilotée par /js/search.js ; /search-index.json ne sert qu'aux suggestions. Sans JavaScript, le bouton d'ouverture reste masqué : le site se parcourt par ses menus.
 import { withBase } from '../lib/base';
+import { KIND_LABELS } from '../data/catalog';
 import { UI, type Lang } from '../lib/i18n';
 
 interface Props {
@@ -16,6 +17,9 @@ const ui = UI[lang];
   class="search"
   aria-labelledby="search-title"
   data-index={withBase('/search-index.json')}
+  data-pagefind={withBase('/pagefind/pagefind.js')}
+  data-base={withBase('/')}
+  data-kinds={JSON.stringify(KIND_LABELS[lang])}
   data-lang={lang}
   data-hint={ui.searchHint}
   data-none={ui.searchNone}

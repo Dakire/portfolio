@@ -54,6 +54,33 @@ const feed = {
   title: lang === 'fr' ? 'Blog de Guillaume Richard' : "Guillaume Richard's blog",
   href: `${SITE}${ROUTES[lang].rss}`,
 };
+// Recherche globale (Pagefind, indexée au build) : seules les pages éditoriales indexables entrent dans l'index. Exclues :
+// pages non indexables, 404, pages légales, cheatsheets (recherche à part), page de recherche. Type déduit du chemin.
+const r = ROUTES[lang];
+const rest = (prefix: string) => (path.startsWith(prefix) ? path.slice(prefix.length) : null);
+const sub = rest(r.blog);
+const searchKind =
+  sub === null || sub === ''
+    ? path === r.skills
+      ? 'skill'
+      : path === r.career
+        ? 'experience'
+        : (rest(r.projects) ?? '') !== ''
+          ? 'project'
+          : (rest(r.tools) ?? '') !== ''
+            ? 'tool'
+            : 'page'
+    : /^(categorie|category)\//.test(sub)
+      ? 'category'
+      : /^tag\//.test(sub)
+        ? 'tag'
+        : 'article';
+const excluded = [
+  /\/cheatsheets\//,
+  /\/(mentions-legales|legal-notice|confidentialite|privacy|accessibilite|accessibility)\//,
+  /\/search\//,
+];
+const searchable = !noindex && path !== '/404.html' && !excluded.some((re) => re.test(path));
 const allScripts = [...scripts, '/js/nav.js', '/js/search.js', '/js/consent.js', '/js/egg.js'];
 ---
 
@@ -109,7 +136,8 @@ const allScripts = [...scripts, '/js/nav.js', '/js/search.js', '/js/consent.js',
     <div class="sheet">
       <div class="sheet-in">
         <SiteHeader lang={lang} path={path} otherHref={otherHref} />
-        <main id="contenu" tabindex="-1">
+        <main id="contenu" tabindex="-1" data-pagefind-body={searchable ? '' : undefined}>
+          {searchable && <meta data-pagefind-filter="type[content]" content={searchKind} />}
           <slot />
         </main>
         <SiteFooter lang={lang} />

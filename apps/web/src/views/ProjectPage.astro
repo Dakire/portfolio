@@ -65,6 +65,9 @@ const hasBlocks = Boolean(
     crumbs: trail.ld,
   })}
 >
+  {project.tags.map((tag) => (
+    <meta data-pagefind-filter="tag[content]" content={tag} />
+  ))}
   <PageHero
     path={project.title}
     title={project.title}

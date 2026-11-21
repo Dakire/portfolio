@@ -47,7 +47,14 @@ export function buildCsp({ script = [], style = [] } = {}) {
   const directives = {
     'default-src': ["'self'"],
     // Google Analytics n'est chargé par /js/consent.js qu'après consentement ; Turnstile par le formulaire de contact.
-    'script-src': ["'self'", ...quoted(script), 'https://www.googletagmanager.com', TURNSTILE],
+    // 'wasm-unsafe-eval' : le moteur de recherche Pagefind (WebAssembly, fichiers locaux de /pagefind/) ; ne permet aucun eval.
+    'script-src': [
+      "'self'",
+      "'wasm-unsafe-eval'",
+      ...quoted(script),
+      'https://www.googletagmanager.com',
+      TURNSTILE,
+    ],
     'style-src': ["'self'", ...quoted(style)],
     // Attributs style="" : produits par la coloration syntaxique (Shiki) ; aucun script ne peut s'en servir (voir ADR 0005).
     'style-src-attr': ["'unsafe-inline'"],
