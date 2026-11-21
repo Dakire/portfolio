@@ -84,7 +84,7 @@ function badgeOf(
 ): { icon: typeof CircleCheck; label: string; tone: string; spin?: boolean } {
   const b = ui.results.badges;
   if (row.state === 'pending')
-    return { icon: LoaderCircle, label: b.pending, tone: 'note', spin: true };
+    return { icon: LoaderCircle, label: b.pending, tone: 'tool-note', spin: true };
   if (row.state === 'error' || row.state === 'servfail' || row.state === 'refused')
     return { icon: TriangleAlert, label: b.failed, tone: 'tone-warn' };
   if (summary.expected)
@@ -118,7 +118,7 @@ function ResolverRow({
     <li class="resolver-row">
       <div>
         <p class="resolver-name">{resolver.name}</p>
-        <p class="note">{[countryName, resolver.ip].filter(Boolean).join(' · ')}</p>
+        <p class="tool-note">{[countryName, resolver.ip].filter(Boolean).join(' · ')}</p>
       </div>
       <div class="resolver-values">
         {answered ? (
@@ -130,10 +130,10 @@ function ResolverRow({
             ))}
           </ul>
         ) : (
-          <p class="note">{states[row.state] ?? row.state}</p>
+          <p class="tool-note">{states[row.state] ?? row.state}</p>
         )}
         {row.ms !== null && (
-          <p class="note">
+          <p class="tool-note">
             {[answered && row.ttl !== null && r.ttl(row.ttl), r.ms(row.ms)]
               .filter(Boolean)
               .join(' · ')}
@@ -352,7 +352,7 @@ export default function PropagationChecker({ lang }: { lang: Lang }) {
             >
               <Search size={20} aria-hidden="true" /> {ui.form.submit}
             </Button>
-            <p class="row-actions note">
+            <p class="row-actions tool-note">
               {ui.form.example}
               {EXAMPLES.map(([domain, type]) => (
                 <button
@@ -383,7 +383,7 @@ export default function PropagationChecker({ lang }: { lang: Lang }) {
           <div class="stack">
             {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
             <h2 ref={headingRef} tabIndex={-1} class="result-heading mono">
-              {ui.results.title} {query.domain} <span class="note">({query.type})</span>
+              {ui.results.title} {query.domain} <span class="tool-note">({query.type})</span>
             </h2>
             <p class="verdict">
               <VerdictIcon
@@ -394,7 +394,7 @@ export default function PropagationChecker({ lang }: { lang: Lang }) {
               <span>{text}</span>
             </p>
             {hints.map((hint) => (
-              <p key={hint} class="note">
+              <p key={hint} class="tool-note">
                 {hint}
               </p>
             ))}
@@ -435,10 +435,10 @@ export default function PropagationChecker({ lang }: { lang: Lang }) {
               {ui.results.auto}
             </Check>
           </div>
-          <p class="note">{ui.results.note}</p>
+          <p class="tool-note">{ui.results.note}</p>
         </div>
       )}
-      <p class="note">{ui.privacy}</p>
+      <p class="tool-note">{ui.privacy}</p>
     </div>
   );
 }

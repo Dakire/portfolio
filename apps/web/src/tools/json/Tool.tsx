@@ -84,7 +84,7 @@ export default function JsonFormatter({ lang }: { lang: Lang }) {
 
         <div class="row-actions">
           <p role="status" class="status-line">
-            {!parsed && <span class="note">{ui.status.empty}</span>}
+            {!parsed && <span class="tool-note">{ui.status.empty}</span>}
             {stats && (
               <>
                 <CircleCheck size={20} class="tone-ok" aria-hidden="true" />
@@ -191,7 +191,7 @@ export default function JsonFormatter({ lang }: { lang: Lang }) {
             {duplicates && <p class="tone-warn">{duplicates}</p>}
           </>
         )}
-        <p class="note">{ui.privacy}</p>
+        <p class="tool-note">{ui.privacy}</p>
       </div>
     </div>
   );

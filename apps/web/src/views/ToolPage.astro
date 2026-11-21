@@ -1,5 +1,4 @@
 ---
-import Card from '@grichard/ui/components/Card.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import '../styles/tools.css';
@@ -93,9 +92,9 @@ const ld = {
   ld={ld}
 >
   <PageHero path={`~/tools/${tool.slug[lang]}`} title={ui.h1} lead={ui.intro} />
-  <div class="container section stack-lg">
-    <nav aria-label={hub.breadcrumb.tools} class="meta breadcrumb">
-      <ol class="row" role="list">
+  <div class="container tool-page">
+    <nav aria-label={hub.breadcrumb.tools} class="crumbs tool-crumbs">
+      <ol role="list">
         <li>
           <a href={ROUTES[lang].home}>{hub.breadcrumb.home}</a>
         </li>
@@ -124,26 +123,24 @@ const ld = {
       {toolId === 'qr' && <QrGenerator client:visible lang={lang} />}
     </div>
 
-    <section aria-labelledby="what-title" class="stack">
+    <section aria-labelledby="what-title" class="tool-block">
       <h2 id="what-title">{ui.seo.whatTitle}</h2>
-      <ul class="cards" role="list">
+      <ul class="tool-what" role="list">
         {ui.seo.what.map(([name, text]) => (
           <li>
-            <Card>
-              <h3>{name}</h3>
-              <p>{text}</p>
-            </Card>
+            <h3>{name}</h3>
+            <p>{text}</p>
           </li>
         ))}
       </ul>
     </section>
 
-    <section aria-labelledby="how-title" class="tool-section">
+    <section aria-labelledby="how-title" class="tool-section tool-block">
       <h2 id="how-title">{ui.seo.howTitle}</h2>
       <p>{ui.seo.how}</p>
     </section>
 
-    <section aria-labelledby="faq-title" class="tool-section">
+    <section aria-labelledby="faq-title" class="tool-section tool-block">
       <h2 id="faq-title">FAQ</h2>
       <div class="faq">
         {ui.seo.faq.map(([question, answer]) => (
@@ -156,14 +153,14 @@ const ld = {
     </section>
 
     {privacy && (
-      <section aria-labelledby="privacy-title" class="tool-section">
+      <section aria-labelledby="privacy-title" class="tool-section tool-block">
         <h2 id="privacy-title">{hub.privacyTitle}</h2>
         <p>{privacy}</p>
       </section>
     )}
 
     {related.length > 0 && (
-      <aside aria-labelledby="related-title" class="tool-section">
+      <aside aria-labelledby="related-title" class="tool-section tool-block">
         <h2 id="related-title">{ui.related}</h2>
         <ul>
           {related.map((p) => (

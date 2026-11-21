@@ -62,7 +62,7 @@ function EventList<T>({
         </summary>
         <div class="disclosure-body stack">
           {items.length === 0 ? (
-            <p class="note">{r.empty}</p>
+            <p class="tool-note">{r.empty}</p>
           ) : (
             <ScrollRegion label={title}>
               <table class="data-table">
@@ -187,7 +187,7 @@ export default function IcsCompare({ lang }: { lang: Lang }) {
     <li key={label} class={accent ? 'stat-card is-accent' : 'stat-card'}>
       <p class="stat-number">{value}</p>
       <p class="stat-label">{label}</p>
-      {help && <p class="note">{help}</p>}
+      {help && <p class="tool-note">{help}</p>}
     </li>
   );
 
@@ -251,7 +251,7 @@ export default function IcsCompare({ lang }: { lang: Lang }) {
                 />
                 <span>
                   <span class="choice-title">{f.match[m][0]}</span>
-                  <span class="note">{f.match[m][1]}</span>
+                  <span class="tool-note">{f.match[m][1]}</span>
                 </span>
               </label>
             ))}
@@ -290,7 +290,7 @@ export default function IcsCompare({ lang }: { lang: Lang }) {
               {stat(c.modified, r.modified)}
               {stat(c.onlyInDestination, r.onlyDestination)}
             </ul>
-            <p class="note">
+            <p class="tool-note">
               {f.source} : {c.source} {ui.loaded.events} · {f.destination} : {c.destination}{' '}
               {ui.loaded.events}
             </p>
@@ -367,7 +367,7 @@ export default function IcsCompare({ lang }: { lang: Lang }) {
               ui={ui}
             />
           </div>
-          <p class="note">{ui.privacy}</p>
+          <p class="tool-note">{ui.privacy}</p>
         </>
       )}
     </div>

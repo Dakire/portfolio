@@ -151,10 +151,10 @@ function DataTab({ lang, ui }: { lang: Lang; ui: Ui }) {
             ))}
           </dl>
         ) : !('error' in parsed) || parsed.error === 'empty' ? (
-          <p class="note">{d.empty}</p>
+          <p class="tool-note">{d.empty}</p>
         ) : null}
       </div>
-      <p class="note">{d.note}</p>
+      <p class="tool-note">{d.note}</p>
     </div>
   );
 }
@@ -263,7 +263,7 @@ function TransferTab({ lang, ui }: { lang: Lang; ui: Ui }) {
         {result && (
           <div class="stack">
             <div class="result-box">
-              <p class="note">{t.result}</p>
+              <p class="tool-note">{t.result}</p>
               <p class="result-value mono">{durationText(result.seconds, t, lang)}</p>
               <p>
                 {t.theoretical(formatValue(result.seconds, lang))} ·{' '}
@@ -407,7 +407,7 @@ function BandwidthTab({ lang, ui }: { lang: Lang; ui: Ui }) {
         {result && best && (
           <div class="stack">
             <div class="result-box">
-              <p class="note">{t.result}</p>
+              <p class="tool-note">{t.result}</p>
               <p class="result-value mono">
                 {formatValue(best.value, lang)} {labels[best.id] ?? best.id}
               </p>
@@ -491,10 +491,10 @@ function BaseTab({ ui }: { ui: Ui }) {
             <Row ui={ui} label={b.rows.bits} value={b.bits(info.bits)} copy={String(info.bits)} />
           </dl>
         ) : (
-          !error && <p class="note">{b.empty}</p>
+          !error && <p class="tool-note">{b.empty}</p>
         )}
       </div>
-      <p class="note">{b.note}</p>
+      <p class="tool-note">{b.note}</p>
     </div>
   );
 }

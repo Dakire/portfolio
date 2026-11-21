@@ -34,7 +34,7 @@ function RecordTable({
   caption: string;
 }) {
   const c = ui.results.recordCols;
-  if (!records.length) return <p class="note">{ui.results.noRecords}</p>;
+  if (!records.length) return <p class="tool-note">{ui.results.noRecords}</p>;
   return (
     <ScrollRegion label={caption}>
       <table class="data-table">
@@ -102,7 +102,7 @@ function Extra({ check, ui }: { check: Check; ui: Ui }) {
       <div>
         <p class="strong">
           {r.spfTree}{' '}
-          <span class="note">
+          <span class="tool-note">
             — {data.lookups} {r.spfLookups}
           </span>
         </p>
@@ -146,7 +146,7 @@ function Extra({ check, ui }: { check: Check; ui: Ui }) {
             ))}
           </ul>
         </details>
-        {!data.explicit && <p class="note">{r.dkimHint}</p>}
+        {!data.explicit && <p class="tool-note">{r.dkimHint}</p>}
       </div>
     );
   }
@@ -233,7 +233,9 @@ function CheckSection({
               {title}
               <span class="visually-hidden"> — {ui.results.status[check.status]}</span>
             </span>
-            {headline && <span class="note truncate">{describeFinding(lang, headline).title}</span>}
+            {headline && (
+              <span class="tool-note truncate">{describeFinding(lang, headline).title}</span>
+            )}
           </span>
         </summary>
         <div class="disclosure-body stack">
@@ -329,7 +331,7 @@ export default function DnsReport({ report, lang, onCopyReport, onCopyLink, head
           <h2 ref={headingRef} tabIndex={-1} class="result-heading mono">
             {r.title} {report.domain}
           </h2>
-          <p class="note">
+          <p class="tool-note">
             {report.queries} {r.queries} {r.took} {(report.tookMs / 1000).toFixed(1)} s
           </p>
         </div>
@@ -447,7 +449,7 @@ export default function DnsReport({ report, lang, onCopyReport, onCopyLink, head
           />
         ))}
       </div>
-      <p class="note">{r.privacy}</p>
+      <p class="tool-note">{r.privacy}</p>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 ---
-// Outils du registre en lignes : nom, description, flèche ; toute la ligne est cliquable (lien étiré).
-// Page « Outils » (titres h2 ou h3 selon le contexte).
+// Outils du registre en lignes de registre : référence de bon de travail (BT-01…), nom, description, flèche ; toute la ligne
+// est cliquable (lien étiré). Page « Outils » (titres h2 ou h3 selon le contexte).
 import type { Lang } from '../lib/i18n';
 import Icon from './Icon.astro';
 import { TOOLS, toolPath, toolUi } from '../tools/registry';
@@ -16,22 +16,25 @@ interface Props {
 const { lang, headingLevel = 2, limit, ids } = Astro.props;
 const tools = ids ? ids.flatMap((id) => TOOLS.filter((t) => t.id === id)) : [...TOOLS];
 const Heading = headingLevel === 2 ? 'h2' : 'h3';
+const ref = (id: string) =>
+  `BT-${String(TOOLS.findIndex((t) => t.id === id) + 1).padStart(2, '0')}`;
 ---
 
-<ul class="lrows" role="list">
+<ul class="tool-rows" role="list">
   {tools.slice(0, limit).map((tool) => {
     const ui = toolUi(tool, lang);
     return (
-      <li class="lrow">
-        <Heading class="lrow-title">
-          <a class="lrow-link" href={toolPath(tool, lang)}>
+      <li class="tool-row">
+        <span class="tool-row-ref" aria-hidden="true">
+          {ref(tool.id)}
+        </span>
+        <Heading class="tool-row-title">
+          <a class="tool-row-link" href={toolPath(tool, lang)}>
             {ui.name}
           </a>
         </Heading>
-        <div class="lrow-body">
-          <p>{ui.card}</p>
-        </div>
-        <span class="ledger-arrow" aria-hidden="true">
+        <p class="tool-row-text">{ui.card}</p>
+        <span class="tool-row-arrow" aria-hidden="true">
           <Icon name="arrow" size={18} />
         </span>
       </li>

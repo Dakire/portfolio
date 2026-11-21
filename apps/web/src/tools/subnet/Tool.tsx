@@ -150,7 +150,7 @@ export default function SubnetCalculator({ lang }: { lang: Lang }) {
             <Button type="submit" variant="primary" class="btn-lg">
               <Calculator size={20} aria-hidden="true" /> {f.calculate}
             </Button>
-            <p class="row-actions note">
+            <p class="row-actions tool-note">
               {f.examples}
               {EXAMPLES.map((e) => (
                 <button
@@ -311,7 +311,9 @@ export default function SubnetCalculator({ lang }: { lang: Lang }) {
                   </table>
                 </ScrollRegion>
                 {split.truncated && (
-                  <p class="note">{ui.split.truncated(split.items.length, fmt(split.count))}</p>
+                  <p class="tool-note">
+                    {ui.split.truncated(split.items.length, fmt(split.count))}
+                  </p>
                 )}
               </>
             )}
@@ -320,7 +322,7 @@ export default function SubnetCalculator({ lang }: { lang: Lang }) {
           {v4 && (
             <div class="tool">
               <h2>{ui.vlsm.title}</h2>
-              <p class="note">{ui.vlsm.help}</p>
+              <p class="tool-note">{ui.vlsm.help}</p>
               <Field
                 as="textarea"
                 id="vlsm-needs"
@@ -386,7 +388,7 @@ export default function SubnetCalculator({ lang }: { lang: Lang }) {
                       </tbody>
                     </table>
                   </ScrollRegion>
-                  {'free' in plan && <p class="note">{ui.vlsm.free(fmt(plan.free))}</p>}
+                  {'free' in plan && <p class="tool-note">{ui.vlsm.free(fmt(plan.free))}</p>}
                 </>
               )}
             </div>

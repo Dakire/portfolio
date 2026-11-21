@@ -161,7 +161,7 @@ export default function DnsChecker({ lang }: { lang: Lang }) {
                 </>
               )}
             </Button>
-            <p class="row-actions note">
+            <p class="row-actions tool-note">
               {ui.form.example}
               {EXAMPLES.map((example) => (
                 <button
@@ -199,7 +199,7 @@ export default function DnsChecker({ lang }: { lang: Lang }) {
                 ) : (
                   <span class="progress-dot" />
                 )}
-                <span class={progress[step] === 'done' ? 'note' : undefined}>
+                <span class={progress[step] === 'done' ? 'tool-note' : undefined}>
                   {steps[step] ?? step}
                 </span>
               </li>

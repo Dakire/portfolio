@@ -161,7 +161,7 @@ function Report<R extends ServerReport>({
               </>
             )}
           </dl>
-          <p class="note">
+          <p class="tool-note">
             {texts.results.summary(
               report.summary.critical,
               report.summary.important,
@@ -341,7 +341,7 @@ export default function ServerTool<R extends ServerReport>({
                 class="captcha-widget"
               />
               {!ready && !loadFailed && (
-                <p class="captcha-loading note" role="status">
+                <p class="captcha-loading tool-note" role="status">
                   {texts.form.captchaLoading}
                 </p>
               )}

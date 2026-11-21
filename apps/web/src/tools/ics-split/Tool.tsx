@@ -137,7 +137,7 @@ export default function IcsSplit({ lang }: { lang: Lang }) {
                   />
                   <span>
                     <span class="choice-title">{ui.form.modes[m][0]}</span>
-                    <span class="note">{ui.form.modes[m][1]}</span>
+                    <span class="tool-note">{ui.form.modes[m][1]}</span>
                   </span>
                 </label>
               ))}
@@ -182,7 +182,9 @@ export default function IcsSplit({ lang }: { lang: Lang }) {
             <div>
               <h2>{ui.result.title}</h2>
               <p>{ui.result.total(total, result.files.length)}</p>
-              {total === (summary?.events ?? -1) && <p class="note tone-ok">{ui.result.check}</p>}
+              {total === (summary?.events ?? -1) && (
+                <p class="tool-note tone-ok">{ui.result.check}</p>
+              )}
             </div>
             {result.files.length > 1 && (
               <Button onClick={downloadAll}>
@@ -241,11 +243,11 @@ export default function IcsSplit({ lang }: { lang: Lang }) {
             </ScrollRegion>
           )}
           {result.files.length > MAX_ROWS && (
-            <p class="note">
+            <p class="tool-note">
               … {result.files.length - MAX_ROWS} / {result.files.length}
             </p>
           )}
-          <p class="note">{ui.privacy}</p>
+          <p class="tool-note">{ui.privacy}</p>
         </div>
       )}
     </div>

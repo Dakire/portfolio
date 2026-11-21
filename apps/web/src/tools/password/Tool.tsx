@@ -265,9 +265,9 @@ export default function PasswordGenerator({ lang }: { lang: Lang }) {
             <div class="meter" aria-hidden="true">
               <div class={`meter-bar meter-${strength}`} />
             </div>
-            <p class="note">{r.crack(formatDuration(crackSeconds(bits), r.durations))}</p>
+            <p class="tool-note">{r.crack(formatDuration(crackSeconds(bits), r.durations))}</p>
           </div>
-          <p class="note">{ui.privacy}</p>
+          <p class="tool-note">{ui.privacy}</p>
         </div>
       )}
     </div>

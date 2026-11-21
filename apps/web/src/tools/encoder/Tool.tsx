@@ -223,7 +223,7 @@ function TextTool({ kind, ui }: { kind: TextKind; ui: Ui }) {
         {kind === 'hex' && direction === 'encode' && (
           <fieldset class="choice-group">
             <legend class="visually-hidden">{ui.hex.separator}</legend>
-            <span class="note">{ui.hex.separator}</span>
+            <span class="tool-note">{ui.hex.separator}</span>
             {(
               [
                 ['', ui.hex.none],
@@ -260,7 +260,7 @@ function TextTool({ kind, ui }: { kind: TextKind; ui: Ui }) {
           setDirection(direction === 'encode' ? 'decode' : 'encode');
         }}
       />
-      {result.note && <p class="note">{result.note}</p>}
+      {result.note && <p class="tool-note">{result.note}</p>}
 
       {url?.ok && (
         <div class="stack">
@@ -297,7 +297,7 @@ function JwtTool({ ui, lang }: { ui: Ui; lang: Lang }) {
     expired: 'tone-danger',
     notYetValid: 'tone-warn',
     valid: 'tone-ok',
-    noExpiry: 'note',
+    noExpiry: 'tool-note',
   } as const;
   const errors: Record<string, string> = j.errors;
   const labels: Record<string, string> = j.labels;
@@ -317,7 +317,7 @@ function JwtTool({ ui, lang }: { ui: Ui; lang: Lang }) {
         autoCapitalize="none"
         error={result && !result.ok ? errors[result.error] : undefined}
       />
-      <p class="note">{j.notice}</p>
+      <p class="tool-note">{j.notice}</p>
       {result?.ok && (
         <div class="stack">
           <p role="status" class={`status-line ${statusTone[result.status]}`}>
@@ -441,7 +441,7 @@ function HashTool({ ui }: { ui: Ui }) {
           onFile={setFile}
         />
       )}
-      <div role="status" aria-live="polite" class="note">
+      <div role="status" aria-live="polite" class="tool-note">
         {busy ? h.working : ''}
       </div>
       {!empty && (
@@ -472,7 +472,7 @@ function HashTool({ ui }: { ui: Ui }) {
           {matched ? `${h.match} (${matched})` : h.noMatch}
         </p>
       )}
-      <p class="note">{h.md5Warning}</p>
+      <p class="tool-note">{h.md5Warning}</p>
     </div>
   );
 }
@@ -519,7 +519,7 @@ function TimeTool({ ui, lang }: { ui: Ui; lang: Lang }) {
       </div>
       {d && parsed?.ok && (
         <>
-          <p role="status" class="note">
+          <p role="status" class="tool-note">
             {t.detected(units[parsed.unit] ?? parsed.unit)}
           </p>
           <Rows
@@ -668,7 +668,7 @@ export default function EncoderDecoder({ lang }: { lang: Lang }) {
           </div>
         ))}
       </div>
-      <p class="note">{ui.privacy}</p>
+      <p class="tool-note">{ui.privacy}</p>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import type { Finding as FindingData, Severity } from '@grichard/tools-core/dns/findings';
 import { CircleCheck, CircleX, Info, TriangleAlert } from 'lucide-preact';
 
-// Gravité -> icône et classe de couleur. Le texte « Erreur », « Avertissement »… est toujours présent à côté (la couleur ne porte jamais seule l'information).
+// Gravité -> icône et classe de couleur. Le mot « Erreur », « Avertissement »… est toujours visible à côté de l'icône (la forme et le mot portent l'information, la couleur ne fait que la souligner).
 export const SEVERITY = {
   ok: { icon: CircleCheck, tone: 'tone-ok' },
   info: { icon: Info, tone: 'tone-info' },
@@ -39,7 +39,7 @@ export default function Finding({
       <Icon size={20} class={`finding-icon ${tone}`} aria-hidden="true" />
       <div>
         <p class="finding-title">
-          <span class="visually-hidden">{statusLabels[finding.severity]} : </span>
+          <span class={`finding-status ${tone}`}>{statusLabels[finding.severity]} : </span>
           {d.title}
         </p>
         {showDetail && d.detail && <p>{d.detail}</p>}

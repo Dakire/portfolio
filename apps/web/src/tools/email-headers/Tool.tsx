@@ -226,7 +226,7 @@ export default function EmailHeaders({ lang, dnsPath }: { lang: Lang; dnsPath: s
             <Section title={r.sections.path}>
               {report.hops.length ? (
                 <>
-                  <p class="note">{r.path.oldest}</p>
+                  <p class="tool-note">{r.path.oldest}</p>
                   <Table
                     caption={r.sections.path}
                     columns={[
@@ -331,7 +331,7 @@ export default function EmailHeaders({ lang, dnsPath }: { lang: Lang; dnsPath: s
             </Section>
 
             <Section title={r.sections.identity}>
-              <p class="note">{identity.help}</p>
+              <p class="tool-note">{identity.help}</p>
               <Facts
                 rows={[
                   [
@@ -392,7 +392,7 @@ export default function EmailHeaders({ lang, dnsPath }: { lang: Lang; dnsPath: s
                 </div>
               </details>
             </Section>
-            <p class="note">{ui.privacy}</p>
+            <p class="tool-note">{ui.privacy}</p>
           </>
         )}
     </div>
