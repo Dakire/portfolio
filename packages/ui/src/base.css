@@ -78,15 +78,18 @@ p {
   text-wrap: pretty;
 }
 
-/* Liens : encre du stylo bleu, soulignés ; au survol le trait s'épaissit (jamais la couleur seule) */
+/* Liens : à l'encre, soulignés d'un trait ondulé orange (signature reprise d'Inkfolio) ; au survol le trait s'épaissit.
+ * La couleur n'est jamais seule porteuse du lien : le soulignement l'est. */
 a {
   color: var(--link);
   text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--u);
   text-decoration-thickness: 1.5px;
-  text-underline-offset: 0.22em;
+  text-underline-offset: 0.3em;
 }
 a:hover {
-  text-decoration-thickness: 3px;
+  text-decoration-thickness: 2.5px;
 }
 
 img,

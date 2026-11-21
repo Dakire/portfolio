@@ -118,6 +118,7 @@ main {
   border-top: 1px solid var(--line-strong);
 }
 .site-nav a {
+  text-decoration: none;
   display: flex;
   align-items: center;
   min-height: 3.25rem;
@@ -128,10 +129,11 @@ main {
   text-decoration: none;
 }
 .site-nav a:hover {
-  text-decoration: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.25em;
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: var(--u);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.35em;
 }
 .site-nav a[aria-current] {
   color: var(--pen);
@@ -325,6 +327,7 @@ html:not(.js) .subnav {
     background: var(--raised);
     border: var(--stroke) solid var(--ink);
     border-top: 0;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
     box-shadow: var(--shadow-lg);
   }
   .has-sub:is(:hover, :focus-within):not([data-closed]) .subnav {
@@ -364,6 +367,7 @@ html:not(.js) .subnav {
   gap: var(--space-2);
 }
 .social a {
+  text-decoration: none;
   display: grid;
   place-items: center;
   width: var(--target);
@@ -406,6 +410,7 @@ html:not(.js) .subnav {
 
 /* ---------- Recherche globale : boîte de dialogue modale ---------- */
 .search {
+  border-radius: var(--radius-lg);
   width: min(40rem, calc(100vw - 2rem));
   max-height: min(34rem, calc(100dvh - 4rem));
   margin: 8dvh auto auto;
@@ -874,4 +879,73 @@ ol.row {
 }
 .egg-line {
   font-family: var(--font-mono);
+}
+
+/* Liens du pied de page : à l'encre, sans soulignement au repos ; le trait ondulé orange apparaît au survol */
+.footer-list a,
+.footer-links a {
+  text-decoration-color: transparent;
+}
+.footer-list a:hover,
+.footer-links a:hover {
+  text-decoration-color: var(--u);
+}
+
+/* ---------- Grand écran : bandeau fixe sur une seule ligne (nom, menu, recherche, langue, contact) ----------
+ * Le menu reste à portée en lisant un article ; une fine barre orange indique l'avancée de la lecture (CSS seul, défilement
+ * piloté : navigateurs qui le gèrent, hors préférence de mouvement réduit). Sous 80 rem, le bandeau garde ses deux lignes. */
+@media (min-width: 80rem) {
+  .site-header {
+    position: sticky;
+    top: 0;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .site-header-inner {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    grid-template-areas: 'name nav tools cta';
+    align-items: center;
+    gap: var(--space-5);
+    padding-block: var(--space-2);
+  }
+  .site-nav {
+    margin-top: 0;
+  }
+  .site-nav > ul {
+    gap: var(--space-4);
+  }
+  .site-nav > ul > li > a {
+    font-size: 1.0625rem;
+  }
+  .search-open-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .search-open {
+    padding-inline: var(--space-3);
+  }
+}
+@supports (animation-timeline: scroll()) {
+  @media (min-width: 80rem) and (prefers-reduced-motion: no-preference) {
+    .site-header::after {
+      content: '';
+      position: absolute;
+      inset: auto 0 -1px;
+      height: 2px;
+      background: var(--u);
+      transform: scaleX(0);
+      transform-origin: 0 50%;
+      animation: reading linear both;
+      animation-timeline: scroll(root block);
+    }
+    @keyframes reading {
+      to {
+        transform: scaleX(1);
+      }
+    }
+  }
 }

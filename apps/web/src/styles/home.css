@@ -525,3 +525,44 @@
   background: var(--band-ink);
   color: var(--band);
 }
+
+/* ---------- Grand écran : le titre de chaque section passe dans la marge gauche et reste visible en lisant (mise en page
+ * éditoriale d'Inkfolio : titre à gauche, contenu à droite). Sous 76 rem, titre au-dessus du contenu. ---------- */
+@media (min-width: 76rem) {
+  .hm-section:has(> .container > .rubric) > .container {
+    display: grid;
+    grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+    column-gap: var(--space-7);
+    align-items: start;
+  }
+  .hm-section > .container > .rubric {
+    position: sticky;
+    top: 5.5rem;
+    grid-column: 1;
+    grid-row: 1 / span 4;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    margin-bottom: 0;
+    border-top: var(--stroke) solid var(--ink);
+  }
+  .hm-section > .container > .rubric h2 {
+    font-size: var(--text-xl);
+  }
+  .hm-section > .container > :not(.rubric) {
+    grid-column: 2;
+  }
+  .hm-index-link {
+    grid-template-columns: 4.25rem minmax(0, 1fr) 11rem;
+  }
+  .hm-index-title {
+    font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.125rem);
+  }
+  /* Dans la colonne de droite, les outils se rangent sur deux colonnes (quatre seraient trop étroites) */
+  .hm-toolgroups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .hm-toolgroup-wide ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

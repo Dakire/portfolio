@@ -11,7 +11,7 @@
   min-height: var(--target);
   padding: 0 var(--space-5);
   border: var(--stroke) solid var(--ink);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-btn);
   background: transparent;
   color: var(--ink);
   font-family: var(--font-mono);
@@ -39,9 +39,9 @@
   color: var(--canvas);
 }
 .btn-primary:hover {
-  background: var(--accent-strong);
-  border-color: var(--accent-strong);
-  color: var(--accent-ink);
+  background: var(--u);
+  border-color: var(--u);
+  color: var(--u-ink);
 }
 .btn-ghost {
   border-color: transparent;
