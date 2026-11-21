@@ -95,6 +95,7 @@ export function homeLd(lang: Lang, title: string, role: string) {
         '@id': `${SITE}/#website`,
         url: `${SITE}/`,
         name: 'Guillaume Richard',
+        alternateName: 'grichard.eu',
         inLanguage: ['fr-FR', 'en'],
         publisher: { '@id': `${SITE}/#person` },
       },
