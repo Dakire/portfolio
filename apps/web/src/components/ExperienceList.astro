@@ -1,5 +1,8 @@
 ---
+// Journal de bord : une fiche par poste (dates, employeur et contrat en mono à gauche ; intitulé, missions et compétences à droite).
+// Le poste en cours porte un tampon. Les missions sont des exemples, pas une liste exhaustive.
 import type { Experience } from '../data/content';
+import '../styles/pages.css';
 
 interface Props {
   items: Experience[];
@@ -9,12 +12,15 @@ interface Props {
   skillsLabel?: string;
   /** Libellé qui précède la liste des missions (elles ne sont pas exhaustives). */
   dutiesLabel?: string;
+  /** Mot du tampon du poste en cours. */
+  ongoingLabel?: string;
 }
 const {
   items,
   level = 3,
   skillsLabel = 'Compétences',
   dutiesLabel = 'Missions, entre autres :',
+  ongoingLabel = 'en cours',
 } = Astro.props;
 const Heading = `h${level}` as 'h2' | 'h3';
 ---
@@ -26,6 +32,7 @@ const Heading = `h${level}` as 'h2' | 'h3';
         <p class="job-date">{job.date}</p>
         <p class="job-where">{job.company}</p>
         {job.contract && <p class="job-contract">{job.contract}</p>}
+        {!job.end && <p class="stamp job-stamp">{ongoingLabel}</p>}
       </div>
       <div class="job-what">
         <Heading>{job.role}</Heading>

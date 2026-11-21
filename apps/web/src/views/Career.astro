@@ -5,12 +5,13 @@ import CtaBand from '@grichard/ui/components/CtaBand.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import ExperienceList from '../components/ExperienceList.astro';
-import { PORTFOLIO_DATA, PROFILE } from '../data/content';
+import { PORTFOLIO_DATA } from '../data/content';
 import { SITE_TEXT } from '../data/site-text';
 import { withBase } from '../lib/base';
 import { crumbs } from '../lib/crumbs';
 import { careerLd, ogImage } from '../lib/seo-pages';
 import { ROUTES, projectPath, routeAlternates, type Lang } from '../lib/i18n';
+import '../styles/pages.css';
 
 interface Props {
   lang: Lang;
@@ -52,20 +53,29 @@ const trail = crumbs(lang, [], { label: text.career.title, path: routes.career }
   <PageHero path={text.career.title} title={text.career.title} crumbs={trail}>
     <p class="lead">{t.experienceIntro}</p>
   </PageHero>
-  <div class="container section">
-    <section class="stack" aria-labelledby="experiences">
-      <h2 id="experiences">{t.experienceTitle}</h2>
+  <section class="page-section" aria-labelledby="experiences">
+    <div class="container">
+      <div class="rubric">
+        <h2 id="experiences">{fr ? 'Journal de bord' : 'Logbook'}</h2>
+        <p class="rubric-meta">
+          {t.experiences.length} {fr ? 'postes' : 'positions'}
+        </p>
+      </div>
       <ExperienceList
         items={t.experiences}
         level={3}
         skillsLabel={skillsLabel}
         dutiesLabel={fr ? 'Missions, entre autres :' : 'Duties include:'}
+        ongoingLabel={fr ? 'en cours' : 'ongoing'}
       />
-    </section>
-  </div>
-  <section class="band band-olive" aria-labelledby="education">
-    <div class="container stack hm-section">
-      <h2 id="education">{t.educationTitle}</h2>
+    </div>
+  </section>
+  <section class="page-section" aria-labelledby="education">
+    <div class="container">
+      <div class="rubric">
+        <h2 id="education">{t.educationTitle}</h2>
+        <p class="rubric-meta">{t.languagesInfo}</p>
+      </div>
       <ol class="jobs">
         {t.education.map((e) => (
           <li class="job">
@@ -106,25 +116,28 @@ const trail = crumbs(lang, [], { label: text.career.title, path: routes.career }
           </li>
         ))}
       </ol>
-      <p class="prose">{t.languagesInfo}</p>
     </div>
   </section>
-  <section class="band band-petrole" aria-labelledby="cv">
-    <div class="container stack hm-section">
-      <h2 id="cv">{text.career.cvTitle}</h2>
-      <p class="prose">{text.career.cvText}</p>
-      <ul class="row" role="list">
-        {t.hero.cvLinks.map((cv) => (
-          <li>
-            <Button href={withBase(cv.href)} hreflang={cv.lang} lang={cv.lang}>
-              {cv.label}
-            </Button>
-          </li>
-        ))}
-      </ul>
+  <section class="page-section" aria-labelledby="cv">
+    <div class="container">
+      <div class="rubric">
+        <h2 id="cv">{text.career.cvTitle}</h2>
+      </div>
+      <div class="cv-sheet">
+        <p class="prose">{text.career.cvText}</p>
+        <ul class="row" role="list">
+          {t.hero.cvLinks.map((cv) => (
+            <li>
+              <Button href={withBase(cv.href)} hreflang={cv.lang} lang={cv.lang}>
+                {cv.label}
+              </Button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   </section>
-  <div class="container section">
+  <div class="container page-section">
     <CtaBand title={text.contactBand.title}>
       <p>{text.contactBand.text}</p>
       <Fragment slot="actions">

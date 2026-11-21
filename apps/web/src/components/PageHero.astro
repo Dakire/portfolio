@@ -1,4 +1,5 @@
 ---
+// En-tête de page intérieure : fil d'Ariane, ticket (facultatif), titre, chapeau. La feuille commence ici (ADR 0014).
 import Breadcrumb from '@grichard/ui/components/Breadcrumb.astro';
 
 interface Props {
@@ -6,15 +7,18 @@ interface Props {
   path?: string;
   title: string;
   lead?: string;
+  /** Ligne de ticket au-dessus du titre (ex. « GR-R03 · Réseau & Systèmes »). */
+  kicker?: string;
   /** Fil d'Ariane (voir lib/crumbs.ts) ; absent : pas de fil. */
   crumbs?: { label: string; items: { label: string; href?: string }[] };
 }
-const { title, lead, crumbs } = Astro.props;
+const { title, lead, kicker, crumbs } = Astro.props;
 ---
 
-<header class="page-hero grid-bg">
+<header class="page-hero">
   <div class="container">
     {crumbs && <Breadcrumb label={crumbs.label} items={crumbs.items} />}
+    {kicker && <p class="ticket page-kicker">{kicker}</p>}
     <h1>{title}</h1>
     {lead && <p class="lead">{lead}</p>}
     <slot />

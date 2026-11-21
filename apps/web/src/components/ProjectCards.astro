@@ -1,8 +1,12 @@
 ---
-// Réalisations en lignes de registre : titre, description et outils, flèche ; toute la ligne est cliquable (lien étiré).
+// Réalisations en index typographique (ADR 0014) : référence GR-Rxx, titre, description et outils toujours visibles, domaine à droite.
+// Toute la ligne est cliquable (lien du titre étiré) ; le lien GitHub reste cliquable au-dessus.
 import type { Project } from '../data/content';
+import { PORTFOLIO_DATA } from '../data/content';
 import Icon from './Icon.astro';
 import { UI, projectPath, type Lang } from '../lib/i18n';
+import { projectRef } from '../lib/ticket';
+import '../styles/pages.css';
 
 interface Props {
   items: Project[];
@@ -14,31 +18,35 @@ interface Props {
 }
 const { items, lang, limit, level = 3 } = Astro.props;
 const ui = UI[lang];
+const all = PORTFOLIO_DATA[lang].projects;
+const skills = PORTFOLIO_DATA[lang].skills;
 const Heading = `h${level}` as 'h2' | 'h3';
 ---
 
-<ul class="lrows" role="list">
+<ol class="pindex" role="list">
   {items.slice(0, limit).map((project) => (
-    <li class="lrow">
-      <Heading class="lrow-title">
-        <a class="lrow-link" href={projectPath(lang, project.slug)}>
-          {project.title}
-        </a>
-      </Heading>
-      <div class="lrow-body">
+    <li class="pindex-row">
+      <span class="pindex-ref">{projectRef(all.findIndex((p) => p.slug === project.slug))}</span>
+      <div class="pindex-body">
+        <Heading class="pindex-title">
+          <a class="pindex-link" href={projectPath(lang, project.slug)}>
+            {project.title}
+          </a>
+        </Heading>
         <p>{project.desc}</p>
-        <p class="lrow-tags">{project.tags.join(' · ')}</p>
+        <p class="pindex-tags">{project.tags.join(' · ')}</p>
         {project.href && (
           <p>
-            <a class="lrow-extra" href={project.href} rel="noopener">
+            <a class="pindex-extra" href={project.href} rel="noopener">
               GitHub<span class="visually-hidden"> {ui.external}</span>
             </a>
           </p>
         )}
       </div>
-      <span class="ledger-arrow" aria-hidden="true">
-        <Icon name="arrow" size={18} />
+      <p class="pindex-skill">{skills.find((s) => s.id === project.skill)?.category}</p>
+      <span class="pindex-arrow" aria-hidden="true">
+        <Icon name="arrow" size={20} />
       </span>
     </li>
   ))}
-</ul>
+</ol>

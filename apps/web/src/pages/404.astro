@@ -1,10 +1,12 @@
 ---
 // Page d'erreur unique (ErrorDocument 404 et 403) : servie à toutes les adresses inconnues, en français et en anglais.
+// Mise en page de fiche : « fiche introuvable », avec un tampon, et trois sorties (accueil, recherche, blog).
 import Button from '@grichard/ui/components/Button.astro';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import { withBase } from '../lib/base';
 import { ROUTES } from '../lib/i18n';
+import '../styles/pages.css';
 ---
 
 <Base
@@ -16,21 +18,27 @@ import { ROUTES } from '../lib/i18n';
 >
   <PageHero
     path="~/404"
-    title="Page introuvable"
+    title="Fiche introuvable"
+    kicker="Erreur 404"
     lead="Cette adresse n'existe pas ou a changé. Le contenu a peut-être été déplacé."
-  />
-  <div class="container section stack-lg">
+  >
+    <p class="stamp not-found-stamp">Introuvable</p>
+  </PageHero>
+  <div class="container page-section stack-lg">
     <p class="row">
       <Button variant="primary" href={ROUTES.fr.home}>
         Retour à l'accueil
       </Button>
       <Button href={ROUTES.fr.blog}>Voir le blog</Button>
       <Button href={ROUTES.fr.tools}>Voir les outils</Button>
+      <button type="button" class="btn" data-search-open aria-haspopup="dialog" hidden>
+        Rechercher sur le site
+      </button>
     </p>
     <p class="meta egg-line" aria-hidden="true">
       $ curl -I grichard.eu/??? → HTTP/2 404 (et pas de théière : 418)
     </p>
-    <section lang="en" class="stack" aria-labelledby="not-found-en">
+    <section lang="en" class="stack not-found-en" aria-labelledby="not-found-en">
       <h2 id="not-found-en">Page not found</h2>
       <p class="prose">This address does not exist or has changed. The content may have moved.</p>
       <p class="row">

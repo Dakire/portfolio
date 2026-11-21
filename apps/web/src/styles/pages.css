@@ -1,0 +1,670 @@
+/* Pages intérieures (ADR 0014) : Parcours (journal de bord), À propos (fiche d'identité), Compétences (domaines cochés), Réalisations
+ * (index), fiche de réalisation, Contact (demande d'intervention), pages légales, fiche introuvable.
+ * Couleurs : tokens uniquement. Le CSS d'en-tête de page (.page-hero) est dans site.css. */
+
+/* ---------- Rythme vertical : l'en-tête de page fournit l'espace avant le contenu ---------- */
+.page-section {
+  padding-top: var(--space-section);
+}
+.page-hero + .page-section,
+.page-hero + .page-nav,
+.page-nav + .page-section {
+  padding-top: 0;
+}
+.page-nav {
+  padding-bottom: var(--space-6);
+}
+.page-section .rubric {
+  margin-bottom: var(--space-5);
+}
+.rubric-meta a {
+  color: var(--link);
+}
+.page-kicker {
+  margin-top: var(--space-2);
+}
+
+/* ---------- Journal de bord : une fiche par poste ---------- */
+.jobs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--stroke) solid var(--ink);
+}
+.job {
+  display: grid;
+  gap: var(--space-4) var(--space-6);
+  padding-block: var(--space-6);
+  border-bottom: 1px solid var(--line-strong);
+}
+.job-when {
+  display: grid;
+  gap: var(--space-1);
+  align-content: start;
+}
+.job-date {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.job-where {
+  color: var(--ink);
+  font-size: var(--text-lg);
+  font-weight: 650;
+  line-height: 1.2;
+}
+.job-contract {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+.job-stamp {
+  justify-self: start;
+  margin-top: var(--space-3);
+}
+.job-what {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+.job-what h3 {
+  font-size: var(--text-xl);
+}
+.job-duties {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+.skill-tags {
+  margin-top: var(--space-2);
+  gap: var(--space-2);
+}
+@media (min-width: 56rem) {
+  .job {
+    grid-template-columns: 15rem minmax(0, 1fr);
+  }
+}
+.cv-sheet {
+  display: grid;
+  gap: var(--space-4);
+  max-width: var(--measure);
+}
+
+/* ---------- À propos : texte à gauche, fiche d'identité à droite ---------- */
+.about-grid {
+  display: grid;
+  gap: var(--space-7) var(--space-8);
+}
+.about-lead {
+  color: var(--ink);
+  font-size: clamp(1.375rem, 1.1rem + 0.9vw, 1.75rem);
+  font-weight: 450;
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+  max-width: 38ch;
+}
+.about-bio .prose {
+  max-width: 58ch;
+}
+.about-id {
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+  justify-items: start;
+}
+.about-id > :not(.photo) {
+  justify-self: stretch;
+}
+.about-id-title {
+  padding-top: var(--space-3);
+  border-top: 4px double var(--ink);
+  font-size: var(--text-xl);
+}
+.about-facts,
+.facts {
+  margin: 0;
+  border-top: var(--stroke) solid var(--ink);
+}
+.about-facts > div,
+.facts > div {
+  display: grid;
+  gap: var(--space-1) var(--space-4);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--line-strong);
+}
+.about-facts dt,
+.facts dt {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+.about-facts dd,
+.facts dd {
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--text-base);
+  line-height: 1.4;
+}
+.about-interests {
+  max-width: 62ch;
+}
+@media (min-width: 64rem) {
+  .about-grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
+/* Photo d'identité : tirage sur papier, deux coins photo (components/AvatarPortrait.astro) */
+.photo {
+  width: 9.5rem;
+  margin: 0;
+  transform: rotate(-2deg);
+}
+.photo-print {
+  position: relative;
+  padding: 0.5rem 0.5rem 1.4rem;
+  background: var(--raised);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-card);
+}
+.photo-print::before,
+.photo-print::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 2px solid var(--margin-rule);
+  border-bottom: 0;
+}
+.photo-print::before {
+  left: -1px;
+  border-right: 0;
+}
+.photo-print::after {
+  right: -1px;
+  border-left: 0;
+}
+.photo-img {
+  width: 100%;
+  background: var(--sunk);
+}
+.avatar-sombre {
+  display: none;
+}
+:root[data-theme='dark'] .avatar-sombre {
+  display: block;
+}
+:root[data-theme='dark'] .avatar-clair {
+  display: none;
+}
+
+/* ---------- Domaines cochés comme sur une fiche ---------- */
+.checks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--stroke) solid var(--ink);
+}
+.checks li {
+  border-bottom: 1px solid var(--line-strong);
+}
+.checks a {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: var(--space-1) var(--space-4);
+  align-items: baseline;
+  padding-block: var(--space-4);
+  color: inherit;
+  text-decoration: none;
+}
+.checks b {
+  grid-column: 2;
+  color: var(--ink);
+  font-size: var(--text-lg);
+  font-weight: 650;
+}
+.checks a:hover b {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+.checks a > span:not(.check-box) {
+  grid-column: 2;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+.check-box {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: var(--stroke) solid var(--ink);
+}
+.checks .check-box {
+  grid-row: 1 / span 2;
+  align-self: start;
+  margin-top: 0.2rem;
+}
+.check-box::after {
+  content: '';
+  position: absolute;
+  left: 0.3rem;
+  top: -0.2rem;
+  width: 0.5rem;
+  height: 1rem;
+  border-right: 3px solid var(--pen);
+  border-bottom: 3px solid var(--pen);
+  transform: rotate(40deg);
+}
+@media (min-width: 56rem) {
+  .checks a {
+    grid-template-columns: 1.5rem 16rem minmax(0, 1fr);
+  }
+  .checks b {
+    grid-column: 2;
+  }
+  .checks a > span:not(.check-box) {
+    grid-column: 3;
+  }
+  .checks .check-box {
+    grid-row: 1;
+  }
+}
+
+/* ---------- Compétences : un domaine par rubrique, texte et preuves côte à côte ---------- */
+.skill {
+  scroll-margin-top: var(--space-5);
+}
+.skill .rubric h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.skill-grid {
+  display: grid;
+  gap: var(--space-5) var(--space-8);
+}
+.skill-text {
+  max-width: 52ch;
+  color: var(--ink);
+  font-size: var(--text-lg);
+  line-height: 1.45;
+}
+@media (min-width: 64rem) {
+  .skill-grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  }
+}
+
+/* ---------- Index des réalisations : référence, titre, description, domaine ---------- */
+.pindex {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--stroke) solid var(--ink);
+}
+.pindex-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr) 1.5rem;
+  gap: var(--space-2) var(--space-4);
+  align-items: start;
+  padding: var(--space-5) var(--space-2);
+  border-bottom: 1px solid var(--line-strong);
+  transition: background-color var(--duration-fast) var(--ease);
+}
+.pindex-row:hover {
+  background: var(--surface);
+}
+.pindex-ref {
+  padding-top: 0.5em;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-variant-numeric: tabular-nums;
+}
+.pindex-body {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 62ch;
+}
+.pindex-title {
+  font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+.pindex-link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+.pindex-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.pindex-row:hover .pindex-link {
+  text-decoration-color: var(--accent);
+}
+.pindex-tags {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+.pindex-extra {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+.pindex-skill {
+  grid-column: 2;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+.pindex-arrow {
+  grid-column: 3;
+  grid-row: 1;
+  padding-top: 0.45em;
+  color: var(--ink);
+  transition: transform var(--duration) var(--ease);
+}
+.pindex-row:hover .pindex-arrow {
+  transform: translateX(4px);
+}
+@media (min-width: 56rem) {
+  .pindex-row {
+    grid-template-columns: 4.5rem minmax(0, 1fr) 14rem 1.5rem;
+  }
+  .pindex-skill {
+    grid-column: 3;
+    grid-row: 1;
+    padding-top: 0.55em;
+    text-align: right;
+  }
+  .pindex-arrow {
+    grid-column: 4;
+  }
+}
+
+/* ---------- Fiche de réalisation ---------- */
+.project-layout {
+  display: grid;
+  gap: var(--space-8);
+  align-items: start;
+}
+.project-aside {
+  display: grid;
+  gap: var(--space-7);
+}
+@media (min-width: 64rem) {
+  .project-layout {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+  .project-layout.is-single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .project-aside {
+    position: sticky;
+    top: var(--space-5);
+  }
+  .is-single .project-aside {
+    position: static;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+}
+.fiche {
+  display: grid;
+  gap: var(--space-4);
+  padding: 0 var(--space-5) var(--space-4);
+  background: var(--raised);
+  border: var(--stroke) solid var(--ink);
+}
+.fiche-ref {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: 0 calc(var(--space-5) * -1);
+  padding: var(--space-2) var(--space-5);
+  border-bottom: var(--stroke) solid var(--ink);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 500;
+}
+.fiche .facts {
+  border-top: 0;
+}
+.fiche .facts > div:last-child {
+  border-bottom: 0;
+}
+.fiche .facts dd.row {
+  gap: var(--space-2);
+}
+.project-art {
+  width: 100%;
+  max-height: 9rem;
+  padding: var(--space-3);
+  border: 1px dashed var(--line-strong);
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-linecap: square;
+}
+.project-art circle {
+  stroke: var(--accent);
+}
+.steps {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  border-top: var(--stroke) solid var(--ink);
+}
+.steps li {
+  position: relative;
+  padding: var(--space-4) 0 var(--space-4) 3.5rem;
+  border-bottom: 1px solid var(--line-strong);
+  counter-increment: step;
+}
+.steps li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: var(--space-4);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.project-main h2 {
+  font-size: var(--text-xl);
+}
+
+/* ---------- Contact : demande d'intervention ---------- */
+.contact-grid {
+  display: grid;
+  gap: var(--space-7) var(--space-8);
+  align-items: start;
+}
+.contact-direct h2 {
+  font-size: var(--text-xl);
+}
+.contact-mail {
+  font-size: var(--text-xl);
+  font-weight: 560;
+  overflow-wrap: anywhere;
+}
+@media (min-width: 56rem) {
+  .contact-grid {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  }
+}
+.form-sheet {
+  padding: var(--space-5);
+  background: var(--raised);
+  border: var(--stroke) solid var(--ink);
+}
+.contact-form .note {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  font-style: normal;
+  line-height: 1.4;
+}
+.contact-form .note::before {
+  content: none;
+}
+.contact-form .check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--target);
+  color: var(--ink);
+  font-size: var(--text-sm);
+}
+.contact-form .check input {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--ink);
+}
+.contact-form .strong {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 650;
+}
+.contact-form .tone-ok {
+  color: var(--ok);
+}
+.contact-form .contact-success {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6) 0;
+  text-align: center;
+}
+.contact-form .contact-success:focus {
+  outline: none;
+}
+.contact-form .honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+.contact-form .captcha {
+  position: relative;
+  min-height: 65px;
+}
+.contact-form .captcha-widget {
+  min-height: 65px;
+}
+.contact-form .captcha-loading {
+  position: absolute;
+  inset: 0 auto auto 0;
+  display: flex;
+  align-items: center;
+  width: 300px;
+  max-width: 100%;
+  height: 65px;
+  padding-inline: var(--space-4);
+  border: 1px dashed var(--line-strong);
+}
+.contact-form .btn-lg {
+  min-height: 3.25rem;
+  padding: 0 var(--space-6);
+}
+.contact-form .btn-block {
+  width: 100%;
+}
+.contact-form .form-status {
+  min-height: 1.25rem;
+}
+.contact-form .alert-box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--danger);
+  border-left-width: 6px;
+  color: var(--danger);
+  font-weight: 600;
+}
+.contact-form .spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: page-spin 0.8s linear infinite;
+}
+@keyframes page-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Pages légales : texte courant, rubriques numérotées ---------- */
+.legal-sections {
+  counter-reset: legal;
+}
+.legal-sections > section + section {
+  margin-top: var(--space-7);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line-strong);
+}
+.legal-sections h2 {
+  font-size: var(--text-xl);
+}
+.legal-sections h2::before {
+  counter-increment: legal;
+  content: counter(legal, decimal-leading-zero);
+  display: block;
+  margin-bottom: var(--space-1);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 600;
+}
+.legal-sections ul {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: 1.2rem;
+}
+.legal-sections + .meta {
+  margin-top: var(--space-6);
+}
+
+/* ---------- Fiche introuvable ---------- */
+.not-found-stamp {
+  justify-self: start;
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+}
+.egg-line {
+  color: var(--muted);
+}
+.not-found-en {
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--line-strong);
+}

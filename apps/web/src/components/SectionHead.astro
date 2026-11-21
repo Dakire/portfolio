@@ -1,31 +1,30 @@
 ---
-// En-tête de section : sur-titre posé sur un filet (ce qu'est la section), puis le titre et le lien « tout voir » facultatif.
-// Le sur-titre est du texte décoratif répété par le titre : il est masqué aux lecteurs d'écran.
+// En-tête de section : double filet d'encre, titre en serif et lien « tout voir » facultatif, en mono, à droite.
+// Le sur-titre éventuel est du texte décoratif répété par le titre : il est masqué aux lecteurs d'écran.
 interface Props {
   id: string;
-  /** Sur-titre court en capitales (ex. « Réalisations ») ; à défaut, seul le filet est tracé. */
+  /** Mention courte en mono, à droite du titre (ex. « 12 fiches »). */
   eyebrow?: string;
-  /** Titre ; un *mot* entre astérisques prend la couleur d'accent (exception, pas une habitude). */
+  /** Titre. */
   title: string;
   more?: { href: string; label: string };
 }
 const { id, eyebrow, title, more } = Astro.props;
-const parts = title.split('*');
 ---
 
 <div class="section-head">
-  <p class="rule-label" aria-hidden="true">
-    {eyebrow ?? ''}
-  </p>
-  <div class="section-head-row">
-    <h2 id={id}>{parts.map((part, i) => (i % 2 ? <i>{part}</i> : part))}</h2>
-    {more && (
-      <a class="more-link" href={more.href}>
-        {more.label}{' '}
-        <span class="arrow" aria-hidden="true">
-          →
-        </span>
-      </a>
+  <div class="rubric">
+    <h2 id={id}>{title}</h2>
+    {more ? (
+      <p class="rubric-meta">
+        <a href={more.href}>{more.label} →</a>
+      </p>
+    ) : (
+      eyebrow && (
+        <p class="rubric-meta" aria-hidden="true">
+          {eyebrow}
+        </p>
+      )
     )}
   </div>
 </div>
