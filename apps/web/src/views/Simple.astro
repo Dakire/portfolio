@@ -7,6 +7,7 @@ import PageHero from '../components/PageHero.astro';
 import AvatarPortrait from '../components/AvatarPortrait.astro';
 import ProjectCards from '../components/ProjectCards.astro';
 import ContactIsland from '../contact/ContactForm';
+import ProjectGrid from '../projects/ProjectGrid';
 import { PORTFOLIO_DATA, PROFILE } from '../data/content';
 import { SKILL_RELATED, hasRelated, resolveRelated } from '../data/related';
 import { SITE_TEXT } from '../data/site-text';
@@ -116,6 +117,37 @@ const skillBlocks =
       )
     : [];
 // Mêmes domaines, dans le même ordre que la page Compétences (ceux qui n'ont aucune réalisation sont omis)
+// Grille des réalisations (page Projets) : données du profil, rien d'ajouté.
+const gridItems = t.projects.map((p) => ({
+  slug: p.slug,
+  title: p.title,
+  desc: p.desc,
+  tags: p.tags,
+  skill: p.skill,
+  category: t.skills.find((k) => k.id === p.skill)?.category ?? '',
+  url: projectPath(lang, p.slug),
+  ...(p.href ? { href: p.href } : {}),
+  ...(p.kind ? { kind: p.kind === 'pro' ? (fr ? 'pro' : 'work') : fr ? 'perso' : 'personal' } : {}),
+}));
+const gridLabels = fr
+  ? {
+      category: 'Filtrer par domaine',
+      tech: 'Filtrer par technologie',
+      all: 'Tous',
+      count: '{n} réalisation(s)',
+      open: 'Voir le projet',
+      external: '(nouvelle fenêtre)',
+      empty: 'Aucun projet ne correspond : retirez un filtre.',
+    }
+  : {
+      category: 'Filter by area',
+      tech: 'Filter by technology',
+      all: 'All',
+      count: '{n} project(s)',
+      open: 'See the project',
+      external: '(opens in a new tab)',
+      empty: 'No project matches: remove a filter.',
+    };
 const sheets = (n: number) => (fr ? (n > 1 ? 'fiches' : 'fiche') : n > 1 ? 'sheets' : 'sheet');
 const domains = t.skills
   .filter((skill) => t.projects.some((p) => p.skill === skill.id))
@@ -293,32 +325,11 @@ const domains = t.skills
   )}
 
   {page === 'projects' && (
-    <>
-      <div class="container page-nav">
-        <nav aria-label={labels.jump} class="section-nav">
-          <ul>
-            {domains.map((d) => (
-              <li>
-                <a href={`#${d.id}`}>{d.label}</a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+    <section class="page-section" aria-label={t.projectsTitle}>
+      <div class="container">
+        <ProjectGrid client:visible items={gridItems} labels={gridLabels} />
       </div>
-      {domains.map((d) => (
-        <section class="page-section" id={d.id} aria-labelledby={`${d.id}-title`}>
-          <div class="container">
-            <div class="rubric">
-              <h2 id={`${d.id}-title`}>{d.label}</h2>
-              <p class="rubric-meta">
-                {d.items.length} {sheets(d.items.length)}
-              </p>
-            </div>
-            <ProjectCards items={d.items} lang={lang} level={3} />
-          </div>
-        </section>
-      ))}
-    </>
+    </section>
   )}
 
   {page === 'contact' && (

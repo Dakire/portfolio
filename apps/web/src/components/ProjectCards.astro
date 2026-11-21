@@ -1,11 +1,10 @@
 ---
-// Réalisations en index typographique (ADR 0014) : référence GR-Rxx, titre, description et outils toujours visibles, domaine à droite.
+// Réalisations en lignes de registre : titre, description et outils toujours visibles, domaine à droite.
 // Toute la ligne est cliquable (lien du titre étiré) ; le lien GitHub reste cliquable au-dessus.
 import type { Project } from '../data/content';
 import { PORTFOLIO_DATA } from '../data/content';
 import Icon from './Icon.astro';
 import { UI, projectPath, type Lang } from '../lib/i18n';
-import { projectRef } from '../lib/ticket';
 import '../styles/pages.css';
 
 interface Props {
@@ -18,7 +17,6 @@ interface Props {
 }
 const { items, lang, limit, level = 3 } = Astro.props;
 const ui = UI[lang];
-const all = PORTFOLIO_DATA[lang].projects;
 const skills = PORTFOLIO_DATA[lang].skills;
 const Heading = `h${level}` as 'h2' | 'h3';
 ---
@@ -26,7 +24,6 @@ const Heading = `h${level}` as 'h2' | 'h3';
 <ol class="pindex" role="list">
   {items.slice(0, limit).map((project) => (
     <li class="pindex-row">
-      <span class="pindex-ref">{projectRef(all.findIndex((p) => p.slug === project.slug))}</span>
       <div class="pindex-body">
         <Heading class="pindex-title">
           <a class="pindex-link" href={projectPath(lang, project.slug)}>

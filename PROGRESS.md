@@ -60,3 +60,8 @@
 - Expérience : historique en `sessionStorage`, Tab sur commandes et arguments (dossiers, projets, articles, man), suggestion « Vouliez-vous dire », casse ignorée, Ctrl+L / Ctrl+C / Ctrl+K seulement dans le champ du terminal. Registre fermé : aucun eval ni JS arbitraire.
 - Vérifié : check 0 erreur, vitest 1761, e2e 281 verts (axe compris).
 - Reste : test manuel mobile (clavier virtuel) au lot 10 / phase 4.
+
+## Lot 7 (projets) : fait, non poussé
+
+- `/projets/` : îlot Preact `src/projects/ProjectGrid.tsx` (rendu serveur, donc lisible sans JS), filtres par domaine et par technologie (12 plus fréquentes), compteur annoncé, cartes (domaine, titre, description, technologies, lien GitHub si le projet est public). Badge « perso/pro » seulement si `kind` est renseigné. Plus d'aperçu image : aucune capture fournie, rien d'inventé (point ouvert).
+- Références `GR-Rxx` retirées des fiches et des listes de projets. Pages détaillées inchangées (blocs context/role/steps/result masqués tant qu'ils sont vides). Tests `projects.spec.ts`.

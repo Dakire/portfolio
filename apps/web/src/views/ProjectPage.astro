@@ -15,7 +15,6 @@ import { crumbs } from '../lib/crumbs';
 import { UI, ROUTES, projectPath, type Lang } from '../lib/i18n';
 import { shortDescription } from '../lib/seo';
 import { ogImage, projectLd } from '../lib/seo-pages';
-import { projectRef } from '../lib/ticket';
 import '../styles/pages.css';
 
 interface Props {
@@ -33,7 +32,6 @@ const trail = crumbs(lang, [{ label: t.projectsTitle, path: routes.projects }], 
 });
 const related = await resolveRelated(lang, PROJECT_RELATED[project.slug]);
 const domain = t.skills.find((s) => s.id === project.skill);
-const ref = projectRef(t.projects.findIndex((p) => p.slug === project.slug));
 const others = t.projects.filter((p) => p.slug !== project.slug).slice(0, 3);
 // Description de la page : le texte du projet ; trop courte, elle est complétée par ses outils (données du profil, rien d'ajouté).
 const description = shortDescription(
@@ -68,12 +66,7 @@ const hasBlocks = Boolean(
   {project.tags.map((tag) => (
     <meta data-pagefind-filter="tag[content]" content={tag} />
   ))}
-  <PageHero
-    path={project.title}
-    title={project.title}
-    kicker={`${ref}${domain ? ` · ${domain.category}` : ''}`}
-    crumbs={trail}
-  >
+  <PageHero path={project.title} title={project.title} kicker={domain?.category} crumbs={trail}>
     <p class="lead">{project.desc}</p>
   </PageHero>
   <div class="container page-section">
@@ -113,7 +106,7 @@ const hasBlocks = Boolean(
       <aside class="project-aside stack-lg" aria-label={text.project.summary}>
         <section class="fiche project-facts" aria-labelledby="summary">
           <p class="fiche-ref">
-            <span>{ref}</span>
+            <span>{domain?.category}</span>
             <span>{text.project.summary}</span>
           </p>
           <h2 id="summary" class="visually-hidden">
