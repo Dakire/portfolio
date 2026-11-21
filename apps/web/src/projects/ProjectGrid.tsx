@@ -12,6 +12,7 @@ export interface GridProject {
   url: string;
   href?: string;
   kind?: string;
+  image?: { src: string; alt: string };
 }
 interface Labels {
   category: string;
@@ -76,6 +77,28 @@ export default function ProjectGrid({ items, labels }: Props) {
           {shown.map((p) => (
             <li key={p.slug}>
               <article class="pcard">
+                {p.image ? (
+                  <img
+                    class="pcard-shot"
+                    src={p.image.src}
+                    alt={p.image.alt}
+                    width="1600"
+                    height="900"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <div class="pcard-preview" aria-hidden="true">
+                    <p>
+                      <span class="pcard-ps">$</span> project {p.slug}
+                    </p>
+                    {p.tags.slice(0, 4).map((t) => (
+                      <p key={t} class="pcard-out">
+                        {t}
+                      </p>
+                    ))}
+                  </div>
+                )}
                 <p class="pcard-kicker">
                   {p.category}
                   {p.kind ? <span class="stamp stamp-pen">{p.kind}</span> : null}

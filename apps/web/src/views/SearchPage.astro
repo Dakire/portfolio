@@ -1,6 +1,8 @@
 ---
 // Page /search/?q= : recherche partageable (même moteur que la palette, voir /js/search.js). Non indexée.
 import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { crumbs } from '../lib/crumbs';
 import { ROUTES, UI, routeAlternates, type Lang } from '../lib/i18n';
 import '../styles/pages.css';
 
@@ -9,6 +11,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const ui = UI[lang];
+const trail = crumbs(lang, [], { label: ui.searchTitle, path: ROUTES[lang].search });
 ---
 
 <Base
@@ -19,9 +22,8 @@ const ui = UI[lang];
   alternates={routeAlternates('search')}
   noindex
 >
+  <PageHero title={ui.searchTitle} lead={ui.searchHint} crumbs={trail} />
   <div class="container section" data-search-page>
-    <h1>{ui.searchTitle}</h1>
-    <p class="lead">{ui.searchHint}</p>
     <input
       type="search"
       class="search-input search-page-input"

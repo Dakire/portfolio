@@ -778,3 +778,38 @@
 .pgrid-empty {
   color: var(--muted);
 }
+
+/* Aperçus des réalisations : capture réelle si fournie, sinon fenêtre de terminal générée à partir des données du projet */
+.pcard-shot,
+.project-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+.pcard-shot {
+  margin-bottom: var(--space-2);
+}
+.pcard-preview {
+  margin-bottom: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--sunk);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: 1.6;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+.pcard-ps {
+  color: var(--accent);
+}
+.pcard-out::before {
+  content: '▸ ';
+  color: var(--pen);
+}

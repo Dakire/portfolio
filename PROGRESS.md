@@ -89,3 +89,10 @@
 - Données à fournir par Guillaume : disponibilité réelle (aucun indicateur affiché), captures d'aperçu des projets, catégorie « perso/pro » des projets (`kind`), dépôt public de chaque projet.
 - Décisions à confirmer : accent violet (choisi par Guillaume), suppression de `dist-preprod` (préproduction interdite), suppression éventuelle de `cursor.css` (gardé, en violet).
 - Risque avant push (= production) : CSP élargie (`wasm-unsafe-eval` pour Pagefind) ; `pagefind/` ajoute ~1 Mo en FTP ; nouvelles URL `/terminal/`, `/search/` (FR et EN) à ajouter au contrat si souhaité ; les pages `.htaccess` de redirection n'ont pas changé.
+
+## Suite (après le rapport final)
+
+- Dossiers `design-proposals/`, `mockups/` et `graphify-out/` supprimés (demande de Guillaume).
+- Projet ajouté depuis le dépôt public Dakire/StreamDeck (README du dépôt) : StreamDak, avec sa capture d'écran réelle (`public/img/projets/streamdak.png`). Les autres projets sans capture affichent un aperçu généré (fenêtre de terminal faite des données du projet). Dépôts publics déjà liés : portfolio, MineralContest, JetTracker, Star-Seeker, Nurikabe ; les projets professionnels et `MSG-EML-To-PDF-With-Attachments` (privé) n'ont pas de lien.
+- Fil d'Ariane ajouté partout où il manquait (pages légales, blog, catégories, tags, hub des outils, recherche) ; test `dist.test.ts` pour que cela ne se reproduise pas.
+- Non vérifié : `composer test|cs|stan` (composer absent de cette machine, aucun fichier PHP touché).

@@ -51,6 +51,19 @@ describe('site construit', () => {
     expect(pages.length).toBeGreaterThan(40);
   });
 
+  it('chaque page indexable, sauf les accueils et la 404, a un fil d’Ariane', () => {
+    const missing = pages
+      .filter(
+        ({ url, html }) =>
+          !['/', '/en/', '/404.html'].includes(url) &&
+          !url.startsWith('/qr-test/') &&
+          !/<meta name="robots" content="noindex/.test(html),
+      )
+      .filter(({ html }) => !/class="[^"]*(crumbs|breadcrumb)/.test(html))
+      .map(({ url }) => url);
+    expect(missing).toEqual([]);
+  });
+
   describe.each(pages)('$url', ({ url, html }) => {
     it('a une langue, un titre, une description et une URL canonique absolue', () => {
       expect(html).toMatch(/<html lang="(fr|en)"/);

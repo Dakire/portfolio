@@ -127,6 +127,7 @@ const gridItems = t.projects.map((p) => ({
   category: t.skills.find((k) => k.id === p.skill)?.category ?? '',
   url: projectPath(lang, p.slug),
   ...(p.href ? { href: p.href } : {}),
+  ...(p.image ? { image: { src: withBase(p.image.src), alt: p.image.alt } } : {}),
   ...(p.kind ? { kind: p.kind === 'pro' ? (fr ? 'pro' : 'work') : fr ? 'perso' : 'personal' } : {}),
 }));
 const gridLabels = fr

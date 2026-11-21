@@ -4,6 +4,7 @@
 import Button from '@grichard/ui/components/Button.astro';
 import CtaBand from '@grichard/ui/components/CtaBand.astro';
 import Tag from '@grichard/ui/components/Tag.astro';
+import { withBase } from '../lib/base';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import ProjectArt from '../components/ProjectArt.astro';
@@ -112,7 +113,19 @@ const hasBlocks = Boolean(
           <h2 id="summary" class="visually-hidden">
             {text.project.summary}
           </h2>
-          <ProjectArt slug={project.slug} />
+          {project.image ? (
+            <img
+              class="project-shot"
+              src={withBase(project.image.src)}
+              alt={project.image.alt}
+              width="1600"
+              height="900"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <ProjectArt slug={project.slug} />
+          )}
           <dl class="facts">
             <div>
               <dt>{text.project.stack}</dt>

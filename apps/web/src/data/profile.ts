@@ -50,6 +50,8 @@ export interface Project {
   href?: string;
   /** Affiché sur l'accueil. */
   featured?: boolean;
+  /** Aperçu (capture du projet, fichier de public/img/projets/) ; absent : aperçu généré par le site. */
+  image?: { src: string; alt: string };
   /** Nature du projet, affichée seulement si elle est renseignée (à compléter par Guillaume, ne rien deviner). */
   kind?: 'perso' | 'pro';
   /** Blocs facultatifs de la page de détail : tant qu'ils sont absents, rien n'est affiché. À remplir par Guillaume. */
@@ -361,6 +363,19 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         tags: ['Java', 'Maven', 'Jeu de logique'],
         href: 'https://github.com/ju-rouaux/Nurikabe',
       },
+      {
+        slug: 'streamdak',
+        skill: 'dev',
+        kind: 'perso',
+        title: 'StreamDak (tableau de raccourcis Windows)',
+        desc: 'Un tableau de bord de raccourcis façon Stream Deck pour Windows, pensé pour un écran tactile secondaire. Chaque bouton lance une ou plusieurs actions : raccourci clavier, saisie de texte, programme, script, URL, requête web, minuteur, micro et volume. Installeur avec mise à jour sur place.',
+        tags: ['C#', '.NET', 'Windows', 'Automatisation'],
+        href: 'https://github.com/Dakire/StreamDeck',
+        image: {
+          src: '/img/projets/streamdak.png',
+          alt: 'Capture de StreamDak en thème sombre : une grille de boutons de raccourcis',
+        },
+      },
     ],
     educationTitle: 'Formation & langues',
     education: [
@@ -648,6 +663,19 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         desc: "The Nurikabe puzzle game in Java, with help for solving puzzles, built in a third-year bachelor's student project.",
         tags: ['Java', 'Maven', 'Logic game'],
         href: 'https://github.com/ju-rouaux/Nurikabe',
+      },
+      {
+        slug: 'streamdak',
+        skill: 'dev',
+        kind: 'perso',
+        title: 'StreamDak (Windows shortcut dashboard)',
+        desc: 'A Stream Deck-style shortcut dashboard for Windows, designed for a secondary touchscreen. Each button runs one or more actions: keyboard shortcut, typed text, program, script, URL, web request, timer, microphone and volume. Installer with in-place updates.',
+        tags: ['C#', '.NET', 'Windows', 'Automation'],
+        href: 'https://github.com/Dakire/StreamDeck',
+        image: {
+          src: '/img/projets/streamdak.png',
+          alt: 'Screenshot of StreamDak in dark theme: a grid of shortcut buttons',
+        },
       },
     ],
     educationTitle: 'Education & languages',

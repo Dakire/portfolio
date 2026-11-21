@@ -15,6 +15,7 @@ import {
   slugify,
   tagPath,
 } from '../lib/blog';
+import { crumbs } from '../lib/crumbs';
 import { ROUTES, routeAlternates, SITE, type Alternates, type Lang } from '../lib/i18n';
 import { blogLd, breadcrumbLd } from '../lib/seo';
 import { ticketOf } from '../lib/ticket';
@@ -43,6 +44,12 @@ const tagNames = [...tagCounts.keys()].sort((a, b) => a.localeCompare(b, lang));
 
 const tagLabel = tag ? tagNames.find((x) => slugify(x) === tag) : undefined;
 const heading = category ? CATEGORIES[category]?.[lang] : tagLabel;
+const blogTrail = heading
+  ? crumbs(lang, [{ label: t.siteName, path: routes.blog }], {
+      label: heading,
+      path: category ? categoryPath(lang, category) : tagPath(lang, tag ?? ''),
+    })
+  : crumbs(lang, [], { label: t.siteName, path: routes.blog });
 const kind = category ? (lang === 'fr' ? 'Catégorie' : 'Category') : 'Tag';
 // Une catégorie est un hub thématique indexable (texte d'introduction propre, liens vers les outils) ; un tag reste une page de filtre (noindex).
 const categoryText = category ? CATEGORY_TEXT[category]?.[lang] : undefined;
@@ -148,6 +155,7 @@ const toolsTitle = lang === 'fr' ? 'Outils et aide-mémoire liés' : 'Related to
     path={heading ? `~/blog/${category ?? tag}` : '~/blog'}
     title={heading ?? t.siteName}
     lead={categoryText?.intro ?? (heading ? undefined : t.pageIntro)}
+    crumbs={blogTrail}
   />
   <div class="container blog-page">
     <section class="blog-filters" aria-labelledby="blog-filters-title">

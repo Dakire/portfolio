@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
+import { crumbs } from '../lib/crumbs';
 import ToolCards from '../components/ToolCards.astro';
 import '../styles/tools.css';
 import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
@@ -42,7 +43,12 @@ const ld = {
   alternates={routeAlternates('tools')}
   ld={ld}
 >
-  <PageHero path="~/tools" title={hub.h1} lead={hub.intro} />
+  <PageHero
+    path="~/tools"
+    title={hub.h1}
+    lead={hub.intro}
+    crumbs={crumbs(lang, [], { label: hub.h1, path: ROUTES[lang].tools })}
+  />
   <div class="container tools-top">
     <nav class="tool-groups-nav" aria-label={hub.groupsLabel}>
       <ul role="list">

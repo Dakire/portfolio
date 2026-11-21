@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import { PORTFOLIO_DATA } from '../data/content';
 import { ACCESSIBILITY, PRIVACY } from '../data/pages';
+import { crumbs } from '../lib/crumbs';
 import { ROUTES, routeAlternates, type Lang } from '../lib/i18n';
 import '../styles/pages.css';
 
@@ -33,6 +34,7 @@ const content =
         })),
       }
     : (page === 'privacy' ? PRIVACY : ACCESSIBILITY)[lang];
+const trail = crumbs(lang, [], { label: content.title, path: ROUTES[lang][page] });
 ---
 
 <Base
@@ -41,11 +43,13 @@ const content =
   description={content.description}
   path={ROUTES[lang][page]}
   alternates={routeAlternates(page)}
+  ld={{ '@context': 'https://schema.org', ...trail.ld }}
 >
   <PageHero
     path={`~/${page === 'legal' ? 'legal' : page}`}
     title={content.title}
     lead={content.intro}
+    crumbs={trail}
   />
   <div class="container page-section">
     <div class="legal-sections prose">
