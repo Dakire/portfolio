@@ -1,3 +1,4 @@
+import { setTheme } from './helpers/theme';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
@@ -68,7 +69,7 @@ const PAGES = [
 for (const theme of ['dark', 'light'] as const) {
   for (const path of PAGES) {
     test(`WCAG 2.2 AA : ${path} (thème ${theme})`, async ({ page }) => {
-      await page.emulateMedia({ colorScheme: theme });
+      await setTheme(page, theme);
       await page.goto(path);
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       const results = await new AxeBuilder({ page })
@@ -115,15 +116,43 @@ test('le sélecteur de langue mène à la page équivalente', async ({ page }) =
   await expect(page).toHaveURL(/\/en\/blog\/spf-dkim-dmarc-explained\/$/);
 });
 
-test('le sélecteur de thème change et mémorise le choix', async ({ page }) => {
+test('le thème est clair par défaut, même si le système est sombre, et sans bouton dans l’en-tête', async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
   await page.goto('/');
-  const group = page.getByRole('group', { name: 'Thème' });
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.getByRole('banner').locator('[data-theme-switch]')).toHaveCount(0);
+});
+
+test('les réglages de lecture du pied de page changent et mémorisent le papier', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const group = page.getByRole('contentinfo').getByRole('group', { name: 'Thème' });
+  await group.getByRole('button', { name: 'sombre' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await group.getByRole('button', { name: 'clair' }).click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await group.getByRole('button', { name: 'système' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark'); // « système » est un choix explicite
+});
+
+test('le curseur du site est actif par défaut et se coupe depuis le pied de page', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await expect(page.locator('html')).not.toHaveAttribute('data-cursor', 'off');
+  const group = page.getByRole('contentinfo').getByRole('group', { name: 'Curseur' });
+  await group.getByRole('button', { name: 'système' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-cursor', 'off');
   await page.reload();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  await group.getByRole('button', { name: 'auto' }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark'); // le système simulé est sombre
+  await expect(page.locator('html')).toHaveAttribute('data-cursor', 'off');
+  await group.getByRole('button', { name: 'carnet' }).click();
+  await expect(page.locator('html')).not.toHaveAttribute('data-cursor', 'off');
 });
 
 test('les touches BIOS/UEFI : la recherche trouve un constructeur sans entrée vide', async ({

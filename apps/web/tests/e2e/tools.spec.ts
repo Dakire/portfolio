@@ -1,3 +1,4 @@
+import { setTheme } from './helpers/theme';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
@@ -58,7 +59,7 @@ test.describe('convertisseur d’unités', () => {
     await ready(page, '/outils/convertisseur-unites/');
     await page.getByRole('tab', { name: 'Bases numériques' }).click();
     for (const scheme of ['dark', 'light'] as const) {
-      await page.emulateMedia({ colorScheme: scheme });
+      await setTheme(page, scheme);
       const results = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
         .analyze();

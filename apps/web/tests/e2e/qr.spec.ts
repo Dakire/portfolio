@@ -1,3 +1,4 @@
+import { setTheme } from './helpers/theme';
 import AxeBuilder from '@axe-core/playwright';
 import { readFile } from 'node:fs/promises';
 import { expect, test, type Page } from '@playwright/test';
@@ -270,7 +271,7 @@ test.describe('générateur de QR code', () => {
     await page.getByText('4. Logo').click();
     await page.getByText('5. Réglages avancés').click();
     for (const scheme of ['dark', 'light'] as const) {
-      await page.emulateMedia({ colorScheme: scheme });
+      await setTheme(page, scheme);
       const results = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
         .analyze();

@@ -1,3 +1,4 @@
+import { setTheme } from './helpers/theme';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
@@ -136,7 +137,7 @@ test('vérifie un sitemap : priorités, tableaux des fichiers et de l’échanti
   await expect(sample.getByRole('row', { name: /ancienne/ })).toContainText('HTTP 404');
 
   for (const theme of ['dark', 'light'] as const) {
-    await page.emulateMedia({ colorScheme: theme });
+    await setTheme(page, theme);
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();

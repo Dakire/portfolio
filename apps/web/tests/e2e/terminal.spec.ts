@@ -1,3 +1,4 @@
+import { setTheme } from './helpers/theme';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
@@ -122,7 +123,7 @@ test('sans JavaScript : présentation et raccourcis, pas de champ inutilisable',
 
 for (const theme of ['dark', 'light'] as const) {
   test(`WCAG 2.2 AA : terminal utilisé (thème ${theme})`, async ({ page }) => {
-    await page.emulateMedia({ colorScheme: theme });
+    await setTheme(page, theme);
     await page.goto('/en/');
     const input = page.getByRole('textbox', { name: 'Terminal command' });
     await expect(input).toBeEnabled();

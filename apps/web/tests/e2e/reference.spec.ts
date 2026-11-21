@@ -1,3 +1,4 @@
+import { setTheme } from './helpers/theme';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
@@ -169,7 +170,7 @@ const PAGES = [
 for (const theme of ['dark', 'light'] as const) {
   test(`WCAG 2.2 AA : /cheatsheets/ (thème ${theme})`, async ({ page }) => {
     await noConsent(page);
-    await page.emulateMedia({ colorScheme: theme });
+    await setTheme(page, theme);
     await page.goto('/cheatsheets/');
     const axe = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
@@ -181,7 +182,7 @@ for (const theme of ['dark', 'light'] as const) {
   for (const path of PAGES) {
     test(`WCAG 2.2 AA : ${path}?q=get (thème ${theme})`, async ({ page }) => {
       await noConsent(page);
-      await page.emulateMedia({ colorScheme: theme });
+      await setTheme(page, theme);
       await page.goto(`${path}?q=get`);
       await expect(results(page).first()).toBeVisible();
       const axe = await new AxeBuilder({ page })

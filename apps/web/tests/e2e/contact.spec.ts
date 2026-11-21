@@ -1,3 +1,4 @@
+import { setTheme } from './helpers/theme';
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page, type Route } from '@playwright/test';
 
@@ -102,7 +103,7 @@ test('le formulaire est accessible (WCAG 2.2 AA), erreurs affichées, dans les d
   await openForm(page);
   await page.getByRole('button', { name: 'Envoyer le message' }).click();
   for (const scheme of ['dark', 'light'] as const) {
-    await page.emulateMedia({ colorScheme: scheme });
+    await setTheme(page, scheme);
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();

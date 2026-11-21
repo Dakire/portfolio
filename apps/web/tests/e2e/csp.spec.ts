@@ -1,3 +1,4 @@
+import { setTheme } from './helpers/theme';
 import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 
@@ -64,7 +65,7 @@ test.beforeEach(async ({ page }) => {
 for (const path of PAGES) {
   for (const scheme of ['dark', 'light'] as const) {
     test(`${path} respecte la CSP (${scheme})`, async ({ page }) => {
-      await page.emulateMedia({ colorScheme: scheme });
+      await setTheme(page, scheme);
       const consoleErrors: string[] = [];
       page.on('console', (msg) => {
         if (msg.type() === 'error' && /Content Security Policy|CSP/i.test(msg.text()))
