@@ -56,6 +56,11 @@ const alternates: Partial<Alternates> = {
 };
 // Suites de lecture : même catégorie d'abord, puis tags en commun, puis les plus récents (3 au plus), pour qu'aucun article ne finisse sans suite.
 const others = (await getPosts(lang)).filter((p) => p.slug !== post.slug);
+// Articles voisins dans l'ordre chronologique (getPosts trie du plus récent au plus ancien).
+const chrono = await getPosts(lang);
+const at = chrono.findIndex((p) => p.slug === post.slug);
+const next = at > 0 ? chrono[at - 1] : undefined;
+const prev = at >= 0 ? chrono[at + 1] : undefined;
 const sharedTags = (p: Post) => p.data.tags.filter((tag) => post.data.tags.includes(tag)).length;
 const related = [
   ...others.filter((p) => p.data.category === post.data.category),
@@ -95,7 +100,7 @@ const crumbs = [
   alternates={alternates}
   type="article"
   image={image}
-  scripts={post.data.script ? [post.data.script] : []}
+  scripts={['/js/post.js', ...(post.data.script ? [post.data.script] : [])]}
   ld={postLd({
     lang,
     path,
@@ -128,10 +133,27 @@ const crumbs = [
       </ol>
     </nav>
 
-    <article>
+    <div
+      class="read-progress"
+      data-read-progress
+      role="progressbar"
+      aria-label={lang === 'fr' ? 'Progression de la lecture' : 'Reading progress'}
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="0"
+      hidden
+    >
+      <div></div>
+    </div>
+    <article
+      data-copy-label={lang === 'fr' ? 'Copier' : 'Copy'}
+      data-copy-aria={lang === 'fr' ? 'Copier le code' : 'Copy the code'}
+      data-copied-label={lang === 'fr' ? 'Copié' : 'Copied'}
+      data-copy-fail={lang === 'fr' ? 'Échec' : 'Failed'}
+    >
       <header class="stack page-hero post-head">
         <p class="ticket post-ticket">
-          {lang === 'fr' ? 'Fiche n°' : 'Sheet no.'} <b>{ticket}</b>
+          <b>{ticket}</b>
         </p>
         <h1>{post.data.title}</h1>
         {post.data.severity && (
@@ -260,6 +282,37 @@ const crumbs = [
       </section>
 
       <footer class="stack">
+        <div class="post-share">
+          <button type="button" class="btn" data-copy-link hidden>
+            {lang === 'fr' ? 'Copier le lien' : 'Copy link'}
+          </button>
+          <button type="button" class="btn" data-share hidden>
+            {lang === 'fr' ? 'Partager' : 'Share'}
+          </button>
+        </div>
+        {(prev || next) && (
+          <nav
+            class="post-pager"
+            aria-label={lang === 'fr' ? 'Articles voisins' : 'Neighbouring articles'}
+          >
+            {prev ? (
+              <a href={postPath(prev.lang, prev.slug)} rel="prev">
+                <span class="label">{lang === 'fr' ? 'Plus ancien' : 'Older'}</span>
+                {prev.data.title}
+              </a>
+            ) : (
+              <span />
+            )}
+            {next ? (
+              <a href={postPath(next.lang, next.slug)} rel="next">
+                <span class="label">{lang === 'fr' ? 'Plus récent' : 'Newer'}</span>
+                {next.data.title}
+              </a>
+            ) : (
+              <span />
+            )}
+          </nav>
+        )}
         <ul class="row" role="list">
           {post.data.tags.map((tag) => (
             <li>

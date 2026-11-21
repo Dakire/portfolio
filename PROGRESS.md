@@ -65,3 +65,8 @@
 
 - `/projets/` : îlot Preact `src/projects/ProjectGrid.tsx` (rendu serveur, donc lisible sans JS), filtres par domaine et par technologie (12 plus fréquentes), compteur annoncé, cartes (domaine, titre, description, technologies, lien GitHub si le projet est public). Badge « perso/pro » seulement si `kind` est renseigné. Plus d'aperçu image : aucune capture fournie, rien d'inventé (point ouvert).
 - Références `GR-Rxx` retirées des fiches et des listes de projets. Pages détaillées inchangées (blocs context/role/steps/result masqués tant qu'ils sont vides). Tests `projects.spec.ts`.
+
+## Lot 8 (blog) : fait, non poussé
+
+- Déjà en place : index, catégories, tags, temps de lecture, date, articles associés, sommaire. Ajouts : `public/js/post.js` (barre de progression, bouton Copier sur chaque bloc de code, « Copier le lien », partage natif Web Share si disponible, sans service tiers), articles voisins (plus ancien / plus récent), libellé « Fiche n° » retiré. Test `blog.spec.ts`.
+- Pas de pagination : l'index est groupé par mois (37 articles) ; à ajouter si le blog dépasse ~60 articles.
