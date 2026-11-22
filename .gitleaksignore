@@ -1,0 +1,2 @@
+# Clé IndexNow : publique par conception (servie à la racine du site), faux positif generic-api-key.
+b8c96bcac79f22edf9c3f7e676ef6e5889f88ba3:scripts/deploy/indexnow.mjs:generic-api-key:4
