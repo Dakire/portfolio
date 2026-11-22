@@ -311,7 +311,13 @@ html:not(.js) .subnav {
     left: 0;
     right: 0;
     z-index: var(--z-overlay);
-    display: none;
+    display: block;
+    /* masqué par visibility (pas display) : un court délai à la fermeture laisse traverser le pointeur en diagonale */
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 0.12s var(--ease),
+      visibility 0s linear 0.3s;
     padding: var(--space-5) var(--space-6) var(--space-4);
     background: var(--surface);
     border: 1px solid var(--line-strong);
@@ -319,8 +325,20 @@ html:not(.js) .subnav {
     border-radius: 0 0 var(--radius-lg) var(--radius-lg);
     box-shadow: var(--shadow-lg);
   }
+  /* Pont invisible entre le lien et la fiche : sans lui, la zone entre les deux fait perdre le survol */
+  .subnav::before {
+    content: '';
+    position: absolute;
+    inset: auto 0 100% 0;
+    height: var(--space-6);
+  }
   .has-sub:is(:hover, :focus-within):not([data-closed]) .subnav {
-    display: block;
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+  }
+  .has-sub[data-closed] .subnav {
+    transition: none;
   }
   .subnav-groups {
     grid-template-columns: 1fr 0.9fr 1fr 1.45fr;
