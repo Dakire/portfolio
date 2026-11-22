@@ -135,7 +135,6 @@ main {
 }
 .site-nav a[aria-current] {
   color: var(--ink);
-  box-shadow: inset 0 -2px 0 var(--pen);
 }
 .site-tools {
   display: flex;
@@ -298,31 +297,6 @@ html:not(.js) .subnav {
   .site-nav > ul > li > a[aria-current] {
     color: var(--ink);
   }
-  /* Survol, focus clavier et sous-menu ouvert : filet violet qui se trace de gauche à droite, le texte se soulève d'un cran */
-  .site-nav > ul > li > a::after {
-    content: '';
-    position: absolute;
-    inset: auto var(--space-2) 0.55rem;
-    height: 2px;
-    border-radius: 1px;
-    background: var(--u);
-    transform: scaleX(0);
-    transform-origin: left center;
-    transition: transform var(--duration-slow) var(--ease);
-  }
-  .site-nav > ul > li > a:is(:hover, :focus-visible)::after,
-  .site-nav > ul > li.has-sub:is(:hover, :focus-within):not([data-closed]) > a::after {
-    transform: scaleX(1);
-  }
-  .site-nav > ul > li > a {
-    transition:
-      color var(--duration) var(--ease),
-      background var(--duration) var(--ease),
-      translate var(--duration-base) var(--ease);
-  }
-  .site-nav > ul > li > a:is(:hover, :focus-visible) {
-    translate: 0 -1px;
-  }
   .sub-toggle {
     display: none !important;
   }
@@ -380,10 +354,9 @@ html:not(.js) .subnav {
     font-size: var(--text-sm);
     line-height: 1.25;
   }
-  /* Survol et focus clavier : fond en creux et filet violet à gauche (la fiche est déjà sur --surface) */
+  /* Survol et focus clavier : fond en creux (la fiche est déjà sur --surface) ; le filet violet vient du bloc commun */
   .subnav li a:is(:hover, :focus-visible) {
-    background: var(--sunk);
-    box-shadow: inset 2px 0 0 var(--u);
+    background-color: var(--sunk);
   }
   .subnav-all {
     margin-top: var(--space-4);
@@ -1010,4 +983,72 @@ ol.row {
       }
     }
   }
+}
+
+/* ---------- Survol harmonisé ----------
+   Un seul langage pour tout ce qui se clique : un filet violet (--u) se trace de gauche à droite sous l'élément au survol
+   et au focus clavier. Sur la page courante du menu, le même filet reste tracé. Fond, bordure et couleur gardent leurs
+   règles propres ; le filet est un dégradé de fond, donc sans pseudo-élément ni décalage de mise en page.
+   La spécificité (:root :is) l'emporte sur les `background:` abrégés de chaque composant. */
+:root
+  :is(
+    .site-nav a,
+    .subnav li a,
+    .btn:not(.btn-primary):not(:disabled),
+    .chip:not(:disabled),
+    .lang-link,
+    .search-open,
+    .theme-switch button,
+    .section-nav a,
+    .social a,
+    .ledger-row,
+    .pindex-row,
+    .tool-row,
+    .post-row,
+    .hm-skillgrid a,
+    .hm-prompt li a,
+    .ref-toc a,
+    .ref-pill,
+    .pill-button,
+    .tab,
+    .tool-groups-nav a,
+    .post-pager a
+  ) {
+  background-image: linear-gradient(var(--u), var(--u));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 2px;
+  transition:
+    background-size var(--duration-slow) var(--ease),
+    background-color var(--duration) var(--ease),
+    color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease);
+}
+:root
+  :is(
+    .site-nav a,
+    .subnav li a,
+    .btn:not(.btn-primary):not(:disabled),
+    .chip:not(:disabled),
+    .lang-link,
+    .search-open,
+    .theme-switch button,
+    .section-nav a,
+    .social a,
+    .ledger-row,
+    .pindex-row,
+    .tool-row,
+    .post-row,
+    .hm-skillgrid a,
+    .hm-prompt li a,
+    .ref-toc a,
+    .ref-pill,
+    .pill-button,
+    .tab,
+    .tool-groups-nav a,
+    .post-pager a
+  ):is(:hover, :focus-visible),
+:root:root .site-nav a[aria-current],
+:root .site-nav .has-sub:is(:hover, :focus-within):not([data-closed]) > a {
+  background-size: 100% 2px;
 }

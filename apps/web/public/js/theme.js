@@ -1,6 +1,6 @@
-// Réglages de lecture : thème (sombre par défaut, clair ou système) et curseur du site (actif par défaut).
+// Réglages de lecture : thème (clair par défaut, sombre ou système) et curseur du site (actif par défaut).
 // Chargé SANS defer dans le <head> : data-theme et data-cursor sont posés avant le premier rendu (pas de flash).
-// Sans choix mémorisé, le thème est SOMBRE (pas celui du système) ; « auto » est un choix explicite qui suit le système.
+// Sans choix mémorisé, le thème est CLAIR (pas celui du système) ; « sombre » et « auto » sont des choix explicites.
 // Fichier externe (jamais en ligne) : la CSP n'autorise aucun script en ligne.
 (() => {
   const THEME = 'theme';
@@ -29,7 +29,7 @@
 
   const choice = () => {
     const value = read(THEME);
-    return value === 'light' || value === 'auto' ? value : 'dark';
+    return value === 'dark' || value === 'auto' ? value : 'light';
   };
 
   const apply = () => {
@@ -70,8 +70,8 @@
   document.addEventListener('click', (event) => {
     const theme = event.target.closest?.('[data-theme-set]');
     if (theme) {
-      // « sombre » est le défaut : on n'enregistre rien pour lui, un seul état par défaut.
-      write(THEME, theme.dataset.themeSet === 'dark' ? null : theme.dataset.themeSet);
+      // « clair » est le défaut : on n'enregistre rien pour lui, un seul état par défaut.
+      write(THEME, theme.dataset.themeSet === 'light' ? null : theme.dataset.themeSet);
       apply();
       return;
     }

@@ -59,9 +59,9 @@ test('les suggestions, theme et open agissent sur la page', async ({ page }) => 
   await page.getByRole('button', { name: 'projects', exact: true }).click();
   await expect(log).toContainText('Outil de conversion e-mail');
   const input = page.getByRole('textbox', { name: 'Commande du terminal' });
-  await input.fill('theme light');
+  await input.fill('theme dark');
   await input.press('Enter');
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await input.fill('open dns');
   await input.press('Enter');
   await expect(page).toHaveURL(/\/outils\/dns\/$/);

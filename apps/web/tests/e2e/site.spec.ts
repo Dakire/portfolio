@@ -116,12 +116,12 @@ test('le sélecteur de langue mène à la page équivalente', async ({ page }) =
   await expect(page).toHaveURL(/\/en\/blog\/spf-dkim-dmarc-explained\/$/);
 });
 
-test('le thème est sombre par défaut, même si le système est clair, et sans bouton dans l’en-tête', async ({
+test('le thème est clair par défaut, même si le système est sombre, et sans bouton dans l’en-tête', async ({
   page,
 }) => {
-  await page.emulateMedia({ colorScheme: 'light' });
+  await page.emulateMedia({ colorScheme: 'dark' });
   await page.goto('/');
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   await expect(page.getByRole('banner').locator('[data-theme-switch]')).toHaveCount(0);
 });
 
@@ -130,15 +130,15 @@ test('les réglages de lecture du pied de page changent et mémorisent le papier
 }) => {
   await page.goto('/');
   const group = page.getByRole('contentinfo').getByRole('group', { name: 'Thème' });
-  await group.getByRole('button', { name: 'clair' }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  await page.reload();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   await group.getByRole('button', { name: 'sombre' }).click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await page.emulateMedia({ colorScheme: 'light' });
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await group.getByRole('button', { name: 'clair' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await page.emulateMedia({ colorScheme: 'dark' });
   await group.getByRole('button', { name: 'système' }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light'); // « système » est un choix explicite
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark'); // « système » est un choix explicite
 });
 
 test('le curseur du site est actif par défaut et se coupe depuis le pied de page', async ({
