@@ -350,9 +350,15 @@ html:not(.js) .subnav {
   }
   .subnav li a {
     min-height: 2.5rem;
-    padding-block: var(--space-1);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
     font-size: var(--text-sm);
     line-height: 1.25;
+  }
+  /* Survol et focus clavier : fond en creux et filet violet à gauche (la fiche est déjà sur --surface) */
+  .subnav li a:is(:hover, :focus-visible) {
+    background: var(--sunk);
+    box-shadow: inset 2px 0 0 var(--u);
   }
   .subnav-all {
     margin-top: var(--space-4);
