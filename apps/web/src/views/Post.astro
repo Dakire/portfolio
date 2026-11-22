@@ -43,6 +43,10 @@ const ticket = ticketOf(post.data.date, post.data.category);
 const lang: Lang = post.lang;
 const t = PORTFOLIO_DATA[lang].blog;
 const ui = UI[lang];
+const authorAlt =
+  lang === 'fr'
+    ? 'Avatar dessiné de Guillaume Richard : cheveux bruns, barbe courte'
+    : 'Drawn avatar of Guillaume Richard: brown hair, short beard';
 const { Content, headings } = await render(post);
 // Sommaire : la liste numérote déjà ; un intertitre « 4. Si un poste… » perd son numéro pour ne pas afficher « 04. 4. ».
 const toc = headings
@@ -247,11 +251,11 @@ const crumbs = [
       </div>
 
       <section class="author" aria-labelledby="author-title">
-        <div class="author-avatar" aria-hidden="true">
+        <div class="author-avatar">
           <img
             class="avatar-sombre"
             src={withBase('/img/guillaume-sombre.svg')}
-            alt=""
+            alt={authorAlt}
             width="72"
             height="72"
             loading="lazy"
@@ -260,7 +264,7 @@ const crumbs = [
           <img
             class="avatar-clair"
             src={withBase('/img/guillaume-clair.svg')}
-            alt=""
+            alt={authorAlt}
             width="72"
             height="72"
             loading="lazy"
