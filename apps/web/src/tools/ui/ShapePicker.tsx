@@ -35,7 +35,7 @@ export default function ShapePicker({ name, legend, value, options, onChange }: 
             />
             <img
               src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(option.svg)}`}
-              alt=""
+              alt={option.label}
               width="40"
               height="40"
               aria-hidden="true"

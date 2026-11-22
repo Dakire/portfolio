@@ -298,6 +298,31 @@ html:not(.js) .subnav {
   .site-nav > ul > li > a[aria-current] {
     color: var(--ink);
   }
+  /* Survol, focus clavier et sous-menu ouvert : filet violet qui se trace de gauche à droite, le texte se soulève d'un cran */
+  .site-nav > ul > li > a::after {
+    content: '';
+    position: absolute;
+    inset: auto var(--space-2) 0.55rem;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--u);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--duration-slow) var(--ease);
+  }
+  .site-nav > ul > li > a:is(:hover, :focus-visible)::after,
+  .site-nav > ul > li.has-sub:is(:hover, :focus-within):not([data-closed]) > a::after {
+    transform: scaleX(1);
+  }
+  .site-nav > ul > li > a {
+    transition:
+      color var(--duration) var(--ease),
+      background var(--duration) var(--ease),
+      translate var(--duration-base) var(--ease);
+  }
+  .site-nav > ul > li > a:is(:hover, :focus-visible) {
+    translate: 0 -1px;
+  }
   .sub-toggle {
     display: none !important;
   }

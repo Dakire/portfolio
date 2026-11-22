@@ -329,6 +329,10 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         href: 'https://github.com/Dakire/portfolio',
         desc: 'Extensions de navigateur sur mesure et sites web modernes (WordPress, Wix, React).',
         tags: ['JavaScript', 'React', 'Web'],
+        image: {
+          src: '/img/projets/creation-web.png',
+          alt: "Capture de l'accueil de ce portfolio en thème sombre : nom, présentation et aperçu du terminal",
+        },
       },
       {
         slug: 'mineral-contest',
@@ -362,6 +366,10 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         desc: 'Le jeu de Nurikabe en Java, avec une aide à la résolution des puzzles, développé dans un projet étudiant de troisième année de licence.',
         tags: ['Java', 'Maven', 'Jeu de logique'],
         href: 'https://github.com/ju-rouaux/Nurikabe',
+        image: {
+          src: '/img/projets/nurikabe.png',
+          alt: "Capture de Nurikabe : une grille de puzzle et l'aide à la résolution qui explique une déduction",
+        },
       },
       {
         slug: 'streamdak',
@@ -630,6 +638,10 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         href: 'https://github.com/Dakire/portfolio',
         desc: 'Custom browser extensions and modern websites (WordPress, Wix, React).',
         tags: ['JavaScript', 'React', 'Web'],
+        image: {
+          src: '/img/projets/creation-web.png',
+          alt: 'Screenshot of this portfolio home page in dark theme: name, introduction and terminal preview',
+        },
       },
       {
         slug: 'mineral-contest',
@@ -663,6 +675,10 @@ export const PROFILE_TEXT: Record<Lang, ProfileText> = {
         desc: "The Nurikabe puzzle game in Java, with help for solving puzzles, built in a third-year bachelor's student project.",
         tags: ['Java', 'Maven', 'Logic game'],
         href: 'https://github.com/ju-rouaux/Nurikabe',
+        image: {
+          src: '/img/projets/nurikabe.png',
+          alt: 'Screenshot of Nurikabe: a puzzle grid and the solving help explaining a deduction',
+        },
       },
       {
         slug: 'streamdak',
