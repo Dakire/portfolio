@@ -74,6 +74,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ steps.params.outputs.ref }}
+          fetch-depth: 0 # <lastmod> du sitemap : dates du dernier commit par page (scripts/lib/lastmod.mjs)
       - name: La CI de ce commit doit être verte
         env:
           GH_TOKEN: ${{ github.token }}
@@ -176,6 +177,10 @@ jobs:
             exit 0
           fi
           CONTRACT_BASE_URL=https://grichard.eu pnpm test:contract
+      - name: Notifier IndexNow (pages récentes)
+        if: env.DRY_RUN != 'true' && env.TARGET == 'production'
+        continue-on-error: true
+        run: node scripts/deploy/indexnow.mjs 3
 
   tag:
     name: Poser le tag de retour arrière

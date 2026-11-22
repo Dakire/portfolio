@@ -6,6 +6,7 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 import rehypeBase from './src/lib/rehype-base.mjs';
 import rehypeTableScroll from './src/lib/rehype-table-scroll.mjs';
+import { sourceDates } from './scripts/lib/lastmod.mjs';
 
 // Préproduction : le site est servi depuis un sous-dossier (SITE_BASE=/preprod/). Production : racine.
 const base = process.env.SITE_BASE ?? '/';
@@ -43,7 +44,7 @@ const requireTurnstileKey = {
   },
 };
 
-// <lastmod> du sitemap : seulement des dates réelles (publication ou mise à jour des articles, lues dans leur en-tête).
+// <lastmod> du sitemap : seulement des dates réelles (articles : en-tête ; outils, cheatsheets, réalisations : Git).
 // Les autres pages n'en ont pas : une date de build, qui change à chaque livraison, serait ignorée par Google.
 function articleDates() {
   const dates = new Map();
@@ -69,7 +70,8 @@ function articleDates() {
   }
   return dates;
 }
-const LASTMOD = articleDates();
+// Outils, cheatsheets, réalisations : date du dernier commit sur leurs sources (scripts/lib/lastmod.mjs).
+const LASTMOD = new Map([...sourceDates(), ...articleDates()]);
 
 // Pages absentes du sitemap : interne, erreur, et pages de tag du blog (noindex). Les catégories, elles, sont indexables.
 const EXCLUDED = ['/design/', '/qr-test/', '/404', '/blog/tag/', '/en/blog/tag/', '/search/'];
