@@ -111,6 +111,9 @@ describe('livraison du portail', () => {
       'public/index.php',
       'public/.htaccess',
       'public/portal.css',
+      'public/prefs.js',
+      'public/ui/ui.css',
+      'public/ui/fonts/geist.woff2',
       'composer.json',
     ])
       await write(root, file, 'x');
@@ -128,6 +131,10 @@ describe('livraison du portail', () => {
     );
     await readFile(join(out, 'www', 'espace', 'index.php'));
     await readFile(join(out, 'www', 'espace', '.htaccess'));
+    // Réglages de lecture et design system du site, servis à côté du point d'entrée
+    await readFile(join(out, 'www', 'espace', 'prefs.js'));
+    await readFile(join(out, 'www', 'espace', 'ui', 'ui.css'));
+    await readFile(join(out, 'www', 'espace', 'ui', 'fonts', 'geist.woff2'));
     await assert.rejects(readFile(join(out, 'app', 'portal', 'public', 'index.php')));
   });
 

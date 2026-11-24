@@ -27,7 +27,11 @@ final class SecurityTest extends PortalTestCase
         self::assertResponseIsSuccessful();
         self::assertCount(1, $crawler->filter('input[name="_csrf_token"]'));
         self::assertSame('noindex, nofollow', $crawler->filter('meta[name=robots]')->attr('content'));
-        self::assertCount(0, $crawler->filter('script, [style]'), 'ni script ni style en ligne (CSP)');
+        self::assertCount(0, $crawler->filter('script:not([src]), style, [style]'), 'ni script ni style en ligne (CSP)');
+        // Seul script : les réglages de lecture du site, en fichier externe ; feuilles : design system du site, puis l'espace
+        self::assertSame(['/prefs.js'], $crawler->filter('script')->each(static fn($s) => $s->attr('src')));
+        self::assertSame(['/ui/ui.css', '/portal.css'], $crawler->filter('link[rel=stylesheet]')->each(static fn($l) => $l->attr('href')));
+        self::assertSame('light', $crawler->filter('html')->attr('data-theme'), 'thème clair par défaut, comme le site');
     }
 
     public function testValidLoginReachesHomeAndRecordsIt(): void

@@ -1,0 +1,1213 @@
+/* Fichier généré par packages/ui/scripts/portal-ui.mjs à partir de packages/ui/src : ne pas modifier à la main. */
+/* ---- fonts.css ---- */
+/* Polices auto-hébergées, licence OFL (ADR 0016) : deux familles seulement.
+ * - Geist (texte et titres) : sans-serif variable (axe de graisse), sans italique propre (synthétisé).
+ * - IBM Plex Mono (annotations, champs, code, terminal) : trois graisses statiques.
+ * Jeux latin et latin-ext ; le navigateur ne télécharge que ceux dont il a besoin (unicode-range). */
+@font-face {
+  font-family: 'Geist Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(fonts/geist-latin-ext-wght-normal.woff2)
+    format('woff2-variations');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Geist Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(fonts/geist-latin-wght-normal.woff2)
+    format('woff2-variations');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(fonts/ibm-plex-mono-latin-400-normal.woff2)
+    format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(fonts/ibm-plex-mono-latin-500-normal.woff2)
+    format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(fonts/ibm-plex-mono-latin-600-normal.woff2)
+    format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---- tokens.css ---- */
+/*
+ * Tokens du design system grichard.eu (ADR 0016, « console d'ingénieur ») : la seule source des couleurs, de la typographie,
+ * des espacements, des rayons et du mouvement. Remplace l'ADR 0014 (carnet d'interventions) pour l'apparence.
+ *
+ * Thème : clair par défaut (<html data-theme="light"> posé statiquement, quel que soit le système) ; sombre = choix
+ * explicite du visiteur, posé avant le premier rendu par /js/theme.js. Le bloc :root porte les valeurs sombres (repli si
+ * l'attribut manquait), le bloc [data-theme='light'] les valeurs claires. Contrastes vérifiés par
+ * packages/ui/tests/contrast.test.ts (texte >= 4,5:1, bordures d'interface >= 3:1).
+ *
+ * Une encre d'accent (--accent, violet : statuts, survols ; --u pour les soulignés), un secondaire rare (--pen, bleu
+ * acier : focus, annotations). Vert, ambre et rouge d'état seulement pour les états, toujours avec un mot.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* Typographie : deux familles, Geist (titres et texte) et IBM Plex Mono (annotations, champs, code, terminal) */
+  --font-display: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: var(--font-display);
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: clamp(1.25rem, 1.15rem + 0.4vw, 1.4375rem);
+  --text-xl: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  --text-2xl: clamp(1.875rem, 1.45rem + 1.8vw, 2.875rem);
+  --text-display: clamp(2.5rem, 1.7rem + 3.4vw, 4.5rem);
+  --text-hero: clamp(3.75rem, 0.6rem + 15vw, 14rem);
+  --text-label: 0.8125rem; /* annotations en mono */
+  --tracking-display: -0.035em;
+  --tracking-hero: -0.045em;
+  --leading-display: 1.02;
+  --leading-tight: 1.12;
+  --leading-snug: 1.35;
+  --leading-body: 1.65;
+
+  /* Espacements (échelle 4 px) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-section: clamp(var(--space-7), 2rem + 5vw, var(--space-9));
+
+  /* Formes : la feuille reste carrée ; boutons, champs, étiquettes et menus ont des coins doux (6 à 12 px) */
+  --radius-sm: 6px;
+  --radius-md: 9px;
+  --radius-lg: 14px;
+  --radius-btn: 10px;
+  --radius-card: 14px;
+  --radius-tile: 14px;
+  --stroke: 1px; /* épaisseur des filets d'encre */
+
+  /* Profondeur : aucune ombre sur les cartes ; une ombre diffuse seulement pour la palette de recherche et les modales */
+  --shadow-card: none;
+  --shadow-lg: 0 24px 60px -20px rgb(0 0 0 / 0.7);
+
+  /* Mouvement (neutralisé par prefers-reduced-motion dans base.css) */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --duration: var(--duration-base);
+
+  /* Empilement : une seule échelle pour tout le site */
+  --z-below: -1;
+  --z-base: 0;
+  --z-header: 20;
+  --z-overlay: 40;
+  --z-banner: 50;
+  --z-skip: 100;
+
+  /* Mise en page : la feuille (colonne de la page) et sa marge de classeur */
+  --sheet: 82rem;
+  --container: 72rem;
+  --measure: 66ch;
+  --gutter: clamp(1rem, 0.4rem + 2.8vw, 2.5rem);
+  --margin: 0rem; /* marge de classeur : seulement sur grand écran (base.css) */
+  --target: 2.75rem; /* cible tactile minimale : 44 px */
+
+  /* Couleurs : thème sombre (défaut). Fond neutre légèrement bleuté, jamais un noir pur. */
+  --desk: #0f1115; /* arrière-plan de la page */
+  --canvas: #0f1115; /* fond de la colonne de contenu */
+  --surface: #151820; /* encadré, champ, carte */
+  --raised: #1b1f29; /* surface élevée */
+  --sunk: #0b0d11; /* zone en creux : code, terminal */
+  --line: #262b36; /* filets décoratifs */
+  --line-strong: #727a8c; /* bordures de champs, boutons, tableaux : >= 3:1 */
+  --ink: #e8eaee;
+  --body: #d3d7de;
+  --muted: #9aa1af;
+  --accent: #a78bfa;
+  --accent-strong: #a78bfa; /* fond des boutons pleins */
+  --accent-ink: #14102a;
+  --u: #a78bfa; /* soulignés, barre de lecture : jamais du texte */
+  --u-ink: #14102a;
+  --pen: #7fa6d6; /* secondaire : focus, annotations */
+  --link: #e8eaee;
+  --ok: #4cb782;
+  --warn: #e5b53d;
+  --danger: #e5645f;
+  --focus: #7fa6d6;
+  --selection: rgb(127 166 214 / 0.3);
+  --margin-rule: #353b49; /* filet de marge (décoratif, retiré au lot 2) */
+
+  /* Bandeau inversé (en-tête d'article, contact) : surface claire sur thème sombre */
+  --band: #e8eaee;
+  --band-ink: #15181f;
+  --band-muted: #444b5a;
+  --band-accent: #6d3fd6;
+}
+
+/* Thème clair : choix explicite, mêmes jetons */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --shadow-lg: 0 24px 60px -24px rgb(20 24 34 / 0.35);
+
+  --desk: #f1f1ec;
+  --canvas: #fafaf7;
+  --surface: #ffffff;
+  --raised: #ffffff;
+  --sunk: #f0f0ea;
+  --line: #dcdcd3;
+  --line-strong: #7b8190;
+  --ink: #1b1d22;
+  --body: #2b2e36;
+  --muted: #596070;
+  --accent: #6d3fd6;
+  --accent-strong: #6d3fd6;
+  --accent-ink: #ffffff;
+  --u: #7c4dff;
+  --u-ink: #1b1d22;
+  --pen: #2c5a94;
+  --link: #1b1d22;
+  --ok: #25704a;
+  --warn: #8a5a00;
+  --danger: #b0262b;
+  --focus: #2c5a94;
+  --selection: rgb(44 90 148 / 0.22);
+  --margin-rule: #c9c9bf;
+
+  --band: #15181f;
+  --band-ink: #e8eaee;
+  --band-muted: #b4bac6;
+  --band-accent: #b9a2ff;
+}
+
+/* Forçage des couleurs (mode contraste élevé) : le navigateur impose les siennes, les filets restent visibles */
+@media (forced-colors: active) {
+  :root {
+    --line: CanvasText;
+    --line-strong: CanvasText;
+    --margin-rule: CanvasText;
+  }
+}
+
+/* ---- base.css ---- */
+/* Styles de base (ADR 0014) : réinitialisation légère, typographie, focus, lien d'évitement, feuille de classeur et curseur du site.
+ * Dépend de tokens.css. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: 1.5rem;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--desk);
+  color: var(--body);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  font-synthesis: none; /* jamais de faux gras ni de faux italique */
+  hanging-punctuation: first;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* L'attribut hidden l'emporte toujours, même sur un composant qui impose son propre display (.btn, .link-button…) */
+[hidden] {
+  display: none !important;
+}
+
+::selection {
+  background: var(--selection);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+h1 {
+  font-size: var(--text-display);
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+}
+h2 {
+  font-size: var(--text-2xl);
+}
+h3 {
+  font-size: var(--text-xl);
+}
+h4 {
+  font-size: var(--text-lg);
+}
+
+p,
+ul,
+ol,
+dl,
+figure,
+pre,
+blockquote {
+  margin: 0;
+}
+p {
+  text-wrap: pretty;
+}
+
+/* Liens : à l'encre, soulignés d'un trait fin violet ; au survol le trait s'épaissit.
+ * La couleur n'est jamais seule porteuse du lien : le soulignement l'est. */
+a {
+  color: var(--link);
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-color: var(--u);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+}
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  font-variant-ligatures: none; /* « != », « -> » restent lisibles tels qu'on les tape */
+}
+:not(pre) > code {
+  padding: 0.08em 0.32em;
+  background: var(--sunk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow-wrap: anywhere;
+}
+
+table {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Listes de navigation ou de métadonnées (role="list" pour que les lecteurs d'écran les annoncent malgré l'absence de puces) */
+/* :where() : spécificité nulle, pour qu'une classe de composant (.hm-social, .footer-social…) puisse poser une marge */
+:where(ul, ol)[role='list'] {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+hr {
+  border: 0;
+  border-top: var(--stroke) solid var(--line-strong);
+  margin: var(--space-6) 0;
+}
+
+/* Focus : visible partout, jamais supprimé sans remplacement (WCAG 2.4.7, 2.4.11) */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Lien d'évitement : premier élément atteint au clavier */
+.skip-link {
+  position: fixed;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: var(--z-skip);
+  padding: var(--space-3) var(--space-4);
+  background: var(--ink);
+  color: var(--canvas);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  transform: translateY(-200%);
+}
+.skip-link:focus {
+  transform: none;
+}
+
+/* ---------- Colonne de page ----------
+ * La page est une colonne centrée sur le fond (ADR 0016) : plus de marge de classeur ni de perforations. Les classes .sheet et
+ * .sheet-in restent les points d'ancrage de la mise en page (lot 2 : renommage éventuel). */
+.sheet {
+  position: relative;
+  max-width: var(--sheet);
+  margin-inline: auto;
+  background: var(--canvas);
+}
+.sheet-in {
+  position: relative;
+  z-index: var(--z-base);
+}
+
+.container {
+  width: min(100% - 2 * var(--gutter), var(--container));
+  margin-inline: auto;
+}
+.prose {
+  max-width: var(--measure);
+}
+.prose > * + * {
+  margin-top: var(--space-4);
+}
+.stack > * + * {
+  margin-top: var(--space-4);
+}
+.stack-lg > * + * {
+  margin-top: var(--space-7);
+}
+/* Sections d'une page d'accueil : rythme vertical égal */
+.sections > * + * {
+  margin-top: var(--space-section);
+}
+.sections {
+  padding-bottom: var(--space-section);
+}
+.section {
+  padding-block: var(--space-section);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Mouvement : transitions courtes, supprimées si l'utilisateur le demande (WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Changement de page (ClientRouter, View Transitions) : fondu bref de la page entière, aucun si moins de mouvement est demandé.
+   Les pseudo-éléments ::view-transition-* ne sont pas couverts par le sélecteur universel ci-dessus. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-fast);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .sheet {
+    box-shadow: none;
+  }
+}
+
+/* ---- components.css ---- */
+/* Composants (ADR 0016, « console d'ingénieur ») : classes simples, partagées par les composants Astro et les pages.
+ * Vocabulaire : rubrique, badge, annotation, numéro de ticket, ligne de registre, carte. Aucune couleur en dur : tout vient
+ * des tokens. Pas d'ombre sauf palette de recherche et modales. */
+
+/* ---------- Boutons : cible >= 44 px, coins doux, accent plein ou filet ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--target);
+  padding: 0 var(--space-5);
+  border: var(--stroke) solid var(--line-strong);
+  border-radius: var(--radius-btn);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+.btn:hover {
+  background: var(--surface);
+  border-color: var(--ink);
+  text-decoration: none;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn-primary {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.btn-primary:hover {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+  color: var(--accent-ink);
+  filter: brightness(1.1);
+}
+.btn-ghost {
+  border-color: transparent;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.25em;
+}
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.btn:disabled:hover {
+  background: transparent;
+  color: var(--ink);
+}
+/* Flèche des liens d'action : glisse au survol (décorative, aria-hidden dans le HTML) */
+.btn svg,
+.more-link svg {
+  transition: transform var(--duration) var(--ease);
+}
+.btn:hover svg,
+.more-link:hover svg {
+  transform: translateX(3px);
+}
+.more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+/* ---------- Carte : surface, filet fin, coins doux, sans ombre ---------- */
+.card {
+  position: relative;
+  padding: var(--space-5);
+  background: var(--surface);
+  border: var(--stroke) solid var(--line);
+  border-radius: var(--radius-card);
+}
+.tile {
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-tile);
+}
+
+/* ---------- Textes d'annotation ---------- */
+/* Libellé : ligne de mono en sourdine (catégories, dates, métadonnées). Pas de capitales ni d'espacement des lettres. */
+.label {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 400;
+  line-height: 1.5;
+}
+/* Voyant : petit rond plein devant un libellé (décoratif) */
+.led::before {
+  content: '';
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-right: 0.6em;
+  vertical-align: 0.06em;
+  background: var(--accent);
+  border-radius: 50%;
+}
+/* Numéro de ticket : date et rubrique, en mono, chiffres tabulaires */
+.ticket {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.ticket b {
+  color: var(--ink);
+  font-weight: 600;
+}
+/* Annotation en bleu acier : une remarque sous un titre */
+.note {
+  color: var(--pen);
+  font-size: var(--text-base);
+  line-height: 1.4;
+}
+/* Badge de statut : pilule, toujours un mot (jamais un symbole seul). Nom historique : .stamp. */
+.stamp {
+  display: inline-block;
+  padding: 0.1em 0.7em;
+  border: 1px solid var(--line-strong);
+  border-radius: 99px;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 500;
+  line-height: 1.5;
+}
+.stamp-pen {
+  color: var(--pen);
+}
+
+/* Étiquettes (compétences, rubriques) et raccourcis clavier */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.5rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--body);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.8;
+}
+.tag-ok {
+  color: var(--ok);
+}
+.tag-warn {
+  color: var(--warn);
+}
+.tag-danger {
+  color: var(--danger);
+}
+.kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 0.05em 0.45em;
+  border: 1px solid var(--line-strong);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  text-align: center;
+}
+
+/* Invite de terminal : décoration typographique, masquée aux lecteurs d'écran par le composant */
+.prompt {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--accent);
+}
+.prompt::after {
+  content: '';
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 0.3em;
+  vertical-align: -0.18em;
+  background: currentColor;
+  opacity: 0.85;
+}
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+/* ---------- Rubrique : filet fin, titre, mention en mono à droite ---------- */
+.rubric {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+.rubric h2,
+.rubric .rubric-title {
+  font-size: var(--text-2xl);
+}
+.rubric-meta {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+/* Sur-titre posé sur un filet : nomme une section sans la numéroter */
+.rule-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+.rule-label::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--line-strong);
+}
+
+/* ---------- Lignes de registre : liste de liens (référence, titre et sous-titre, mention, flèche) ---------- */
+.ledger-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--stroke) solid var(--ink);
+}
+.ledger-list > li {
+  border-bottom: 1px solid var(--line-strong);
+}
+.ledger-row {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr) auto;
+  gap: var(--space-2) var(--space-5);
+  align-items: baseline;
+  padding: var(--space-4) var(--space-2);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--duration-fast) var(--ease);
+}
+.ledger-row:hover {
+  background: var(--surface);
+}
+.ledger-meta {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.ledger-title {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+.ledger-row:hover .ledger-title {
+  text-decoration-color: var(--accent);
+}
+.ledger-sub {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  font-weight: 400;
+}
+.ledger-arrow {
+  color: var(--ink);
+}
+@media (max-width: 40rem) {
+  .ledger-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .ledger-meta {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Champs de formulaire : étiquette en mono, champ encadré ---------- */
+.field {
+  display: grid;
+  align-content: start; /* dans une rangée de champs, un voisin plus haut n'étire ni l'étiquette ni le champ */
+  gap: var(--space-2);
+}
+.field label {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 500;
+}
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  min-height: var(--target);
+  padding: var(--space-2) var(--space-3);
+  background: var(--raised);
+  color: var(--ink);
+  border: var(--stroke) solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  font: inherit;
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  border-color: var(--ink);
+}
+.field textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+.field [aria-invalid='true'] {
+  border-color: var(--danger);
+}
+.field-hint {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+.field-error {
+  color: var(--danger);
+  font-size: var(--text-sm);
+}
+
+/* ---------- Réglages de lecture (pied de page) : papier et curseur ---------- */
+.theme-switch {
+  display: inline-flex;
+  border: var(--stroke) solid var(--line-strong);
+  border-radius: var(--radius-sm);
+}
+.theme-switch button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target);
+  padding: 0 var(--space-3);
+  border: 0;
+  background: transparent;
+  color: var(--body);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  cursor: pointer;
+}
+.theme-switch button + button {
+  border-left: 1px solid var(--line-strong);
+}
+.theme-switch button:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+.theme-switch button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--canvas);
+}
+.theme-switch svg {
+  width: 1rem;
+  height: 1rem;
+}
+.theme-switch[hidden] {
+  display: none;
+}
+
+/* ---------- Alertes : message d'état dans le flux. Le rôle se pose dans le HTML : role="status" ou role="alert".
+   La couleur n'est jamais seule porteuse du sens : un titre nomme le type. ---------- */
+.alert {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-left: 6px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--body);
+}
+.alert-title {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 600;
+}
+.alert-ok {
+  border-left-color: var(--ok);
+}
+.alert-warn {
+  border-left-color: var(--warn);
+}
+.alert-danger {
+  border-left-color: var(--danger);
+}
+.alert-ok .alert-title {
+  color: var(--ok);
+}
+.alert-warn .alert-title {
+  color: var(--warn);
+}
+.alert-danger .alert-title {
+  color: var(--danger);
+}
+
+/* ---------- Tableaux : à placer dans .table-wrap (région focusable, tabindex="0", nommée) pour défiler sans élargir la page ---------- */
+.table-wrap {
+  overflow-x: auto;
+  border-top: var(--stroke) solid var(--ink);
+  border-bottom: var(--stroke) solid var(--ink);
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+.table caption {
+  padding: var(--space-3) 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  text-align: left;
+}
+.table th,
+.table td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--line-strong);
+  text-align: left;
+  vertical-align: top;
+}
+.table thead th {
+  border-bottom: var(--stroke) solid var(--ink);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 600;
+}
+.table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+/* ---------- Puces interactives (filtres, tags cliquables) : cible >= 44 px ; aria-current="page" marque le filtre actif ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--body);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    border-color var(--duration-fast) var(--ease),
+    background-color var(--duration-fast) var(--ease);
+}
+.chip:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.chip:hover:not(:disabled) {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: var(--surface);
+}
+.chip[aria-current='page'] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--canvas);
+}
+
+/* ---------- Fil d'Ariane : séparateur décoratif, cibles de 44 px ---------- */
+.crumbs {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+}
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.crumbs li {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+}
+.crumbs li:not(:last-child)::after {
+  content: '/';
+  margin-left: var(--space-2);
+  color: var(--muted);
+}
+.crumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  color: var(--link);
+}
+
+/* ---------- Sous-navigation d'une section : visible, sans menu déroulant ---------- */
+.section-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.section-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--body);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  text-decoration: none;
+}
+.section-nav a:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+.section-nav a[aria-current] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--canvas);
+}
+
+/* ---------- Bandeau d'appel à l'action : un titre, une phrase, deux boutons au plus ---------- */
+.cta-band {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: clamp(var(--space-5), 2vw + 1rem, var(--space-7));
+  border: var(--stroke) solid var(--ink);
+  background: var(--raised);
+}
+.cta-band h2 {
+  font-size: var(--text-xl);
+}
+.cta-band p {
+  margin-top: var(--space-2);
+  max-width: 52ch;
+}
+
+/* ---------- Bande d'encre : fiche inversée (le contact, l'en-tête d'un article) ----------
+ * Les tokens de la bande redéfinissent --ink, --accent, --surface… à l'intérieur : tout composant s'y adapte sans règle propre. */
+.band {
+  --ink: var(--band-ink);
+  --body: var(--band-ink);
+  --muted: var(--band-muted);
+  --accent: var(--band-accent);
+  --accent-strong: var(--band-accent);
+  --link: var(--band-ink);
+  --line: var(--band-muted);
+  --line-strong: var(--band-muted);
+  --focus: var(--band-accent);
+  --selection: color-mix(in srgb, var(--band-accent) 35%, transparent);
+  background: var(--band);
+  color: var(--band-ink);
+}
+.band .btn {
+  border-color: var(--band-ink);
+}
+.band .btn:hover,
+.band .btn-primary {
+  background: var(--band-ink);
+  color: var(--band);
+}
+.band .btn-primary:hover {
+  background: var(--band-accent);
+  border-color: var(--band-accent);
+  color: var(--band);
+}
+
+/* ---- cursor.css ---- */
+/* Curseur du site (ADR 0014) : actif par défaut ; /js/theme.js pose data-cursor="off" si le visiteur le coupe (pied de page ou
+ * commande « cursor off » du terminal).
+ * Curseur Windows classique, en couleur du site : la flèche sur ce qui ne se clique pas, la main au doigt tendu sur ce qui se
+ * clique (plus foncée pendant l'appui). Remplissage violet, contour d'encre, léger halo clair pour rester lisible sur tous les
+ * fonds. Pointeur fin seulement ; les champs de texte et les éléments désactivés gardent le curseur natif, comme le mode
+ * couleurs forcées. Aucun bulle ni suivi en JavaScript.
+ * Les images sont intégrées en data: (autorisé par la CSP, img-src) : aucune requête, donc aucun clignotement au premier survol.
+ * Une image de curseur ne pouvant pas lire var(), ses couleurs sont écrites ici : seule exception à la règle des jetons ; elles
+ * reprennent --u, --ink et --canvas de chaque thème (tokens.css), et --accent pour l'appui. */
+@media (pointer: fine) and (not (forced-colors: active)) {
+  html:not([data-cursor='off']) {
+    cursor:
+      url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2226%22 height=%2230%22 viewBox=%220 0 26 30%22%3E%3Cpath d=%22M4 3v21.5l5.4-5 3.6 7.8 3.5-1.6-3.6-7.6 7.4-.3z%22 fill=%22none%22 stroke=%22%23fff8ee%22 stroke-width=%224.2%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M4 3v21.5l5.4-5 3.6 7.8 3.5-1.6-3.6-7.6 7.4-.3z%22 fill=%22%237c4dff%22 stroke=%22%231d1a14%22 stroke-width=%221.7%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E')
+        4 3,
+      default;
+  }
+  html:not([data-cursor='off'])
+    :is(
+      a[href],
+      button,
+      summary,
+      select,
+      [role='button'],
+      [role='tab'],
+      [role='option'],
+      label[for],
+      input:is(
+        [type='checkbox'],
+        [type='radio'],
+        [type='submit'],
+        [type='button'],
+        [type='range'],
+        [type='file']
+      )
+    ):not(:disabled, [aria-disabled='true']) {
+    cursor:
+      url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2230%22 viewBox=%220 0 28 30%22%3E%3Cpath d=%22M10.2 2.7C10.2 1.4 12.7 1.4 12.7 2.7V12.1C13.2 11.6 14.5 11.7 14.8 12.5C15.5 11.9 17 12.1 17.2 13.1C18 12.7 19.5 12.9 19.6 14C20.6 13.7 21.9 14.1 21.9 15.3V20.3C21.9 22.7 20.7 24.1 20.1 25.3V26.6H11.9V25.3C10.6 24 8.5 21.1 6.3 18.1C5.7 17.1 6.7 16.2 7.7 16.7L10.2 18.3Z%22 fill=%22none%22 stroke=%22%23fff8ee%22 stroke-width=%224.2%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M10.2 2.7C10.2 1.4 12.7 1.4 12.7 2.7V12.1C13.2 11.6 14.5 11.7 14.8 12.5C15.5 11.9 17 12.1 17.2 13.1C18 12.7 19.5 12.9 19.6 14C20.6 13.7 21.9 14.1 21.9 15.3V20.3C21.9 22.7 20.7 24.1 20.1 25.3V26.6H11.9V25.3C10.6 24 8.5 21.1 6.3 18.1C5.7 17.1 6.7 16.2 7.7 16.7L10.2 18.3Z%22 fill=%22%237c4dff%22 stroke=%22%231d1a14%22 stroke-width=%221.7%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M14.7 15.4v4.2M17.2 15.9v3.8M19.6 16.5v3.2%22 fill=%22none%22 stroke=%22%231d1a14%22 stroke-width=%221.2%22 stroke-linecap=%22round%22/%3E%3C/svg%3E')
+        11 3,
+      pointer;
+  }
+  html:not([data-cursor='off'])
+    :is(
+      a[href],
+      button,
+      summary,
+      select,
+      [role='button'],
+      [role='tab'],
+      [role='option'],
+      label[for],
+      input:is(
+        [type='checkbox'],
+        [type='radio'],
+        [type='submit'],
+        [type='button'],
+        [type='range'],
+        [type='file']
+      )
+    ):not(:disabled, [aria-disabled='true']):active {
+    cursor:
+      url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2230%22 viewBox=%220 0 28 30%22%3E%3Cpath d=%22M10.2 2.7C10.2 1.4 12.7 1.4 12.7 2.7V12.1C13.2 11.6 14.5 11.7 14.8 12.5C15.5 11.9 17 12.1 17.2 13.1C18 12.7 19.5 12.9 19.6 14C20.6 13.7 21.9 14.1 21.9 15.3V20.3C21.9 22.7 20.7 24.1 20.1 25.3V26.6H11.9V25.3C10.6 24 8.5 21.1 6.3 18.1C5.7 17.1 6.7 16.2 7.7 16.7L10.2 18.3Z%22 fill=%22none%22 stroke=%22%23fff8ee%22 stroke-width=%224.2%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M10.2 2.7C10.2 1.4 12.7 1.4 12.7 2.7V12.1C13.2 11.6 14.5 11.7 14.8 12.5C15.5 11.9 17 12.1 17.2 13.1C18 12.7 19.5 12.9 19.6 14C20.6 13.7 21.9 14.1 21.9 15.3V20.3C21.9 22.7 20.7 24.1 20.1 25.3V26.6H11.9V25.3C10.6 24 8.5 21.1 6.3 18.1C5.7 17.1 6.7 16.2 7.7 16.7L10.2 18.3Z%22 fill=%22%236d3fd6%22 stroke=%22%231d1a14%22 stroke-width=%221.7%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M14.7 15.4v4.2M17.2 15.9v3.8M19.6 16.5v3.2%22 fill=%22none%22 stroke=%22%231d1a14%22 stroke-width=%221.2%22 stroke-linecap=%22round%22/%3E%3C/svg%3E')
+        11 3,
+      pointer;
+  }
+  html:not([data-cursor='off'])[data-theme='dark'] {
+    cursor:
+      url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2226%22 height=%2230%22 viewBox=%220 0 26 30%22%3E%3Cpath d=%22M4 3v21.5l5.4-5 3.6 7.8 3.5-1.6-3.6-7.6 7.4-.3z%22 fill=%22none%22 stroke=%22%23efe5cf%22 stroke-width=%224.2%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M4 3v21.5l5.4-5 3.6 7.8 3.5-1.6-3.6-7.6 7.4-.3z%22 fill=%22%23a78bfa%22 stroke=%22%2317130e%22 stroke-width=%221.7%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E')
+        4 3,
+      default;
+  }
+  html:not([data-cursor='off'])[data-theme='dark']
+    :is(
+      a[href],
+      button,
+      summary,
+      select,
+      [role='button'],
+      [role='tab'],
+      [role='option'],
+      label[for],
+      input:is(
+        [type='checkbox'],
+        [type='radio'],
+        [type='submit'],
+        [type='button'],
+        [type='range'],
+        [type='file']
+      )
+    ):not(:disabled, [aria-disabled='true']) {
+    cursor:
+      url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2230%22 viewBox=%220 0 28 30%22%3E%3Cpath d=%22M10.2 2.7C10.2 1.4 12.7 1.4 12.7 2.7V12.1C13.2 11.6 14.5 11.7 14.8 12.5C15.5 11.9 17 12.1 17.2 13.1C18 12.7 19.5 12.9 19.6 14C20.6 13.7 21.9 14.1 21.9 15.3V20.3C21.9 22.7 20.7 24.1 20.1 25.3V26.6H11.9V25.3C10.6 24 8.5 21.1 6.3 18.1C5.7 17.1 6.7 16.2 7.7 16.7L10.2 18.3Z%22 fill=%22none%22 stroke=%22%23efe5cf%22 stroke-width=%224.2%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M10.2 2.7C10.2 1.4 12.7 1.4 12.7 2.7V12.1C13.2 11.6 14.5 11.7 14.8 12.5C15.5 11.9 17 12.1 17.2 13.1C18 12.7 19.5 12.9 19.6 14C20.6 13.7 21.9 14.1 21.9 15.3V20.3C21.9 22.7 20.7 24.1 20.1 25.3V26.6H11.9V25.3C10.6 24 8.5 21.1 6.3 18.1C5.7 17.1 6.7 16.2 7.7 16.7L10.2 18.3Z%22 fill=%22%23a78bfa%22 stroke=%22%2317130e%22 stroke-width=%221.7%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M14.7 15.4v4.2M17.2 15.9v3.8M19.6 16.5v3.2%22 fill=%22none%22 stroke=%22%2317130e%22 stroke-width=%221.2%22 stroke-linecap=%22round%22/%3E%3C/svg%3E')
+        11 3,
+      pointer;
+  }
+  html:not([data-cursor='off'])[data-theme='dark']
+    :is(
+      a[href],
+      button,
+      summary,
+      select,
+      [role='button'],
+      [role='tab'],
+      [role='option'],
+      label[for],
+      input:is(
+        [type='checkbox'],
+        [type='radio'],
+        [type='submit'],
+        [type='button'],
+        [type='range'],
+        [type='file']
+      )
+    ):not(:disabled, [aria-disabled='true']):active {
+    cursor:
+      url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2230%22 viewBox=%220 0 28 30%22%3E%3Cpath d=%22M10.2 2.7C10.2 1.4 12.7 1.4 12.7 2.7V12.1C13.2 11.6 14.5 11.7 14.8 12.5C15.5 11.9 17 12.1 17.2 13.1C18 12.7 19.5 12.9 19.6 14C20.6 13.7 21.9 14.1 21.9 15.3V20.3C21.9 22.7 20.7 24.1 20.1 25.3V26.6H11.9V25.3C10.6 24 8.5 21.1 6.3 18.1C5.7 17.1 6.7 16.2 7.7 16.7L10.2 18.3Z%22 fill=%22none%22 stroke=%22%23efe5cf%22 stroke-width=%224.2%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M10.2 2.7C10.2 1.4 12.7 1.4 12.7 2.7V12.1C13.2 11.6 14.5 11.7 14.8 12.5C15.5 11.9 17 12.1 17.2 13.1C18 12.7 19.5 12.9 19.6 14C20.6 13.7 21.9 14.1 21.9 15.3V20.3C21.9 22.7 20.7 24.1 20.1 25.3V26.6H11.9V25.3C10.6 24 8.5 21.1 6.3 18.1C5.7 17.1 6.7 16.2 7.7 16.7L10.2 18.3Z%22 fill=%22%235b2fd0%22 stroke=%22%2317130e%22 stroke-width=%221.7%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M14.7 15.4v4.2M17.2 15.9v3.8M19.6 16.5v3.2%22 fill=%22none%22 stroke=%22%2317130e%22 stroke-width=%221.2%22 stroke-linecap=%22round%22/%3E%3C/svg%3E')
+        11 3,
+      pointer;
+  }
+  html:not([data-cursor='off'])
+    :is(input, textarea, [contenteditable='true']):not(
+      [type='checkbox'],
+      [type='radio'],
+      [type='submit'],
+      [type='button'],
+      [type='range'],
+      [type='file']
+    ) {
+    cursor: text;
+  }
+}

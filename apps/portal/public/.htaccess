@@ -1,4 +1,4 @@
-# Espace client (www/espace/) : tout passe par index.php, sauf la feuille de style.
+# Espace client (www/espace/) : tout passe par index.php, sauf les fichiers statiques (portal.css, prefs.js, ui/).
 Options -Indexes
 DirectoryIndex index.php
 
@@ -7,10 +7,15 @@ DirectoryIndex index.php
     Header always set Cache-Control "no-store"
     Header always set X-Frame-Options "DENY"
     Header always set Referrer-Policy "same-origin"
-    # Aucun script, aucun style en ligne, rien de tiers.
-    Header always set Content-Security-Policy "default-src 'none'; style-src 'self'; img-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
-    <FilesMatch "\.css$">
-        Header set Cache-Control "no-cache"
+    # Rien de tiers, aucun script ni style en ligne. Seul script : prefs.js (thème et curseur choisis sur le site).
+    # img-src data: : images du curseur du site, intégrées dans ui/ui.css. font-src : polices du design system (ui/fonts/).
+    Header always set Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
+    # « always », comme la règle no-store ci-dessus : même table d'en-têtes, donc la valeur la remplace au lieu de s'y ajouter.
+    <FilesMatch "\.(css|js)$">
+        Header always set Cache-Control "no-cache"
+    </FilesMatch>
+    <FilesMatch "\.woff2$">
+        Header always set Cache-Control "public, max-age=2592000"
     </FilesMatch>
 </IfModule>
 

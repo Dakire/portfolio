@@ -102,6 +102,8 @@ export async function verifyPortal(portal) {
     'public/index.php',
     'public/.htaccess',
     'public/portal.css',
+    'public/prefs.js',
+    'public/ui/ui.css',
     'composer.json',
   ])
     if (!(await exists(join(portal, file)))) problems.push(`${file} manquant`);
@@ -126,8 +128,10 @@ async function assemblePortal({ portal, out, buildId }) {
     await cp(join(portal, dir), join(code, dir), { recursive: true });
   await cp(join(portal, 'composer.json'), join(code, 'composer.json'));
   await writeFile(join(code, 'BUILD_ID'), `${buildId}\n`);
-  for (const file of ['index.php', '.htaccess', 'portal.css'])
+  for (const file of ['index.php', '.htaccess', 'portal.css', 'prefs.js'])
     await cp(join(portal, 'public', file), join(web, file));
+  // Design system du site (copie générée par packages/ui/scripts/portal-ui.mjs) : feuille unique et polices
+  await cp(join(portal, 'public', 'ui'), join(web, 'ui'), { recursive: true });
   return { web, code };
 }
 

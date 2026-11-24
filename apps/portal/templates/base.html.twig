@@ -1,29 +1,42 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="color-scheme" content="dark light">
+    <meta name="color-scheme" content="light dark">
     <title>{% block title %}Espace client{% endblock %} | grichard.eu</title>
+    {# Thème et curseur choisis sur grichard.eu, posés avant le premier rendu (fichier externe : la CSP refuse tout script en ligne) #}
+    <script src="{{ app.request.basePath }}/prefs.js"></script>
+    <link rel="preload" href="{{ app.request.basePath }}/ui/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    {# Design system du site (packages/ui, copie générée), puis la mise en page propre à l'espace #}
+    <link rel="stylesheet" href="{{ app.request.basePath }}/ui/ui.css">
     <link rel="stylesheet" href="{{ app.request.basePath }}/portal.css">
   </head>
   <body>
-    <a class="skip" href="#contenu">Aller au contenu</a>
-    <header class="bar">
-      <p class="brand"><span aria-hidden="true">&gt;_</span> grichard.eu / espace</p>
-      {% if is_granted('ROLE_USER') %}
-        <nav aria-label="Navigation principale">
-          <a href="{{ path('app_home') }}">Accueil</a>
-          <a href="{{ path('app_shop') }}">Boutique</a>
-          {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_admin') }}">Administration</a>{% endif %}
-          <a href="{{ path('app_logout') }}">Déconnexion</a>
-        </nav>
-      {% endif %}
-    </header>
-    <main id="contenu" tabindex="-1">
-      {% for message in app.flashes('success') %}<p class="notice" role="status">{{ message }}</p>{% endfor %}
-      {% block body %}{% endblock %}
-    </main>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+    <div class="sheet">
+      <header class="portal-bar">
+        <div class="portal-bar-in">
+          <a class="portal-brand" href="/">Guillaume Richard <span class="portal-brand-sub">/ espace client</span></a>
+          {% if is_granted('ROLE_USER') %}
+            {% set route = app.request.attributes.get('_route') %}
+            <nav class="portal-nav" aria-label="Navigation de l'espace client">
+              <a href="{{ path('app_home') }}"{% if route == 'app_home' %} aria-current="page"{% endif %}>Accueil</a>
+              <a href="{{ path('app_shop') }}"{% if route == 'app_shop' %} aria-current="page"{% endif %}>Boutique</a>
+              {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_admin') }}"{% if route starts with 'app_admin' %} aria-current="page"{% endif %}>Administration</a>{% endif %}
+              <a href="{{ path('app_logout') }}">Déconnexion</a>
+            </nav>
+          {% endif %}
+        </div>
+      </header>
+      <main id="contenu" tabindex="-1" class="portal-main">
+        {% for message in app.flashes('success') %}<div class="alert alert-ok" role="status"><p class="alert-title">Fait</p><p>{{ message }}</p></div>{% endfor %}
+        {% block body %}{% endblock %}
+      </main>
+      <footer class="portal-foot">
+        <p><a href="/">grichard.eu</a> · espace privé, non indexé</p>
+      </footer>
+    </div>
   </body>
 </html>

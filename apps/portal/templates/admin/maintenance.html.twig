@@ -1,16 +1,27 @@
 {% extends 'base.html.twig' %}
 {% block title %}Maintenance{% endblock %}
 {% block body %}
-  <h1>Maintenance</h1>
-  <p>Version de la base : <strong>{{ current }}</strong></p>
+  <div class="portal-head">
+    <p class="rule-label">administration</p>
+    <h1>Maintenance</h1>
+  </div>
+  <dl class="kv">
+    <dt>Version de la base</dt><dd><code>{{ current }}</code></dd>
+  </dl>
   {% if pending is empty %}
-    <p>La base est à jour.</p>
+    <div class="alert alert-ok" role="status">
+      <p class="alert-title">À jour</p>
+      <p>La base est à jour.</p>
+    </div>
   {% else %}
-    <p>{{ pending|length }} migration(s) en attente :</p>
-    <ul>{% for version in pending %}<li>{{ version }}</li>{% endfor %}</ul>
+    <div class="alert alert-warn" role="status">
+      <p class="alert-title">Migrations en attente</p>
+      <p>{{ pending|length }} migration(s) en attente :</p>
+      <ul>{% for version in pending %}<li><code>{{ version }}</code></li>{% endfor %}</ul>
+    </div>
     <form method="post">
       <input type="hidden" name="_token" value="{{ csrf_token('maintenance') }}">
-      <button type="submit">Appliquer les migrations</button>
+      <button type="submit" class="btn btn-primary">Appliquer les migrations</button>
     </form>
   {% endif %}
 {% endblock %}

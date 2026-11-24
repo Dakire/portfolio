@@ -1,7 +1,12 @@
 {% extends 'base.html.twig' %}
 {% block title %}Administration{% endblock %}
 {% block body %}
-  <h1>Administration</h1>
-  <p>{{ userCount }} utilisateur(s).</p>
-  <p><a href="{{ path('app_admin_maintenance') }}">Maintenance de la base de données</a></p>
+  <div class="portal-head">
+    <p class="rule-label">administration</p>
+    <h1>Administration</h1>
+  </div>
+  <dl class="kv">
+    <dt>Utilisateurs</dt><dd>{{ userCount }}</dd>
+  </dl>
+  <p><a class="btn" href="{{ path('app_admin_maintenance') }}">Maintenance de la base de données</a></p>
 {% endblock %}

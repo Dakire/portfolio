@@ -1,14 +1,28 @@
 {% extends 'base.html.twig' %}
 {% block title %}Connexion{% endblock %}
 {% block body %}
-  <h1>Connexion</h1>
-  {% if error %}<p class="error" role="alert">Identifiants incorrects, ou trop d'essais récents. Réessayez dans quelques minutes.</p>{% endif %}
-  <form method="post" class="stack">
-    <label for="username">Adresse e-mail</label>
-    <input id="username" name="_username" type="email" value="{{ last_username }}" autocomplete="username" required autofocus>
-    <label for="password">Mot de passe</label>
-    <input id="password" name="_password" type="password" autocomplete="current-password" required>
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-    <button type="submit">Se connecter</button>
-  </form>
+  <div class="portal-narrow">
+    <div class="portal-head">
+      <p class="rule-label">espace client</p>
+      <h1>Connexion</h1>
+    </div>
+    {% if error %}
+      <div class="alert alert-danger" role="alert">
+        <p class="alert-title">Connexion refusée</p>
+        <p>Identifiants incorrects, ou trop d'essais récents. Réessayez dans quelques minutes.</p>
+      </div>
+    {% endif %}
+    <form method="post" class="portal-form">
+      <div class="field">
+        <label for="username">Adresse e-mail</label>
+        <input id="username" name="_username" type="email" value="{{ last_username }}" autocomplete="username" required autofocus>
+      </div>
+      <div class="field">
+        <label for="password">Mot de passe</label>
+        <input id="password" name="_password" type="password" autocomplete="current-password" required>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+      <button type="submit" class="btn btn-primary">Se connecter</button>
+    </form>
+  </div>
 {% endblock %}

@@ -15,6 +15,6 @@ final class ShopController extends AbstractController
     #[Route('/boutique', name: 'app_shop', methods: ['GET'])]
     public function index(Catalog $catalog): Response
     {
-        return $this->render('shop/index.html.twig', ['products' => $catalog->all()]);
+        return $this->render('shop/index.html.twig', ['groups' => $catalog->byStage()]);
     }
 }

@@ -59,6 +59,28 @@ final class Catalog
                 watchpoint: 'Accès Gmail « restreints » : validation de Google obligatoire, et audit de sécurité annuel si des données passent par un serveur. Lancer la demande tôt.',
             ),
             new Product(
+                slug: 'sante-email',
+                name: 'Santé des domaines et des e-mails',
+                platform: 'Service hébergé (Cloudflare Worker planifié, D1, Email Workers)',
+                pitch: 'Chaque semaine : contrôle de SPF, DKIM, DMARC, MX, listes noires, expiration du domaine et du certificat, avec une alerte en français quand quelque chose casse. Les rapports DMARC sont reçus à une adresse dédiée et résumés clairement : qui envoie au nom du domaine, ce qui échoue, quoi corriger.',
+                audience: 'TPE, indépendants et agences qui gèrent leurs domaines sans service informatique.',
+                channel: 'Abonnement par Paddle ; suite naturelle des outils DNS gratuits du site',
+                price: 'Gratuit pour 1 domaine, 19 € par an pour 5, environ 9 € par mois pour une agence (50 domaines)',
+                stage: Stage::Later,
+                watchpoint: 'Concurrence entre 19 et 25 $ par mois pour quelques domaines, souvent avec un plan gratuit limité : se distinguer par le français, la clarté et le prix. Réutiliser la logique de packages/tools-core.',
+            ),
+            new Product(
+                slug: 'analyse-en-tetes-webmail',
+                name: 'Analyse d\'en-têtes dans Gmail et Outlook web',
+                platform: 'Extension Chrome',
+                pitch: 'Un clic sur un message affiche le verdict SPF, DKIM et DMARC, le trajet du message et les signes d\'usurpation.',
+                audience: 'Techniciens support et administrateurs de messagerie.',
+                channel: 'Licence vendue sur grichard.eu (Paddle), extension publiée sur le Chrome Web Store',
+                price: 'Gratuit, version Pro à 9 € par an',
+                stage: Stage::Later,
+                watchpoint: 'Lire le message original affiché dans la page, sans demander les accès Gmail « restreints » (validation de Google). Réutilise l\'analyseur d\'en-têtes du site.',
+            ),
+            new Product(
                 slug: 'regles-tags-shopify',
                 name: 'Règles de tags automatiques',
                 platform: 'App Shopify embarquée',
@@ -80,6 +102,35 @@ final class Catalog
                 stage: Stage::FreeTool,
                 watchpoint: 'Marché saturé d\'outils gratuits ; un appel à une IA coûterait à chaque usage (abonnement, ou clé fournie par l\'utilisateur).',
             ),
+            new Product(
+                slug: 'generateur-gam-powershell',
+                name: 'Générateur de commandes GAM et PowerShell Microsoft 365',
+                platform: 'Outil en ligne',
+                pitch: 'Un formulaire produit la commande exacte à partir des données des cheatsheets ; en option, des packs de scripts d\'arrivée et de départ d\'un collaborateur.',
+                audience: 'Administrateurs Google Workspace et Microsoft 365.',
+                channel: 'Outil gratuit sur grichard.eu ; packs de scripts vendus sur le site (Paddle)',
+                price: 'Gratuit ; packs de scripts de 19 à 29 €',
+                stage: Stage::FreeTool,
+                watchpoint: 'Les packs vendus doivent être testés sur un vrai tenant : les exemples actuels des cheatsheets ne le sont pas.',
+            ),
         ];
+    }
+
+    /**
+     * Produits regroupés par étape, dans l'ordre des étapes ; une étape sans produit n'apparaît pas.
+     *
+     * @return list<array{stage: Stage, products: list<Product>}>
+     */
+    public function byStage(): array
+    {
+        $groups = [];
+        foreach (Stage::cases() as $stage) {
+            $products = array_values(array_filter($this->all(), static fn(Product $p): bool => $p->stage === $stage));
+            if ($products !== []) {
+                $groups[] = ['stage' => $stage, 'products' => $products];
+            }
+        }
+
+        return $groups;
     }
 }

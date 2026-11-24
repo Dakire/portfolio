@@ -4,18 +4,19 @@ Banc d'essai personnel (voir [ADR 0004](adr/0004-portail-symfony-sqlite.md)) : S
 
 ## Ce qui est en place
 
-| Sujet                | Choix                                                                                                                                                  |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Mots de passe        | Argon2id (12 Mio, 3 itérations — minimum OWASP), mise à niveau automatique du hachage                                                                  |
-| Connexion            | Formulaire avec jeton CSRF, limitation à 5 essais / 15 min (par identifiant et par IP), message identique pour « inconnu » et « mauvais mot de passe » |
-| Session              | Cookie `HttpOnly`, `Secure` (HTTPS détecté derrière le proxy), `SameSite=Lax`, durée 2 h                                                               |
-| Rôles                | `ROLE_USER` (tout le portail), `ROLE_ADMIN` (`/admin`) ; contrôlés par `access_control`                                                                |
-| Installation         | Page `/setup` : applique les migrations puis crée le premier administrateur ; **jeton d'installation** requis ; se ferme dès qu'un utilisateur existe  |
-| Migrations           | Appliquées depuis `/admin/maintenance` (POST + CSRF) : l'hébergement n'a pas de ligne de commande                                                      |
-| En-têtes             | `www/espace/.htaccess` : `noindex`, `no-store`, CSP `default-src 'none'`, aucun script ni style en ligne                                               |
-| Journaux             | Canal `portal` (connexions, installation, maintenance) sans e-mail ni IP en clair ; le reste à partir de `warning` ; rotation sur 14 jours             |
-| Authentification MFA | **Pas encore** (prévu : TOTP), voir « Suite »                                                                                                          |
-| Boutique (aperçu)    | `/boutique`, réservée aux comptes connectés : fiches des produits prévus (`src/Catalog/Catalog.php`), sans aucun achat possible (ADR 0017)             |
+| Sujet                | Choix                                                                                                                                                                                                                                                                         |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Mots de passe        | Argon2id (12 Mio, 3 itérations — minimum OWASP), mise à niveau automatique du hachage                                                                                                                                                                                         |
+| Connexion            | Formulaire avec jeton CSRF, limitation à 5 essais / 15 min (par identifiant et par IP), message identique pour « inconnu » et « mauvais mot de passe »                                                                                                                        |
+| Session              | Cookie `HttpOnly`, `Secure` (HTTPS détecté derrière le proxy), `SameSite=Lax`, durée 2 h                                                                                                                                                                                      |
+| Rôles                | `ROLE_USER` (tout le portail), `ROLE_ADMIN` (`/admin`) ; contrôlés par `access_control`                                                                                                                                                                                       |
+| Installation         | Page `/setup` : applique les migrations puis crée le premier administrateur ; **jeton d'installation** requis ; se ferme dès qu'un utilisateur existe                                                                                                                         |
+| Migrations           | Appliquées depuis `/admin/maintenance` (POST + CSRF) : l'hébergement n'a pas de ligne de commande                                                                                                                                                                             |
+| En-têtes             | `www/espace/.htaccess` : `noindex`, `no-store`, CSP `default-src 'none'`, aucun script ni style en ligne                                                                                                                                                                      |
+| Journaux             | Canal `portal` (connexions, installation, maintenance) sans e-mail ni IP en clair ; le reste à partir de `warning` ; rotation sur 14 jours                                                                                                                                    |
+| Authentification MFA | **Pas encore** (prévu : TOTP), voir « Suite »                                                                                                                                                                                                                                 |
+| Apparence            | Design system du site : `public/ui/ui.css` et `public/ui/fonts/`, copie générée de `packages/ui` (`pnpm --filter @grichard/ui portal-ui`, vérifiée à l'identique par un test) ; thème et curseur suivent les choix faits sur le site (`public/prefs.js`, même `localStorage`) |
+| Boutique (aperçu)    | `/boutique`, réservée aux comptes connectés : fiches des produits prévus (`src/Catalog/Catalog.php`), sans aucun achat possible (ADR 0017)                                                                                                                                    |
 
 ## Où vivent les données
 

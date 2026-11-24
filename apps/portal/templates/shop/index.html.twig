@@ -1,25 +1,41 @@
 {% extends 'base.html.twig' %}
 {% block title %}Boutique (aperçu){% endblock %}
 {% block body %}
-  <h1>Boutique</h1>
-  <p class="notice" role="note"><strong>Aperçu privé.</strong> Rien n'est en vente : ouverture prévue au premier trimestre 2027. Tarifs proposés, à valider.</p>
+  <div class="portal-head">
+    <p class="rule-label">aperçu privé</p>
+    <h1>Boutique</h1>
+    <p class="portal-lede">Modules, extensions et services prévus, avec leur tarif proposé et ce qui reste à régler avant de les vendre.</p>
+  </div>
+  <div class="alert alert-warn" role="note">
+    <p class="alert-title">Aperçu</p>
+    <p>Rien n'est en vente : ouverture prévue au premier trimestre 2027. Les tarifs sont des propositions, à valider.</p>
+  </div>
 
-  <ul class="products" role="list">
-    {% for product in products %}
-      <li class="product" id="{{ product.slug }}">
-        <article aria-labelledby="{{ product.slug }}-titre">
-          <p class="platform">{{ product.platform }}</p>
-          <h2 id="{{ product.slug }}-titre">{{ product.name }}</h2>
-          <p>{{ product.pitch }}</p>
-          <dl class="kv">
-            <dt>Pour qui</dt><dd>{{ product.audience }}</dd>
-            <dt>Tarif proposé</dt><dd>{{ product.price }}</dd>
-            <dt>Vente</dt><dd>{{ product.channel }}</dd>
-            <dt>Étape</dt><dd>{{ product.stage.value }}</dd>
-            <dt>À régler</dt><dd>{{ product.watchpoint }}</dd>
-          </dl>
-        </article>
-      </li>
-    {% endfor %}
-  </ul>
+  {% for group in groups %}
+    <section class="shop-section" aria-labelledby="etape-{{ group.stage.value }}">
+      <div class="rubric">
+        <h2 id="etape-{{ group.stage.value }}">{{ group.stage.title }}</h2>
+        <p class="rubric-meta">{{ group.stage.label }} · {{ group.products|length }} produit{{ group.products|length > 1 ? 's' }}</p>
+      </div>
+      <ul class="ledger-list" role="list">
+        {% for product in group.products %}
+          <li id="{{ product.slug }}">
+            <article class="product-row" aria-labelledby="{{ product.slug }}-titre">
+              <p class="product-meta">{{ product.platform }}</p>
+              <div class="product-body">
+                <h3 id="{{ product.slug }}-titre">{{ product.name }}</h3>
+                <p class="product-pitch">{{ product.pitch }}</p>
+                <dl class="kv">
+                  <dt>tarif proposé</dt><dd class="product-price">{{ product.price }}</dd>
+                  <dt>pour qui</dt><dd>{{ product.audience }}</dd>
+                  <dt>vente</dt><dd>{{ product.channel }}</dd>
+                  <dt>à régler</dt><dd>{{ product.watchpoint }}</dd>
+                </dl>
+              </div>
+            </article>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endfor %}
 {% endblock %}
