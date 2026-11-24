@@ -117,6 +117,7 @@ export const UI = {
       cheatsheets: 'Cheatsheets',
       terminal: 'Terminal',
       contact: 'Contact',
+      portal: 'Espace client',
     },
     footerLinks: {
       legal: 'Mentions légales',
@@ -167,6 +168,7 @@ export const UI = {
       cheatsheets: 'Cheatsheets',
       terminal: 'Terminal',
       contact: 'Contact',
+      portal: 'Customer area',
     },
     footerLinks: {
       legal: 'Legal notice',

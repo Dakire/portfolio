@@ -46,6 +46,9 @@ const attr = (html: string, re: RegExp) =>
 /** Pages prévues dans une phase suivante (outils : phase 3). Vider cette liste quand elles existent. */
 const PENDING: string[] = [];
 
+/** Chemins servis par PHP, hors de dist/ : l'espace client (apps/portal, livré dans www/espace/). */
+const SERVED_BY_PHP = ['/espace/'];
+
 describe('site construit', () => {
   it('contient des pages', () => {
     expect(pages.length).toBeGreaterThan(40);
@@ -103,7 +106,9 @@ describe('site construit', () => {
         ...attr(html, /<meta property="og:image" content="([^"]+)"/g),
       ];
       const missing = refs
-        .filter((r) => !PENDING.some((p) => r.replace(SITE, '').startsWith(p)))
+        .filter(
+          (r) => ![...PENDING, ...SERVED_BY_PHP].some((p) => r.replace(SITE, '').startsWith(p)),
+        )
         .map((r) => ({ r, t: resolveTarget(r, url) }))
         .filter(({ t }) => t && !existsSync(t))
         .map(({ r }) => r);
