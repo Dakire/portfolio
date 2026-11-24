@@ -80,7 +80,7 @@ Terminal : page `/terminal/` (`src/terminal`, registre de commandes fermé, aucu
 
 ## Pièges d'outillage (Windows)
 
-- Git Bash : `composer` n'est pas dans le `PATH` ; ajouter le dossier PHP de winget et passer `COMPOSER_BIN` (voir la note de mémoire sur la chaîne PHP) pour que `pnpm verify` aille jusqu'au bout.
+- PHP (winget, avec `pdo_sqlite`) et Composer (`%LOCALAPPDATA%\Programs\Composer`) sont dans le `PATH` utilisateur ; un shell ouvert avant leur installation ne les voit pas : ajouter les deux dossiers au `PATH` (voir la note de mémoire sur la chaîne PHP) pour que `pnpm verify` aille jusqu'au bout.
 - Un serveur `astro dev` ou `astro preview` oublié bloque `pnpm verify` (port ou verrou de fichier `.astro`) : l'arrêter (`astro preview stop`) avant de relancer.
 - Hook `commit-msg` : sujet de la forme `type(portée): sujet`, sans parenthèses supplémentaires dans le sujet.
 
