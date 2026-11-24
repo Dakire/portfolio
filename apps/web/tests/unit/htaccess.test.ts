@@ -95,6 +95,17 @@ describe('.htaccess de production', () => {
     expect(file).toContain('RedirectMatch 404 "/\\.(?!well-known/)"');
     expect(file).toContain('contact\\.config\\.php');
   });
+
+  it('annonce les règles de pré-rendu sur les pages HTML, servies avec leur type propre', () => {
+    expect(file).toContain('Header set Speculation-Rules "\\"/speculation-rules.json\\""');
+    expect(file).toContain('ForceType application/speculationrules+json');
+    const rules = JSON.parse(
+      readFileSync(new URL('../../public/speculation-rules.json', import.meta.url), 'utf-8'),
+    ) as { prerender: { eagerness: string; where: { and: unknown[] } }[] };
+    expect(rules.prerender[0]?.eagerness).toBe('moderate');
+    // Jamais les points d'entrée PHP (formulaire, outils serveur) : un pré-rendu ne doit déclencher aucune action.
+    expect(JSON.stringify(rules)).toContain('/*.php');
+  });
 });
 
 describe('.htaccess de préproduction', () => {

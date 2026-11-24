@@ -48,6 +48,12 @@
   let loaded = false;
   const loadAnalytics = () => {
     window[`ga-disable-${GA_ID}`] = false;
+    // Page pré-rendue au survol d'un lien (Speculation Rules, voir htaccess.mjs) : aucune mesure tant que le visiteur ne l'a
+    // pas réellement ouverte, sinon une page jamais vue serait comptée.
+    if (document.prerendering) {
+      document.addEventListener('prerenderingchange', loadAnalytics, { once: true });
+      return;
+    }
     if (loaded) return;
     loaded = true;
     window.dataLayer = window.dataLayer || [];
