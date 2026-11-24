@@ -1,6 +1,13 @@
 # Espace client (www/espace/) : tout passe par index.php, sauf les fichiers statiques (portal.css, prefs.js, ui/).
 Options -Indexes
 DirectoryIndex index.php
+# Type des polices (inconnu de l'hébergeur : sans lui, elles partent sans Content-Type)
+AddType font/woff2 .woff2
+
+# Le .htaccess du site (www/) active mod_expires pour les CSS : ici, seul le Cache-Control ci-dessous fait foi.
+<IfModule mod_expires.c>
+    ExpiresActive Off
+</IfModule>
 
 <IfModule mod_headers.c>
     Header always set X-Robots-Tag "noindex, nofollow, noarchive"
