@@ -2,12 +2,13 @@
  * Tokens du design system grichard.eu (ADR 0016, « console d'ingénieur ») : la seule source des couleurs, de la typographie,
  * des espacements, des rayons et du mouvement. Remplace l'ADR 0014 (carnet d'interventions) pour l'apparence.
  *
- * Thème : sombre par défaut (avec ou sans JavaScript, quel que soit le système) ; clair = choix explicite du visiteur, posé
- * avant le premier rendu par /js/theme.js (<html data-theme="dark|light">). Contrastes vérifiés par
+ * Thème : clair par défaut (<html data-theme="light"> posé statiquement, quel que soit le système) ; sombre = choix
+ * explicite du visiteur, posé avant le premier rendu par /js/theme.js. Le bloc :root porte les valeurs sombres (repli si
+ * l'attribut manquait), le bloc [data-theme='light'] les valeurs claires. Contrastes vérifiés par
  * packages/ui/tests/contrast.test.ts (texte >= 4,5:1, bordures d'interface >= 3:1).
  *
- * Une encre d'accent (--accent, violet : liens actifs, survols, statuts), un secondaire rare (--pen, bleu acier : page
- * courante, focus, annotations). Vert, ambre et rouge d'état seulement pour les états, toujours avec un mot.
+ * Une encre d'accent (--accent, violet : statuts, survols ; --u pour les soulignés), un secondaire rare (--pen, bleu
+ * acier : focus, annotations). Vert, ambre et rouge d'état seulement pour les états, toujours avec un mot.
  */
 
 :root {
@@ -55,11 +56,8 @@
   --stroke: 1px; /* épaisseur des filets d'encre */
 
   /* Profondeur : aucune ombre sur les cartes ; une ombre diffuse seulement pour la palette de recherche et les modales */
-  --shadow-sm: none;
   --shadow-card: none;
-  --shadow-md: none;
   --shadow-lg: 0 24px 60px -20px rgb(0 0 0 / 0.7);
-  --shadow-sheet: none;
 
   /* Mouvement (neutralisé par prefers-reduced-motion dans base.css) */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -92,7 +90,6 @@
   --sunk: #0b0d11; /* zone en creux : code, terminal */
   --line: #262b36; /* filets décoratifs */
   --line-strong: #727a8c; /* bordures de champs, boutons, tableaux : >= 3:1 */
-  --guide: #0b0d11;
   --ink: #e8eaee;
   --body: #d3d7de;
   --muted: #9aa1af;
@@ -101,40 +98,20 @@
   --accent-ink: #14102a;
   --u: #a78bfa; /* soulignés, barre de lecture : jamais du texte */
   --u-ink: #14102a;
-  --pen: #7fa6d6; /* secondaire : page courante, annotations */
-  --accent-alt: #7fa6d6;
+  --pen: #7fa6d6; /* secondaire : focus, annotations */
   --link: #e8eaee;
-  --signal: #a78bfa;
-  --signal-ink: #14102a;
   --ok: #4cb782;
   --warn: #e5b53d;
   --danger: #e5645f;
   --focus: #7fa6d6;
   --selection: rgb(127 166 214 / 0.3);
   --margin-rule: #353b49; /* filet de marge (décoratif, retiré au lot 2) */
-  --hole: #0f1115;
 
   /* Bandeau inversé (en-tête d'article, contact) : surface claire sur thème sombre */
   --band: #e8eaee;
   --band-ink: #15181f;
   --band-muted: #444b5a;
   --band-accent: #6d3fd6;
-
-  /* Cartes colorées (aperçus de réalisation) : deux tons seulement */
-  --tone-ink: #e8eaee;
-  --tone-danger: #e5645f;
-  --tone-ok: #4cb782;
-  --tone-warn: #e5b53d;
-  --tone-petrole: #151820;
-  --tone-petrole-accent: #a78bfa;
-  --tone-olive: #1b1f29;
-  --tone-olive-accent: #a78bfa;
-  --tone-prune: #151820;
-  --tone-prune-accent: #a78bfa;
-  --tone-ocre: #1b1f29;
-  --tone-ocre-accent: #a78bfa;
-  --tone-ardoise: #151820;
-  --tone-ardoise-accent: #a78bfa;
 }
 
 /* Thème clair : choix explicite, mêmes jetons */
@@ -149,7 +126,6 @@
   --sunk: #f0f0ea;
   --line: #dcdcd3;
   --line-strong: #7b8190;
-  --guide: #f0f0ea;
   --ink: #1b1d22;
   --body: #2b2e36;
   --muted: #596070;
@@ -159,37 +135,18 @@
   --u: #7c4dff;
   --u-ink: #1b1d22;
   --pen: #2c5a94;
-  --accent-alt: #2c5a94;
   --link: #1b1d22;
-  --signal: #6d3fd6;
-  --signal-ink: #ffffff;
   --ok: #25704a;
   --warn: #8a5a00;
   --danger: #b0262b;
   --focus: #2c5a94;
   --selection: rgb(44 90 148 / 0.22);
   --margin-rule: #c9c9bf;
-  --hole: #f1f1ec;
 
   --band: #15181f;
   --band-ink: #e8eaee;
   --band-muted: #b4bac6;
   --band-accent: #b9a2ff;
-
-  --tone-ink: #1b1d22;
-  --tone-danger: #6d3fd6;
-  --tone-ok: #25704a;
-  --tone-warn: #8a5a00;
-  --tone-petrole: #f0f0ea;
-  --tone-petrole-accent: #6d3fd6;
-  --tone-olive: #ebebe4;
-  --tone-olive-accent: #6d3fd6;
-  --tone-prune: #f0f0ea;
-  --tone-prune-accent: #6d3fd6;
-  --tone-ocre: #ebebe4;
-  --tone-ocre-accent: #6d3fd6;
-  --tone-ardoise: #f0f0ea;
-  --tone-ardoise-accent: #6d3fd6;
 }
 
 /* Forçage des couleurs (mode contraste élevé) : le navigateur impose les siennes, les filets restent visibles */
