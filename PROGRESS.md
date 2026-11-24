@@ -1,5 +1,49 @@
 # PROGRESS
 
+## 24 novembre 2026 : optimisation, navigation sans rechargement, boutique et espace client
+
+### Fait (poussé sur `main`)
+
+| Sujet                   | Changement                                                                                                                                                                                                                                                                     | Commits              |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------- |
+| Audit du site           | SEO, GEO et performance déjà au niveau (392 pages contrôlées) ; jetons de couleur inutilisés retirés (`--tone-*`, `--signal*`…), dont un `--tone-danger` violet en thème clair                                                                                                 | `0655dec`            |
+| Curseur entre les pages | Navigation sans rechargement (`ClientRouter` d'Astro) : le curseur Windows ne réapparaît plus. Scripts du `body` en `data-astro-rerun`, écouteurs globaux coupés à `astro:before-swap`, `theme.js` repose thème et curseur à `astro:after-swap`. Pré-rendu au survol abandonné | `ed26e9f`, `904f3db` |
+| Sécurité                | `twig/twig` passé en 3.31.1 (failles du bac à sable publiées le jour même ; elles bloquaient toute livraison)                                                                                                                                                                  | `9df7cf5`            |
+| Outillage local         | Composer installé, `pdo_sqlite` activé : `pnpm verify` contrôle aussi l'API, le portail et `packages/licence`                                                                                                                                                                  | `ba346ce`, `1e4b605` |
+| Décision boutique       | ADR 0017 (Paddle comme Merchant of Record, licences Ed25519 vérifiées hors ligne, webhooks, aucun serveur en plus) ; feuille de route [docs/boutique.md](docs/boutique.md)                                                                                                     | `8a84d4a`            |
+| Espace client en ligne  | Portail livré sous `/espace/`, apparence du site (copie générée de `packages/ui`, thème et curseur suivis), aperçu privé de la boutique `/espace/boutique`                                                                                                                     | `c650ac3`, `1eb2122` |
+| Lot 1 : vitrine         | `/boutique/` et `/en/shop/` : 3 produits, tarifs, CGV, remboursement 30 jours, licence ; masqués (`SHOP_OPEN = false`, noindex, hors sitemap)                                                                                                                                  | `a1d221a`            |
+| Lots 2 et 3 : portail   | Inscription, adresse confirmée, mot de passe oublié, double authentification, export et suppression RGPD ; licences signées, notifications Paddle, API des produits, téléchargements, administration des licences ; confidentialité du site complétée                          | `a0bebbd`            |
+| Lot 4 : produits        | `packages/licence` : vérification JS (extensions, Worker Slack) et PHP (modules PrestaShop), testée contre les jetons du portail ; guide [docs/licences.md](docs/licences.md)                                                                                                  | `1e4b605`            |
+| Migrations              | Appliquées automatiquement à la première requête d'une livraison (une migration de `app_user` aurait sinon bloqué la connexion)                                                                                                                                                | `9a576a8`            |
+| Menu                    | Lien « Espace client » dans l'en-tête (icône sur grand écran, libellé sur mobile)                                                                                                                                                                                              | `2508028`            |
+
+Vérifications à chaque étape : `pnpm verify` (e2e et axe dans les deux thèmes, contrats d'URL, PHP), rendu en 1440 et 375 px, contrat vérifié en ligne après les livraisons du site.
+
+### En cours
+
+- Livraison du portail avec les lots 2 et 3 (workflow `Déploiement`, cible `portal`) : tant qu'elle n'est pas terminée, `/espace/inscription` et `/espace/api/…` répondent 404. Après la livraison : se connecter (les migrations s'appliquent seules), vérifier `/espace/compte` et `/espace/licences`.
+
+### Reste à faire
+
+**Guillaume**
+
+- Créer la micro-entreprise début janvier 2027 (gratuit, formalites.entreprise.gouv.fr) ; ouvrir Abby ou Tiime (formule gratuite).
+- Générer la clé de signature des licences et l'ajouter à `private/portal.php` (`licence_key`, commande dans [docs/licences.md](docs/licences.md)) ; la sauvegarder dans le gestionnaire de mots de passe.
+- Compte Paddle sandbox : produits et prix, destination de notification `https://grichard.eu/espace/webhooks/paddle` et son secret (`paddle_webhook_secret`).
+- Tester la délivrabilité des e-mails du portail : créer un compte avec une adresse personnelle et vérifier `spf=pass` et `dmarc=pass` (DMARC du domaine en `p=reject`).
+- Relire les fiches produit (fonctions marquées « à préciser »), CGV, remboursement et licence ; ajouter le SIRET dès l'immatriculation.
+- Intégrer `packages/licence` dans les produits (hors de ce dépôt) et passer le bot Slack de Stripe à Paddle.
+
+**Dans le dépôt, une fois Paddle configuré**
+
+- Prix Paddle dans `apps/portal/config/paddle_prices.php`.
+- Boutons d'achat (Paddle.js en surimpression, `customData.user_id`) sur les fiches et dans l'espace client ; domaines de Paddle dans la CSP (`htaccess.mjs`, `.htaccess` du portail).
+- Achat de bout en bout en sandbox (licence, renouvellement, remboursement).
+- Ouverture : `SHOP_OPEN = true`, préfixes retirés d'`EXCLUDED`, lien « Boutique » au menu, contrat d'URL et sitemap ; aperçu privé `/espace/boutique` retiré ou réservé à l'administrateur.
+
+**Questions ouvertes** : apps Shopify (App Store ou sur mesure), canal du support client, rappel de renouvellement des abonnements annuels par Paddle (annoncé par les CGV, à vérifier).
+
 ## État
 
 - Phase 1 (audit) : **faite** → `THEME-MERGE-AUDIT.md`.
