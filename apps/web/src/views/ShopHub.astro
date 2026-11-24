@@ -1,0 +1,126 @@
+---
+// Accueil de la boutique (ADR 0017) : produits, tous les tarifs (exigé par la revue de Paddle) et conditions.
+// Masquée tant que SHOP_OPEN est faux : noindex, hors sitemap, hors menu, aucun bouton d'achat.
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { crumbs } from '../lib/crumbs';
+import { ROUTES, type Lang } from '../lib/i18n';
+import { SHOP_OPEN, SHOP_ROUTES, productPath, shopAlternates } from '../shop/config';
+import { SHOP_LEGAL } from '../shop/legal';
+import { PRODUCTS, formatPrice } from '../shop/products';
+import { SHOP_TEXT } from '../shop/text';
+import '../styles/pages.css';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = SHOP_TEXT[lang];
+const routes = SHOP_ROUTES[lang];
+const products = PRODUCTS[lang];
+const trail = crumbs(lang, [], { label: t.title, path: routes.hub });
+---
+
+<Base
+  lang={lang}
+  title={`${t.title} | Guillaume Richard`}
+  description={t.description}
+  path={routes.hub}
+  alternates={shopAlternates('hub')}
+  noindex={!SHOP_OPEN}
+  ld={{ '@context': 'https://schema.org', ...trail.ld }}
+>
+  <PageHero title={t.title} lead={t.lead} crumbs={trail} />
+  <div class="container page-section stack-lg">
+    {!SHOP_OPEN && (
+      <div class="alert alert-warn" role="note">
+        <p class="alert-title">{t.notOpenTitle}</p>
+        <p>
+          {t.notOpen} {t.provisional}
+        </p>
+      </div>
+    )}
+
+    <section aria-labelledby="produits">
+      <div class="rubric">
+        <h2 id="produits">{t.products}</h2>
+        <p class="rubric-meta">{products.length}</p>
+      </div>
+      <ul class="ledger-list" role="list">
+        {products.map((product) => (
+          <li>
+            <a class="ledger-row" href={productPath(lang, product.slug)}>
+              <span class="ledger-meta">{product.platform}</span>
+              <span class="ledger-title">
+                {product.name}
+                <span class="ledger-sub">{product.summary}</span>
+              </span>
+              <span class="ledger-arrow" aria-hidden="true">
+                →
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="tarifs">
+      <div class="rubric">
+        <h2 id="tarifs">{t.pricing}</h2>
+        <p class="rubric-meta">{t.pricingNote}</p>
+      </div>
+      <div class="table-wrap" role="region" aria-labelledby="tarifs" tabindex="0">
+        <table class="table">
+          <caption class="visually-hidden">{t.pricingCaption}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{t.product}</th>
+              <th scope="col">{t.plan}</th>
+              <th scope="col">{t.price}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.flatMap((product) =>
+              product.plans.map((plan, i) => (
+                <tr>
+                  {i === 0 && (
+                    <th scope="rowgroup" rowspan={product.plans.length}>
+                      <a href={productPath(lang, product.slug)}>{product.name}</a>
+                    </th>
+                  )}
+                  <td>{plan.name}</td>
+                  <td>{formatPrice(lang, plan)}</td>
+                </tr>
+              )),
+            )}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="conditions">
+      <div class="rubric">
+        <h2 id="conditions">{t.conditions}</h2>
+      </div>
+      <ul class="ledger-list" role="list">
+        {(['terms', 'refunds', 'license'] as const).map((page) => (
+          <li>
+            <a class="ledger-row" href={routes[page]}>
+              <span class="ledger-meta">{t.legalMeta[page]}</span>
+              <span class="ledger-title">
+                {SHOP_LEGAL[lang][page].title}
+                <span class="ledger-sub">{SHOP_LEGAL[lang][page].lead}</span>
+              </span>
+              <span class="ledger-arrow" aria-hidden="true">
+                →
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="prose shop-terms">
+        {t.questions} <a href={ROUTES[lang].contact}>{t.contact}</a>
+      </p>
+    </section>
+  </div>
+</Base>

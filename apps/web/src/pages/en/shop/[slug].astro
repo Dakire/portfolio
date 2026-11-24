@@ -1,0 +1,11 @@
+---
+import ShopProduct from '../../../views/ShopProduct.astro';
+import { PRODUCTS } from '../../../shop/products';
+
+export function getStaticPaths() {
+  return PRODUCTS.en.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+const { product } = Astro.props;
+---
+
+<ShopProduct lang="en" product={product} />

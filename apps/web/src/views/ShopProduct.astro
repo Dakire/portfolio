@@ -1,0 +1,118 @@
+---
+// Fiche d'un produit de la boutique : description, prérequis, formules et tarifs, licence. Aucun bouton d'achat tant que la
+// boutique est fermée (SHOP_OPEN) : un encart annonce l'ouverture à la place.
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { crumbs } from '../lib/crumbs';
+import { SITE, type Lang } from '../lib/i18n';
+import { SHOP_OPEN, SHOP_ROUTES, productPath } from '../shop/config';
+import { formatPrice, type ShopProduct } from '../shop/products';
+import { SHOP_TEXT } from '../shop/text';
+import '../styles/pages.css';
+
+interface Props {
+  lang: Lang;
+  product: ShopProduct;
+}
+const { lang, product } = Astro.props;
+const t = SHOP_TEXT[lang];
+const routes = SHOP_ROUTES[lang];
+const path = productPath(lang, product.slug);
+const trail = crumbs(lang, [{ label: t.title, path: routes.hub }], { label: product.name, path });
+
+// Données structurées : application et ses offres (prix en euros). Sans disponibilité tant que rien n'est en vente.
+const ld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: product.name,
+      description: product.summary,
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: product.platform,
+      url: `${SITE}${path}`,
+      author: { '@type': 'Person', name: 'Guillaume Richard', url: SITE },
+      offers: product.plans.map((plan) => ({
+        '@type': 'Offer',
+        name: plan.name,
+        price: String(plan.price),
+        priceCurrency: 'EUR',
+        ...(SHOP_OPEN ? { availability: 'https://schema.org/InStock' } : {}),
+      })),
+    },
+    trail.ld,
+  ],
+};
+---
+
+<Base
+  lang={lang}
+  title={`${product.name} | ${t.title}`}
+  description={product.summary}
+  path={path}
+  alternates={{
+    fr: productPath('fr', product.slug),
+    en: productPath('en', product.slug),
+  }}
+  noindex={!SHOP_OPEN}
+  ld={ld}
+>
+  <PageHero title={product.name} lead={product.summary} kicker={product.platform} crumbs={trail} />
+  <div class="container page-section stack-lg">
+    {!SHOP_OPEN && (
+      <div class="alert alert-warn" role="note">
+        <p class="alert-title">{t.notOpenTitle}</p>
+        <p>{t.notOpen}</p>
+      </div>
+    )}
+
+    <section aria-labelledby="fonctions" class="stack">
+      <div class="rubric">
+        <h2 id="fonctions">{t.features}</h2>
+      </div>
+      <ul class="prose shop-list">
+        {product.features.map((feature) => (
+          <li>{feature}</li>
+        ))}
+      </ul>
+      <dl class="shop-facts">
+        <dt>{t.audience}</dt>
+        <dd>{product.audience}</dd>
+        <dt>{t.requirements}</dt>
+        <dd>{product.requirements.join(' ; ')}</dd>
+        <dt>{t.licence}</dt>
+        <dd>
+          {product.licence} <a href={routes.license}>{t.licenceLink}</a>
+        </dd>
+      </dl>
+    </section>
+
+    <section aria-labelledby="formules">
+      <div class="rubric">
+        <h2 id="formules">{t.plans}</h2>
+        <p class="rubric-meta">{t.pricingNote}</p>
+      </div>
+      <ul class="shop-plans" role="list">
+        {product.plans.map((plan) => (
+          <li class="shop-plan">
+            <h3>{plan.name}</h3>
+            <p class="shop-plan-price">{formatPrice(lang, plan)}</p>
+            <ul class="shop-list">
+              {plan.features.map((feature) => (
+                <li>{feature}</li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+      <p class="prose shop-terms">
+        {t.termsLine} <a href={routes.terms}>{t.termsLink}</a> ·{' '}
+        <a href={routes.refunds}>{t.refundsLink}</a>
+      </p>
+    </section>
+
+    <p>
+      <a href={routes.hub}>{t.back}</a>
+    </p>
+  </div>
+</Base>

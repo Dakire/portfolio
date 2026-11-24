@@ -74,7 +74,17 @@ function articleDates() {
 const LASTMOD = new Map([...sourceDates(), ...articleDates()]);
 
 // Pages absentes du sitemap : interne, erreur, et pages de tag du blog (noindex). Les catégories, elles, sont indexables.
-const EXCLUDED = ['/design/', '/qr-test/', '/404', '/blog/tag/', '/en/blog/tag/', '/search/'];
+// Boutique : masquée (noindex) jusqu'à l'ouverture, voir SHOP_OPEN dans src/shop/config.ts ; retirer ses préfixes à l'ouverture.
+const EXCLUDED = [
+  '/design/',
+  '/qr-test/',
+  '/404',
+  '/blog/tag/',
+  '/en/blog/tag/',
+  '/search/',
+  '/boutique/',
+  '/en/shop/',
+];
 
 export default defineConfig({
   site: 'https://grichard.eu',

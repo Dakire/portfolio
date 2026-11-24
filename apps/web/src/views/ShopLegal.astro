@@ -1,0 +1,58 @@
+---
+// Conditions de la boutique (CGV, remboursement, licence) : même mise en forme que les mentions légales (Info.astro).
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { crumbs } from '../lib/crumbs';
+import type { Lang } from '../lib/i18n';
+import { SHOP_OPEN, SHOP_ROUTES, shopAlternates } from '../shop/config';
+import { DRAFT_NOTICE, SHOP_LEGAL } from '../shop/legal';
+import { SHOP_TEXT } from '../shop/text';
+import '../styles/pages.css';
+
+interface Props {
+  lang: Lang;
+  page: 'terms' | 'refunds' | 'license';
+}
+const { lang, page } = Astro.props;
+const content = SHOP_LEGAL[lang][page];
+const routes = SHOP_ROUTES[lang];
+const trail = crumbs(lang, [{ label: SHOP_TEXT[lang].title, path: routes.hub }], {
+  label: content.title,
+  path: routes[page],
+});
+---
+
+<Base
+  lang={lang}
+  title={`${content.title} | ${SHOP_TEXT[lang].title}`}
+  description={content.description}
+  path={routes[page]}
+  alternates={shopAlternates(page)}
+  noindex={!SHOP_OPEN}
+  ld={{ '@context': 'https://schema.org', ...trail.ld }}
+>
+  <PageHero title={content.title} lead={content.lead} crumbs={trail} />
+  <div class="container page-section stack-lg">
+    <div class="alert alert-warn" role="note">
+      <p class="alert-title">{SHOP_TEXT[lang].draftTitle}</p>
+      <p>{DRAFT_NOTICE[lang]}</p>
+    </div>
+    <div class="legal-sections prose">
+      {content.sections.map((section, i) => (
+        <section id={`s${i + 1}`} aria-labelledby={`s${i + 1}-h`} class="stack">
+          <h2 id={`s${i + 1}-h`}>{section.h}</h2>
+          {section.p.map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+          {section.items && (
+            <ul>
+              {section.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))}
+    </div>
+  </div>
+</Base>

@@ -655,6 +655,66 @@
   margin-top: var(--space-6);
 }
 
+/* ---------- Boutique (ADR 0017) : fiche produit, faits clé : valeur, formules en fiches côte à côte ---------- */
+.shop-list {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: 1.2rem;
+}
+.shop-facts {
+  display: grid;
+  grid-template-columns: minmax(8rem, max-content) minmax(0, 1fr);
+  gap: var(--space-3) var(--space-5);
+  max-width: var(--measure);
+}
+.shop-facts dt {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+}
+.shop-facts dd {
+  margin: 0;
+}
+.shop-plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+.shop-plan {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+.shop-plan h3 {
+  font-size: var(--text-lg);
+}
+.shop-plan-price {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+.shop-terms {
+  margin-top: var(--space-5);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+@media (max-width: 40rem) {
+  .shop-facts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+  }
+  .shop-facts dd + dt {
+    margin-top: var(--space-3);
+  }
+}
+
 /* ---------- Fiche introuvable ---------- */
 .not-found-stamp {
   justify-self: start;
