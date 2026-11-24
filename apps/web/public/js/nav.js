@@ -6,6 +6,11 @@
   const menu = button && document.getElementById(button.getAttribute('aria-controls'));
   if (!button || !menu) return;
   const wide = matchMedia('(min-width: 76rem)');
+  // Navigation sans rechargement (ClientRouter, voir Base.astro) : ce script est relancé à chaque page ; ses écouteurs globaux
+  // sont coupés juste avant l'échange, sinon ils s'empileraient et viseraient les éléments de l'ancienne page.
+  const scope = new AbortController();
+  const { signal } = scope;
+  document.addEventListener('astro:before-swap', () => scope.abort(), { once: true, signal });
 
   const set = (open, { focusButton = false } = {}) => {
     button.setAttribute('aria-expanded', String(open));
@@ -15,10 +20,18 @@
 
   button.addEventListener('click', () => set(button.getAttribute('aria-expanded') !== 'true'));
 
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true' && !wide.matches)
-      set(false, { focusButton: menu.contains(document.activeElement) });
-  });
+  document.addEventListener(
+    'keydown',
+    (event) => {
+      if (
+        event.key === 'Escape' &&
+        button.getAttribute('aria-expanded') === 'true' &&
+        !wide.matches
+      )
+        set(false, { focusButton: menu.contains(document.activeElement) });
+    },
+    { signal },
+  );
 
   // Menu au survol : Échap le ferme sans bouger le pointeur (WCAG 1.4.13) ; il se rouvre au prochain survol ou focus.
   document.querySelectorAll('.has-sub').forEach((item) => {
@@ -28,14 +41,18 @@
       if (!item.contains(event.relatedTarget)) reopen();
     });
   });
-  document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || !wide.matches) return;
-    document.querySelectorAll('.has-sub').forEach((item) => {
-      if (!item.matches(':hover, :focus-within')) return;
-      item.setAttribute('data-closed', '');
-      if (item.contains(document.activeElement)) item.querySelector(':scope > a').focus();
-    });
-  });
+  document.addEventListener(
+    'keydown',
+    (event) => {
+      if (event.key !== 'Escape' || !wide.matches) return;
+      document.querySelectorAll('.has-sub').forEach((item) => {
+        if (!item.matches(':hover, :focus-within')) return;
+        item.setAttribute('data-closed', '');
+        if (item.contains(document.activeElement)) item.querySelector(':scope > a').focus();
+      });
+    },
+    { signal },
+  );
 
   // Petit écran : « Outils » se déplie en accordéon (chaque outil par catégorie), comme le sous-menu au survol sur grand écran.
   const closeSubs = () =>
@@ -52,8 +69,12 @@
   });
 
   // Passage en grand écran : la navigation est toujours visible, l'état replié n'a plus de sens.
-  wide.addEventListener('change', () => {
-    set(false);
-    closeSubs();
-  });
+  wide.addEventListener(
+    'change',
+    () => {
+      set(false);
+      closeSubs();
+    },
+    { signal },
+  );
 })();

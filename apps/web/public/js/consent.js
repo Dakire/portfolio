@@ -45,17 +45,11 @@
     }
   };
 
-  let loaded = false;
   const loadAnalytics = () => {
     window[`ga-disable-${GA_ID}`] = false;
-    // Page pré-rendue au survol d'un lien (Speculation Rules, voir htaccess.mjs) : aucune mesure tant que le visiteur ne l'a
-    // pas réellement ouverte, sinon une page jamais vue serait comptée.
-    if (document.prerendering) {
-      document.addEventListener('prerenderingchange', loadAnalytics, { once: true });
-      return;
-    }
-    if (loaded) return;
-    loaded = true;
+    // Navigation sans rechargement (ClientRouter, voir Base.astro) : ce script est relancé à chaque page, mais gtag n'est chargé
+    // qu'une fois par visite ; les pages suivantes sont comptées par GA4 sur les changements d'historique.
+    if (window.gtag) return;
     window.dataLayer = window.dataLayer || [];
     window.gtag = function gtag() {
       window.dataLayer.push(arguments);
@@ -143,9 +137,16 @@
     if (focus) banner.querySelector('button').focus();
   };
 
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('[data-consent-open]')) open(true);
-  });
+  const scope = new AbortController();
+  const { signal } = scope;
+  document.addEventListener('astro:before-swap', () => scope.abort(), { once: true, signal });
+  document.addEventListener(
+    'click',
+    (e) => {
+      if (e.target.closest('[data-consent-open]')) open(true);
+    },
+    { signal },
+  );
 
   const saved = read();
   if (saved?.analytics) loadAnalytics();

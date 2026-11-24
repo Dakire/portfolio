@@ -10,6 +10,11 @@
 
   // Barre de progression : se remplit avec le défilement dans l'article.
   const bar = document.querySelector('[data-read-progress]');
+  // Navigation sans rechargement (ClientRouter, voir Base.astro) : le suivi du défilement est coupé avant l'échange de page,
+  // sinon il continuerait de mesurer l'article quitté.
+  const scope = new AbortController();
+  const { signal } = scope;
+  document.addEventListener('astro:before-swap', () => scope.abort(), { once: true, signal });
   if (bar) {
     const fill = bar.firstElementChild;
     bar.hidden = false;
@@ -20,8 +25,8 @@
       fill.style.transform = `scaleX(${done.toFixed(3)})`;
       bar.setAttribute('aria-valuenow', String(Math.round(done * 100)));
     };
-    addEventListener('scroll', update, { passive: true });
-    addEventListener('resize', update);
+    addEventListener('scroll', update, { passive: true, signal });
+    addEventListener('resize', update, { signal });
     update();
   }
 

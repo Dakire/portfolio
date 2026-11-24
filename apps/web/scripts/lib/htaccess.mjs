@@ -104,18 +104,6 @@ export function buildHtaccess({ hashes, base = '', authFile } = {}) {
     'AddType application/json .json',
     'AddType application/rss+xml .rss',
     '',
-    "# Pré-rendu de la page suivante au survol d'un lien (Speculation Rules, Chrome et Edge ; ignoré ailleurs) : le clic",
-    '# active une page déjà chargée et stylée, sans écran blanc ni retour du curseur natif. Règles dans un fichier externe',
-    "# (aucun script en ligne), qui doit être servi avec son type propre ; l'en-tête n'est envoyé qu'avec les pages HTML.",
-    '<Files "speculation-rules.json">',
-    '    ForceType application/speculationrules+json',
-    '</Files>',
-    '<IfModule mod_headers.c>',
-    '    <FilesMatch "\\.html$">',
-    `        Header set Speculation-Rules "\\"${prefix}/speculation-rules.json\\""`,
-    '    </FilesMatch>',
-    '</IfModule>',
-    '',
   ];
 
   if (preprod) {

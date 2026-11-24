@@ -167,6 +167,58 @@ test('le curseur du site est actif par défaut et se coupe depuis le pied de pag
   await expect(page.locator('html')).not.toHaveAttribute('data-cursor', 'off');
 });
 
+test('changer de page garde le même document : curseur, thème et scripts suivent', async ({
+  page,
+}) => {
+  await setTheme(page, 'dark');
+  await page.addInitScript(() =>
+    localStorage.setItem('consent', JSON.stringify({ analytics: false, ts: Date.now() })),
+  );
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+
+  await page.goto('/');
+  // Marqueur posé dans le document : il ne survit que si la page n'est pas rechargée.
+  await page.evaluate(() => Object.assign(window, { sameDocument: true }));
+  const html = page.locator('html');
+  const banner = page.getByRole('banner');
+
+  await banner.getByRole('link', { name: 'Compétences', exact: true }).click();
+  await expect(page).toHaveURL(/\/competences\/$/);
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  expect(await page.evaluate(() => 'sameDocument' in window)).toBe(true);
+  // Attributs de <html> reposés après l'échange : thème choisi, classe « js », curseur du site
+  await expect(html).toHaveAttribute('data-theme', 'dark');
+  await expect(html).toHaveClass(/\bjs\b/);
+  await expect(html).toHaveAttribute('lang', 'fr');
+  expect(await page.locator('main').evaluate((el) => getComputedStyle(el).cursor)).toContain(
+    'data:image/svg+xml',
+  );
+
+  // Les scripts de la nouvelle page tournent une seule fois : Ctrl+K ouvre la palette, Échap la ferme.
+  await page.keyboard.press('Control+k');
+  await expect(page.locator('#search')).toHaveAttribute('open', '');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#search')).not.toHaveAttribute('open', '');
+
+  // Page à scripts propres (MiniSearch puis reference.js, dont l'ordre n'est plus garanti) : la recherche fonctionne.
+  await banner.getByRole('link', { name: 'Cheatsheets', exact: true }).first().click();
+  await expect(page).toHaveURL(/\/cheatsheets\/$/);
+  await page.locator('main a[href$="/cheatsheets/powershell-m365/"]').first().click();
+  await expect(page).toHaveURL(/\/cheatsheets\/powershell-m365\/$/);
+  await page.locator('[data-reference]').getByRole('searchbox').fill('get-mailbox');
+  await expect(page.locator('[data-ref-results] > li > article').first()).toBeVisible();
+  expect(await page.evaluate(() => 'sameDocument' in window)).toBe(true);
+
+  // Retour arrière : toujours le même document, thème conservé.
+  await page.goBack();
+  await expect(page).toHaveURL(/\/cheatsheets\/$/);
+  await expect(html).toHaveAttribute('data-theme', 'dark');
+  expect(await page.evaluate(() => 'sameDocument' in window)).toBe(true);
+  expect(errors).toEqual([]);
+});
+
 test('les touches BIOS/UEFI : la recherche trouve un constructeur sans entrée vide', async ({
   page,
 }) => {

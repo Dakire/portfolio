@@ -56,6 +56,14 @@
 
   apply();
   document.addEventListener('DOMContentLoaded', apply);
+  // Navigation sans rechargement (ClientRouter, voir Base.astro) : ce script, dans le <head>, ne tourne qu'une fois par visite,
+  // mais le routeur remplace les attributs de <html> par ceux de la page suivante (data-theme="light", sans « js » ni
+  // data-cursor). On les repose aussitôt après l'échange, avant le premier rendu de la nouvelle page : ni flash de thème, ni
+  // menu mobile déplié, ni retour du curseur natif.
+  document.addEventListener('astro:after-swap', () => {
+    root.classList.add('js');
+    apply();
+  });
 
   system.addEventListener('change', () => {
     if (choice() === 'auto') apply();

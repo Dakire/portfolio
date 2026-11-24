@@ -1,6 +1,6 @@
 // Recherche des pages « Référence » : 100 % navigateur (MiniSearch + index JSON statique chargé à la demande).
 // Un seul composant pour toutes les pages : <section data-reference data-index="/data/reference/xxx.json"> (ou "all").
-(() => {
+function startReference() {
   const root = document.querySelector('[data-reference]');
   if (!root || typeof MiniSearch === 'undefined') return;
 
@@ -445,88 +445,101 @@
   });
 
   const articles = () => [...list.querySelectorAll('article')];
-  document.addEventListener('keydown', (e) => {
-    const t = e.target;
-    const typing =
-      t instanceof HTMLElement && (t.matches('input, textarea, select') || t.isContentEditable);
-    if ((e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey) && !e.altKey) {
-      e.preventDefault();
-      input.focus();
-      input.select();
-      return;
-    }
-    if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      e.preventDefault();
-      input.focus();
-      input.select();
-      return;
-    }
-    if (t === input) {
-      if (e.key === 'Escape' && input.value) {
+  // Navigation sans rechargement (ClientRouter, voir Base.astro) : script relancé à chaque page, écouteurs globaux coupés
+  // avant l'échange pour ne pas s'empiler.
+  const scope = new AbortController();
+  const { signal } = scope;
+  document.addEventListener('astro:before-swap', () => scope.abort(), { once: true, signal });
+  document.addEventListener(
+    'keydown',
+    (e) => {
+      const t = e.target;
+      const typing =
+        t instanceof HTMLElement && (t.matches('input, textarea, select') || t.isContentEditable);
+      if ((e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey) && !e.altKey) {
         e.preventDefault();
-        input.value = '';
-        update(true);
-      } else if (e.key === 'ArrowDown') {
-        const first = articles()[0];
-        if (first) {
+        input.focus();
+        input.select();
+        return;
+      }
+      if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        input.focus();
+        input.select();
+        return;
+      }
+      if (t === input) {
+        if (e.key === 'Escape' && input.value) {
           e.preventDefault();
-          first.focus();
+          input.value = '';
+          update(true);
+        } else if (e.key === 'ArrowDown') {
+          const first = articles()[0];
+          if (first) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+        return;
+      }
+      if (t instanceof HTMLElement && t.matches('article') && list.contains(t)) {
+        const all = articles();
+        const i = all.indexOf(t);
+        if (e.key === 'ArrowDown' && all[i + 1]) {
+          e.preventDefault();
+          all[i + 1].focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          (all[i - 1] ?? input).focus();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (t.dataset.url) window.open(t.dataset.url, '_blank', 'noopener,noreferrer');
+        } else if (e.key === 'Escape') {
+          input.focus();
         }
       }
-      return;
-    }
-    if (t instanceof HTMLElement && t.matches('article') && list.contains(t)) {
-      const all = articles();
-      const i = all.indexOf(t);
-      if (e.key === 'ArrowDown' && all[i + 1]) {
-        e.preventDefault();
-        all[i + 1].focus();
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        (all[i - 1] ?? input).focus();
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        if (t.dataset.url) window.open(t.dataset.url, '_blank', 'noopener,noreferrer');
-      } else if (e.key === 'Escape') {
-        input.focus();
-      }
-    }
-  });
+    },
+    { signal },
+  );
 
   // Boutons « Copier » (résultats et blocs statiques de la page).
   let toastTimer = 0;
-  document.addEventListener('click', async (e) => {
-    const btn = e.target instanceof Element && e.target.closest('button[data-copy]');
-    if (!btn) return;
-    const code = btn.closest('.ref-example')?.querySelector('code')?.textContent ?? '';
-    let ok = false;
-    try {
-      await navigator.clipboard.writeText(code);
-      ok = true;
-    } catch {
-      const ta = document.createElement('textarea');
-      ta.value = code;
-      ta.setAttribute('readonly', '');
-      ta.className = 'visually-hidden';
-      document.body.append(ta);
-      ta.select();
+  document.addEventListener(
+    'click',
+    async (e) => {
+      const btn = e.target instanceof Element && e.target.closest('button[data-copy]');
+      if (!btn) return;
+      const code = btn.closest('.ref-example')?.querySelector('code')?.textContent ?? '';
+      let ok = false;
       try {
-        ok = document.execCommand('copy');
+        await navigator.clipboard.writeText(code);
+        ok = true;
       } catch {
-        ok = false;
+        const ta = document.createElement('textarea');
+        ta.value = code;
+        ta.setAttribute('readonly', '');
+        ta.className = 'visually-hidden';
+        document.body.append(ta);
+        ta.select();
+        try {
+          ok = document.execCommand('copy');
+        } catch {
+          ok = false;
+        }
+        ta.remove();
+        btn.focus();
       }
-      ta.remove();
-      btn.focus();
-    }
-    if (toast) toast.textContent = ok ? T.copied : T.copyFail;
-    if (ok) {
-      const old = btn.textContent;
-      btn.textContent = T.copied;
-      setTimeout(() => (btn.textContent = old), 1800);
-    }
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast && (toast.textContent = ''), 2500);
-  });
+      if (toast) toast.textContent = ok ? T.copied : T.copyFail;
+      if (ok) {
+        const old = btn.textContent;
+        btn.textContent = T.copied;
+        setTimeout(() => (btn.textContent = old), 1800);
+      }
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast && (toast.textContent = ''), 2500);
+    },
+    { signal },
+  );
 
   // ---- Démarrage : état de l'URL ---------------------------------------------------------------
   const params = new URLSearchParams(location.search);
@@ -534,6 +547,16 @@
   const c0 = params.get('cat') ?? '';
   if (c0 && catBox?.querySelector(`button[data-cat="${CSS.escape(c0)}"]`)) setCat(c0);
   if (q0) input.value = q0;
-  if (q0 || cat) update(true);
+  // Saisie déjà présente : après une navigation sans rechargement, le champ est affiché avant que ce script ait fini de charger,
+  // et ce qui a été tapé entre-temps ne doit pas être perdu.
+  if (input.value || cat) update(true);
   else status.textContent = T.idle;
-})();
+}
+
+// Après une navigation sans rechargement (ClientRouter, voir Base.astro), les scripts de la page sont recréés et s'exécutent
+// dans l'ordre où ils finissent de charger : minisearch.js peut arriver après ce fichier. On l'attend dans ce cas.
+if (typeof MiniSearch === 'undefined')
+  document
+    .querySelector('script[src*="/js/libs/minisearch"]')
+    ?.addEventListener('load', startReference, { once: true });
+else startReference();

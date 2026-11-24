@@ -321,4 +321,15 @@ export function mountTerminal(root: HTMLElement): void {
   }
 }
 
-for (const root of document.querySelectorAll<HTMLElement>('[data-terminal]')) mountTerminal(root);
+// Module chargé une seule fois par visite : avec la navigation sans rechargement (ClientRouter, voir Base.astro), le terminal se
+// monte à chaque page qui en contient un (astro:page-load), une seule fois par élément.
+const mountAll = () => {
+  for (const root of document.querySelectorAll<HTMLElement>(
+    '[data-terminal]:not([data-mounted])',
+  )) {
+    root.dataset.mounted = '';
+    mountTerminal(root);
+  }
+};
+mountAll();
+document.addEventListener('astro:page-load', mountAll);

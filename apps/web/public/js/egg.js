@@ -44,31 +44,43 @@
     );
   };
 
-  addEventListener('keydown', (event) => {
-    const target = event.target;
-    if (
-      target instanceof Element &&
-      target.closest('input, textarea, select, [contenteditable="true"]')
-    ) {
-      step = 0;
-      return;
-    }
-    if (event.key === 'Escape' && root.classList.contains('egg-guides')) {
-      guides(false);
-      return;
-    }
-    const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
-    if (key === KONAMI[step]) {
-      step += 1;
-      if (step === KONAMI.length) {
-        step = 0;
-        guides(!root.classList.contains('egg-guides'));
-      }
-    } else {
-      step = key === KONAMI[0] ? 1 : 0;
-    }
-  });
+  // Navigation sans rechargement (ClientRouter, voir Base.astro) : script relancé à chaque page, écouteur coupé avant l'échange.
+  const scope = new AbortController();
+  const { signal } = scope;
+  document.addEventListener('astro:before-swap', () => scope.abort(), { once: true, signal });
 
+  addEventListener(
+    'keydown',
+    (event) => {
+      const target = event.target;
+      if (
+        target instanceof Element &&
+        target.closest('input, textarea, select, [contenteditable="true"]')
+      ) {
+        step = 0;
+        return;
+      }
+      if (event.key === 'Escape' && root.classList.contains('egg-guides')) {
+        guides(false);
+        return;
+      }
+      const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      if (key === KONAMI[step]) {
+        step += 1;
+        if (step === KONAMI.length) {
+          step = 0;
+          guides(!root.classList.contains('egg-guides'));
+        }
+      } else {
+        step = key === KONAMI[0] ? 1 : 0;
+      }
+    },
+    { signal },
+  );
+
+  // Le mot de la console : une fois par visite, pas à chaque page.
+  if (window.grichardEggSaid) return;
+  window.grichardEggSaid = true;
   try {
     console.log(
       en

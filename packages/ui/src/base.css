@@ -223,6 +223,20 @@ hr {
   }
 }
 
+/* Changement de page (ClientRouter, View Transitions) : fondu bref de la page entière, aucun si moins de mouvement est demandé.
+   Les pseudo-éléments ::view-transition-* ne sont pas couverts par le sélecteur universel ci-dessus. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-fast);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
 @media print {
   body {
     background: #fff;

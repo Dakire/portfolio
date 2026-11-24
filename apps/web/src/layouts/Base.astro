@@ -10,6 +10,7 @@ import SkipLink from '@grichard/ui/components/SkipLink.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SearchDialog from '../components/SearchDialog.astro';
+import { ClientRouter } from 'astro:transitions';
 import { ROUTES, SITE, UI, otherLang, type Alternates, type Lang } from '../lib/i18n';
 import { BASE, withBase } from '../lib/base';
 import { OG_DEFAULT, fitTitle, jsonForScript, versioned } from '../lib/seo';
@@ -130,6 +131,10 @@ const allScripts = [...scripts, '/js/nav.js', '/js/search.js', '/js/consent.js',
     <meta name="twitter:image" content={image.url} />
     <meta name="twitter:image:alt" content={image.alt} />
     {ld && <script type="application/ld+json" set:html={jsonForScript(ld)} />}
+    {/* Navigation sans rechargement : le routeur charge la page suivante et n'en échange que le contenu (head fusionné, body
+         remplacé). Le document reste le même, donc le curseur du site ne cède jamais la place au curseur natif entre deux
+         pages. « swap » : échange immédiat dans les navigateurs sans View Transitions (Firefox), sans animation de repli. */}
+    <ClientRouter fallback="swap" />
   </head>
   <body>
     <SkipLink label={ui.skip} />
@@ -144,8 +149,10 @@ const allScripts = [...scripts, '/js/nav.js', '/js/search.js', '/js/consent.js',
       </div>
     </div>
     <SearchDialog lang={lang} />
+    {/* data-astro-rerun : sans lui, le routeur ne relancerait pas un script déjà exécuté, et la page suivante resterait sans
+         menu, recherche ni bandeau de cookies. Chaque script coupe ses écouteurs globaux avant l'échange (astro:before-swap). */}
     {allScripts.map((src) => (
-      <script is:inline defer src={versioned(src)} />
+      <script is:inline defer data-astro-rerun src={versioned(src)} />
     ))}
   </body>
 </html>

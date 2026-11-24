@@ -220,17 +220,26 @@
     if (!page) dialog.addEventListener('keydown', onKey);
   }
 
-  document.addEventListener('keydown', (e) => {
-    if (document.querySelector('[data-reference]') || page) return;
-    const t = e.target;
-    const typing =
-      t instanceof HTMLElement && (t.matches('input, textarea, select') || t.isContentEditable);
-    const ctrlK = (e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey) && !e.altKey;
-    const slash = e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey;
-    if (!ctrlK && !slash) return;
-    // Dans le terminal (page /terminal), Ctrl+K est repris par le terminal lui-même.
-    if (ctrlK && t instanceof HTMLElement && t.closest('[data-terminal]')) return;
-    e.preventDefault();
-    open();
-  });
+  // Navigation sans rechargement (ClientRouter, voir Base.astro) : script relancé à chaque page, raccourci global coupé avant
+  // l'échange pour ne pas s'empiler.
+  const scope = new AbortController();
+  const { signal } = scope;
+  document.addEventListener('astro:before-swap', () => scope.abort(), { once: true, signal });
+  document.addEventListener(
+    'keydown',
+    (e) => {
+      if (document.querySelector('[data-reference]') || page) return;
+      const t = e.target;
+      const typing =
+        t instanceof HTMLElement && (t.matches('input, textarea, select') || t.isContentEditable);
+      const ctrlK = (e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey) && !e.altKey;
+      const slash = e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey;
+      if (!ctrlK && !slash) return;
+      // Dans le terminal (page /terminal), Ctrl+K est repris par le terminal lui-même.
+      if (ctrlK && t instanceof HTMLElement && t.closest('[data-terminal]')) return;
+      e.preventDefault();
+      open();
+    },
+    { signal },
+  );
 })();
