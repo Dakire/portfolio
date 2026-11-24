@@ -12,6 +12,8 @@ parameters:
   portal.downloads_dir: '%env(PORTAL_VAR_DIR)%/downloads'
   # Prix Paddle -> formules (src/Paddle/PriceMap.php)
   portal.paddle_prices_file: '%kernel.project_dir%/config/paddle_prices.php'
+  # Migrations appliquées à la première requête d'une livraison (Setup\AutoMigrateListener) : production seulement
+  portal.auto_migrate: false
 
 services:
   _defaults:
@@ -35,3 +37,7 @@ services:
 when@test:
   parameters:
     portal.paddle_prices_file: '%kernel.project_dir%/tests/fixtures/paddle_prices.php'
+
+when@prod:
+  parameters:
+    portal.auto_migrate: true
