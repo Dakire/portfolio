@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}Boutique (aperçu){% endblock %}
+{% block body %}
+  <h1>Boutique</h1>
+  <p class="notice" role="note"><strong>Aperçu privé.</strong> Rien n'est en vente : ouverture prévue au premier trimestre 2027. Tarifs proposés, à valider.</p>
+
+  <ul class="products" role="list">
+    {% for product in products %}
+      <li class="product" id="{{ product.slug }}">
+        <article aria-labelledby="{{ product.slug }}-titre">
+          <p class="platform">{{ product.platform }}</p>
+          <h2 id="{{ product.slug }}-titre">{{ product.name }}</h2>
+          <p>{{ product.pitch }}</p>
+          <dl class="kv">
+            <dt>Pour qui</dt><dd>{{ product.audience }}</dd>
+            <dt>Tarif proposé</dt><dd>{{ product.price }}</dd>
+            <dt>Vente</dt><dd>{{ product.channel }}</dd>
+            <dt>Étape</dt><dd>{{ product.stage.value }}</dd>
+            <dt>À régler</dt><dd>{{ product.watchpoint }}</dd>
+          </dl>
+        </article>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

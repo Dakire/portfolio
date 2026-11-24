@@ -15,6 +15,7 @@ Banc d'essai personnel (voir [ADR 0004](adr/0004-portail-symfony-sqlite.md)) : S
 | En-têtes             | `www/espace/.htaccess` : `noindex`, `no-store`, CSP `default-src 'none'`, aucun script ni style en ligne                                               |
 | Journaux             | Canal `portal` (connexions, installation, maintenance) sans e-mail ni IP en clair ; le reste à partir de `warning` ; rotation sur 14 jours             |
 | Authentification MFA | **Pas encore** (prévu : TOTP), voir « Suite »                                                                                                          |
+| Boutique (aperçu)    | `/boutique`, réservée aux comptes connectés : fiches des produits prévus (`src/Catalog/Catalog.php`), sans aucun achat possible (ADR 0017)             |
 
 ## Où vivent les données
 

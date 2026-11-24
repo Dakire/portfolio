@@ -13,6 +13,8 @@ services:
     exclude:
       - '../src/Entity/'
       - '../src/Kernel.php'
+      - '../src/Catalog/Product.php'
+      - '../src/Catalog/Stage.php'
 
   Grichard\Portal\Setup\SetupToken:
     arguments:

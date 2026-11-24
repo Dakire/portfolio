@@ -118,6 +118,31 @@ button {
 .kv dd {
   margin: 0;
 }
+/* Boutique (aperçu privé) : une fiche par produit, filet fin, aucune ombre */
+.products {
+  display: grid;
+  gap: 1rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.product {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+}
+.product h2 {
+  margin: 0.25rem 0 0.5rem;
+  font-size: 1.25rem;
+}
+.platform {
+  margin: 0;
+  color: var(--muted);
+  font:
+    0.875rem ui-monospace,
+    'Cascadia Mono',
+    monospace;
+}
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
