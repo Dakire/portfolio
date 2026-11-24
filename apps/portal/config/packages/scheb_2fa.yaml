@@ -1,0 +1,16 @@
+# Double authentification facultative (TOTP : application d'authentification) et codes de secours à usage unique.
+# Activée par le client depuis /compte ; le secret n'est enregistré qu'après la saisie d'un premier code valide.
+scheb_two_factor:
+  # Jetons produits par la connexion qui déclenchent le code : form_login crée un UsernamePasswordToken (sans lui, la double
+  # authentification serait silencieusement ignorée ; vérifié par tests/AccountTest.php)
+  security_tokens:
+    - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+    - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
+  totp:
+    enabled: true
+    issuer: 'grichard.eu'
+    # Un pas de 30 s de tolérance de chaque côté (horloge du téléphone légèrement décalée)
+    leeway: 29
+    template: security/2fa.html.twig
+  backup_codes:
+    enabled: true

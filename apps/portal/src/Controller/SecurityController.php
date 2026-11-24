@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Grichard\Portal\Controller;
 
+use Grichard\Portal\Security\UserChecker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 final class SecurityController extends AbstractController
@@ -24,6 +26,8 @@ final class SecurityController extends AbstractController
             'last_username' => $authenticationUtils->getLastUsername(),
             // Un seul message pour « inconnu » et « mauvais mot de passe » : ne pas révéler quels comptes existent.
             'error' => null !== $error,
+            // Adresse non confirmée : signalé seulement après un mot de passe correct (Security\UserChecker)
+            'unverified' => $error instanceof CustomUserMessageAccountStatusException && UserChecker::UNVERIFIED === $error->getMessageKey(),
         ], new Response(status: null !== $error ? Response::HTTP_UNAUTHORIZED : Response::HTTP_OK));
     }
 

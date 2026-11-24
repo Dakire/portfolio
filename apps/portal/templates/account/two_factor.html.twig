@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% block title %}Activer la double authentification{% endblock %}
+{% block body %}
+  <div class="portal-narrow">
+    <div class="portal-head">
+      <p class="rule-label">compte</p>
+      <h1>Double authentification</h1>
+    </div>
+    <ol class="portal-steps">
+      <li>
+        <p>Scannez ce code avec votre application d'authentification.</p>
+        <img class="portal-qr" src="{{ qr }}" width="220" height="220" alt="QR code à scanner avec l'application d'authentification (la clé est aussi écrite juste en dessous)">
+        <p>Ou saisissez la clé à la main : <code class="portal-secret">{{ secret }}</code></p>
+      </li>
+      <li>
+        <p>Saisissez le code à six chiffres affiché par l'application.</p>
+        {% if error %}
+          <div class="alert alert-danger" role="alert">
+            <p class="alert-title">Code refusé</p>
+            <p>{{ error }}</p>
+          </div>
+        {% endif %}
+        <form method="post" class="portal-form">
+          <div class="field">
+            <label for="code">Code de l'application</label>
+            <input id="code" name="code" type="text" inputmode="numeric" pattern="[0-9 ]*" autocomplete="one-time-code" maxlength="8" required>
+          </div>
+          <input type="hidden" name="_token" value="{{ csrf_token('account_2fa') }}">
+          <button type="submit" class="btn btn-primary">Activer</button>
+        </form>
+      </li>
+    </ol>
+    <ul class="portal-links" role="list"><li><a href="{{ path('app_account') }}">Annuler</a></li></ul>
+  </div>
+{% endblock %}

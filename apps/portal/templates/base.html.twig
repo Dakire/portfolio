@@ -24,6 +24,8 @@
             <nav class="portal-nav" aria-label="Navigation de l'espace client">
               <a href="{{ path('app_home') }}"{% if route == 'app_home' %} aria-current="page"{% endif %}>Accueil</a>
               <a href="{{ path('app_shop') }}"{% if route == 'app_shop' %} aria-current="page"{% endif %}>Boutique</a>
+              <a href="{{ path('app_licences') }}"{% if route starts with 'app_licence' %} aria-current="page"{% endif %}>Licences</a>
+              <a href="{{ path('app_account') }}"{% if route starts with 'app_account' %} aria-current="page"{% endif %}>Compte</a>
               {% if is_granted('ROLE_ADMIN') %}<a href="{{ path('app_admin') }}"{% if route starts with 'app_admin' %} aria-current="page"{% endif %}>Administration</a>{% endif %}
               <a href="{{ path('app_logout') }}">Déconnexion</a>
             </nav>
@@ -32,6 +34,7 @@
       </header>
       <main id="contenu" tabindex="-1" class="portal-main">
         {% for message in app.flashes('success') %}<div class="alert alert-ok" role="status"><p class="alert-title">Fait</p><p>{{ message }}</p></div>{% endfor %}
+        {% for message in app.flashes('error') %}<div class="alert alert-danger" role="alert"><p class="alert-title">Refusé</p><p>{{ message }}</p></div>{% endfor %}
         {% block body %}{% endblock %}
       </main>
       <footer class="portal-foot">

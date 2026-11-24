@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block title %}Confirmer l'adresse{% endblock %}
+{% block body %}
+  <div class="portal-narrow">
+    <div class="portal-head">
+      <p class="rule-label">espace client</p>
+      <h1>Confirmer l'adresse</h1>
+    </div>
+    {% if valid %}
+      <p class="portal-lede">Un dernier clic pour confirmer votre adresse e-mail et activer votre compte.</p>
+      <form method="post" class="portal-form">
+        <input type="hidden" name="_token" value="{{ csrf_token('verify') }}">
+        <button type="submit" class="btn btn-primary">Confirmer mon adresse</button>
+      </form>
+    {% else %}
+      <div class="alert alert-danger" role="alert">
+        <p class="alert-title">Lien expiré ou déjà utilisé</p>
+        <p>Ce lien n'est plus valable. <a href="{{ path('app_verify_resend') }}">Recevoir un nouveau lien</a></p>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

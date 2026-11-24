@@ -16,6 +16,9 @@
         <server name="PORTAL_DB" value="./var/test/portal.sqlite" force="true"/>
         <server name="PORTAL_VAR_DIR" value="./var/test" force="true"/>
         <server name="PORTAL_SETUP_TOKEN" value="jeton-installation-de-test-0123456789" force="true"/>
+        <!-- Clé de signature des licences RÉSERVÉE AUX TESTS (dérivée de la graine « tttt… ») ; la vraie est dans private/portal.php -->
+        <server name="PORTAL_LICENCE_KEY" value="dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHRVX0acIhiOkAFb3YW4iWeNRZ+Gvfj3vTSXGxC5s4WGCQ==" force="true"/>
+        <server name="PORTAL_PADDLE_WEBHOOK_SECRET" value="pdl_ntfset_secret_de_test" force="true"/>
     </php>
     <testsuites>
         <testsuite name="portal">

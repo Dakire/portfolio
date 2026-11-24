@@ -6,7 +6,12 @@
       <p class="rule-label">espace client</p>
       <h1>Connexion</h1>
     </div>
-    {% if error %}
+    {% if unverified %}
+      <div class="alert alert-warn" role="alert">
+        <p class="alert-title">Adresse à confirmer</p>
+        <p>Confirmez d'abord votre adresse e-mail avec le lien reçu à l'inscription. <a href="{{ path('app_verify_resend') }}">Recevoir un nouveau lien</a></p>
+      </div>
+    {% elseif error %}
       <div class="alert alert-danger" role="alert">
         <p class="alert-title">Connexion refusée</p>
         <p>Identifiants incorrects, ou trop d'essais récents. Réessayez dans quelques minutes.</p>
@@ -24,5 +29,9 @@
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
       <button type="submit" class="btn btn-primary">Se connecter</button>
     </form>
+    <ul class="portal-links" role="list">
+      <li><a href="{{ path('app_forgot_password') }}">Mot de passe oublié ?</a></li>
+      <li>Pas encore de compte ? <a href="{{ path('app_register') }}">Créer un compte</a></li>
+    </ul>
   </div>
 {% endblock %}

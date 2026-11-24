@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block title %}Nouveau mot de passe{% endblock %}
+{% block body %}
+  <div class="portal-narrow">
+    <div class="portal-head">
+      <p class="rule-label">espace client</p>
+      <h1>Nouveau mot de passe</h1>
+    </div>
+    {% if not valid %}
+      <div class="alert alert-danger" role="alert">
+        <p class="alert-title">Lien expiré ou déjà utilisé</p>
+        <p>Ce lien n'est plus valable. <a href="{{ path('app_forgot_password') }}">Demander un nouveau lien</a></p>
+      </div>
+    {% else %}
+      {% if error %}
+        <div class="alert alert-danger" role="alert">
+          <p class="alert-title">Mot de passe refusé</p>
+          <p>{{ error }}</p>
+        </div>
+      {% endif %}
+      <form method="post" class="portal-form">
+        <div class="field">
+          <label for="password">Nouveau mot de passe</label>
+          <input id="password" name="password" type="password" minlength="{{ min_length }}" autocomplete="new-password" aria-describedby="password-hint" required>
+          <p class="field-hint" id="password-hint">{{ min_length }} caractères minimum.</p>
+        </div>
+        <div class="field">
+          <label for="password_confirm">Confirmer le mot de passe</label>
+          <input id="password_confirm" name="password_confirm" type="password" autocomplete="new-password" required>
+        </div>
+        <input type="hidden" name="_token" value="{{ csrf_token('reset') }}">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+      </form>
+    {% endif %}
+  </div>
+{% endblock %}

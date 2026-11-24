@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+{% block title %}Consultez votre messagerie{% endblock %}
+{% block body %}
+  {% set is_reset = reset is defined and reset %}
+  <div class="portal-narrow">
+    <div class="portal-head">
+      <p class="rule-label">espace client</p>
+      <h1>Consultez votre messagerie</h1>
+    </div>
+    <div class="alert alert-ok" role="status">
+      <p class="alert-title">Demande enregistrée</p>
+      {% if is_reset %}
+        <p>Si un compte existe pour <strong>{{ email }}</strong>, un lien de réinitialisation vient de lui être envoyé. Il est valable une heure.</p>
+      {% else %}
+        <p>Si l'adresse <strong>{{ email }}</strong> est valable, un e-mail vient de lui être envoyé. Suivez le lien qu'il contient ; il est valable 48 heures.</p>
+      {% endif %}
+    </div>
+    <p class="portal-lede">Rien reçu après quelques minutes ? Regardez dans les indésirables, puis <a href="{{ is_reset ? path('app_forgot_password') : path('app_verify_resend') }}">demandez un nouveau lien</a>.</p>
+  </div>
+{% endblock %}

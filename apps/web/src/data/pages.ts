@@ -24,7 +24,7 @@ export const PRIVACY: Record<Lang, InfoPage> = {
       'Quelles données ce site collecte (formulaire de contact, mesure d’audience), pourquoi, combien de temps elles sont gardées et comment exercer vos droits RGPD.',
     intro:
       'Ce site collecte le strict minimum. Voici, point par point, ce qui est traité, pourquoi, et ce que vous pouvez faire.',
-    updated: '8 octobre 2026',
+    updated: '24 novembre 2026',
     updatedLabel: 'Dernière mise à jour',
     sections: [
       {
@@ -63,6 +63,15 @@ export const PRIVACY: Record<Lang, InfoPage> = {
         ],
       },
       {
+        id: 'espace-client',
+        h: 'Espace client',
+        p: [
+          "Si vous créez un compte sur l'espace client (grichard.eu/espace/), il conserve votre adresse e-mail, une empreinte de votre mot de passe (Argon2id : le mot de passe lui-même n'est jamais stocké), les dates de création, de confirmation de l'adresse et de dernière connexion, et, si vous activez la double authentification, sa clé secrète et une empreinte de vos codes de secours. Finalité : vous donner accès à votre compte et, à l'ouverture de la boutique, à vos licences et téléchargements (base légale : exécution du contrat).",
+          "Ces données sont gardées tant que le compte existe ; un compte dont l'adresse n'a jamais été confirmée est effacé au bout de 7 jours. Les liens envoyés par e-mail (confirmation, mot de passe oublié) expirent après 48 heures ou une heure et ne servent qu'une fois. Un cookie de session strictement nécessaire (PORTALSESSID, 2 heures) est déposé à la connexion. Pour limiter les abus, votre adresse IP sert de clé à des compteurs conservés au plus une heure ; les journaux de l'espace ne contiennent ni adresse e-mail ni adresse IP en clair.",
+          "Depuis la page Compte, vous pouvez à tout moment télécharger vos données (JSON) ou supprimer votre compte, sans avoir à m'écrire. Les paiements, à l'ouverture de la boutique, seront traités par Paddle selon sa propre politique de confidentialité.",
+        ],
+      },
+      {
         id: 'hebergeur',
         h: 'Hébergeur',
         p: [
@@ -84,7 +93,7 @@ export const PRIVACY: Record<Lang, InfoPage> = {
       'What data this site collects (contact form, audience measurement), why, how long it is kept, and how to exercise your GDPR rights.',
     intro:
       'This site collects the bare minimum. Here is, point by point, what is processed, why, and what you can do about it.',
-    updated: '8 October 2026',
+    updated: '24 November 2026',
     updatedLabel: 'Last updated',
     sections: [
       {
@@ -122,6 +131,15 @@ export const PRIVACY: Record<Lang, InfoPage> = {
         p: [
           'Tools that process text or files (JSON, ICS, encoding, passwords, network calculations…) run entirely in your browser: what you type is not sent to the site. The DNS tools query public DNS resolvers (for example Cloudflare, Google, Quad9) directly from your browser: those services see the requested domain name and your IP address, under their own policies. The site neither relays nor stores these queries.',
           'The SEO report and the sitemap checker work differently: the address you enter is sent to the site, which queries the given site (the page, its robots.txt, its sitemap and a sample of its pages or links) and returns the report. Neither the address, the page nor the report is kept or logged. As with the form, the analysis is protected by Cloudflare Turnstile, a non-reversible hash of your IP address is kept for at most one hour to cap the number of analyses, and a strictly necessary technical cookie (__Host-grtools, an anti-request-forgery token that does not outlive the session) is set.',
+        ],
+      },
+      {
+        id: 'customer-area',
+        h: 'Customer area',
+        p: [
+          'If you create an account in the customer area (grichard.eu/espace/), it keeps your email address, a hash of your password (Argon2id: the password itself is never stored), the dates of creation, address confirmation and last login, and, if you enable two-factor authentication, its secret key and a hash of your backup codes. Purpose: giving you access to your account and, once the shop opens, to your licences and downloads (legal basis: performance of the contract).',
+          'This data is kept for as long as the account exists; an account whose address was never confirmed is erased after 7 days. Links sent by email (confirmation, forgotten password) expire after 48 hours or one hour and work only once. A strictly necessary session cookie (PORTALSESSID, 2 hours) is set when you sign in. To limit abuse, your IP address is used as the key of counters kept for at most one hour; the customer area logs contain no plain email or IP address.',
+          'From the Account page, you can download your data (JSON) or delete your account at any time, without having to write to me. Payments, once the shop opens, will be processed by Paddle under its own privacy policy.',
         ],
       },
       {

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %}Nouveau lien de confirmation{% endblock %}
+{% block body %}
+  <div class="portal-narrow">
+    <div class="portal-head">
+      <p class="rule-label">espace client</p>
+      <h1>Nouveau lien de confirmation</h1>
+    </div>
+    <form method="post" class="portal-form">
+      <div class="field">
+        <label for="email">Adresse e-mail du compte</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <input type="hidden" name="_token" value="{{ csrf_token('verify_resend') }}">
+      <button type="submit" class="btn btn-primary">Envoyer le lien</button>
+    </form>
+  </div>
+{% endblock %}

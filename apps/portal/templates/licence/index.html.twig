@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+{% block title %}Licences{% endblock %}
+{% block body %}
+  <div class="portal-head">
+    <p class="rule-label">espace client</p>
+    <h1>Licences</h1>
+    <p class="portal-lede">Vos licences, leur jeton à coller dans le produit, et les fichiers à télécharger.</p>
+  </div>
+  {% if rows is empty %}
+    <div class="alert" role="status">
+      <p class="alert-title">Aucune licence</p>
+      <p>Vos achats apparaîtront ici. Un achat fait avec cette adresse avant la création du compte y est rattaché automatiquement.</p>
+    </div>
+  {% else %}
+    <ul class="ledger-list" role="list">
+      {% for row in rows %}
+        {% set licence = row.licence %}
+        <li>
+          <article class="product-row" aria-labelledby="lic-{{ licence.id }}">
+            <div class="product-meta">
+              <p><code>{{ licence.key }}</code></p>
+              <p class="stamp{{ licence.usable ? '' : ' stamp-pen' }}">{{ {active: 'active', cancelled: 'résiliée', revoked: 'révoquée'}[licence.status] }}</p>
+            </div>
+            <div class="product-body">
+              <h2 id="lic-{{ licence.id }}" class="product-name">{{ licence.product }} <span class="portal-brand-sub">/ {{ licence.plan }}</span></h2>
+              <dl class="kv">
+                <dt>validité</dt><dd>{{ licence.validUntil ? "jusqu'au " ~ licence.validUntil|date('d/m/Y') : 'sans échéance' }}</dd>
+                <dt>mises à jour</dt><dd>{{ licence.updatesUntil ? "jusqu'au " ~ licence.updatesUntil|date('d/m/Y') : 'incluses' }}</dd>
+                {% if row.latest %}
+                  <dt>dernière version</dt><dd>{{ row.latest.version }} ({{ row.latest.published|date('d/m/Y') }})</dd>
+                {% endif %}
+              </dl>
+              {% if licence.usable %}
+                <div class="portal-actions">
+                  <a class="btn" href="{{ path('app_licence_token', {key: licence.key}) }}">Télécharger le jeton de licence</a>
+                  {% if row.latest %}
+                    <a class="btn btn-primary" href="{{ path('app_licence_download', {key: licence.key, version: row.latest.version}) }}">Télécharger la version {{ row.latest.version }}</a>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          </article>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

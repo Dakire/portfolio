@@ -33,6 +33,12 @@ if (null !== $hosted) {
         'PORTAL_VAR_DIR' => $hosted . '/private/portal',
         'PORTAL_SETUP_TOKEN' => $settings['setup_token'] ?? '',
         'PORTAL_TRUSTED_PROXIES' => $settings['trusted_proxies'] ?? '',
+        // E-mails du compte : fonction mail() de l'hébergement par défaut ; expéditeur sur le domaine (SPF de l'hébergeur)
+        'PORTAL_MAILER_DSN' => $settings['mailer_dsn'] ?? 'native://default',
+        'PORTAL_MAIL_FROM' => $settings['mail_from'] ?? 'grichard.eu <no-reply@grichard.eu>',
+        // Boutique : clé privée Ed25519 de signature des licences (base64) et secret des notifications Paddle
+        'PORTAL_LICENCE_KEY' => $settings['licence_key'] ?? '',
+        'PORTAL_PADDLE_WEBHOOK_SECRET' => $settings['paddle_webhook_secret'] ?? '',
     ];
     foreach ($env as $name => $value) {
         $_SERVER[$name] = $_ENV[$name] = is_string($value) ? $value : '';

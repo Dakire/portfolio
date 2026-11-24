@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block title %}Supprimer le compte{% endblock %}
+{% block body %}
+  <div class="portal-narrow">
+    <div class="portal-head">
+      <p class="rule-label">compte</p>
+      <h1>Supprimer le compte</h1>
+      <p class="portal-lede">Le compte et toutes ses données sont effacés aussitôt, sans retour possible. Les factures restent chez Paddle, qui doit les conserver pour ses obligations comptables.</p>
+    </div>
+    {% if error %}
+      <div class="alert alert-danger" role="alert">
+        <p class="alert-title">Suppression refusée</p>
+        <p>{{ error }}</p>
+      </div>
+    {% endif %}
+    <form method="post" class="portal-form">
+      <div class="field">
+        <label for="current_password">Mot de passe actuel</label>
+        <input id="current_password" name="current_password" type="password" autocomplete="current-password" required>
+      </div>
+      <div class="field-check">
+        <input id="confirm" name="confirm" type="checkbox" value="1" required>
+        <label for="confirm">Je comprends que la suppression est définitive.</label>
+      </div>
+      <input type="hidden" name="_token" value="{{ csrf_token('account_delete') }}">
+      <button type="submit" class="btn btn-danger">Supprimer définitivement</button>
+    </form>
+    <ul class="portal-links" role="list"><li><a href="{{ path('app_account') }}">Annuler</a></li></ul>
+  </div>
+{% endblock %}

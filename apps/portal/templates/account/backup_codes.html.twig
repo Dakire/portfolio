@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %}Codes de secours{% endblock %}
+{% block body %}
+  <div class="portal-narrow">
+    <div class="portal-head">
+      <p class="rule-label">compte</p>
+      <h1>Codes de secours</h1>
+    </div>
+    <div class="alert alert-ok" role="status">
+      <p class="alert-title">{{ first ? 'Double authentification activée' : 'Nouveaux codes' }}</p>
+      <p>Gardez ces codes en lieu sûr (gestionnaire de mots de passe, papier). Chacun permet une connexion si vous n'avez plus votre téléphone. Ils ne seront plus jamais affichés{{ first ? '' : ' ; les anciens ne fonctionnent plus' }}.</p>
+    </div>
+    <ul class="portal-codes" role="list">
+      {% for code in codes %}<li><code>{{ code }}</code></li>{% endfor %}
+    </ul>
+    <p><a class="btn btn-primary" href="{{ path('app_account') }}">J'ai noté mes codes</a></p>
+  </div>
+{% endblock %}

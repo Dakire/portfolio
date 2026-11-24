@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+{% block title %}Compte{% endblock %}
+{% block body %}
+  <div class="portal-head">
+    <p class="rule-label">espace client</p>
+    <h1>Compte</h1>
+  </div>
+
+  <section class="stack" aria-labelledby="identite">
+    <div class="rubric"><h2 id="identite">Identité</h2></div>
+    <dl class="kv">
+      <dt>Adresse e-mail</dt><dd>{{ user.email }}</dd>
+      <dt>Compte créé le</dt><dd>{{ user.createdAt|date('d/m/Y') }}</dd>
+      <dt>Dernière connexion</dt><dd>{{ user.lastLoginAt ? user.lastLoginAt|date('d/m/Y H:i') : 'première connexion' }}</dd>
+    </dl>
+    <p><a class="btn" href="{{ path('app_account_password') }}">Changer de mot de passe</a></p>
+  </section>
+
+  <section class="stack" aria-labelledby="double">
+    <div class="rubric">
+      <h2 id="double">Double authentification</h2>
+      <p class="rubric-meta">{{ user.totpAuthenticationEnabled ? 'active' : 'inactive' }}</p>
+    </div>
+    {% if user.totpAuthenticationEnabled %}
+      <p class="portal-lede">À chaque connexion, un code de votre application d'authentification est demandé après le mot de passe. Codes de secours restants : <strong>{{ user.countBackupCodes }}</strong>.</p>
+      <div class="portal-actions">
+        <form method="post" action="{{ path('app_account_backup_codes') }}" class="portal-form portal-inline">
+          <div class="field">
+            <label for="pw-codes">Mot de passe actuel</label>
+            <input id="pw-codes" name="current_password" type="password" autocomplete="current-password" required>
+          </div>
+          <input type="hidden" name="_token" value="{{ csrf_token('account_backup_codes') }}">
+          <button type="submit" class="btn">Nouveaux codes de secours</button>
+        </form>
+        <form method="post" action="{{ path('app_account_2fa_disable') }}" class="portal-form portal-inline">
+          <div class="field">
+            <label for="pw-disable">Mot de passe actuel</label>
+            <input id="pw-disable" name="current_password" type="password" autocomplete="current-password" required>
+          </div>
+          <input type="hidden" name="_token" value="{{ csrf_token('account_2fa_disable') }}">
+          <button type="submit" class="btn">Désactiver</button>
+        </form>
+      </div>
+    {% else %}
+      <p class="portal-lede">Protégez le compte par un code à six chiffres, donné par une application d'authentification (Google Authenticator, Microsoft Authenticator, 2FAS, Aegis…).</p>
+      <p><a class="btn btn-primary" href="{{ path('app_account_2fa') }}">Activer la double authentification</a></p>
+    {% endif %}
+  </section>
+
+  <section class="stack" aria-labelledby="donnees">
+    <div class="rubric"><h2 id="donnees">Vos données</h2></div>
+    <p class="portal-lede">Téléchargez tout ce que l'espace client sait de votre compte, ou supprimez le compte et ses données.</p>
+    <div class="portal-actions">
+      <form method="post" action="{{ path('app_account_export') }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('account_export') }}">
+        <button type="submit" class="btn">Télécharger mes données (JSON)</button>
+      </form>
+      <a class="btn" href="{{ path('app_account_delete') }}">Supprimer mon compte</a>
+    </div>
+  </section>
+{% endblock %}

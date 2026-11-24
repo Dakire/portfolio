@@ -72,6 +72,7 @@ final class SetupController extends AbstractController
                 $admin = new User(strtolower($email), '');
                 $admin->setPassword($hasher->hashPassword($admin, $password));
                 $admin->setRoles(['ROLE_ADMIN']);
+                $admin->markVerified(); // l'administrateur a prouvé son accès au serveur (jeton d'installation)
                 $entityManager->persist($admin);
                 $entityManager->flush();
                 $logger->info('installation : administrateur créé', ['id' => $admin->getId()]);

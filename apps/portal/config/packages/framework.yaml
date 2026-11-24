@@ -20,6 +20,24 @@ framework:
       policy: fixed_window
       limit: 5
       interval: '15 minutes'
+    # Inscription, renvoi du lien, mot de passe oublié : par adresse IP
+    registration:
+      policy: fixed_window
+      limit: 10
+      interval: '1 hour'
+    # E-mails envoyés à une même adresse (empreinte de l'adresse) : empêche d'en inonder une boîte
+    account_mail:
+      policy: fixed_window
+      limit: 3
+      interval: '1 hour'
+    # API des produits (renouvellement de licence, mises à jour) : par adresse IP
+    licence_api:
+      policy: sliding_window
+      limit: 120
+      interval: '1 hour'
+  # Transport : private/portal.php (mailer_dsn) ; sur l'hébergement, la fonction mail() de PHP par défaut (native://default)
+  mailer:
+    dsn: '%env(PORTAL_MAILER_DSN)%'
   php_errors:
     log: true
 

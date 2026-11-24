@@ -46,33 +46,38 @@ Les offres gratuites changent : vérifier la liste exacte des fonctions au momen
 
 ## Lots techniques
 
-### Lot 1 : vitrine (statique, `apps/web`)
+### Lot 1 : vitrine (statique, `apps/web`) — fait
 
-- Une page par produit (FR/EN), une page de tarifs, données dans `src/data/` (comme `profile.ts`), JSON-LD `Product` et `Offer`.
-- Pages légales : CGV (Paddle Merchant of Record, nom légal), remboursement, licence d'utilisation ; confidentialité complétée pour les données clients.
-- Masqué jusqu'à l'ouverture : hors menu, `noindex`, hors sitemap ; bouton d'achat absent.
+- `/boutique/` et `/en/shop/` : produits de l'ouverture, tous les tarifs, conditions ; une fiche par produit ; CGV, remboursement (30 jours), licence. Données dans `src/shop/`.
+- Masqué tant que `SHOP_OPEN` est faux (`src/shop/config.ts`) : `noindex`, hors sitemap (`EXCLUDED` d'`astro.config.mjs`), hors menu, recherche et llms.txt, sans bouton d'achat.
+- Textes en version de travail : fonctions limitées à ce qui est connu (« à préciser » sinon), SIRET à ajouter à l'immatriculation.
 
-### Lot 2 : comptes clients (`apps/portal`)
+### Lot 2 : comptes clients (`apps/portal`) — fait
 
-- Inscription, vérification de l'e-mail, mot de passe oublié (envoi d'e-mails : SPF, DKIM et DMARC du domaine à vérifier), TOTP et codes de secours.
-- Export et suppression des données (RGPD).
-- Le portail cesse d'être un banc d'essai : mettre à jour l'ADR 0004 et [portail.md](portail.md).
+- Inscription, adresse confirmée par lien, mot de passe oublié, double authentification (TOTP, codes de secours), export et suppression des données ; détail dans [portail.md](portail.md). Politique de confidentialité du site complétée.
 
-### Lot 3 : achats, licences, téléchargements
+### Lot 3 : achats, licences, téléchargements (`apps/portal`) — fait, à brancher sur Paddle
 
-- Webhook Paddle : signature vérifiée, idempotence (identifiant d'événement stocké), commande et licence créées ou mises à jour.
-- Licences Ed25519 : clé privée dans `private/` (jamais dans le dépôt), clé publique dans chaque produit ; rotation possible (identifiant de clé dans la licence).
-- Téléchargements : ZIP dans `private/`, liens signés à durée limitée, réservés à une licence valide.
-- Point d'entrée de mise à jour des modules PrestaShop (dernière version, téléchargement sous licence).
-- Espace client : commandes, licences et installations, téléchargements, lien vers le portail client Paddle (factures, moyen de paiement, résiliation).
+- Notifications Paddle (`/webhooks/paddle`), licences signées Ed25519, téléchargements et mises à jour sous licence, API des produits, administration des licences ; détail dans [portail.md](portail.md) et [licences.md](licences.md).
 
-### Lot 4 : premier produit
+### Lot 4 : vérification dans les produits — fait côté bibliothèques
 
-- Vérification de licence hors ligne dans le module ou l'extension, tolérante si le site ne répond pas.
-- Achat réel de bout en bout (puis remboursement), vérification des versements et du relevé Paddle.
+- `packages/licence` : vérification JavaScript (extensions, Worker Slack) et PHP (modules PrestaShop), testées contre des jetons signés par le portail ; guide d'intégration par produit dans [licences.md](licences.md).
+- Reste à faire dans le code de chaque produit (hors de ce dépôt) : intégrer la bibliothèque, la clé publique et la page de saisie du jeton ; passer le bot Slack de Stripe à Paddle.
+
+## Avant l'ouverture (dans l'ordre)
+
+1. **Clé de licence** : générer `licence_key` (commande dans [licences.md](licences.md)) dans `private/portal.php`, la sauvegarder ; livrer le portail (cible `portal`), puis appliquer les migrations depuis `/espace/admin/maintenance`.
+2. **Paddle sandbox** : créer les produits et prix, puis renseigner `apps/portal/config/paddle_prices.php` ; créer la destination de notification `https://grichard.eu/espace/webhooks/paddle` (événements `transaction.completed`, `subscription.*`, `adjustment.*`) et copier son secret dans `paddle_webhook_secret`.
+3. **Paiement** : boutons d'achat (Paddle.js en surimpression, `customData.user_id` pour l'acheteur connecté) sur les fiches et dans l'espace client ; ajouter les domaines de Paddle à la CSP (`htaccess.mjs` et `.htaccess` du portail). Non fait : dépend du compte Paddle.
+4. **Achat de bout en bout en sandbox** : achat, licence reçue, jeton accepté par le produit, renouvellement, remboursement (licence révoquée).
+5. **Délivrabilité** : créer un compte avec une adresse personnelle et vérifier `spf=pass` et `dmarc=pass` dans les en-têtes (DMARC du domaine en `p=reject`).
+6. **Statut et textes** : SIRET dans les CGV ; relire CGV, remboursement, licence et fiches ; confirmer la grille de Paddle.
+7. **Compte Paddle réel** : vérification d'identité et du domaine (pages du lot 1 rendues publiques à cette étape), puis prix réels dans `paddle_prices.php`.
+8. **Ouverture** : `SHOP_OPEN = true`, préfixes retirés d'`EXCLUDED`, lien « Boutique » au menu, contrat d'URL et sitemap mis à jour, `/espace/boutique` (aperçu privé) retiré ou réservé à l'administrateur.
 
 ## Questions ouvertes
 
-- Quels sont les premiers produits, et leurs prix ?
 - Les apps Shopify : produits payants par l'App Store, ou seulement des apps sur mesure pour des clients ?
 - Support client : par e-mail seulement, ou par l'espace client ?
+- Rappel avant renouvellement d'un abonnement annuel : à vérifier dans les e-mails de Paddle (les CGV l'annoncent).

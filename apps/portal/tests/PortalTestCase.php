@@ -55,12 +55,14 @@ abstract class PortalTestCase extends WebTestCase
     }
 
     /** @param list<string> $roles */
-    protected function createUser(string $email, array $roles = []): User
+    protected function createUser(string $email, array $roles = [], bool $verified = true): User
     {
-        $container = self::getContainer();
         $user = new User($email, '');
         $user->setPassword($this->service(UserPasswordHasherInterface::class)->hashPassword($user, self::PASSWORD));
         $user->setRoles($roles);
+        if ($verified) {
+            $user->markVerified();
+        }
         $em = $this->service(EntityManagerInterface::class);
         $em->persist($user);
         $em->flush();

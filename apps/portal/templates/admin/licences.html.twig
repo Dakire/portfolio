@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+{% block title %}Licences (administration){% endblock %}
+{% block body %}
+  <div class="portal-head">
+    <p class="rule-label">administration</p>
+    <h1>Licences</h1>
+  </div>
+
+  <section class="stack" aria-labelledby="attribuer">
+    <div class="rubric"><h2 id="attribuer">Attribuer une licence</h2></div>
+    <p class="portal-lede">Pour un essai, un geste commercial ou le support. Si l'adresse a un compte confirmé, la licence y est rattachée ; sinon, elle le sera à l'inscription.</p>
+    {% if error %}
+      <div class="alert alert-danger" role="alert"><p class="alert-title">Attribution refusée</p><p>{{ error }}</p></div>
+    {% endif %}
+    <form method="post" class="portal-form portal-narrow">
+      <div class="field">
+        <label for="email">Adresse e-mail du client</label>
+        <input id="email" name="email" type="email" required>
+      </div>
+      <div class="field">
+        <label for="offer">Produit et formule</label>
+        <select id="offer" name="offer" required>
+          {% for offer in offers %}<option value="{{ offer }}">{{ offer }}</option>{% endfor %}
+        </select>
+      </div>
+      <input type="hidden" name="_token" value="{{ csrf_token('admin_licence_grant') }}">
+      <button type="submit" class="btn btn-primary">Attribuer</button>
+    </form>
+  </section>
+
+  <section class="stack" aria-labelledby="liste">
+    <div class="rubric">
+      <h2 id="liste">Dernières licences</h2>
+      <p class="rubric-meta">{{ licences|length }}</p>
+    </div>
+    {% if licences is empty %}
+      <p>Aucune licence pour l'instant.</p>
+    {% else %}
+      <div class="table-wrap" role="region" aria-labelledby="liste" tabindex="0">
+        <table class="table">
+          <thead>
+            <tr><th scope="col">Clé</th><th scope="col">Produit</th><th scope="col">Client</th><th scope="col">État</th><th scope="col">Validité</th><th scope="col"><span class="visually-hidden">Action</span></th></tr>
+          </thead>
+          <tbody>
+            {% for licence in licences %}
+              <tr>
+                <td><code>{{ licence.key }}</code></td>
+                <td>{{ licence.product }} / {{ licence.plan }}</td>
+                <td>{{ licence.email }}{{ licence.user ? '' : ' (sans compte)' }}</td>
+                <td>{{ licence.status }}</td>
+                <td>{{ licence.validUntil ? licence.validUntil|date('d/m/Y') : 'perpétuelle' }}</td>
+                <td>
+                  {% if licence.status != 'revoked' %}
+                    <form method="post" action="{{ path('app_admin_licence_revoke', {id: licence.id}) }}">
+                      <input type="hidden" name="_token" value="{{ csrf_token('admin_licence_revoke_' ~ licence.id) }}">
+                      <button type="submit" class="btn btn-danger">Révoquer <span class="visually-hidden">{{ licence.key }}</span></button>
+                    </form>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

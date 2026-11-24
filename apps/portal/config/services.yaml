@@ -2,6 +2,16 @@ parameters:
   env(PORTAL_DB): '%kernel.project_dir%/var/portal.sqlite'
   env(PORTAL_VAR_DIR): '%kernel.project_dir%/var'
   env(PORTAL_SETUP_TOKEN): ''
+  # Développement et tests : aucun e-mail n'est envoyé (les tests lisent ceux qui l'auraient été)
+  env(PORTAL_MAILER_DSN): 'null://null'
+  env(PORTAL_MAIL_FROM): 'grichard.eu <no-reply@grichard.eu>'
+  # Boutique (lot 3) : vides tant que private/portal.php ne les renseigne pas (signature et webhooks alors refusés)
+  env(PORTAL_LICENCE_KEY): ''
+  env(PORTAL_PADDLE_WEBHOOK_SECRET): ''
+  # Fichiers à télécharger : private/portal/downloads/<produit>/<produit>-<version>.zip (déposés par FTP, jamais livrés)
+  portal.downloads_dir: '%env(PORTAL_VAR_DIR)%/downloads'
+  # Prix Paddle -> formules (src/Paddle/PriceMap.php)
+  portal.paddle_prices_file: '%kernel.project_dir%/config/paddle_prices.php'
 
 services:
   _defaults:
@@ -21,3 +31,7 @@ services:
       $token: '%env(PORTAL_SETUP_TOKEN)%'
 
   Doctrine\Migrations\DependencyFactory: '@doctrine.migrations.dependency_factory'
+
+when@test:
+  parameters:
+    portal.paddle_prices_file: '%kernel.project_dir%/tests/fixtures/paddle_prices.php'

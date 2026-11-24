@@ -8,5 +8,8 @@
   <dl class="kv">
     <dt>Utilisateurs</dt><dd>{{ userCount }}</dd>
   </dl>
-  <p><a class="btn" href="{{ path('app_admin_maintenance') }}">Maintenance de la base de données</a></p>
+  <div class="portal-actions">
+    <a class="btn" href="{{ path('app_admin_licences') }}">Licences</a>
+    <a class="btn" href="{{ path('app_admin_maintenance') }}">Maintenance de la base de données</a>
+  </div>
 {% endblock %}

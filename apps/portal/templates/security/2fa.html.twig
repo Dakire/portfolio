@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% block title %}Code de vérification{% endblock %}
+{% block body %}
+  {# Gabarit du formulaire de scheb/2fa : variables fournies par son contrôleur (voir config/packages/scheb_2fa.yaml) #}
+  <div class="portal-narrow">
+    <div class="portal-head">
+      <p class="rule-label">connexion</p>
+      <h1>Code de vérification</h1>
+      <p class="portal-lede">Saisissez le code à six chiffres de votre application d'authentification, ou un code de secours.</p>
+    </div>
+    {% if authenticationError %}
+      <div class="alert alert-danger" role="alert">
+        <p class="alert-title">Code refusé</p>
+        <p>Ce code n'est pas valable. Vérifiez l'heure de votre téléphone, ou utilisez un code de secours.</p>
+      </div>
+    {% endif %}
+    <form method="post" action="{{ checkPathUrl ? checkPathUrl : path(checkPathRoute) }}" class="portal-form">
+      <div class="field">
+        <label for="_auth_code">Code</label>
+        <input id="_auth_code" name="{{ authCodeParameterName }}" type="text" autocomplete="one-time-code" maxlength="16" autofocus required>
+      </div>
+      {% if isCsrfProtectionEnabled %}
+        <input type="hidden" name="{{ csrfParameterName }}" value="{{ csrf_token(csrfTokenId) }}">
+      {% endif %}
+      <button type="submit" class="btn btn-primary">Valider</button>
+    </form>
+    <ul class="portal-links" role="list"><li><a href="{{ logoutPath }}">Annuler et se déconnecter</a></li></ul>
+  </div>
+{% endblock %}
