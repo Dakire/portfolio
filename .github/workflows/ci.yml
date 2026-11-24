@@ -75,6 +75,7 @@ jobs:
       - run: pnpm --filter @grichard/tools-core check
       - run: pnpm --filter @grichard/tools-core lint
       - run: pnpm --filter @grichard/tools-core test
+      - run: pnpm --filter @grichard/licence test
       - run: pnpm --filter @grichard/web check
       - run: pnpm --filter @grichard/web lint
       - run: pnpm --filter @grichard/web exec playwright install --with-deps chromium

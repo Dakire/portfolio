@@ -1,0 +1,20 @@
+{
+  "name": "@grichard/licence",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Vérification hors ligne des licences grichard.eu (Ed25519, WebCrypto) pour les extensions, le Worker Slack et Node ; vérificateur PHP pour les modules PrestaShop (php/).",
+  "exports": {
+    ".": "./src/licence.js"
+  },
+  "files": [
+    "src",
+    "php"
+  ],
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.12"
+  }
+}

@@ -11,3 +11,6 @@ parameters:
         - migrations
     excludePaths:
         - var (?)
+    # Vérificateur de licence embarqué dans les modules PrestaShop (sans autoload), chargé par tests/LicenceInteropTest.php
+    scanFiles:
+        - ../../packages/licence/php/GrichardLicence.php

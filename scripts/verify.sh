@@ -20,6 +20,7 @@ pnpm -s --filter @grichard/ui test
 pnpm -s --filter @grichard/tools-core check
 pnpm -s --filter @grichard/tools-core lint
 pnpm -s --filter @grichard/tools-core test
+pnpm -s --filter @grichard/licence test
 
 step 'Site : types et lint'
 pnpm -s --filter @grichard/web check
@@ -48,6 +49,11 @@ if command -v php >/dev/null 2>&1; then
   composer="${COMPOSER_BIN:-composer}"
   for f in $(git ls-files 'apps/api/*.php'); do php -l "$f" >/dev/null; done
   (cd apps/api && $composer cs && $composer stan && $composer test)
+
+  step 'Espace client PHP : syntaxe, style, analyse statique, tests'
+  for f in $(git ls-files 'apps/portal/*.php' 'packages/licence/php/*.php'); do php -l "$f" >/dev/null; done
+  # config/reference.php est généré par Symfony (ignoré par git) : retiré pour ne pas fausser le contrôle de style
+  (cd apps/portal && rm -f config/reference.php && $composer cs && $composer stan && $composer test)
 else
   printf '\n\033[33m! PHP absent : contrôles PHP non faits (la CI les fera, mais ne poussez pas de PHP sans eux).\033[0m\n'
 fi

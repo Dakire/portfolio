@@ -14,7 +14,7 @@ Monorepo de grichard.eu. Production sur OVH mutualisé : **fichiers statiques + 
 
 ## Structure cible
 
-`apps/web` (Astro statique FR/EN), `apps/api` (PHP : formulaire de contact et outils serveur SEO/sitemap via `tools.php`, couche `Net/` anti-SSRF, ADR 0007), `apps/portal` (Symfony, espace client de test, SQLite), `apps/web/data/reference` (aide-mémoire, recherche côté client, ADR 0008), `packages/ui|tools-core|config|content-schema`, `docs/adr/` (décisions).
+`apps/web` (Astro statique FR/EN), `apps/api` (PHP : formulaire de contact et outils serveur SEO/sitemap via `tools.php`, couche `Net/` anti-SSRF, ADR 0007), `apps/portal` (Symfony, espace client : comptes, double authentification, licences signées, notifications Paddle ; docs/portail.md, docs/licences.md), `packages/licence` (vérification des licences dans les produits, JS et PHP), boutique `apps/web/src/shop/` masquée tant que `SHOP_OPEN` est faux (ADR 0017, docs/boutique.md), `apps/web/data/reference` (aide-mémoire, recherche côté client, ADR 0008), `packages/ui|tools-core|config|content-schema`, `docs/adr/` (décisions).
 
 ## Architecture du site
 

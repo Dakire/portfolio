@@ -4,7 +4,7 @@ Contexte pour Claude Code. Le même contenu, formulé pour d'autres agents, est 
 
 ## Projet
 
-Monorepo de **grichard.eu** (portfolio, blog, outils en ligne, espace client de test). Le site en ligne est `apps/web` (Astro) + `apps/api` (PHP) ; l'ancien site reste dans `legacy/` comme référence.
+Monorepo de **grichard.eu** (portfolio, blog, outils en ligne, espace client et boutique). Le site en ligne est `apps/web` (Astro) + `apps/api` (PHP) ; l'ancien site reste dans `legacy/` comme référence.
 
 ## Contrainte non négociable : production = fichiers statiques + PHP 8.5
 
@@ -28,13 +28,14 @@ Ne jamais introduire de dépendance d'exécution Node, ni d'appel à un service 
 | Site : build / types / lint        | `pnpm --filter @grichard/web build` / `check` / `lint`                                            |
 | Site : e2e + axe                   | `pnpm --filter @grichard/web test:e2e`                                                            |
 | Design system : tests              | `pnpm --filter @grichard/ui test`                                                                 |
+| Licences (vérif. produits) : tests | `pnpm --filter @grichard/licence test` (PHP : `composer test` dans `apps/portal`)                 |
 | API PHP : installer                | `cd apps/api && composer install`                                                                 |
 | API PHP : tests / style / analyse  | `composer test` / `composer cs` / `composer stan` (dans `apps/api`)                               |
 | Références : régénérer les index   | `pnpm --filter @grichard/web reference:build` (GAM : `reference:gam` ; liens : `reference:links`) |
 | Contrat sur le nouveau site        | `CONTRACT_DIST=apps/web/dist pnpm test:contract` (après `pnpm --filter @grichard/web build`)      |
 | Sitemap en ligne (GET, chaque URL) | `pnpm --filter @grichard/web sitemap:check` (référence : `/root-access.xml`, voir docs/seo.md)    |
 
-Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. `/root-access.xml` (liste d'URL, référence déclarée dans `robots.txt` ; `/sitemap.xml` et `/sitemap-0.xml` en restent des copies identiques) est produit par `postbuild.mjs` : voir [docs/seo.md](docs/seo.md). Identité visuelle : [ADR 0016](docs/adr/0016-console-d-ingenieur.md) (« console d'ingénieur » : clair par défaut (sombre en choix explicite), Geist et IBM Plex Mono, accent violet ; remplace les ADR 0010 à 0015 pour l'apparence ; **aucun code des thèmes de référence copié**), [ADR 0012](docs/adr/0012-edition-releve.md) (structure des pages, portfolio d'abord). Portail Symfony (`apps/portal`, voir [docs/portail.md](docs/portail.md)) : `composer install`, `composer test|cs|stan` dans `apps/portal`. Déploiement : [docs/deploiement.md](docs/deploiement.md) (production automatique après CI verte sur `main` ; à la main : retour arrière, portail).
+Le `.htaccess` (CSP, en-têtes, cache, redirections) est généré dans `dist/` par `apps/web/scripts/lib/htaccess.mjs` : ne pas l'écrire à la main. `/root-access.xml` (liste d'URL, référence déclarée dans `robots.txt` ; `/sitemap.xml` et `/sitemap-0.xml` en restent des copies identiques) est produit par `postbuild.mjs` : voir [docs/seo.md](docs/seo.md). Identité visuelle : [ADR 0016](docs/adr/0016-console-d-ingenieur.md) (« console d'ingénieur » : clair par défaut (sombre en choix explicite), Geist et IBM Plex Mono, accent violet ; remplace les ADR 0010 à 0015 pour l'apparence ; **aucun code des thèmes de référence copié**), [ADR 0012](docs/adr/0012-edition-releve.md) (structure des pages, portfolio d'abord). Boutique : [ADR 0017](docs/adr/0017-boutique-merchant-of-record.md), [docs/boutique.md](docs/boutique.md) (vitrine `src/shop/` masquée tant que `SHOP_OPEN` est faux), [docs/licences.md](docs/licences.md) (jetons Ed25519, `packages/licence`). Portail Symfony (`apps/portal`, espace client : comptes, double authentification, licences, notifications Paddle ; voir [docs/portail.md](docs/portail.md)) : `composer install`, `composer test|cs|stan` dans `apps/portal`. Déploiement : [docs/deploiement.md](docs/deploiement.md) (production automatique après CI verte sur `main` ; à la main : retour arrière, portail).
 
 ## Architecture cible
 
