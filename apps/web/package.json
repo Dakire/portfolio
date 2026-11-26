@@ -24,8 +24,8 @@
     "@grichard/tools-core": "workspace:*",
     "@grichard/ui": "workspace:*",
     "astro": "^7.4.13",
-    "lucide-preact": "^1.77.0",
-    "preact": "^11.0.1"
+    "lucide-preact": "^1.78.0",
+    "preact": "^11.2.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
